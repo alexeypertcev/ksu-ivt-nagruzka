@@ -48,6 +48,34 @@ void MainWindow::push1(){
 
 void MainWindow::on_pushButton_clicked()
 {
+    //QSqlQuery query;
+    //query.exec("SELECT name, salary FROM employee WHERE salary > 50000");
+
+  //  while (query.next()) {
+  //    QString name = query.value(0).toString();
+  //    int salary = query.value(1).toInt();
+  //    qDebug() << name << salary;
+  //  }
+  /*
+   QSqlQuery query;
+   query.prepare("INSERT INTO employee (id, name, salary) "
+          "VALUES (:id, :name, :salary)");
+   query.bindValue(":id", 1001);
+   query.bindValue(":name", "Thad Beaumont");
+   query.bindValue(":salary", 65000);
+   query.exec();
+
+
+   QSqlQuery query;
+   query.prepare("INSERT INTO employee (id, name, salary) "
+          "VALUES (?, ?, ?)");
+   query.addBindValue(1001);
+   query.addBindValue("Thad Beaumont");
+   query.addBindValue(65000);
+   query.exec();
+  */
+
+
     QSqlTableModel *tablemodel = new QSqlTableModel(this);
     QSqlQueryModel *querymodel = new QSqlQueryModel(this);
 

@@ -73,6 +73,9 @@ void MainWindow::on_pushButton_clicked()
    query.addBindValue("Thad Beaumont");
    query.addBindValue(65000);
    query.exec();
+
+
+
   */
 
 

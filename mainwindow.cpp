@@ -78,6 +78,11 @@ void MainWindow::on_pushButton_clicked()
 
   */
 
+    for(int i=0; i<10; ++i){
+
+        i--;
+    }
+
 
     QSqlTableModel *tablemodel = new QSqlTableModel(this);
     QSqlQueryModel *querymodel = new QSqlQueryModel(this);

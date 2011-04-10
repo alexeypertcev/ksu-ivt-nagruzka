@@ -27,6 +27,24 @@ MainWindow::MainWindow(QWidget *parent) :
         QMessageBox m;
         m.setText("db is not open");
         m.exec();
+
+    } else {
+
+        QSqlQuery query;
+        query.exec("PRAGMA foreign_keys = ON;");
+
+        QSqlTableModel *tablemodel_subject = new QSqlTableModel(this);
+        tablemodel_subject->setTable("subject");
+        tablemodel_subject->select();
+        ui->tableView_2->setModel(tablemodel_subject);
+
+        QSqlRelationalTableModel *tablemodel_teachers = new QSqlRelationalTableModel(this);
+        tablemodel_teachers->setTable("teachers");
+        tablemodel_teachers->select();
+
+        ui->tableView->setModel(tablemodel_teachers);
+        tablemodel_teachers->setRelation(4, QSqlRelation("status", "status_name", "name"));
+
     }
 }
 
@@ -37,63 +55,10 @@ MainWindow::~MainWindow()
 
 
 void MainWindow::push1(){
-    //QSqlQuery sql;
-    //sql.exec("insert into subject values('matan2', 'tex2')");
-    QSqlTableModel *model = new QSqlTableModel(this);
-    //model->setQuery("PRAGMA foreign_keys = 1;");
-    model->setTable("subject");
-    model->select();
-    ui->tableView_2->setModel(model);
+
 }
 
 void MainWindow::on_pushButton_clicked()
 {
-    //QSqlQuery query;
-    //query.exec("SELECT name, salary FROM employee WHERE salary > 50000");
-
-  //  while (query.next()) {
-  //    QString name = query.value(0).toString();
-  //    int salary = query.value(1).toInt();
-  //    qDebug() << name << salary;
-  //  }
-  /*
-   QSqlQuery query;
-   query.prepare("INSERT INTO employee (id, name, salary) "
-          "VALUES (:id, :name, :salary)");
-   query.bindValue(":id", 1001);
-   query.bindValue(":name", "Thad Beaumont");
-   query.bindValue(":salary", 65000);
-   query.exec();
-
-
-   QSqlQuery query;
-   query.prepare("INSERT INTO employee (id, name, salary) "
-          "VALUES (?, ?, ?)");
-   query.addBindValue(1001);
-   query.addBindValue("Thad Beaumont");
-   query.addBindValue(65000);
-   query.exec();
-
-
-
-  */
-
-    for(int i=0; i<10; ++i){
-
-        i--;
-    }
-
-
-    QSqlTableModel *tablemodel = new QSqlTableModel(this);
-    QSqlQueryModel *querymodel = new QSqlQueryModel(this);
-
-    tablemodel->setTable("teachers");
-    querymodel->setQuery("SELECT * FROM employee");
-
-    //model->setQuery("PRAGMA foreign_keys = 1;");
-    tablemodel->select();
-    //querymodel->setRelation(4, QSqlRelation("status_name", "name", "name"));
-
-    ui->tableView->setModel(tablemodel);
 
 }

@@ -33,18 +33,39 @@ MainWindow::MainWindow(QWidget *parent) :
 
         QSqlQuery query;
         query.exec("PRAGMA foreign_keys = ON;");
-
+/*
         QSqlRelationalTableModel *tablemodel_subject = new QSqlRelationalTableModel(this);
         tablemodel_subject->setTable("subject");
         tablemodel_subject->select();
-        ui->tableView_2->setModel(tablemodel_subject);
+        ui->tableWidget->setModel(tablemodel_subject);
 
         QSqlRelationalTableModel *tablemodel_teachers = new QSqlRelationalTableModel(this);
         tablemodel_teachers->setTable("teachers");
         tablemodel_teachers->select();
-        //tablemodel_teachers->setRelation(4, QSqlRelation("status", "status_name", "name"));
+        tablemodel_teachers->setRelation(4, QSqlRelation("status", "status_name", "name"));
         ui->tableView->setModel(tablemodel_teachers);
-        //ui->tableView->setItemDelegate(new QSqlRelationalDelegate(ui->tableView));
+        ui->tableView->setItemDelegate(new QSqlRelationalDelegate(ui->tableView));
+*/
+
+        QSqlQuery qry;
+        qry.exec("SELECT * FROM subject;");
+
+
+        ui->tableWidget->setColumnCount(1);
+        ui->tableWidget->setRowCount(0);
+
+        qDebug() << qry.size();
+
+        while (qry.next()){
+           ui->tableWidget->setRowCount(ui->tableWidget->rowCount() + 1);
+           QTableWidgetItem *twi = ui->tableWidget->item(1, 0);
+           twi = new QTableWidgetItem();
+           twi->setText("xyi");
+           twi->setText(qry.value(0).toString());
+           qDebug() << qry.value(0).toString();
+
+        }
+
     }
 }
 

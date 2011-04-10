@@ -11,6 +11,7 @@
 #include <QSqlQuery>
 #include <QSqlQueryModel>
 #include <QSqlTableModel>
+#include <QSqlRelationalTableModel>
 #include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -33,7 +34,7 @@ MainWindow::MainWindow(QWidget *parent) :
         QSqlQuery query;
         query.exec("PRAGMA foreign_keys = ON;");
 
-        QSqlTableModel *tablemodel_subject = new QSqlTableModel(this);
+        QSqlRelationalTableModel *tablemodel_subject = new QSqlRelationalTableModel(this);
         tablemodel_subject->setTable("subject");
         tablemodel_subject->select();
         ui->tableView_2->setModel(tablemodel_subject);
@@ -41,10 +42,9 @@ MainWindow::MainWindow(QWidget *parent) :
         QSqlRelationalTableModel *tablemodel_teachers = new QSqlRelationalTableModel(this);
         tablemodel_teachers->setTable("teachers");
         tablemodel_teachers->select();
-
+        //tablemodel_teachers->setRelation(4, QSqlRelation("status", "status_name", "name"));
         ui->tableView->setModel(tablemodel_teachers);
-        tablemodel_teachers->setRelation(4, QSqlRelation("status", "status_name", "name"));
-
+        //ui->tableView->setItemDelegate(new QSqlRelationalDelegate(ui->tableView));
     }
 }
 

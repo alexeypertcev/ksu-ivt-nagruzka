@@ -21,7 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+    db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName("/home/perec/nagruzka.db");
 
     if (!db.open()){
@@ -34,19 +34,19 @@ MainWindow::MainWindow(QWidget *parent) :
 
         QSqlQuery query;
         query.exec("PRAGMA foreign_keys = ON;");
-/*
-        QSqlRelationalTableModel *tablemodel_subject = new QSqlRelationalTableModel(this);
+
+        tablemodel_subject = new QSqlRelationalTableModel(this);
         tablemodel_subject->setTable("subject");
         tablemodel_subject->select();
-        ui->tableWidget->setModel(tablemodel_subject);
+        ui->tableView->setModel(tablemodel_subject);
 
         QSqlRelationalTableModel *tablemodel_teachers = new QSqlRelationalTableModel(this);
         tablemodel_teachers->setTable("teachers");
         tablemodel_teachers->select();
         tablemodel_teachers->setRelation(4, QSqlRelation("status", "status_name", "name"));
-        ui->tableView->setModel(tablemodel_teachers);
-        ui->tableView->setItemDelegate(new QSqlRelationalDelegate(ui->tableView));
-*/
+        ui->tableView_2->setModel(tablemodel_teachers);
+        ui->tableView_2->setItemDelegate(new QSqlRelationalDelegate(ui->tableView));
+/*
 
         QSqlQuery qry;
         qry.exec("SELECT * FROM subject;");
@@ -66,7 +66,7 @@ MainWindow::MainWindow(QWidget *parent) :
            qDebug() << qry.value(0).toString();
 
         }
-
+*/
     }
 }
 
@@ -83,4 +83,17 @@ void MainWindow::push1(){
 void MainWindow::on_pushButton_clicked()
 {
 
+}
+
+void MainWindow::on_pushButton_5_clicked()
+{
+    tablemodel_subject->database().transaction();
+     if (tablemodel_subject->submitAll()) {
+         tablemodel_subject->database().commit();
+     } else {
+         tablemodel_subject->database().rollback();
+         QMessageBox::warning(this, tr("Cached Table"),
+                              tr("The database reported an error: %1")
+                              .arg(tablemodel_subject->lastError().text()));
+     }
 }

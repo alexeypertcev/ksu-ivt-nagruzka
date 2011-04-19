@@ -42,6 +42,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
         QSqlRelationalTableModel *tablemodel_teachers = new QSqlRelationalTableModel(this);
         tablemodel_teachers->setTable("teachers");
+        tablemodel_teachers->setEditStrategy(QSqlTableModel::OnManualSubmit);
         tablemodel_teachers->select();
         tablemodel_teachers->setRelation(4, QSqlRelation("status", "status_name", "name"));
         ui->tableView_2->setModel(tablemodel_teachers);

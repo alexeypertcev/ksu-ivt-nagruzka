@@ -6,6 +6,9 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "connection.h"
+#include "table_editor.h"
+
 #include <QtGui>
 #include <QtSql>
 #include <QSqlDatabase>
@@ -21,16 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName("/home/perec/nagruzka.db");
-
-    if (!db.open()){
-
-        QMessageBox m;
-        m.setText("db is not open");
-        m.exec();
-
-    } else {
+    if (createConnection()){
 
         QSqlQuery query;
         query.exec("PRAGMA foreign_keys = ON;");
@@ -47,6 +41,15 @@ MainWindow::MainWindow(QWidget *parent) :
         tablemodel_teachers->setRelation(4, QSqlRelation("status", "status_name", "name"));
         ui->tableView_2->setModel(tablemodel_teachers);
         ui->tableView_2->setItemDelegate(new QSqlRelationalDelegate(ui->tableView));
+
+
+
+
+
+            }
+
+
+
 /*
 
         QSqlQuery qry;
@@ -68,7 +71,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
         }
 */
-    }
 }
 
 MainWindow::~MainWindow()

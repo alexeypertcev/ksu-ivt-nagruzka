@@ -15,6 +15,7 @@ SOURCES += main.cpp\
     table_editor.cpp
 
 HEADERS  += mainwindow.h \
-    table_editor.h
+    table_editor.h \
+    connection.h
 
 FORMS    += mainwindow.ui

@@ -66,8 +66,8 @@ static bool create_new_db(){
                    "name TEXT NOT NULL, "
                    "hours INTEGER NOT NULL, "
                    "CONSTRAINT name PRIMARY KEY (name))");
-        query.exec("CREATE TABLE teachers ( "
-                   "id INTEGER AUTO_INCREMENT NOT NULL, "
+   /*     query.exec("CREATE TABLE teachers ( "
+                   "id INTEGER AUTOINCREMENT NOT NULL, "
                    "f TEXT NOT NULL, "
                    "i TEXT NOT NULL, "
                    "o TEXT NOT NULL, "
@@ -75,7 +75,7 @@ static bool create_new_db(){
                    "rate REAL NOT NULL, "
                    "CONSTRAINT id PRIMARY KEY (id), "
                    "CONSTRAINT status_name FOREIGN KEY (status_name) "
-                   "  REFERENCES status (name)) ");
+                   "  REFERENCES status (name)) ");*/
         query.exec("CREATE TABLE curriculum ( "
                    "id INTEGER AUTO_INCREMENT NOT NULL, "
                    "speciality_name TEXT NOT NULL, "

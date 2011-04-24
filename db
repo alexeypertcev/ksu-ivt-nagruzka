@@ -39,13 +39,12 @@ CONSTRAINT "name" PRIMARY KEY ("name")
 )
 
 CREATE TABLE teachers ( 
-"id" INTEGER AUTO_INCREMENT NOT NULL, 
+"id" INTEGER PRIMARY KEY AUTOINCREMENT,
 "f" TEXT NOT NULL, 
 "i" TEXT NOT NULL, 
 "o" TEXT NOT NULL, 
 "status_name" TEXT NOT NULL, 
 "rate" REAL NOT NULL,
-CONSTRAINT "id" PRIMARY KEY ("id"),
 CONSTRAINT "status_name" FOREIGN KEY ("status_name") 
   REFERENCES "status" ("name")
 ) 

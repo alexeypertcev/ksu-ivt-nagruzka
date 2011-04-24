@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab_6">
      <attribute name="title">
@@ -71,7 +71,7 @@
      <attribute name="title">
       <string>Преподаватели</string>
      </attribute>
-     <widget class="QPushButton" name="pushButton">
+     <widget class="QPushButton" name="pushButton_del_teachers">
       <property name="geometry">
        <rect>
         <x>580</x>
@@ -94,7 +94,7 @@
        </rect>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_4">
+     <widget class="QPushButton" name="pushButton_add_teachers">
       <property name="geometry">
        <rect>
         <x>470</x>

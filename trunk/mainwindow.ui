@@ -20,7 +20,7 @@
       <x>10</x>
       <y>0</y>
       <width>691</width>
-      <height>351</height>
+      <height>361</height>
      </rect>
     </property>
     <property name="currentIndex">
@@ -30,7 +30,7 @@
      <attribute name="title">
       <string>Предметы</string>
      </attribute>
-     <widget class="QPushButton" name="pushButton_3">
+     <widget class="QPushButton" name="pushButton_add_subject">
       <property name="geometry">
        <rect>
         <x>300</x>
@@ -49,11 +49,11 @@
         <x>10</x>
         <y>10</y>
         <width>281</width>
-        <height>301</height>
+        <height>311</height>
        </rect>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_2">
+     <widget class="QPushButton" name="pushButton_del_subject">
       <property name="geometry">
        <rect>
         <x>300</x>
@@ -81,7 +81,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>PushButton</string>
+       <string>удалить</string>
       </property>
      </widget>
      <widget class="QTableView" name="tableView_2">
@@ -92,6 +92,19 @@
         <width>661</width>
         <height>271</height>
        </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_4">
+      <property name="geometry">
+       <rect>
+        <x>470</x>
+        <y>290</y>
+        <width>91</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>добавить</string>
       </property>
      </widget>
     </widget>

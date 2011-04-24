@@ -17,6 +17,7 @@
 #include <QSqlTableModel>
 #include <QSqlRelationalTableModel>
 #include <QMessageBox>
+#include <QModelIndex>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -33,6 +34,7 @@ MainWindow::MainWindow(QWidget *parent) :
         tablemodel_subject->setTable("subject");
         tablemodel_subject->select();
         ui->tableView->setModel(tablemodel_subject);
+        ui->tableView->update();
 
         QSqlRelationalTableModel *tablemodel_teachers = new QSqlRelationalTableModel(this);
         tablemodel_teachers->setTable("teachers");
@@ -99,4 +101,30 @@ void MainWindow::on_pushButton_5_clicked()
                               tr("The database reported an error: %1")
                               .arg(tablemodel_subject->lastError().text()));
      }
+}
+
+void MainWindow::on_action_6_activated()
+{
+ //   create_new_db();
+}
+
+void MainWindow::on_pushButton_3_clicked()
+{
+    QSqlQuery query;
+    if (!query.exec("insert into subject values('')")){
+        QMessageBox::warning(this, tr("Error querry"),
+                             tr("The database reported an error: %1")
+                             .arg(tablemodel_subject->lastError().text()));
+    }
+    tablemodel_subject->select();
+}
+
+void MainWindow::on_pushButton_2_clicked()
+{
+    //QModelIndex *qmi;
+    //qmi = ui->tableView->selectedIndexes();
+    QList<QModelIndex*> modelindexlist;
+
+    modelindexlist = ui->tableView->selectedIndexes();
+
 }

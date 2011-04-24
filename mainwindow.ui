@@ -30,69 +30,17 @@
      <attribute name="title">
       <string>Предметы</string>
      </attribute>
-     <widget class="QPushButton" name="pushButton_2">
-      <property name="geometry">
-       <rect>
-        <x>270</x>
-        <y>10</y>
-        <width>91</width>
-        <height>24</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>PushButton</string>
-      </property>
-     </widget>
      <widget class="QPushButton" name="pushButton_3">
       <property name="geometry">
        <rect>
-        <x>290</x>
-        <y>150</y>
+        <x>250</x>
+        <y>60</y>
         <width>91</width>
         <height>24</height>
        </rect>
       </property>
       <property name="text">
        <string>добавить</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="pushButton_4">
-      <property name="geometry">
-       <rect>
-        <x>290</x>
-        <y>180</y>
-        <width>91</width>
-        <height>24</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>удалить</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="pushButton_5">
-      <property name="geometry">
-       <rect>
-        <x>320</x>
-        <y>270</y>
-        <width>91</width>
-        <height>24</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>сохранить</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="pushButton_6">
-      <property name="geometry">
-       <rect>
-        <x>430</x>
-        <y>270</y>
-        <width>91</width>
-        <height>24</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>отменить</string>
       </property>
      </widget>
      <widget class="QTableView" name="tableView">
@@ -103,6 +51,19 @@
         <width>221</width>
         <height>301</height>
        </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_2">
+      <property name="geometry">
+       <rect>
+        <x>250</x>
+        <y>90</y>
+        <width>91</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>удалить</string>
       </property>
      </widget>
     </widget>
@@ -169,6 +130,7 @@
     <property name="title">
      <string>Файл</string>
     </property>
+    <addaction name="action_6"/>
    </widget>
    <widget class="QMenu" name="menu_2">
     <property name="title">
@@ -223,27 +185,15 @@
     <string>Должности</string>
    </property>
   </action>
+  <action name="action_6">
+   <property name="text">
+    <string>!!! Создать</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
- <connections>
-  <connection>
-   <sender>pushButton_2</sender>
-   <signal>clicked()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>push1()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>284</x>
-     <y>74</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>122</x>
-     <y>349</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
  <slots>
   <slot>push1()</slot>
  </slots>

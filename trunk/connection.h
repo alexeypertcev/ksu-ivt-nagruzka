@@ -5,6 +5,8 @@
 #ifndef CONNECTION_H
 #define CONNECTION_H
 
+#define PATH_DB "/home/perec/nagruzka.db"
+
 #include <QMessageBox>
 #include <QSqlDatabase>
 #include <QSqlError>
@@ -15,7 +17,7 @@ QSqlDatabase db;
 static bool createConnection()
 {
     db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName("/home/perec/nagruzka.db");
+    db.setDatabaseName(PATH_DB);
     
     if (!db.open()) {
         QMessageBox::critical(0, qApp->tr("Cannot open database"),
@@ -26,7 +28,6 @@ static bool createConnection()
                      "Click Cancel to exit."), QMessageBox::Cancel);
         return false;
     }
-
     return true;
 }
 
@@ -41,8 +42,64 @@ static bool create_new_db(){
                      "Click Cancel to exit."), QMessageBox::Cancel);
         return false;
     } else{
-
         QSqlQuery query;
+        query.exec("PRAGMA foreign_keys = ON;");
+        query.exec("CREATE TABLE speciality (name TEXT NOT NULL, "
+                   "CONSTRAINT name PRIMARY KEY (name))");
+        query.exec("CREATE TABLE subject (name TEXT NOT NULL, "
+                   "CONSTRAINT name PRIMARY KEY (name))");
+        query.exec("CREATE TABLE student_on_course (id INTEGER AUTO_INCREMENT NOT NULL, "
+                   "speciality_name TEXT NOT NULL, "
+                   "course INTEGER NOT NULL, "
+                   "CONSTRAINT id PRIMARY KEY (id), "
+                   "CONSTRAINT speciality_name FOREIGN KEY (speciality_name)"
+                   "REFERENCES speciality (name))");
+        query.exec("CREATE TABLE student_on_group (id INTEGER AUTO_INCREMENT NOT NULL, "
+                   "student_on_course_id INTEGER NOT NULL, "
+                   "group INTEGER NOT NULL, "
+                   "undergroup INTEGER NOT NULL, "
+                   "quantity INTEGER NOT NULL, "
+                   "CONSTRAINT id PRIMARY KEY (id), "
+                   "CONSTRAINT student_on_course_id FOREIGN KEY (student_on_course_id)"
+                   "REFERENCES student_on_course (id))");
+        query.exec("CREATE TABLE status ( "
+                   "name TEXT NOT NULL, "
+                   "hours INTEGER NOT NULL, "
+                   "CONSTRAINT name PRIMARY KEY (name))");
+        query.exec("CREATE TABLE teachers ( "
+                   "id INTEGER AUTO_INCREMENT NOT NULL, "
+                   "f TEXT NOT NULL, "
+                   "i TEXT NOT NULL, "
+                   "o TEXT NOT NULL, "
+                   "status_name TEXT NOT NULL, "
+                   "rate REAL NOT NULL, "
+                   "CONSTRAINT id PRIMARY KEY (id), "
+                   "CONSTRAINT status_name FOREIGN KEY (status_name) "
+                   "  REFERENCES status (name)) ");
+        query.exec("CREATE TABLE curriculum ( "
+                   "id INTEGER AUTO_INCREMENT NOT NULL, "
+                   "speciality_name TEXT NOT NULL, "
+                   "subject_name TEXT NOT NULL, "
+                   "semmestr INTEGER NOT NULL, "
+                   "lection_hr INTEGER, "
+                   "labs_hr INTEGER, "
+                   "practice_hr INTEGER, "
+                   "KCP_hr INTEGER, "
+                   "CONSTRAINT id PRIMARY KEY (id), "
+                   "CONSTRAINT subject_name FOREIGN KEY (subject_name) "
+                   "  REFERENCES subject (name), "
+                   "CONSTRAINT speciality_name FOREIGN KEY (speciality_name) "
+                   "  REFERENCES speciality (name))");
+        query.exec("CREATE TABLE subjects_in_semmestre ( "
+                   "id INTEGER AUTO_INCREMENT NOT NULL, "
+                   "student_on_course_id INTEGER NOT NULL, "
+                   "curriculum_id INTEGER NOT NULL, "
+                   "CONSTRAINT id PRIMARY KEY (id), "
+                   "CONSTRAINT student_on_course_id FOREIGN KEY (student_on_course_id) "
+                   "  REFERENCES student_on_course (id), "
+                   "CONSTRAINT curriculum_id FOREIGN KEY (curriculum_id) "
+                   "  REFERENCES curriculum (id)) ");
+
         /*
             query.exec("create table person (id int primary key, "
                        "firstname varchar(20), lastname varchar(20))");
@@ -92,10 +149,6 @@ static bool create_new_db(){
                        "history. Today the city counts 12 million citizens, and "
                        "is the political, economic and cultural centre of China.')");
                        */
-
-
-
-
     }
     return true;
 }

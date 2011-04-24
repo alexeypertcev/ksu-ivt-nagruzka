@@ -25,8 +25,11 @@ private:
     Ui::MainWindow *ui;
     QSqlDatabase db;
     QSqlTableModel *model;
-    QSqlRelationalTableModel *tablemodel_subject;
+    QSqlRelationalTableModel* tablemodel_subject;
+    QSqlRelationalTableModel* tablemodel_teachers;
 private slots:
+    void on_pushButton_del_teachers_clicked();
+    void on_pushButton_add_teachers_clicked();
     void on_pushButton_del_subject_clicked();
     void on_pushButton_add_subject_clicked();
     void on_action_6_activated();

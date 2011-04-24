@@ -37,13 +37,15 @@ MainWindow::MainWindow(QWidget *parent) :
         ui->tableView->setModel(tablemodel_subject);
         ui->tableView->update();
 
-        QSqlRelationalTableModel *tablemodel_teachers = new QSqlRelationalTableModel(this);
+        tablemodel_teachers = new QSqlRelationalTableModel(this);
         tablemodel_teachers->setTable("teachers");
         tablemodel_teachers->setEditStrategy(QSqlTableModel::OnFieldChange);
         tablemodel_teachers->select();
-        tablemodel_teachers->setRelation(4, QSqlRelation("status", "status_name", "name"));
+        tablemodel_teachers->setRelation(4, QSqlRelation("status", "name", "name"));
+
         ui->tableView_2->setModel(tablemodel_teachers);
         ui->tableView_2->setItemDelegate(new QSqlRelationalDelegate(ui->tableView));
+        ui->tableView_2->update();
      }
 }
 
@@ -81,4 +83,30 @@ void MainWindow::on_pushButton_del_subject_clicked()
                              tr("The database reported an error: %1").arg(tablemodel_subject->lastError().text()));
     }
     tablemodel_subject->select();
+}
+
+void MainWindow::on_pushButton_add_teachers_clicked()
+{
+    QString s = "insert into teachers values(NULL, 'f', 'i', 'o', 'default', 1.0 );";
+    qDebug() << s;
+
+    QSqlQuery query;
+    if (!query.exec(s)){
+        QMessageBox::warning(this, tr("Error querry"),
+                             tr("The database reported an error: %1").arg(tablemodel_subject->lastError().text()));
+    }
+    tablemodel_teachers->select();
+}
+
+void MainWindow::on_pushButton_del_teachers_clicked()
+{
+    QString s = "DELETE FROM teachers WHERE id = '"+ ui->tableView_2->currentIndex().data(Qt::DisplayRole).toString() + "';";
+    qDebug() << s;
+
+    QSqlQuery query;
+    if (!query.exec(s)){
+        QMessageBox::warning(this, tr("Error querry"),
+                             tr("The database reported an error: %1").arg(tablemodel_subject->lastError().text()));
+    }
+    tablemodel_teachers->select();
 }

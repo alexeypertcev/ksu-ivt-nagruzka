@@ -44,35 +44,8 @@ MainWindow::MainWindow(QWidget *parent) :
         ui->tableView_2->setModel(tablemodel_teachers);
         ui->tableView_2->setItemDelegate(new QSqlRelationalDelegate(ui->tableView));
 
-
-
-
-
             }
 
-
-
-/*
-
-        QSqlQuery qry;
-        qry.exec("SELECT * FROM subject;");
-
-
-        ui->tableWidget->setColumnCount(1);
-        ui->tableWidget->setRowCount(0);
-
-        qDebug() << qry.size();
-
-        while (qry.next()){
-           ui->tableWidget->setRowCount(ui->tableWidget->rowCount() + 1);
-           QTableWidgetItem *twi = ui->tableWidget->item(1, 0);
-           twi = new QTableWidgetItem();
-           twi->setText("xyi");
-           twi->setText(qry.value(0).toString());
-           qDebug() << qry.value(0).toString();
-
-        }
-*/
 }
 
 MainWindow::~MainWindow()
@@ -92,15 +65,7 @@ void MainWindow::on_pushButton_clicked()
 
 void MainWindow::on_pushButton_5_clicked()
 {
-    tablemodel_subject->database().transaction();
-     if (tablemodel_subject->submitAll()) {
-         tablemodel_subject->database().commit();
-     } else {
-         tablemodel_subject->database().rollback();
-         QMessageBox::warning(this, tr("Cached Table"),
-                              tr("The database reported an error: %1")
-                              .arg(tablemodel_subject->lastError().text()));
-     }
+
 }
 
 void MainWindow::on_action_6_activated()
@@ -110,8 +75,11 @@ void MainWindow::on_action_6_activated()
 
 void MainWindow::on_pushButton_3_clicked()
 {
+    QString s = "insert into subject values('')";
+    qDebug() << s;
+
     QSqlQuery query;
-    if (!query.exec("insert into subject values('')")){
+    if (!query.exec(s)){
         QMessageBox::warning(this, tr("Error querry"),
                              tr("The database reported an error: %1")
                              .arg(tablemodel_subject->lastError().text()));
@@ -121,10 +89,14 @@ void MainWindow::on_pushButton_3_clicked()
 
 void MainWindow::on_pushButton_2_clicked()
 {
-    //QModelIndex *qmi;
-    //qmi = ui->tableView->selectedIndexes();
-    QList<QModelIndex*> modelindexlist;
+    QString s = "DELETE FROM subject WHERE name = '"+ ui->tableView->currentIndex().data(Qt::DisplayRole).toString() + "';";
+    qDebug() << s;
 
-    modelindexlist = ui->tableView->selectedIndexes();
-
+    QSqlQuery query;
+    if (!query.exec(s)){
+        QMessageBox::warning(this, tr("Error querry"),
+                             tr("The database reported an error: %1")
+                             .arg(tablemodel_subject->lastError().text()));
+    }
+    tablemodel_subject->select();
 }

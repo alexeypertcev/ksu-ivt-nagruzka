@@ -116,5 +116,5 @@ void MainWindow::on_action_4_activated()
 {   //вызов окна настроек
 
     Settings s;
-    s.show();
+    s.exec();
 }

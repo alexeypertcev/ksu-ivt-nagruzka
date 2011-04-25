@@ -6,7 +6,6 @@
 
 QT_BEGIN_NAMESPACE
 class QSqlRelationalTableModel;
-class QSqlTableModel;
 QT_END_NAMESPACE
 
 namespace Ui {
@@ -24,7 +23,6 @@ public:
 private:
     Ui::MainWindow *ui;
     QSqlDatabase db;
-    QSqlTableModel *model;
     QSqlRelationalTableModel* tablemodel_subject;
     QSqlRelationalTableModel* tablemodel_teachers;
 private slots:

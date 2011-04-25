@@ -3,6 +3,10 @@
 
 #include <QDialog>
 
+QT_BEGIN_NAMESPACE
+class QSqlRelationalTableModel;
+QT_END_NAMESPACE
+
 namespace Ui {
     class Settings;
 }
@@ -17,11 +21,15 @@ public:
 
 private:
     Ui::Settings *ui;
-
+    QSqlRelationalTableModel* tablemodel_spec;
+    QSqlRelationalTableModel* tablemodel_stat;
 private slots:
 
 
 private slots:
+    void on_pushButton_del_dolj_clicked();
+    void on_pushButton_add_dolj_clicked();
+    void on_pushButton_del_spec_clicked();
     void on_pushButton_add_spec_clicked();
 };
 

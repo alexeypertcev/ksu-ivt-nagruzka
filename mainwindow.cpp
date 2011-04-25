@@ -8,6 +8,7 @@
 #include "ui_mainwindow.h"
 #include "connection.h"
 #include "table_editor.h"
+#include "settings.h"
 
 #include <QtGui>
 #include <QtSql>
@@ -109,4 +110,11 @@ void MainWindow::on_pushButton_del_teachers_clicked()
                              tr("The database reported an error: %1").arg(tablemodel_subject->lastError().text()));
     }
     tablemodel_teachers->select();
+}
+
+void MainWindow::on_action_4_activated()
+{   //вызов окна настроек
+
+    Settings s;
+    s.show();
 }

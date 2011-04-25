@@ -28,6 +28,7 @@ private:
     QSqlRelationalTableModel* tablemodel_subject;
     QSqlRelationalTableModel* tablemodel_teachers;
 private slots:
+    void on_action_4_activated();
     void on_pushButton_del_teachers_clicked();
     void on_pushButton_add_teachers_clicked();
     void on_pushButton_del_subject_clicked();

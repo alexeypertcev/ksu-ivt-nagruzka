@@ -12,10 +12,13 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    table_editor.cpp
+    table_editor.cpp \
+    settings.cpp
 
 HEADERS  += mainwindow.h \
     table_editor.h \
-    connection.h
+    connection.h \
+    settings.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    settings.ui

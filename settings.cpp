@@ -88,3 +88,7 @@ void Settings::on_pushButton_del_dolj_clicked()
     }
     tablemodel_stat->select();
 }
+
+void Settings::set_tab(int index){
+    ui->tabWidget->setCurrentIndex(index);
+}

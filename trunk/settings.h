@@ -18,7 +18,7 @@ class Settings : public QDialog
 public:
     explicit Settings(QWidget *parent = 0);
     ~Settings();
-
+    void set_tab(int index);
 private:
     Ui::Settings *ui;
     QSqlRelationalTableModel* tablemodel_spec;

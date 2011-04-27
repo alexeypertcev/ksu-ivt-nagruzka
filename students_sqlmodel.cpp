@@ -11,7 +11,7 @@ StudentsSqlModel::StudentsSqlModel(QObject *parent)
 {
 }
 
-//! [0]
+
 Qt::ItemFlags StudentsSqlModel::flags(
         const QModelIndex &index) const
 {
@@ -20,9 +20,7 @@ Qt::ItemFlags StudentsSqlModel::flags(
         flags |= Qt::ItemIsEditable;
     return flags;
 }
-//! [0]
 
-//! [1]
 bool StudentsSqlModel::setData(const QModelIndex &index, const QVariant &value, int /* role */)
 {
     if (index.column() < 1 || index.column() > 2)
@@ -42,7 +40,6 @@ bool StudentsSqlModel::setData(const QModelIndex &index, const QVariant &value, 
     refresh();
     return ok;
 }
-//! [1]
 
 void StudentsSqlModel::refresh()
 {
@@ -52,7 +49,6 @@ void StudentsSqlModel::refresh()
     setHeaderData(2, Qt::Horizontal, QObject::tr("Last name"));
 }
 
-//! [2]
 bool StudentsSqlModel::setFirstName(int personId, const QString &firstName)
 {
     QSqlQuery query;
@@ -61,7 +57,6 @@ bool StudentsSqlModel::setFirstName(int personId, const QString &firstName)
     query.addBindValue(personId);
     return query.exec();
 }
-//! [2]
 
 bool StudentsSqlModel::setLastName(int personId, const QString &lastName)
 {

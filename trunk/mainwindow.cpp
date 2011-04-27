@@ -53,8 +53,10 @@ MainWindow::MainWindow(QWidget *parent) :
         ui->tableView_2->update();
 
         // students table
+        //"SELECT student_on_course.speciality_name, student_on_course.course, student_on_group.group, student_on_group.undergroup, student_on_group.quantity"
+        //                                    "FROM student_on_course INNER JOIN student_on_group ON student_on_course.id = student_on_group.student_on_course_id;";
         sqlmodel_students = new StudentsSqlModel(this);
-        sqlmodel_students->setQuery("select * from student_on_course");
+        sqlmodel_students->setQuery("SELECT * FROM student_on_group");
         ui->tableView_3->setModel(sqlmodel_students);
         ui->tableView_3->show();
 
@@ -70,6 +72,7 @@ MainWindow::~MainWindow()
 void MainWindow::on_action_6_activated()
 {
     create_all_tables();
+    insert_main_data();
 }
 
 void MainWindow::on_action_7_activated()
@@ -170,7 +173,7 @@ void MainWindow::on_pushButton_clicked()
 
 void MainWindow::on_pushButton_add_student_clicked()
 {
-    QString s = "insert into student_on_course values(2, 'PO', 1);";
+    QString s = "insert into student_on_course values(NULL, 'default', 1);";
     qDebug() << s;
 
     QSqlQuery query;
@@ -183,6 +186,17 @@ void MainWindow::on_pushButton_add_student_clicked()
 
 void MainWindow::on_pushButton_del_student_clicked()
 {
+    int row = ui->tableView_3->currentIndex().row();
+    QString s = "DELETE FROM student_on_course WHERE id = '" + sqlmodel_students->data( tablemodel_teachers->index(row,0),
+                                                                                Qt::DisplayRole ).toString() + "';";
+    qDebug() << s;
+
+    QSqlQuery query;
+    if (!query.exec(s)){
+        QMessageBox::warning(this, tr("Error querry"),
+                             tr("The database reported an error: %1").arg(sqlmodel_students->lastError().text()));
+    }
+    sqlmodel_students->setQuery("select * from student_on_course");
 
 }
 

@@ -28,7 +28,7 @@ bool StudentsSqlModel::setData(const QModelIndex &index, const QVariant &value, 
 
     QModelIndex primaryKeyIndex = QSqlQueryModel::index(index.row(), 0);
     int id = data(primaryKeyIndex).toInt();
-
+/*
     clear();
 
     bool ok;
@@ -39,6 +39,7 @@ bool StudentsSqlModel::setData(const QModelIndex &index, const QVariant &value, 
     }
     refresh();
     return ok;
+*/
 }
 
 void StudentsSqlModel::refresh()

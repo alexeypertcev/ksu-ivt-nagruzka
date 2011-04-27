@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>713</width>
-    <height>415</height>
+    <height>466</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,11 +20,11 @@
       <x>10</x>
       <y>0</y>
       <width>691</width>
-      <height>361</height>
+      <height>411</height>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="tab_6">
      <attribute name="title">
@@ -139,16 +139,16 @@
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>411</width>
-        <height>311</height>
+        <width>661</width>
+        <height>331</height>
        </rect>
       </property>
      </widget>
      <widget class="QPushButton" name="pushButton_add_student">
       <property name="geometry">
        <rect>
-        <x>430</x>
-        <y>80</y>
+        <x>460</x>
+        <y>350</y>
         <width>91</width>
         <height>24</height>
        </rect>
@@ -160,8 +160,8 @@
      <widget class="QPushButton" name="pushButton_del_student">
       <property name="geometry">
        <rect>
-        <x>430</x>
-        <y>120</y>
+        <x>570</x>
+        <y>350</y>
         <width>91</width>
         <height>24</height>
        </rect>
@@ -202,6 +202,7 @@
      <string>Файл</string>
     </property>
     <addaction name="action_6"/>
+    <addaction name="action_7"/>
    </widget>
    <widget class="QMenu" name="menu_2">
     <property name="title">
@@ -258,7 +259,15 @@
   </action>
   <action name="action_6">
    <property name="text">
-    <string>!!! Создать</string>
+    <string>Создать</string>
+   </property>
+   <property name="toolTip">
+    <string>Создать</string>
+   </property>
+  </action>
+  <action name="action_7">
+   <property name="text">
+    <string>Удалить</string>
    </property>
   </action>
  </widget>

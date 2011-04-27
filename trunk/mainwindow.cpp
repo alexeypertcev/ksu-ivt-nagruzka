@@ -33,6 +33,7 @@ MainWindow::MainWindow(QWidget *parent) :
         QSqlQuery query;
         query.exec("PRAGMA foreign_keys = ON;");
 
+        // subject table
         tablemodel_subject = new QSqlRelationalTableModel(this);
         tablemodel_subject->setTable("subject");
         tablemodel_subject->setEditStrategy(QSqlTableModel::OnFieldChange);
@@ -40,6 +41,7 @@ MainWindow::MainWindow(QWidget *parent) :
         ui->tableView->setModel(tablemodel_subject);
         ui->tableView->update();
 
+        // teachers table
         tablemodel_teachers = new QSqlRelationalTableModel(this);
         tablemodel_teachers->setTable("teachers");
         tablemodel_teachers->setEditStrategy(QSqlTableModel::OnFieldChange);
@@ -49,6 +51,12 @@ MainWindow::MainWindow(QWidget *parent) :
         ui->tableView_2->setModel(tablemodel_teachers);
         ui->tableView_2->setItemDelegate(new QSqlRelationalDelegate(ui->tableView_2));
         ui->tableView_2->update();
+
+        // students table
+        sqlmodel_students = new StudentsSqlModel(this);
+        sqlmodel_students->setQuery("select * from student_on_course");
+        ui->tableView_3->setModel(sqlmodel_students);
+        ui->tableView_3->show();
 
         set_design_window();
      }
@@ -61,7 +69,12 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_action_6_activated()
 {
- //   create_new_db();
+    create_all_tables();
+}
+
+void MainWindow::on_action_7_activated()
+{
+    drop_all_tables();
 }
 
 void MainWindow::on_pushButton_add_subject_clicked()
@@ -105,8 +118,6 @@ void MainWindow::on_pushButton_add_teachers_clicked()
 
 void MainWindow::on_pushButton_del_teachers_clicked()
 {
-    //tablemodel_teachers->setData( tablemodel_teachers->index( 1, 1 ), Qt::red , Qt::BackgroundRole );
-
     int row = ui->tableView_2->currentIndex().row();
     QString s = "DELETE FROM teachers WHERE id = '" + tablemodel_teachers->data( tablemodel_teachers->index(row,0),
                                                                                 Qt::DisplayRole ).toString() + "';";
@@ -156,3 +167,23 @@ void MainWindow::on_pushButton_clicked()
     //tablemodel_teachers->setData( tablemodel_teachers->index( 1, 1 ), QBrush(Qt::red) , Qt::BackgroundRole );
     */
 }
+
+void MainWindow::on_pushButton_add_student_clicked()
+{
+    QString s = "insert into student_on_course values(2, 'PO', 1);";
+    qDebug() << s;
+
+    QSqlQuery query;
+    if (!query.exec(s)){
+        QMessageBox::warning(this, tr("Error querry"),
+                             tr("The database reported an error: %1").arg(tablemodel_subject->lastError().text()));
+    }
+    sqlmodel_students->setQuery("select * from student_on_course");
+}
+
+void MainWindow::on_pushButton_del_student_clicked()
+{
+
+}
+
+

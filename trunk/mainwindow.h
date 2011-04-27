@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QSqlDatabase>
+#include "students_sqlmodel.h"
 
 QT_BEGIN_NAMESPACE
 class QSqlRelationalTableModel;
@@ -26,7 +27,11 @@ private:
     QSqlDatabase db;
     QSqlRelationalTableModel* tablemodel_subject;
     QSqlRelationalTableModel* tablemodel_teachers;
+    StudentsSqlModel* sqlmodel_students;
 private slots:
+    void on_action_7_activated();
+    void on_pushButton_del_student_clicked();
+    void on_pushButton_add_student_clicked();
     void on_pushButton_clicked();
     void on_action_5_activated();
     void on_action_4_activated();

@@ -31,7 +31,7 @@ static bool createConnection()
     return true;
 }
 
-static bool create_new_db(){
+static bool create_all_tables(){
 
     if (!db.open()) {
         QMessageBox::critical(0, qApp->tr("Cannot open database"),
@@ -66,18 +66,17 @@ static bool create_new_db(){
                    "name TEXT NOT NULL, "
                    "hours INTEGER NOT NULL, "
                    "CONSTRAINT name PRIMARY KEY (name))");
-   /*     query.exec("CREATE TABLE teachers ( "
-                   "id INTEGER AUTOINCREMENT NOT NULL, "
+        query.exec("CREATE TABLE teachers ( "
+                   "id INTEGER PRIMARY KEY AUTOINCREMENT, "
                    "f TEXT NOT NULL, "
                    "i TEXT NOT NULL, "
                    "o TEXT NOT NULL, "
                    "status_name TEXT NOT NULL, "
                    "rate REAL NOT NULL, "
-                   "CONSTRAINT id PRIMARY KEY (id), "
                    "CONSTRAINT status_name FOREIGN KEY (status_name) "
-                   "  REFERENCES status (name)) ");*/
+                   "  REFERENCES status (name)) ");
         query.exec("CREATE TABLE curriculum ( "
-                   "id INTEGER AUTO_INCREMENT NOT NULL, "
+                   "id INTEGER PRIMARY KEY AUTOINCREMENT, "
                    "speciality_name TEXT NOT NULL, "
                    "subject_name TEXT NOT NULL, "
                    "semmestr INTEGER NOT NULL, "
@@ -85,16 +84,14 @@ static bool create_new_db(){
                    "labs_hr INTEGER, "
                    "practice_hr INTEGER, "
                    "KCP_hr INTEGER, "
-                   "CONSTRAINT id PRIMARY KEY (id), "
                    "CONSTRAINT subject_name FOREIGN KEY (subject_name) "
                    "  REFERENCES subject (name), "
                    "CONSTRAINT speciality_name FOREIGN KEY (speciality_name) "
                    "  REFERENCES speciality (name))");
         query.exec("CREATE TABLE subjects_in_semmestre ( "
-                   "id INTEGER AUTO_INCREMENT NOT NULL, "
+                   "id INTEGER PRIMARY KEY AUTOINCREMENT, "
                    "student_on_course_id INTEGER NOT NULL, "
                    "curriculum_id INTEGER NOT NULL, "
-                   "CONSTRAINT id PRIMARY KEY (id), "
                    "CONSTRAINT student_on_course_id FOREIGN KEY (student_on_course_id) "
                    "  REFERENCES student_on_course (id), "
                    "CONSTRAINT curriculum_id FOREIGN KEY (curriculum_id) "
@@ -153,5 +150,28 @@ static bool create_new_db(){
     return true;
 }
 
+static bool drop_all_tables()
+{
+
+    if (!db.open()) {
+        QMessageBox::critical(0, qApp->tr("Cannot open database"),
+            qApp->tr("Unable to establish a database connection.\n"
+                     "This example needs SQLite support. Please read "
+                     "the Qt SQL driver documentation for information how "
+                     "to build it.\n\n"
+                     "Click Cancel to exit."), QMessageBox::Cancel);
+        return false;
+    } else{
+        QSqlQuery query;
+        query.exec("DROP TABLE speciality");
+        query.exec("DROP TABLE subject");
+        query.exec("DROP TABLE student_on_course");
+        query.exec("DROP TABLE student_on_group");
+        query.exec("DROP TABLE status");
+        query.exec("DROP TABLE teachers");
+        query.exec("DROP TABLE curriculum");
+        query.exec("DROP TABLE subjects_in_semmestre");
+    }
+}
 
 #endif

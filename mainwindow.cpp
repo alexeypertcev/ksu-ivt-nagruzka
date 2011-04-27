@@ -49,6 +49,8 @@ MainWindow::MainWindow(QWidget *parent) :
         ui->tableView_2->setModel(tablemodel_teachers);
         ui->tableView_2->setItemDelegate(new QSqlRelationalDelegate(ui->tableView_2));
         ui->tableView_2->update();
+
+        set_design_window();
      }
 }
 
@@ -103,10 +105,10 @@ void MainWindow::on_pushButton_add_teachers_clicked()
 
 void MainWindow::on_pushButton_del_teachers_clicked()
 {
-    //tablemodel_teachers->setData( tablemodel_teachers->index( 2, 2 ), QBrush( Qt::red ), Qt::BackgroundRole );
+    //tablemodel_teachers->setData( tablemodel_teachers->index( 1, 1 ), Qt::red , Qt::BackgroundRole );
 
     int row = ui->tableView_2->currentIndex().row();
-    QString s = "DELETE FROM teachers WHERE id = '"+ tablemodel_teachers->data( tablemodel_teachers->index(row,0),
+    QString s = "DELETE FROM teachers WHERE id = '" + tablemodel_teachers->data( tablemodel_teachers->index(row,0),
                                                                                 Qt::DisplayRole ).toString() + "';";
     qDebug() << s;
 
@@ -130,4 +132,27 @@ void MainWindow::on_action_5_activated()
     Settings s;
     s.set_tab(1);
     s.exec();
+}
+
+void MainWindow::set_design_window()
+{
+    ui->tableView_2->setColumnWidth(0,40);
+    ui->tableView_2->setColumnWidth(1,160);
+    ui->tableView_2->setColumnWidth(2,160);
+    ui->tableView_2->setColumnWidth(3,160);
+    ui->tableView_2->setColumnWidth(4,90);
+    ui->tableView_2->setColumnWidth(5,45);
+
+}
+
+void MainWindow::on_pushButton_clicked()
+{
+    /*
+    QAbstractItemModel* m = tablemodel_teachers->model();
+    if(!m->setData( m->index( 1, 1 ), QBrush( Qt::red ), Qt::BackgroundRole )){
+        qDebug() << "background not set";
+    }
+    //tablemodel_teachers->setData(tablemodel_teachers->index( 1, 1 ), "hellowrld", Qt::EditRole);
+    //tablemodel_teachers->setData( tablemodel_teachers->index( 1, 1 ), QBrush(Qt::red) , Qt::BackgroundRole );
+    */
 }

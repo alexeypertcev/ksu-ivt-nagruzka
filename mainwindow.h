@@ -22,10 +22,12 @@ public:
 
 private:
     Ui::MainWindow *ui;
+    void set_design_window();
     QSqlDatabase db;
     QSqlRelationalTableModel* tablemodel_subject;
     QSqlRelationalTableModel* tablemodel_teachers;
 private slots:
+    void on_pushButton_clicked();
     void on_action_5_activated();
     void on_action_4_activated();
     void on_pushButton_del_teachers_clicked();

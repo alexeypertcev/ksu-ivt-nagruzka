@@ -22,6 +22,8 @@
 #include <QModelIndex>
 #include <QAbstractItemModel>
 
+#define SELECT_STUDENTS "SELECT student_on_course.speciality_name, student_on_course.course, student_on_group.group_, student_on_group.undergroup, student_on_group.quantity FROM student_on_course INNER JOIN student_on_group ON student_on_course.id = student_on_group.student_on_course_id;"
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -53,10 +55,8 @@ MainWindow::MainWindow(QWidget *parent) :
         ui->tableView_2->update();
 
         // students table
-        //"SELECT student_on_course.speciality_name, student_on_course.course, student_on_group.group, student_on_group.undergroup, student_on_group.quantity"
-        //                                    "FROM student_on_course INNER JOIN student_on_group ON student_on_course.id = student_on_group.student_on_course_id;";
         sqlmodel_students = new StudentsSqlModel(this);
-        sqlmodel_students->setQuery("SELECT * FROM student_on_group");
+        sqlmodel_students->setQuery(SELECT_STUDENTS);
         ui->tableView_3->setModel(sqlmodel_students);
         ui->tableView_3->show();
 
@@ -181,7 +181,7 @@ void MainWindow::on_pushButton_add_student_clicked()
         QMessageBox::warning(this, tr("Error querry"),
                              tr("The database reported an error: %1").arg(tablemodel_subject->lastError().text()));
     }
-    sqlmodel_students->setQuery("select * from student_on_course");
+    sqlmodel_students->setQuery(SELECT_STUDENTS);
 }
 
 void MainWindow::on_pushButton_del_student_clicked()
@@ -196,7 +196,7 @@ void MainWindow::on_pushButton_del_student_clicked()
         QMessageBox::warning(this, tr("Error querry"),
                              tr("The database reported an error: %1").arg(sqlmodel_students->lastError().text()));
     }
-    sqlmodel_students->setQuery("select * from student_on_course");
+    sqlmodel_students->setQuery(SELECT_STUDENTS);
 
 }
 

@@ -57,7 +57,7 @@ static bool create_all_tables(){
         query.exec("CREATE TABLE student_on_group ( "
                    "id INTEGER PRIMARY KEY AUTOINCREMENT, "
                    "student_on_course_id INTEGER NOT NULL, "
-                   "group INTEGER NOT NULL, "
+                   "group_ INTEGER NOT NULL, "
                    "undergroup INTEGER NOT NULL, "
                    "quantity INTEGER NOT NULL, "
                    "CONSTRAINT student_on_course_id FOREIGN KEY (student_on_course_id) "

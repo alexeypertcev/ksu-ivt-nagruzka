@@ -91,6 +91,15 @@ static bool create_all_tables(){
                    "  REFERENCES students (id), "
                    "CONSTRAINT curriculum_id FOREIGN KEY (curriculum_id) "
                    "  REFERENCES curriculum (id)) ");
+        query.exec("CREATE TABLE distribution ( "
+                   "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                   "subjects_in_semmestre_id INTEGER NOT NULL, "
+                   "teachers_id INTEGER NOT NULL, "
+                   "CONSTRAINT subjects_in_semmestre_id FOREIGN KEY (subjects_in_semmestre_id) "
+                   "  REFERENCES subjects_in_semmestre (id), "
+                   "CONSTRAINT teachers_id FOREIGN KEY (teachers_id) "
+                   "  REFERENCES teachers (id))");
+
     }
     return true;
 }
@@ -141,14 +150,14 @@ static bool drop_all_tables()
         return false;
     } else{
         QSqlQuery query;
+        query.exec("DROP TABLE distribution");
+        query.exec("DROP TABLE subjects_in_semmestre");
+        query.exec("DROP TABLE curriculum");
+        query.exec("DROP TABLE students");
+        query.exec("DROP TABLE teachers");
         query.exec("DROP TABLE speciality");
         query.exec("DROP TABLE subject");
-        query.exec("DROP TABLE student_on_course");
-        query.exec("DROP TABLE student_on_group");
         query.exec("DROP TABLE status");
-        query.exec("DROP TABLE teachers");
-        query.exec("DROP TABLE curriculum");
-        query.exec("DROP TABLE subjects_in_semmestre");
     }
     return true;
 }

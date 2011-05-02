@@ -59,7 +59,7 @@ MainWindow::MainWindow(QWidget *parent) :
         tablemodel_students->setTable("students");
         tablemodel_students->setEditStrategy(QSqlTableModel::OnFieldChange);
         tablemodel_students->select();
-        tablemodel_students->setRelation(4, QSqlRelation("speciality", "name", "name"));
+        tablemodel_students->setRelation(1, QSqlRelation("speciality", "name", "name"));
 
         ui->tableView_3->setModel(tablemodel_students);
         ui->tableView_3->setItemDelegate(new QSqlRelationalDelegate(ui->tableView_3));
@@ -188,30 +188,30 @@ void MainWindow::on_pushButton_clicked()
 
 void MainWindow::on_pushButton_add_student_clicked()
 {
-    QString s = "insert into student_on_course values(NULL, 'default', 1);";
+    QString s = "insert into students values(NULL, 'МОиАИС', 1, 1, 1, 1);";
     qDebug() << s;
 
     QSqlQuery query;
     if (!query.exec(s)){
         QMessageBox::warning(this, tr("Error querry"),
-                             tr("The database reported an error: %1").arg(tablemodel_subject->lastError().text()));
+                             tr("The database reported an error: %1").arg(tablemodel_students->lastError().text()));
     }
-    sqlmodel_students->setQuery(SELECT_STUDENTS);
+    tablemodel_students->select();
 }
 
 void MainWindow::on_pushButton_del_student_clicked()
 {
     int row = ui->tableView_3->currentIndex().row();
-    QString s = "DELETE FROM student_on_course WHERE id = '" + sqlmodel_students->data( tablemodel_teachers->index(row,0),
-                                                                                Qt::DisplayRole ).toString() + "';";
+    QString s = "DELETE FROM students WHERE id = '" + tablemodel_students->data( tablemodel_students->index(row,0),
+                                                                                 Qt::DisplayRole ).toString() + "';";
     qDebug() << s;
 
     QSqlQuery query;
     if (!query.exec(s)){
         QMessageBox::warning(this, tr("Error querry"),
-                             tr("The database reported an error: %1").arg(sqlmodel_students->lastError().text()));
+                             tr("The database reported an error: %1").arg(tablemodel_students->lastError().text()));
     }
-    sqlmodel_students->setQuery(SELECT_STUDENTS);
+    tablemodel_students->select();
 
 }
 

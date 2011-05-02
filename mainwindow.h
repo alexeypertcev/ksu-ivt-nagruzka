@@ -27,6 +27,7 @@ private:
     QSqlDatabase db;
     QSqlRelationalTableModel* tablemodel_subject;
     QSqlRelationalTableModel* tablemodel_teachers;
+    QSqlRelationalTableModel* tablemodel_students;
     StudentsSqlModel* sqlmodel_students;
 
     QString select_students;

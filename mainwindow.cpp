@@ -55,10 +55,15 @@ MainWindow::MainWindow(QWidget *parent) :
         ui->tableView_2->update();
 
         // students table
-        sqlmodel_students = new StudentsSqlModel(this);
-        sqlmodel_students->setQuery(SELECT_STUDENTS);
-        ui->tableView_3->setModel(sqlmodel_students);
-        ui->tableView_3->show();
+        tablemodel_students = new QSqlRelationalTableModel(this);
+        tablemodel_students->setTable("students");
+        tablemodel_students->setEditStrategy(QSqlTableModel::OnFieldChange);
+        tablemodel_students->select();
+        tablemodel_students->setRelation(4, QSqlRelation("speciality", "name", "name"));
+
+        ui->tableView_3->setModel(tablemodel_students);
+        ui->tableView_3->setItemDelegate(new QSqlRelationalDelegate(ui->tableView_3));
+        ui->tableView_3->update();
 
         set_design_window();
      }
@@ -151,17 +156,21 @@ void MainWindow::on_action_5_activated()
 void MainWindow::set_design_window()
 {
     ui->tableView_2->setColumnWidth(0,40);
-    ui->tableView_2->setColumnWidth(1,160);
-    ui->tableView_2->setColumnWidth(2,160);
-    ui->tableView_2->setColumnWidth(3,160);
-    ui->tableView_2->setColumnWidth(4,90);
-    ui->tableView_2->setColumnWidth(5,45);
+    ui->tableView_2->setColumnWidth(1,180);
+    ui->tableView_2->setColumnWidth(2,180);
+    ui->tableView_2->setColumnWidth(3,180);
+    ui->tableView_2->setColumnWidth(4,120);
+    ui->tableView_2->setColumnWidth(5,60);
 
     tablemodel_subject->setHeaderData(0, Qt::Horizontal, QObject::tr("Название"));
 
 
-    //tablemodel_subject->setHeaderData(1, Qt::Horizontal, QObject::tr("First name"));
-    //tablemodel_subject->setHeaderData(2, Qt::Horizontal, QObject::tr("Last name"));
+    tablemodel_teachers->setHeaderData(0, Qt::Horizontal, QObject::tr("ID"));
+    tablemodel_teachers->setHeaderData(1, Qt::Horizontal, QObject::tr("Фамилия"));
+    tablemodel_teachers->setHeaderData(2, Qt::Horizontal, QObject::tr("Имя"));
+    tablemodel_teachers->setHeaderData(3, Qt::Horizontal, QObject::tr("Отчество"));
+    tablemodel_teachers->setHeaderData(4, Qt::Horizontal, QObject::tr("Должность"));
+    tablemodel_teachers->setHeaderData(5, Qt::Horizontal, QObject::tr("Ставка"));
 
 }
 

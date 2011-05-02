@@ -29,6 +29,7 @@ Settings::Settings(QWidget *parent) :
     ui->tableView_2->setModel(tablemodel_stat);
     ui->tableView_2->update();
 
+    ui->tableView_2->setColumnWidth(0,120);
 }
 
 Settings::~Settings()

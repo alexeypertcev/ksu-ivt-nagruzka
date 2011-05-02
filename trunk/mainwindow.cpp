@@ -157,6 +157,12 @@ void MainWindow::set_design_window()
     ui->tableView_2->setColumnWidth(4,90);
     ui->tableView_2->setColumnWidth(5,45);
 
+    tablemodel_subject->setHeaderData(0, Qt::Horizontal, QObject::tr("Название"));
+
+
+    //tablemodel_subject->setHeaderData(1, Qt::Horizontal, QObject::tr("First name"));
+    //tablemodel_subject->setHeaderData(2, Qt::Horizontal, QObject::tr("Last name"));
+
 }
 
 void MainWindow::on_pushButton_clicked()

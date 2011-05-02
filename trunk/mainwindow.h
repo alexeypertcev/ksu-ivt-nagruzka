@@ -28,6 +28,9 @@ private:
     QSqlRelationalTableModel* tablemodel_subject;
     QSqlRelationalTableModel* tablemodel_teachers;
     StudentsSqlModel* sqlmodel_students;
+
+    QString select_students;
+
 private slots:
     void on_action_7_activated();
     void on_pushButton_del_student_clicked();

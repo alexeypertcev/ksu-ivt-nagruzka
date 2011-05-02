@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>5</number>
     </property>
     <widget class="QWidget" name="tab_6">
      <attribute name="title">
@@ -175,13 +175,126 @@
      <attribute name="title">
       <string>Учебный план</string>
      </attribute>
+     <widget class="QTableView" name="tableView_4">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>791</width>
+        <height>331</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_del_curriculum">
+      <property name="geometry">
+       <rect>
+        <x>710</x>
+        <y>350</y>
+        <width>91</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>удалить</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_add_curriculum">
+      <property name="geometry">
+       <rect>
+        <x>600</x>
+        <y>350</y>
+        <width>91</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>добавить</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="tab_4">
      <attribute name="title">
-      <string>Распределение</string>
+      <string>Предметы в семместре</string>
      </attribute>
+     <widget class="QTableView" name="tableView_5">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>791</width>
+        <height>331</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_del_subjects_in_semmestre">
+      <property name="geometry">
+       <rect>
+        <x>710</x>
+        <y>350</y>
+        <width>91</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>удалить</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_add_subjects_in_semmestre">
+      <property name="geometry">
+       <rect>
+        <x>600</x>
+        <y>350</y>
+        <width>91</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>добавить</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="tab_5">
+     <attribute name="title">
+      <string>Распределение</string>
+     </attribute>
+     <widget class="QTableView" name="tableView_6">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>791</width>
+        <height>331</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_add_distribution">
+      <property name="geometry">
+       <rect>
+        <x>600</x>
+        <y>350</y>
+        <width>91</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>добавить</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_del_distribution">
+      <property name="geometry">
+       <rect>
+        <x>710</x>
+        <y>350</y>
+        <width>91</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>удалить</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_7">
      <attribute name="title">
       <string>Карточки</string>
      </attribute>

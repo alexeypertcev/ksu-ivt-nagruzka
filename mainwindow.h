@@ -28,11 +28,21 @@ private:
     QSqlRelationalTableModel* tablemodel_subject;
     QSqlRelationalTableModel* tablemodel_teachers;
     QSqlRelationalTableModel* tablemodel_students;
+    QSqlRelationalTableModel* tablemodel_curriculum;
+    QSqlRelationalTableModel* tablemodel_subjects_in_semmestre;
+    QSqlRelationalTableModel* tablemodel_distribution;
+
     StudentsSqlModel* sqlmodel_students;
 
     QString select_students;
 
 private slots:
+    void on_pushButton_del_distribution_clicked();
+    void on_pushButton_add_distribution_clicked();
+    void on_pushButton_del_subjects_in_semmestre_clicked();
+    void on_pushButton_add_subjects_in_semmestre_clicked();
+    void on_pushButton_del_curriculum_clicked();
+    void on_pushButton_add_curriculum_clicked();
     void on_action_7_activated();
     void on_pushButton_del_student_clicked();
     void on_pushButton_add_student_clicked();

@@ -65,6 +65,43 @@ MainWindow::MainWindow(QWidget *parent) :
         ui->tableView_3->setItemDelegate(new QSqlRelationalDelegate(ui->tableView_3));
         ui->tableView_3->update();
 
+        // curriculum table
+        tablemodel_curriculum = new QSqlRelationalTableModel(this);
+        tablemodel_curriculum->setTable("curriculum");
+        tablemodel_curriculum->setEditStrategy(QSqlTableModel::OnFieldChange);
+        tablemodel_curriculum->select();
+        tablemodel_curriculum->setRelation(1, QSqlRelation("speciality", "name", "name"));
+        tablemodel_curriculum->setRelation(2, QSqlRelation("subject", "name", "name"));
+
+        ui->tableView_4->setModel(tablemodel_curriculum);
+        ui->tableView_4->setItemDelegate(new QSqlRelationalDelegate(ui->tableView_4));
+        ui->tableView_4->update();
+
+        // subjects_in_semmestre table
+        tablemodel_subjects_in_semmestre = new QSqlRelationalTableModel(this);
+        tablemodel_subjects_in_semmestre->setTable("subjects_in_semmestre");
+        tablemodel_subjects_in_semmestre->setEditStrategy(QSqlTableModel::OnFieldChange);
+        tablemodel_subjects_in_semmestre->select();
+        tablemodel_subjects_in_semmestre->setRelation(1, QSqlRelation("students", "id", "id"));
+        tablemodel_subjects_in_semmestre->setRelation(2, QSqlRelation("curriculum", "id", "id"));
+
+        ui->tableView_5->setModel(tablemodel_subjects_in_semmestre);
+        ui->tableView_5->setItemDelegate(new QSqlRelationalDelegate(ui->tableView_5));
+        ui->tableView_5->update();
+
+        // distribution table
+        tablemodel_distribution = new QSqlRelationalTableModel(this);
+        tablemodel_distribution->setTable("distribution");
+        tablemodel_distribution->setEditStrategy(QSqlTableModel::OnFieldChange);
+        tablemodel_distribution->select();
+        tablemodel_distribution->setRelation(1, QSqlRelation("subjects_in_semmestre", "id", "id"));
+        tablemodel_distribution->setRelation(2, QSqlRelation("teachers", "id", "id"));
+
+        ui->tableView_6->setModel(tablemodel_distribution);
+        ui->tableView_6->setItemDelegate(new QSqlRelationalDelegate(ui->tableView_6));
+        ui->tableView_6->update();
+
+
         set_design_window();
      }
 }
@@ -164,14 +201,12 @@ void MainWindow::set_design_window()
 
     tablemodel_subject->setHeaderData(0, Qt::Horizontal, QObject::tr("Название"));
 
-
     tablemodel_teachers->setHeaderData(0, Qt::Horizontal, QObject::tr("ID"));
     tablemodel_teachers->setHeaderData(1, Qt::Horizontal, QObject::tr("Фамилия"));
     tablemodel_teachers->setHeaderData(2, Qt::Horizontal, QObject::tr("Имя"));
     tablemodel_teachers->setHeaderData(3, Qt::Horizontal, QObject::tr("Отчество"));
     tablemodel_teachers->setHeaderData(4, Qt::Horizontal, QObject::tr("Должность"));
     tablemodel_teachers->setHeaderData(5, Qt::Horizontal, QObject::tr("Ставка"));
-
 }
 
 void MainWindow::on_pushButton_clicked()
@@ -215,4 +250,50 @@ void MainWindow::on_pushButton_del_student_clicked()
 
 }
 
+void MainWindow::on_pushButton_add_curriculum_clicked()
+{
+    QString s = "insert into curriculum values(NULL, 'МОиАИС', 'ПП', 1, 1, 1, 1, 1);";
+    qDebug() << s;
 
+    QSqlQuery query;
+    if (!query.exec(s)){QMessageBox::warning(this, tr("Error querry"), "");}
+
+    tablemodel_curriculum->select();
+}
+
+void MainWindow::on_pushButton_del_curriculum_clicked()
+{
+
+}
+
+void MainWindow::on_pushButton_add_subjects_in_semmestre_clicked()
+{
+    QString s = "insert into subjects_in_semmestre values(NULL, 1, 1);";
+    qDebug() << s;
+
+    QSqlQuery query;
+    if (!query.exec(s)){QMessageBox::warning(this, tr("Error querry"), "");}
+
+    tablemodel_subjects_in_semmestre->select();
+}
+
+void MainWindow::on_pushButton_del_subjects_in_semmestre_clicked()
+{
+
+}
+
+void MainWindow::on_pushButton_add_distribution_clicked()
+{
+    QString s = "insert into distribution values(NULL, 1, 1);";
+    qDebug() << s;
+
+    QSqlQuery query;
+    if (!query.exec(s)){QMessageBox::warning(this, tr("Error querry"), "");}
+
+    tablemodel_distribution->select();
+}
+
+void MainWindow::on_pushButton_del_distribution_clicked()
+{
+
+}

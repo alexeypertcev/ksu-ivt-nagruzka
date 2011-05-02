@@ -48,20 +48,15 @@ static bool create_all_tables(){
                    "CONSTRAINT name PRIMARY KEY (name))");
         query.exec("CREATE TABLE subject (name TEXT NOT NULL, "
                    "CONSTRAINT name PRIMARY KEY (name))");
-        query.exec("CREATE TABLE student_on_course ( "
+        query.exec("CREATE TABLE students ( "
                    "id INTEGER PRIMARY KEY AUTOINCREMENT, "
                    "speciality_name TEXT NOT NULL, "
                    "course INTEGER NOT NULL, "
-                   "CONSTRAINT speciality_name FOREIGN KEY (speciality_name) "
-                   " REFERENCES speciality (name))");
-        query.exec("CREATE TABLE student_on_group ( "
-                   "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-                   "student_on_course_id INTEGER NOT NULL, "
                    "group_ INTEGER NOT NULL, "
                    "undergroup INTEGER NOT NULL, "
                    "quantity INTEGER NOT NULL, "
-                   "CONSTRAINT student_on_course_id FOREIGN KEY (student_on_course_id) "
-                   " REFERENCES student_on_course (id))");
+                   "CONSTRAINT speciality_name FOREIGN KEY (speciality_name) "
+                   "REFERENCES speciality (name))");
         query.exec("CREATE TABLE status ( "
                    "name TEXT NOT NULL, "
                    "hours INTEGER NOT NULL, "
@@ -90,10 +85,10 @@ static bool create_all_tables(){
                    "  REFERENCES speciality (name))");
         query.exec("CREATE TABLE subjects_in_semmestre ( "
                    "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-                   "student_on_course_id INTEGER NOT NULL, "
+                   "students_id INTEGER NOT NULL, "
                    "curriculum_id INTEGER NOT NULL, "
-                   "CONSTRAINT student_on_course_id FOREIGN KEY (student_on_course_id) "
-                   "  REFERENCES student_on_course (id), "
+                   "CONSTRAINT students_id FOREIGN KEY (students_id) "
+                   "  REFERENCES students (id), "
                    "CONSTRAINT curriculum_id FOREIGN KEY (curriculum_id) "
                    "  REFERENCES curriculum (id)) ");
     }
@@ -114,18 +109,20 @@ static bool insert_main_data()
     } else{
         QSqlQuery query;
         query.exec("PRAGMA foreign_keys = ON;");
-        query.exec("insert into subject values('PP')");
-        query.exec("insert into subject values('OOP')");
-        query.exec("insert into subject values('CII')");
-        query.exec("insert into speciality values('MOiAIS')");
-        query.exec("insert into speciality values('PO')");
+        query.exec("insert into subject values('ПП')");
+        query.exec("insert into subject values('ООП')");
+        query.exec("insert into subject values('СИИ')");
+        query.exec("insert into speciality values('МОиАИС')");
+        query.exec("insert into speciality values('ПО')");
+        query.exec("insert into speciality values('Ин.-яз.')");
         query.exec("insert into status values('default', 0)");
-        query.exec("insert into status values('proffessor', 0)");
-        query.exec("insert into status values('docent', 0)");
-        query.exec("insert into status values('aspirant', 0)");
-        query.exec("insert into teachers values(NULL, 'f', 'i', 'o', 'proffessor', 1.0 );");
-        query.exec("insert into teachers values(NULL, 'f', 'i', 'o', 'docent',     1.0 );");
-        query.exec("insert into teachers values(NULL, 'f', 'i', 'o', 'aspirant',   1.0 );");
+        query.exec("insert into status values('профессор', 680)");
+        query.exec("insert into status values('доцент', 730)");
+        query.exec("insert into status values('ст. преподаватель', 780)");
+        query.exec("insert into status values('ассистент', 830)");
+        query.exec("insert into teachers values(NULL, 'f', 'i', 'o', 'default', 1.0 );");
+        query.exec("insert into teachers values(NULL, 'f', 'i', 'o', 'default',     1.0 );");
+        query.exec("insert into teachers values(NULL, 'f', 'i', 'o', 'default',   1.0 );");
 
     }
     return true;

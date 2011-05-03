@@ -179,9 +179,9 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>10</y>
+        <y>40</y>
         <width>791</width>
-        <height>331</height>
+        <height>301</height>
        </rect>
       </property>
      </widget>
@@ -211,6 +211,16 @@
        <string>добавить</string>
       </property>
      </widget>
+     <widget class="QComboBox" name="comboBox">
+      <property name="geometry">
+       <rect>
+        <x>667</x>
+        <y>10</y>
+        <width>131</width>
+        <height>24</height>
+       </rect>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="tab_4">
      <attribute name="title">
@@ -220,13 +230,16 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>10</y>
+        <y>40</y>
         <width>791</width>
-        <height>331</height>
+        <height>301</height>
        </rect>
       </property>
      </widget>
      <widget class="QPushButton" name="pushButton_del_subjects_in_semmestre">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>710</x>
@@ -240,6 +253,9 @@
       </property>
      </widget>
      <widget class="QPushButton" name="pushButton_add_subjects_in_semmestre">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>600</x>
@@ -250,6 +266,29 @@
       </property>
       <property name="text">
        <string>добавить</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="comboBox_2">
+      <property name="geometry">
+       <rect>
+        <x>667</x>
+        <y>10</y>
+        <width>131</width>
+        <height>24</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_2">
+      <property name="geometry">
+       <rect>
+        <x>540</x>
+        <y>10</y>
+        <width>91</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>расчитать</string>
       </property>
      </widget>
     </widget>
@@ -307,7 +346,7 @@
      <x>0</x>
      <y>0</y>
      <width>846</width>
-     <height>20</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">

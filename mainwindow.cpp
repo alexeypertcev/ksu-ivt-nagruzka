@@ -218,6 +218,7 @@ void MainWindow::on_pushButton_clicked()
     ui->tableView_2->setItemDelegate(new QSqlRelationalDelegate(ui->tableView_2));
     ui->tableView_2->update();
 
+    ui->tableView_2->itemDelegate()->
 
     /*
     QAbstractItemModel* m = tablemodel_teachers->model();

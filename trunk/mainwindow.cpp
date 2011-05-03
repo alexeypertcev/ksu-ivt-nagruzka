@@ -218,7 +218,7 @@ void MainWindow::on_pushButton_clicked()
     ui->tableView_2->setItemDelegate(new QSqlRelationalDelegate(ui->tableView_2));
     ui->tableView_2->update();
 
-    ui->tableView_2->itemDelegate()->
+    //ui->tableView_2->itemDelegate()->
 
     /*
     QAbstractItemModel* m = tablemodel_teachers->model();
@@ -303,6 +303,65 @@ void MainWindow::on_pushButton_add_distribution_clicked()
 }
 
 void MainWindow::on_pushButton_del_distribution_clicked()
+{
+
+}
+
+void MainWindow::on_tabWidget_currentChanged(int index)
+{
+    switch(index){
+    case 0:
+        update_subject();
+        break;
+    case 1:
+        update_teachers();
+        break;
+    case 2:
+        update_students();
+        break;
+    case 3:
+        update_curriculum();
+        break;
+    case 4:
+        update_subject_in_semestre();
+        break;
+    case 5:
+        update_disctibution();
+        break;
+    case 6:
+
+        break;
+    default:
+
+        break;
+    }
+}
+void MainWindow::update_subject()
+{
+
+}
+
+void MainWindow::update_teachers()
+{
+
+}
+
+void MainWindow::update_students()
+{
+
+}
+
+void MainWindow::update_curriculum()
+{
+
+}
+
+void MainWindow::update_subject_in_semestre()
+{
+
+}
+
+void MainWindow::update_disctibution()
 {
 
 }

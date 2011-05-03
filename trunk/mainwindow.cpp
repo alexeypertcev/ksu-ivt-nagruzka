@@ -22,8 +22,6 @@
 #include <QModelIndex>
 #include <QAbstractItemModel>
 
-#define SELECT_STUDENTS "SELECT student_on_course.speciality_name, student_on_course.course, student_on_group.group_, student_on_group.undergroup, student_on_group.quantity FROM student_on_course INNER JOIN student_on_group ON student_on_course.id = student_on_group.student_on_course_id;"
-
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -211,6 +209,16 @@ void MainWindow::set_design_window()
 
 void MainWindow::on_pushButton_clicked()
 {
+    tablemodel_teachers->setTable("teachers");
+    tablemodel_teachers->setEditStrategy(QSqlTableModel::OnFieldChange);
+    tablemodel_teachers->select();
+    tablemodel_teachers->setRelation(4, QSqlRelation("status", "name", "name"));
+
+    ui->tableView_2->setModel(tablemodel_teachers);
+    ui->tableView_2->setItemDelegate(new QSqlRelationalDelegate(ui->tableView_2));
+    ui->tableView_2->update();
+
+
     /*
     QAbstractItemModel* m = tablemodel_teachers->model();
     if(!m->setData( m->index( 1, 1 ), QBrush( Qt::red ), Qt::BackgroundRole )){

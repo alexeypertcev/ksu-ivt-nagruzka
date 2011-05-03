@@ -52,9 +52,9 @@ static bool create_all_tables(){
                    "id INTEGER PRIMARY KEY AUTOINCREMENT, "
                    "speciality_name TEXT NOT NULL, "
                    "course INTEGER NOT NULL, "
-                   "group_ INTEGER NOT NULL, "
-                   "undergroup INTEGER NOT NULL, "
-                   "quantity INTEGER NOT NULL, "
+                   "num_group INTEGER NOT NULL, "
+                   "num_undergroup INTEGER NOT NULL, "
+                   "quantity_course INTEGER NOT NULL, "
                    "CONSTRAINT speciality_name FOREIGN KEY (speciality_name) "
                    "REFERENCES speciality (name))");
         query.exec("CREATE TABLE status ( "

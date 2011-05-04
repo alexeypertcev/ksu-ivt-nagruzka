@@ -16,7 +16,10 @@ Qt::ItemFlags CurriculumSqlModel::flags(
         const QModelIndex &index) const
 {
     Qt::ItemFlags flags = QSqlQueryModel::flags(index);
-    if (index.column() == 1 || index.column() == 2)
+    if (index.column() == 1 || index.column() == 2 ||
+        index.column() == 3 || index.column() == 4 ||
+        index.column() == 5 || index.column() == 6 ||
+        index.column() == 7)
         flags |= Qt::ItemIsEditable;
     return flags;
 }

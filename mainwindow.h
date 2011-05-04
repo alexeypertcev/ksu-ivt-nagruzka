@@ -32,6 +32,9 @@ private:
     QSqlRelationalTableModel* tablemodel_subjects_in_semmestre;
     QSqlRelationalTableModel* tablemodel_distribution;
 
+    QSqlRelationalTableModel* tablemodel_spec;
+    QSqlRelationalTableModel* tablemodel_stat;
+
     CurriculumSqlModel* sqlmodel_curriculum;
 
     void update_subject();

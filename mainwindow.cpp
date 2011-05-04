@@ -33,6 +33,16 @@ MainWindow::MainWindow(QWidget *parent) :
         QSqlQuery query;
         query.exec("PRAGMA foreign_keys = ON;");
 
+        tablemodel_spec = new QSqlRelationalTableModel(this);
+        tablemodel_spec->setTable("speciality");
+        tablemodel_spec->setEditStrategy(QSqlTableModel::OnFieldChange);
+        tablemodel_spec->select();
+
+        tablemodel_stat = new QSqlRelationalTableModel(this);
+        tablemodel_stat->setTable("status");
+        tablemodel_stat->setEditStrategy(QSqlTableModel::OnFieldChange);
+        tablemodel_stat->select();
+
         // subject table
         tablemodel_subject = new QSqlRelationalTableModel(this);
         tablemodel_subject->setTable("subject");
@@ -69,6 +79,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
         ui->tableView_4->setModel(sqlmodel_curriculum);
         ui->tableView_4->update();
+
+        ui->comboBox->setModel(tablemodel_spec);
+        ui->comboBox_2->setModel(tablemodel_spec);
+
+
 
       /*tablemodel_curriculum = new QSqlRelationalTableModel(this);
         tablemodel_curriculum->setTable("curriculum");
@@ -183,16 +198,16 @@ void MainWindow::on_pushButton_del_teachers_clicked()
 
 void MainWindow::on_action_4_activated()
 {
-    Settings s;
-    s.set_tab(0);
-    s.exec();
+    Settings* s = new Settings(this, tablemodel_spec, tablemodel_stat);
+    s->set_tab(0);
+    s->exec();
 }
 
 void MainWindow::on_action_5_activated()
 {
-    Settings s;
-    s.set_tab(1);
-    s.exec();
+    Settings* s = new Settings(this, tablemodel_spec, tablemodel_stat);
+    s->set_tab(1);
+    s->exec();
 }
 
 void MainWindow::set_design_window()

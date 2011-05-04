@@ -16,7 +16,7 @@ class Settings : public QDialog
     Q_OBJECT
 
 public:
-    explicit Settings(QWidget *parent = 0);
+    explicit Settings(QWidget *parent, QSqlRelationalTableModel* tablemodel_spec, QSqlRelationalTableModel* tablemodel_stat);
     ~Settings();
     void set_tab(int index);
 private:

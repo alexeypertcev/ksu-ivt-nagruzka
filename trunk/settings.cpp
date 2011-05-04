@@ -8,24 +8,18 @@
 #include <QMessageBox>
 #include <QModelIndex>
 
-Settings::Settings(QWidget *parent) :
+Settings::Settings(QWidget *parent, QSqlRelationalTableModel* tm_spec, QSqlRelationalTableModel* tm_stat) :
     QDialog(parent),
     ui(new Ui::Settings)
 {
     ui->setupUi(this);
 
 
-    tablemodel_spec = new QSqlRelationalTableModel(this);
-    tablemodel_spec->setTable("speciality");
-    tablemodel_spec->setEditStrategy(QSqlTableModel::OnFieldChange);
-    tablemodel_spec->select();
+    tablemodel_spec = tm_spec;
     ui->tableView->setModel(tablemodel_spec);
     ui->tableView->update();
 
-    tablemodel_stat = new QSqlRelationalTableModel(this);
-    tablemodel_stat->setTable("status");
-    tablemodel_stat->setEditStrategy(QSqlTableModel::OnFieldChange);
-    tablemodel_stat->select();
+    tablemodel_stat = tm_stat;
     ui->tableView_2->setModel(tablemodel_stat);
     ui->tableView_2->update();
 

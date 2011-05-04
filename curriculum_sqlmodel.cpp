@@ -4,15 +4,15 @@
 
 #include <QtSql>
 
-#include "students_sqlmodel.h"
+#include "curriculum_sqlmodel.h"
 
-StudentsSqlModel::StudentsSqlModel(QObject *parent)
+CurriculumSqlModel::CurriculumSqlModel(QObject *parent)
     : QSqlQueryModel(parent)
 {
 }
 
 
-Qt::ItemFlags StudentsSqlModel::flags(
+Qt::ItemFlags CurriculumSqlModel::flags(
         const QModelIndex &index) const
 {
     Qt::ItemFlags flags = QSqlQueryModel::flags(index);
@@ -21,7 +21,7 @@ Qt::ItemFlags StudentsSqlModel::flags(
     return flags;
 }
 
-bool StudentsSqlModel::setData(const QModelIndex &index, const QVariant &value, int /* role */)
+bool CurriculumSqlModel::setData(const QModelIndex &index, const QVariant &value, int /* role */)
 {
     if (index.column() < 1 || index.column() > 2)
         return false;
@@ -42,7 +42,7 @@ bool StudentsSqlModel::setData(const QModelIndex &index, const QVariant &value, 
 */
 }
 
-void StudentsSqlModel::refresh()
+void CurriculumSqlModel::refresh()
 {
     setQuery("select * from person");
     setHeaderData(0, Qt::Horizontal, QObject::tr("ID"));
@@ -50,7 +50,7 @@ void StudentsSqlModel::refresh()
     setHeaderData(2, Qt::Horizontal, QObject::tr("Last name"));
 }
 
-bool StudentsSqlModel::setFirstName(int personId, const QString &firstName)
+bool CurriculumSqlModel::setFirstName(int personId, const QString &firstName)
 {
     QSqlQuery query;
     query.prepare("update person set firstname = ? where id = ?");
@@ -59,7 +59,7 @@ bool StudentsSqlModel::setFirstName(int personId, const QString &firstName)
     return query.exec();
 }
 
-bool StudentsSqlModel::setLastName(int personId, const QString &lastName)
+bool CurriculumSqlModel::setLastName(int personId, const QString &lastName)
 {
     QSqlQuery query;
     query.prepare("update person set lastname = ? where id = ?");

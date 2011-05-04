@@ -14,13 +14,13 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     table_editor.cpp \
     settings.cpp \
-    students_sqlmodel.cpp
+    curriculum_sqlmodel.cpp
 
 HEADERS  += mainwindow.h \
     table_editor.h \
     connection.h \
     settings.h \
-    students_sqlmodel.h
+    curriculum_sqlmodel.h
 
 FORMS    += mainwindow.ui \
     settings.ui

@@ -2,17 +2,17 @@
 
 ****************************************************************************/
 
-#ifndef STUDENTSSQLMODEL_H
-#define STUDENTSSQLMODEL_H
+#ifndef CURRICULUMSQLMODEL_H
+#define CURRICULUMSQLMODEL_H
 
 #include <QSqlQueryModel>
 
-class StudentsSqlModel : public QSqlQueryModel
+class CurriculumSqlModel : public QSqlQueryModel
 {
     Q_OBJECT
 
 public:
-    StudentsSqlModel(QObject *parent = 0);
+    CurriculumSqlModel(QObject *parent = 0);
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
     bool setData(const QModelIndex &index, const QVariant &value, int role);

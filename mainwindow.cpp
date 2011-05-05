@@ -78,8 +78,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
         // curriculum table
         sqlmodel_curriculum = new CurriculumSqlModel(this);
-        sqlmodel_curriculum->setQuery("SELECT * FROM curriculum WHERE speciality_name = '" + ui->comboBox->currentText() + "';");
-
+        update_curriculum();
         ui->tableView_4->setModel(sqlmodel_curriculum);
         ui->tableView_4->update();
 
@@ -87,47 +86,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
 
-      /*tablemodel_curriculum = new QSqlRelationalTableModel(this);
-        tablemodel_curriculum->setTable("curriculum");
-        tablemodel_curriculum->setEditStrategy(QSqlTableModel::OnFieldChange);
-        tablemodel_curriculum->select();
-        tablemodel_curriculum->setRelation(1, QSqlRelation("speciality", "name", "name"));
-        tablemodel_curriculum->setRelation(2, QSqlRelation("subject", "name", "name"));
-
-        ui->tableView_4->setModel(tablemodel_curriculum);
-        ui->tableView_4->setItemDelegate(new QSqlRelationalDelegate(ui->tableView_4));
-        ui->tableView_4->update();
-*/
-        /*
-        // subjects_in_semmestre table
-        tablemodel_subjects_in_semmestre = new QSqlRelationalTableModel(this);
-        tablemodel_subjects_in_semmestre->setTable("subjects_in_semmestre");
-        tablemodel_subjects_in_semmestre->setEditStrategy(QSqlTableModel::OnFieldChange);
-        tablemodel_subjects_in_semmestre->select();
-        tablemodel_subjects_in_semmestre->setRelation(1, QSqlRelation("students", "id", "id"));
-        tablemodel_subjects_in_semmestre->setRelation(2, QSqlRelation("curriculum", "id", "id"));
-
-        ui->tableView_5->setModel(tablemodel_subjects_in_semmestre);
-        ui->tableView_5->setItemDelegate(new QSqlRelationalDelegate(ui->tableView_5));
-        ui->tableView_5->update();
-
-        // distribution table
-        tablemodel_distribution = new QSqlRelationalTableModel(this);
-        tablemodel_distribution->setTable("distribution");
-        tablemodel_distribution->setEditStrategy(QSqlTableModel::OnFieldChange);
-        tablemodel_distribution->select();
-        tablemodel_distribution->setRelation(1, QSqlRelation("subjects_in_semmestre", "id", "id"));
-        tablemodel_distribution->setRelation(2, QSqlRelation("teachers", "id", "id"));
-
-        ui->tableView_6->setModel(tablemodel_distribution);
-        ui->tableView_6->setItemDelegate(new QSqlRelationalDelegate(ui->tableView_6));
-        ui->tableView_6->update();
-        */
 
         set_design_window();
-
-
-
 
         QObject::connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(update_curriculum()));
      }
@@ -217,39 +177,6 @@ void MainWindow::on_action_5_activated()
     s->exec();
 }
 
-void MainWindow::set_design_window()
-{
-    tablemodel_subject->setHeaderData(0, Qt::Horizontal, QObject::tr("Название"));
-
-    ui->tableView_2->setColumnWidth(0,40);
-    ui->tableView_2->setColumnWidth(1,180);
-    ui->tableView_2->setColumnWidth(2,180);
-    ui->tableView_2->setColumnWidth(3,180);
-    ui->tableView_2->setColumnWidth(4,120);
-    ui->tableView_2->setColumnWidth(5,60);
-
-    tablemodel_teachers->setHeaderData(0, Qt::Horizontal, QObject::tr("ID"));
-    tablemodel_teachers->setHeaderData(1, Qt::Horizontal, QObject::tr("Фамилия"));
-    tablemodel_teachers->setHeaderData(2, Qt::Horizontal, QObject::tr("Имя"));
-    tablemodel_teachers->setHeaderData(3, Qt::Horizontal, QObject::tr("Отчество"));
-    tablemodel_teachers->setHeaderData(4, Qt::Horizontal, QObject::tr("Должность"));
-    tablemodel_teachers->setHeaderData(5, Qt::Horizontal, QObject::tr("Ставка"));
-
-    ui->tableView_3->setColumnWidth(0,40);
-    ui->tableView_3->setColumnWidth(1,150);
-    ui->tableView_3->setColumnWidth(2,145);
-    ui->tableView_3->setColumnWidth(3,145);
-    ui->tableView_3->setColumnWidth(4,145);
-    ui->tableView_3->setColumnWidth(5,145);
-
-    tablemodel_students->setHeaderData(0, Qt::Horizontal, QObject::tr("ID"));
-    tablemodel_students->setHeaderData(1, Qt::Horizontal, QObject::tr("Специальность"));
-    tablemodel_students->setHeaderData(2, Qt::Horizontal, QObject::tr("Курс"));
-    tablemodel_students->setHeaderData(3, Qt::Horizontal, QObject::tr("Кол-во групп"));
-    tablemodel_students->setHeaderData(4, Qt::Horizontal, QObject::tr("Кол-во подгрупп"));
-    tablemodel_students->setHeaderData(5, Qt::Horizontal, QObject::tr("Кол-во человек"));
-}
-
 void MainWindow::on_pushButton_clicked()
 {
     tablemodel_teachers->setTable("teachers");
@@ -260,17 +187,6 @@ void MainWindow::on_pushButton_clicked()
     ui->tableView_2->setModel(tablemodel_teachers);
     ui->tableView_2->setItemDelegate(new QSqlRelationalDelegate(ui->tableView_2));
     ui->tableView_2->update();
-
-    //ui->tableView_2->itemDelegate()->
-
-    /*
-    QAbstractItemModel* m = tablemodel_teachers->model();
-    if(!m->setData( m->index( 1, 1 ), QBrush( Qt::red ), Qt::BackgroundRole )){
-        qDebug() << "background not set";
-    }
-    //tablemodel_teachers->setData(tablemodel_teachers->index( 1, 1 ), "hellowrld", Qt::EditRole);
-    //tablemodel_teachers->setData( tablemodel_teachers->index( 1, 1 ), QBrush(Qt::red) , Qt::BackgroundRole );
-    */
 }
 
 void MainWindow::on_pushButton_add_student_clicked()
@@ -407,4 +323,52 @@ void MainWindow::update_subject_in_semestre()
 void MainWindow::update_disctibution()
 {
 
+}
+
+void MainWindow::set_design_window()
+{
+    tablemodel_subject->setHeaderData(0, Qt::Horizontal, QObject::tr("Название"));
+
+    ui->tableView_2->setColumnWidth(0,40);
+    ui->tableView_2->setColumnWidth(1,180);
+    ui->tableView_2->setColumnWidth(2,180);
+    ui->tableView_2->setColumnWidth(3,180);
+    ui->tableView_2->setColumnWidth(4,120);
+    ui->tableView_2->setColumnWidth(5,60);
+
+    tablemodel_teachers->setHeaderData(0, Qt::Horizontal, QObject::tr("ID"));
+    tablemodel_teachers->setHeaderData(1, Qt::Horizontal, QObject::tr("Фамилия"));
+    tablemodel_teachers->setHeaderData(2, Qt::Horizontal, QObject::tr("Имя"));
+    tablemodel_teachers->setHeaderData(3, Qt::Horizontal, QObject::tr("Отчество"));
+    tablemodel_teachers->setHeaderData(4, Qt::Horizontal, QObject::tr("Должность"));
+    tablemodel_teachers->setHeaderData(5, Qt::Horizontal, QObject::tr("Ставка"));
+
+    ui->tableView_3->setColumnWidth(0,40);
+    ui->tableView_3->setColumnWidth(1,150);
+    ui->tableView_3->setColumnWidth(2,145);
+    ui->tableView_3->setColumnWidth(3,145);
+    ui->tableView_3->setColumnWidth(4,145);
+    ui->tableView_3->setColumnWidth(5,145);
+
+    tablemodel_students->setHeaderData(0, Qt::Horizontal, QObject::tr("ID"));
+    tablemodel_students->setHeaderData(1, Qt::Horizontal, QObject::tr("Специальность"));
+    tablemodel_students->setHeaderData(2, Qt::Horizontal, QObject::tr("Курс"));
+    tablemodel_students->setHeaderData(3, Qt::Horizontal, QObject::tr("Кол-во групп"));
+    tablemodel_students->setHeaderData(4, Qt::Horizontal, QObject::tr("Кол-во подгрупп"));
+    tablemodel_students->setHeaderData(5, Qt::Horizontal, QObject::tr("Кол-во человек"));
+
+    int h=85;
+    ui->tableView_4->setColumnWidth(0,40);
+    ui->tableView_4->setColumnWidth(1,140);
+    ui->tableView_4->setColumnWidth(2,140);
+    ui->tableView_4->setColumnWidth(3,h);
+    ui->tableView_4->setColumnWidth(4,h);
+    ui->tableView_4->setColumnWidth(5,h);
+    ui->tableView_4->setColumnWidth(6,h);
+    ui->tableView_4->setColumnWidth(7,h);
+
+    sqlmodel_curriculum->setHeaderData(0, Qt::Horizontal, QObject::tr("ID"));
+    sqlmodel_curriculum->setHeaderData(1, Qt::Horizontal, QObject::tr("Специальность"));
+    sqlmodel_curriculum->setHeaderData(2, Qt::Horizontal, QObject::tr("Курс"));
+    sqlmodel_curriculum->setHeaderData(3, Qt::Horizontal, QObject::tr("Семестр"));
 }

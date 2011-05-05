@@ -74,8 +74,8 @@ MainWindow::MainWindow(QWidget *parent) :
         ui->tableView_3->update();
 
         // curriculum table
-        sqlmodel_curriculum = new  CurriculumSqlModel();
-        sqlmodel_curriculum->setQuery("SELECT * FROM curriculum");
+        sqlmodel_curriculum = new CurriculumSqlModel(this);
+        sqlmodel_curriculum->setQuery("SELECT * FROM curriculum;");
 
         ui->tableView_4->setModel(sqlmodel_curriculum);
         ui->tableView_4->update();

@@ -40,9 +40,10 @@ private:
     void update_subject();
     void update_teachers();
     void update_students();
-    void update_curriculum();
+
     void update_subject_in_semestre();
     void update_disctibution();
+
 
 private slots:
     void on_tabWidget_currentChanged(int index);
@@ -63,6 +64,9 @@ private slots:
     void on_pushButton_del_subject_clicked();
     void on_pushButton_add_subject_clicked();
     void on_action_6_activated();
+
+    void update_curriculum();
+    //void update_query_curriculum();
 };
 
 #endif // MAINWINDOW_H

@@ -38,6 +38,9 @@ MainWindow::MainWindow(QWidget *parent) :
         tablemodel_spec->setEditStrategy(QSqlTableModel::OnFieldChange);
         tablemodel_spec->select();
 
+        ui->comboBox->setModel(tablemodel_spec);
+        ui->comboBox_2->setModel(tablemodel_spec);
+
         tablemodel_stat = new QSqlRelationalTableModel(this);
         tablemodel_stat->setTable("status");
         tablemodel_stat->setEditStrategy(QSqlTableModel::OnFieldChange);
@@ -75,13 +78,12 @@ MainWindow::MainWindow(QWidget *parent) :
 
         // curriculum table
         sqlmodel_curriculum = new CurriculumSqlModel(this);
-        sqlmodel_curriculum->setQuery("SELECT * FROM curriculum;");
+        sqlmodel_curriculum->setQuery("SELECT * FROM curriculum WHERE speciality_name = '" + ui->comboBox->currentText() + "';");
 
         ui->tableView_4->setModel(sqlmodel_curriculum);
         ui->tableView_4->update();
 
-        ui->comboBox->setModel(tablemodel_spec);
-        ui->comboBox_2->setModel(tablemodel_spec);
+
 
 
 
@@ -123,6 +125,11 @@ MainWindow::MainWindow(QWidget *parent) :
         */
 
         set_design_window();
+
+
+
+
+        QObject::connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(update_curriculum()));
      }
 }
 
@@ -389,7 +396,7 @@ void MainWindow::update_students()
 
 void MainWindow::update_curriculum()
 {
-
+    sqlmodel_curriculum->setQuery("SELECT * FROM curriculum WHERE speciality_name = '" + ui->comboBox->currentText() + "';");
 }
 
 void MainWindow::update_subject_in_semestre()

@@ -30,7 +30,7 @@ bool CurriculumSqlModel::setData(const QModelIndex &index, const QVariant &value
         return false;
 
     QModelIndex primaryKeyIndex = QSqlQueryModel::index(index.row(), 0);
-    int id = data(primaryKeyIndex).toInt();
+    //int id = data(primaryKeyIndex).toInt();
 /*
     clear();
 
@@ -43,6 +43,7 @@ bool CurriculumSqlModel::setData(const QModelIndex &index, const QVariant &value
     refresh();
     return ok;
 */
+    return true;
 }
 
 void CurriculumSqlModel::refresh()

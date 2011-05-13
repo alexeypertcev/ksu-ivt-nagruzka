@@ -15,13 +15,19 @@ CurriculumSqlModel::CurriculumSqlModel(QObject *parent)
 Qt::ItemFlags CurriculumSqlModel::flags(
         const QModelIndex &index) const
 {
-    Qt::ItemFlags flags = QSqlQueryModel::flags(index);
     if (index.column() == 1 || index.column() == 2 ||
-        index.column() == 3 || index.column() == 4 ||
+        index.column() == 3 || /*index.column() == 4 ||*/
         index.column() == 5 || index.column() == 6 ||
         index.column() == 7)
-        flags |= Qt::ItemIsEditable;
-    return flags;
+    {
+        return Qt::ItemIsEditable;
+    } else {
+        if (index.column() == 4 )
+        {
+            //return QAbstractItemModel::flags(index);
+        }
+    }
+    return QSqlQueryModel::flags(index);
 }
 
 bool CurriculumSqlModel::setData(const QModelIndex &index, const QVariant &value, int /* role */)
@@ -72,6 +78,10 @@ bool CurriculumSqlModel::setLastName(int personId, const QString &lastName)
     return query.exec();
 }
 
+SpinBoxDelegate::SpinBoxDelegate(QObject *parent)
+    : QItemDelegate(parent)
+{
+}
 
 QWidget *SpinBoxDelegate::createEditor(QWidget *parent,
     const QStyleOptionViewItem &/* option */,

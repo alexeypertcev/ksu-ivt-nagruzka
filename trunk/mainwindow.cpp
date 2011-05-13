@@ -82,7 +82,13 @@ MainWindow::MainWindow(QWidget *parent) :
         ui->tableView_4->setModel(sqlmodel_curriculum);
         ui->tableView_4->update();
 
+        SpinBoxDelegate delegate;
+//        ui->tableView_4->setItemDelegate(&delegate);
+//        ui->tableView_4->horizontalHeader()->setStretchLastSection(true);
 
+
+//        QModelIndex index = sqlmodel_curriculum->index(0, 3, QModelIndex());
+//        sqlmodel_curriculum->setData(index, QVariant(4));
 
 
 

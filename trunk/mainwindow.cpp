@@ -231,7 +231,7 @@ void MainWindow::on_pushButton_add_curriculum_clicked()
     QSqlQuery query;
     if (!query.exec(s)){QMessageBox::warning(this, tr("Error querry"), "");}
 
-    tablemodel_curriculum->select();
+    update_curriculum();
 }
 
 void MainWindow::on_pushButton_del_curriculum_clicked()
@@ -317,7 +317,8 @@ void MainWindow::update_students()
 
 void MainWindow::update_curriculum()
 {
-    sqlmodel_curriculum->setQuery("SELECT * FROM curriculum WHERE speciality_name = '" + ui->comboBox->currentText() + "';");
+    sqlmodel_curriculum->setspeciality(ui->comboBox->currentText());
+    sqlmodel_curriculum->refresh();
 }
 
 void MainWindow::update_subject_in_semestre()

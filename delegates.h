@@ -66,12 +66,12 @@ public:
         const QStyleOptionViewItem &option, const QModelIndex &index) const;
 };
 
-class SubjectComboBoxDelegate : public QItemDelegate
+class ComboBoxDelegate : public QItemDelegate
 {
     Q_OBJECT
 
 public:
-    SubjectComboBoxDelegate(QObject *parent = 0);
+    ComboBoxDelegate(QObject *parent = 0);
 
     QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option,
                           const QModelIndex &index) const;

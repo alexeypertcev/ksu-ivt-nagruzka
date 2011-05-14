@@ -102,12 +102,12 @@ void SpinBoxDelegate::updateEditorGeometry(QWidget *editor,
 //! [4]
 
 //---------------------------------------------------------------------------------------
-SubjectComboBoxDelegate::SubjectComboBoxDelegate(QObject *parent)
+ComboBoxDelegate::ComboBoxDelegate(QObject *parent)
     : QItemDelegate(parent)
 {
 }
 
-QWidget *SubjectComboBoxDelegate::createEditor(QWidget *parent,
+QWidget *ComboBoxDelegate::createEditor(QWidget *parent,
     const QStyleOptionViewItem &/* option */,
     const QModelIndex &/* index */) const
 {
@@ -120,7 +120,7 @@ QWidget *SubjectComboBoxDelegate::createEditor(QWidget *parent,
     return editor;*/
 }
 
-void SubjectComboBoxDelegate::setEditorData(QWidget *editor,
+void ComboBoxDelegate::setEditorData(QWidget *editor,
                                     const QModelIndex &index) const
 {
 
@@ -131,7 +131,7 @@ void SubjectComboBoxDelegate::setEditorData(QWidget *editor,
     spinBox->setValue(value);*/
 }
 
-void SubjectComboBoxDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
+void ComboBoxDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
                                    const QModelIndex &index) const
 {
 
@@ -142,7 +142,7 @@ void SubjectComboBoxDelegate::setModelData(QWidget *editor, QAbstractItemModel *
     model->setData(index, value, Qt::EditRole);*/
 }
 
-void SubjectComboBoxDelegate::updateEditorGeometry(QWidget *editor,
+void ComboBoxDelegate::updateEditorGeometry(QWidget *editor,
     const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
 {
     editor->setGeometry(option.rect);

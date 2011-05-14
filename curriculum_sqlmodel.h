@@ -18,11 +18,14 @@ public:
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
     bool setData(const QModelIndex &index, const QVariant &value, int role);
+    void setspeciality(QString s);
+    void refresh();
 
 private:
+    QString speciality;
     bool setFirstName(int personId, const QString &firstName);
     bool setLastName(int personId, const QString &lastName);
-    void refresh();
+
 };
 
 #endif

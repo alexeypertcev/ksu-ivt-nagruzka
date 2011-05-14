@@ -12,15 +12,15 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    table_editor.cpp \
     settings.cpp \
-    curriculum_sqlmodel.cpp
+    curriculum_sqlmodel.cpp \
+    delegates.cpp
 
 HEADERS  += mainwindow.h \
-    table_editor.h \
     connection.h \
     settings.h \
-    curriculum_sqlmodel.h
+    curriculum_sqlmodel.h \
+    delegates.h
 
 FORMS    += mainwindow.ui \
     settings.ui

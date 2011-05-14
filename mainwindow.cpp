@@ -10,6 +10,7 @@
 #include "connection.h"
 #include "settings.h"
 #include "curriculum_sqlmodel.h"
+#include "delegates.h"
 
 #include <QtGui>
 #include <QtSql>
@@ -21,6 +22,7 @@
 #include <QMessageBox>
 #include <QModelIndex>
 #include <QAbstractItemModel>
+#include <QStandardItemModel>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -80,15 +82,12 @@ MainWindow::MainWindow(QWidget *parent) :
         sqlmodel_curriculum = new CurriculumSqlModel(this);
         update_curriculum();
         ui->tableView_4->setModel(sqlmodel_curriculum);
+
+        SpinBoxDelegate *delegate = new SpinBoxDelegate();
+        ui->tableView_4->setItemDelegateForColumn(3, delegate);
+
         ui->tableView_4->update();
 
-        SpinBoxDelegate delegate;
-//        ui->tableView_4->setItemDelegate(&delegate);
-//        ui->tableView_4->horizontalHeader()->setStretchLastSection(true);
-
-
-//        QModelIndex index = sqlmodel_curriculum->index(0, 3, QModelIndex());
-//        sqlmodel_curriculum->setData(index, QVariant(4));
 
 
 

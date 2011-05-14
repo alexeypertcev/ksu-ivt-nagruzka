@@ -23,9 +23,6 @@ public:
 
 private:
     QString speciality;
-    bool setFirstName(int personId, const QString &firstName);
-    bool setLastName(int personId, const QString &lastName);
-
 };
 
 #endif

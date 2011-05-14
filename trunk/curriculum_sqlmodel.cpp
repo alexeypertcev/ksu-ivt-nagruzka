@@ -80,24 +80,6 @@ void CurriculumSqlModel::refresh()
     this->setQuery("SELECT * FROM curriculum WHERE speciality_name = '" + speciality + "';");
 }
 
-bool CurriculumSqlModel::setFirstName(int personId, const QString &firstName)
-{
-    QSqlQuery query;
-    query.prepare("update person set firstname = ? where id = ?");
-    query.addBindValue(firstName);
-    query.addBindValue(personId);
-    return query.exec();
-}
-
-bool CurriculumSqlModel::setLastName(int personId, const QString &lastName)
-{
-    QSqlQuery query;
-    query.prepare("update person set lastname = ? where id = ?");
-    query.addBindValue(lastName);
-    query.addBindValue(personId);
-    return query.exec();
-}
-
 void CurriculumSqlModel::setspeciality(QString s)
 {
     speciality = s;

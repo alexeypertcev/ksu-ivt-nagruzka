@@ -19,10 +19,7 @@ Qt::ItemFlags CurriculumSqlModel::flags(
         const QModelIndex &index) const
 {
     Qt::ItemFlags flags = QSqlQueryModel::flags(index);
-    if (index.column() == 1 || index.column() == 2 ||
-        index.column() == 3 || index.column() == 4 ||
-        index.column() == 5 || index.column() == 6 ||
-        index.column() == 7)
+    if (index.column() > 0 && index.column() < 11 )
     {
         flags |= Qt::ItemIsEditable;
     }
@@ -31,7 +28,7 @@ Qt::ItemFlags CurriculumSqlModel::flags(
 
 bool CurriculumSqlModel::setData(const QModelIndex &index, const QVariant &value, int /* role */)
 {
-    if (index.column() < 1 || index.column() > 7)
+    if (index.column() < 1 || index.column() > 10)
         return false;
 
     QModelIndex primaryKeyIndex = QSqlQueryModel::index(index.row(), 0);
@@ -58,6 +55,15 @@ bool CurriculumSqlModel::setData(const QModelIndex &index, const QVariant &value
             break;
         case 7:
             field = "KCP_hr";
+            break;
+        case 8:
+            field = "is_examen";
+            break;
+        case 9:
+            field = "is_offset";
+            break;
+        case 10:
+            field = "is_coursework";
             break;
         default:
             field = ";";
@@ -87,7 +93,7 @@ void CurriculumSqlModel::setspeciality(QString s)
 
 bool CurriculumSqlModel::add()
 {
-    QString s = "insert into curriculum values(NULL, '" + speciality + "', 'ПП', 1, 1, 1, 1, 1);";
+    QString s = "insert into curriculum values(NULL, '" + speciality + "', 'ПП', 1, 0, 0, 0, 0, 0, 0, 0);";
     qDebug() << s;
 
     QSqlQuery query;

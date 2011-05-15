@@ -104,3 +104,49 @@ void ComboBoxDelegate::updateEditorGeometry(QWidget *editor,
 {
     editor->setGeometry(option.rect);
 }
+
+//---------------------------------------------------------------------------------------
+CheckBoxDelegate::CheckBoxDelegate(QObject *parent)
+    : QItemDelegate(parent)
+{
+}
+
+QWidget *CheckBoxDelegate::createEditor(QWidget *parent,
+    const QStyleOptionViewItem &/* option */,
+    const QModelIndex &/* index */) const
+{
+    QCheckBox *editor = new QCheckBox(parent);
+    return editor;
+}
+
+void CheckBoxDelegate::setEditorData(QWidget *editor,
+                                    const QModelIndex &index) const
+{
+    int value = index.model()->data(index, Qt::EditRole).toInt();
+
+    QCheckBox *checkBox = static_cast<QCheckBox*>(editor);
+
+    if (value == 0){
+        checkBox->setCheckState(Qt::Unchecked);
+    } else {
+        checkBox->setCheckState(Qt::Checked);
+    }
+}
+
+void CheckBoxDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
+                                   const QModelIndex &index) const
+{
+    QCheckBox *checkBox = static_cast<QCheckBox*>(editor);
+    int value = 0;
+    if (checkBox->checkState() == Qt::Checked){
+        value = 1;
+    }
+
+    model->setData(index, value, Qt::EditRole);
+}
+
+void CheckBoxDelegate::updateEditorGeometry(QWidget *editor,
+    const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
+{
+    editor->setGeometry(option.rect);
+}

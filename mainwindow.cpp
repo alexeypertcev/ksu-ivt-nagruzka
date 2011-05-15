@@ -80,12 +80,20 @@ MainWindow::MainWindow(QWidget *parent) :
         ComboBoxDelegate *speciality_delegate = new ComboBoxDelegate("speciality",this);
         ComboBoxDelegate *subject_delegate = new ComboBoxDelegate("subject",this);
         SpinBoxDelegate *semester_delegate = new SpinBoxDelegate(1,12,this);
+        CheckBoxDelegate *checkBox_delegate = new CheckBoxDelegate(this);
 
         ui->tableView_4->setItemDelegateForColumn(1, speciality_delegate);
         ui->tableView_4->setItemDelegateForColumn(2, subject_delegate);
         ui->tableView_4->setItemDelegateForColumn(3, semester_delegate);
+        ui->tableView_4->setItemDelegateForColumn(8, checkBox_delegate);
+        ui->tableView_4->setItemDelegateForColumn(9, checkBox_delegate);
+        ui->tableView_4->setItemDelegateForColumn(10, checkBox_delegate);
 
         ui->tableView_4->update();
+
+
+
+
 
 
 
@@ -361,7 +369,7 @@ void MainWindow::set_design_window()
     tablemodel_students->setHeaderData(5, Qt::Horizontal, QObject::tr("Кол-во человек"));
 
     int h=85;
-    ui->tableView_4->setColumnWidth(0,40);
+    ui->tableView_4->setColumnWidth(0,38);
     ui->tableView_4->setColumnWidth(1,140);
     ui->tableView_4->setColumnWidth(2,140);
     ui->tableView_4->setColumnWidth(3,h);
@@ -369,6 +377,9 @@ void MainWindow::set_design_window()
     ui->tableView_4->setColumnWidth(5,h);
     ui->tableView_4->setColumnWidth(6,h);
     ui->tableView_4->setColumnWidth(7,h);
+    ui->tableView_4->setColumnWidth(8,h/2);
+    ui->tableView_4->setColumnWidth(9,h/2);
+    ui->tableView_4->setColumnWidth(10,h/2);
 
     sqlmodel_curriculum->setHeaderData(0, Qt::Horizontal, QObject::tr("ID"));
     sqlmodel_curriculum->setHeaderData(1, Qt::Horizontal, QObject::tr("Специальность"));

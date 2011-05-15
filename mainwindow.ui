@@ -288,7 +288,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>расчитать</string>
+       <string>пересчитать</string>
       </property>
      </widget>
     </widget>

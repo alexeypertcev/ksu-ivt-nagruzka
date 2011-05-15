@@ -66,7 +66,6 @@ private slots:
     void on_action_6_activated();
 
     void update_curriculum();
-    //void update_query_curriculum();
 };
 
 #endif // MAINWINDOW_H

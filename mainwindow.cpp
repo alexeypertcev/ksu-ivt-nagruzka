@@ -83,8 +83,10 @@ MainWindow::MainWindow(QWidget *parent) :
         update_curriculum();
         ui->tableView_4->setModel(sqlmodel_curriculum);
 
-        SpinBoxDelegate *delegate = new SpinBoxDelegate();
-        ui->tableView_4->setItemDelegateForColumn(3, delegate);
+        ComboBoxDelegate *speciality_delegate = new ComboBoxDelegate("speciality",this);
+
+        SpinBoxDelegate *semester_delegate = new SpinBoxDelegate(1,12,this);
+        ui->tableView_4->setItemDelegateForColumn(3, semester_delegate);
 
         ui->tableView_4->update();
 
@@ -349,7 +351,7 @@ void MainWindow::set_design_window()
     tablemodel_teachers->setHeaderData(4, Qt::Horizontal, QObject::tr("Должность"));
     tablemodel_teachers->setHeaderData(5, Qt::Horizontal, QObject::tr("Ставка"));
 
-    ui->tableView_3->setColumnWidth(0,40);
+    ui->tableView_3->setColumnWidth(0,39);
     ui->tableView_3->setColumnWidth(1,150);
     ui->tableView_3->setColumnWidth(2,145);
     ui->tableView_3->setColumnWidth(3,145);

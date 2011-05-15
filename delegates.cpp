@@ -51,9 +51,11 @@
 
 
 //! [0]
-SpinBoxDelegate::SpinBoxDelegate(QObject *parent)
+SpinBoxDelegate::SpinBoxDelegate(int min, int max, QObject *parent)
     : QItemDelegate(parent)
 {
+    range_min = min;
+    range_max = max;
 }
 //! [0]
 
@@ -63,8 +65,8 @@ QWidget *SpinBoxDelegate::createEditor(QWidget *parent,
     const QModelIndex &/* index */) const
 {
     QSpinBox *editor = new QSpinBox(parent);
-    editor->setMinimum(1);
-    editor->setMaximum(12);
+    editor->setMinimum(range_min);
+    editor->setMaximum(range_max);
 
     return editor;
 }
@@ -102,7 +104,7 @@ void SpinBoxDelegate::updateEditorGeometry(QWidget *editor,
 //! [4]
 
 //---------------------------------------------------------------------------------------
-ComboBoxDelegate::ComboBoxDelegate(QObject *parent)
+ComboBoxDelegate::ComboBoxDelegate(QString table_name, QObject *parent)
     : QItemDelegate(parent)
 {
 }

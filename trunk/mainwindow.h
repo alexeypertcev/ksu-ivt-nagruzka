@@ -24,6 +24,8 @@ public:
 private:
     Ui::MainWindow *ui;
     void set_design_window();
+
+    QString path_db;
     QSqlDatabase db;
     QSqlRelationalTableModel* tablemodel_subject;
     QSqlRelationalTableModel* tablemodel_teachers;
@@ -66,6 +68,7 @@ private slots:
     void on_action_6_activated();
 
     void update_curriculum();
+    void on_pushButton_2_clicked();
 };
 
 #endif // MAINWINDOW_H

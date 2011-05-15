@@ -1,8 +1,6 @@
 //---------------------------------------------
 //  alexey.pertcev@gmail.com  Alexey Pertcev
 //
-//
-//
 //---------------------------------------------
 
 #include "mainwindow.h"
@@ -14,15 +12,8 @@
 
 #include <QtGui>
 #include <QtSql>
-#include <QSqlDatabase>
-#include <QSqlQuery>
-#include <QSqlQueryModel>
-#include <QSqlTableModel>
-#include <QSqlRelationalTableModel>
 #include <QMessageBox>
-#include <QModelIndex>
-#include <QAbstractItemModel>
-#include <QStandardItemModel>
+#include <QStatusBar>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -30,7 +21,10 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    if (createConnection()){
+    path_db = "/home/perec/nagruzka.db";
+    //ui->statusBar->showMessage("The database is used from " + path_db);
+
+    if (createConnection(path_db)){
 
         QSqlQuery query;
         query.exec("PRAGMA foreign_keys = ON;");
@@ -382,4 +376,12 @@ void MainWindow::set_design_window()
     sqlmodel_curriculum->setHeaderData(1, Qt::Horizontal, QObject::tr("Специальность"));
     sqlmodel_curriculum->setHeaderData(2, Qt::Horizontal, QObject::tr("Курс"));
     sqlmodel_curriculum->setHeaderData(3, Qt::Horizontal, QObject::tr("Семестр"));
+}
+
+void MainWindow::on_pushButton_2_clicked()
+{
+    // перерасчет таблицы "предметы в семместре"
+
+
+
 }

@@ -90,7 +90,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
 
-
+        settings = new Settings(this, tablemodel_spec, tablemodel_stat);
         set_design_window();
 
         QObject::connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(update_curriculum()));
@@ -169,16 +169,17 @@ void MainWindow::on_pushButton_del_teachers_clicked()
 
 void MainWindow::on_action_4_activated()
 {
-    Settings* s = new Settings(this, tablemodel_spec, tablemodel_stat);
-    s->set_tab(0);
-    s->exec();
+    //тут утекает память около 250кб за создание
+
+    settings->set_tab(0);
+    settings->exec();
 }
 
 void MainWindow::on_action_5_activated()
 {
-    Settings* s = new Settings(this, tablemodel_spec, tablemodel_stat);
-    s->set_tab(1);
-    s->exec();
+
+    settings->set_tab(1);
+    settings->exec();
 }
 
 void MainWindow::on_pushButton_clicked()

@@ -7,6 +7,7 @@
 QT_BEGIN_NAMESPACE
 class QSqlRelationalTableModel;
 class CurriculumSqlModel;
+class Settings;
 QT_END_NAMESPACE
 
 namespace Ui {
@@ -25,6 +26,7 @@ private:
     Ui::MainWindow *ui;
     void set_design_window();
 
+    Settings* settings;
     QString path_db;
     QSqlDatabase db;
     QSqlRelationalTableModel* tablemodel_subject;

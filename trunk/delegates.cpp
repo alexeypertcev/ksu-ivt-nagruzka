@@ -107,6 +107,8 @@ void SpinBoxDelegate::updateEditorGeometry(QWidget *editor,
 ComboBoxDelegate::ComboBoxDelegate(QString table_name, QObject *parent)
     : QItemDelegate(parent)
 {
+
+
 }
 
 QWidget *ComboBoxDelegate::createEditor(QWidget *parent,

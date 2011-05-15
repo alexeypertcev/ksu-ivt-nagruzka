@@ -225,13 +225,13 @@ void MainWindow::on_pushButton_del_student_clicked()
 
 void MainWindow::on_pushButton_add_curriculum_clicked()
 {
-    QString s = "insert into curriculum values(NULL, 'МОиАИС', 'ПП', 1, 1, 1, 1, 1);";
-    qDebug() << s;
+    // необязательно, тк в модели всегда актуальное значение
+    //sqlmodel_curriculum->setspeciality(ui->comboBox->currentText());
 
-    QSqlQuery query;
-    if (!query.exec(s)){QMessageBox::warning(this, tr("Error querry"), "");}
-
-    update_curriculum();
+    if (!sqlmodel_curriculum->add()){
+        QMessageBox::warning(this, tr("Error querry"),"");
+    }
+    sqlmodel_curriculum->refresh();
 }
 
 void MainWindow::on_pushButton_del_curriculum_clicked()

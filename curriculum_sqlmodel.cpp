@@ -84,3 +84,16 @@ void CurriculumSqlModel::setspeciality(QString s)
 {
     speciality = s;
 }
+
+bool CurriculumSqlModel::add()
+{
+    QString s = "insert into curriculum values(NULL, '" + speciality + "', 'ПП', 1, 1, 1, 1, 1);";
+    qDebug() << s;
+
+    QSqlQuery query;
+    if (!query.exec(s))
+    {
+        return false;
+    }
+    return true;
+}

@@ -87,6 +87,9 @@ public:
 
     void updateEditorGeometry(QWidget *editor,
         const QStyleOptionViewItem &option, const QModelIndex &index) const;
+private:
+    QString table;
+
 };
 
 #endif

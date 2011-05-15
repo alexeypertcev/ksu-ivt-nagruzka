@@ -84,8 +84,11 @@ MainWindow::MainWindow(QWidget *parent) :
         ui->tableView_4->setModel(sqlmodel_curriculum);
 
         ComboBoxDelegate *speciality_delegate = new ComboBoxDelegate("speciality",this);
-
+        ComboBoxDelegate *subject_delegate = new ComboBoxDelegate("subject",this);
         SpinBoxDelegate *semester_delegate = new SpinBoxDelegate(1,12,this);
+
+        ui->tableView_4->setItemDelegateForColumn(1, speciality_delegate);
+        ui->tableView_4->setItemDelegateForColumn(2, subject_delegate);
         ui->tableView_4->setItemDelegateForColumn(3, semester_delegate);
 
         ui->tableView_4->update();

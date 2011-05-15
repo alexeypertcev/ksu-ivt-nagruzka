@@ -46,6 +46,8 @@
 */
 
 #include <QtGui>
+#include <QtSql>
+#include <QSqlTableModel>
 
 #include "delegates.h"
 
@@ -107,43 +109,47 @@ void SpinBoxDelegate::updateEditorGeometry(QWidget *editor,
 ComboBoxDelegate::ComboBoxDelegate(QString table_name, QObject *parent)
     : QItemDelegate(parent)
 {
-
-
+    table = table_name;
 }
 
 QWidget *ComboBoxDelegate::createEditor(QWidget *parent,
     const QStyleOptionViewItem &/* option */,
     const QModelIndex &/* index */) const
 {
+    QComboBox *editor = new QComboBox(parent);
+    QSqlTableModel* tablemodel_spec = new QSqlTableModel(parent);
+    tablemodel_spec->setTable(table);
+    tablemodel_spec->setEditStrategy(QSqlTableModel::OnFieldChange);
+    tablemodel_spec->select();
+    editor->setModel(tablemodel_spec);
 
-
-    /*QSpinBox *editor = new QSpinBox(parent);
-    editor->setMinimum(0);
-    editor->setMaximum(12);
-
-    return editor;*/
+    return editor;
 }
 
 void ComboBoxDelegate::setEditorData(QWidget *editor,
                                     const QModelIndex &index) const
 {
+    QString value = index.model()->data(index, Qt::EditRole).toString();
 
-
-    /*int value = index.model()->data(index, Qt::EditRole).toInt();
-
-    QSpinBox *spinBox = static_cast<QSpinBox*>(editor);
-    spinBox->setValue(value);*/
+    QComboBox *comboBox = static_cast<QComboBox*>(editor);
+    int i;
+    //опасная хуйня, но быстрая)
+    for (i = 0; i<comboBox->count(); ++i)
+    {
+        if ( comboBox->itemText(i) == value ){ break; }
+    }
+    //
+    comboBox->setCurrentIndex(i);
 }
 
 void ComboBoxDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
                                    const QModelIndex &index) const
 {
 
-    /*QSpinBox *spinBox = static_cast<QSpinBox*>(editor);
-    spinBox->interpretText();
-    int value = spinBox->value();
+    QComboBox *comboBox = static_cast<QComboBox*>(editor);
+    QString value = comboBox->currentText();
 
-    model->setData(index, value, Qt::EditRole);*/
+    model->setData(index, value, Qt::EditRole);
 }
 
 void ComboBoxDelegate::updateEditorGeometry(QWidget *editor,

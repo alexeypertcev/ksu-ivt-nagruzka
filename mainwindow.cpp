@@ -97,7 +97,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
 
-
+        ui->lineEdit->setText("/home/perec/Загрузки/ПОиАИС_utf8.txt");
         settings = new Settings(this, tablemodel_spec, tablemodel_stat);
         set_design_window();
 
@@ -385,6 +385,13 @@ void MainWindow::set_design_window()
     sqlmodel_curriculum->setHeaderData(1, Qt::Horizontal, QObject::tr("Специальность"));
     sqlmodel_curriculum->setHeaderData(2, Qt::Horizontal, QObject::tr("Курс"));
     sqlmodel_curriculum->setHeaderData(3, Qt::Horizontal, QObject::tr("Семестр"));
+    sqlmodel_curriculum->setHeaderData(4, Qt::Horizontal, QObject::tr("Лекции"));
+    sqlmodel_curriculum->setHeaderData(5, Qt::Horizontal, QObject::tr("Лаборат."));
+    sqlmodel_curriculum->setHeaderData(6, Qt::Horizontal, QObject::tr("Практич."));
+    sqlmodel_curriculum->setHeaderData(7, Qt::Horizontal, QObject::tr("КСР"));
+    sqlmodel_curriculum->setHeaderData(8, Qt::Horizontal, QObject::tr("Экз."));
+    sqlmodel_curriculum->setHeaderData(9, Qt::Horizontal, QObject::tr("Зач."));
+    sqlmodel_curriculum->setHeaderData(10,Qt::Horizontal, QObject::tr("Курс."));
 }
 
 void MainWindow::on_pushButton_2_clicked()
@@ -392,5 +399,33 @@ void MainWindow::on_pushButton_2_clicked()
     // перерасчет таблицы "предметы в семместре"
 
 
+
+}
+
+void MainWindow::on_pushButton_4_clicked()
+{
+    QString directory = QFileDialog::getOpenFileName(this,
+                               tr("Find Files"), QDir::currentPath());
+
+    if (!directory.isEmpty()) {
+        ui->lineEdit->setText(directory);
+    }
+}
+
+void MainWindow::on_pushButton_3_clicked()
+{
+    QFile file(ui->lineEdit->text());
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        return;
+
+    QString line;
+    QSqlQuery query;
+    while (!file.atEnd()) {
+        line = file.readLine();
+        qDebug() << line.trimmed();
+
+        query.exec("insert into subject values('" + line.trimmed() + "')");
+    }
+    tablemodel_subject->select();
 
 }

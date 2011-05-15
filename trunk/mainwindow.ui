@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>846</width>
+    <width>944</width>
     <height>466</height>
    </rect>
   </property>
@@ -19,12 +19,12 @@
      <rect>
       <x>10</x>
       <y>0</y>
-      <width>821</width>
+      <width>921</width>
       <height>411</height>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>4</number>
+     <number>3</number>
     </property>
     <widget class="QWidget" name="tab_6">
      <attribute name="title">
@@ -95,7 +95,7 @@
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>791</width>
+        <width>891</width>
         <height>321</height>
        </rect>
       </property>
@@ -139,7 +139,7 @@
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>791</width>
+        <width>891</width>
         <height>331</height>
        </rect>
       </property>
@@ -180,7 +180,7 @@
        <rect>
         <x>10</x>
         <y>40</y>
-        <width>791</width>
+        <width>891</width>
         <height>301</height>
        </rect>
       </property>
@@ -214,7 +214,7 @@
      <widget class="QComboBox" name="comboBox">
       <property name="geometry">
        <rect>
-        <x>667</x>
+        <x>760</x>
         <y>10</y>
         <width>131</width>
         <height>24</height>
@@ -231,7 +231,7 @@
        <rect>
         <x>10</x>
         <y>40</y>
-        <width>791</width>
+        <width>891</width>
         <height>301</height>
        </rect>
       </property>
@@ -271,7 +271,7 @@
      <widget class="QComboBox" name="comboBox_2">
       <property name="geometry">
        <rect>
-        <x>667</x>
+        <x>770</x>
         <y>10</y>
         <width>131</width>
         <height>24</height>
@@ -281,7 +281,7 @@
      <widget class="QPushButton" name="pushButton_2">
       <property name="geometry">
        <rect>
-        <x>540</x>
+        <x>670</x>
         <y>10</y>
         <width>91</width>
         <height>24</height>
@@ -345,7 +345,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>846</width>
+     <width>944</width>
      <height>21</height>
     </rect>
    </property>

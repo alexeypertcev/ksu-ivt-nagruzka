@@ -169,15 +169,12 @@ void MainWindow::on_pushButton_del_teachers_clicked()
 
 void MainWindow::on_action_4_activated()
 {
-    //тут утекает память около 250кб за создание
-
     settings->set_tab(0);
     settings->exec();
 }
 
 void MainWindow::on_action_5_activated()
 {
-
     settings->set_tab(1);
     settings->exec();
 }

@@ -20,7 +20,7 @@ public:
     bool setData(const QModelIndex &index, const QVariant &value, int role);
     void setspeciality(QString s);
     void refresh();
-
+    bool add();
 private:
     QString speciality;
 };

@@ -5,8 +5,6 @@
 #ifndef CONNECTION_H
 #define CONNECTION_H
 
-#define PATH_DB "/home/perec/nagruzka.db"
-
 #include <QMessageBox>
 #include <QSqlDatabase>
 #include <QSqlError>
@@ -14,10 +12,10 @@
 
 QSqlDatabase db;
 
-static bool createConnection()
+static bool createConnection(QString path_db)
 {
     db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName(PATH_DB);
+    db.setDatabaseName(path_db);
     
     if (!db.open()) {
         QMessageBox::critical(0, qApp->tr("Cannot open database"),

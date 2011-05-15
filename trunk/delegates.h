@@ -53,7 +53,7 @@ class SpinBoxDelegate : public QItemDelegate
     Q_OBJECT
 
 public:
-    SpinBoxDelegate(QObject *parent = 0);
+    SpinBoxDelegate(int min, int max, QObject *parent = 0);
 
     QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option,
                           const QModelIndex &index) const;
@@ -64,6 +64,9 @@ public:
 
     void updateEditorGeometry(QWidget *editor,
         const QStyleOptionViewItem &option, const QModelIndex &index) const;
+private:
+    int range_min, range_max;
+
 };
 
 class ComboBoxDelegate : public QItemDelegate
@@ -71,7 +74,9 @@ class ComboBoxDelegate : public QItemDelegate
     Q_OBJECT
 
 public:
-    ComboBoxDelegate(QObject *parent = 0);
+    ComboBoxDelegate(QString table_name, QObject *parent = 0);
+
+    //bool setTable(QString table_name);
 
     QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option,
                           const QModelIndex &index) const;

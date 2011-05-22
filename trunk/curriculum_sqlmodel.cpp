@@ -42,7 +42,7 @@ bool CurriculumSqlModel::setData(const QModelIndex &index, const QVariant &value
             field = "subject_name";
             break;
         case 3:
-            field = "semmestr";
+            field = "semmester";
             break;
         case 4:
             field = "lection_hr";

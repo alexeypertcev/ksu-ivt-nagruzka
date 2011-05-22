@@ -8,6 +8,7 @@ QT_BEGIN_NAMESPACE
 class QSqlRelationalTableModel;
 class CurriculumSqlModel;
 class Settings;
+class StudentsSqlModel;
 QT_END_NAMESPACE
 
 namespace Ui {
@@ -31,7 +32,6 @@ private:
     QSqlDatabase db;
     QSqlRelationalTableModel* tablemodel_subject;
     QSqlRelationalTableModel* tablemodel_teachers;
-    QSqlRelationalTableModel* tablemodel_students;
     QSqlRelationalTableModel* tablemodel_curriculum;
     QSqlRelationalTableModel* tablemodel_subjects_in_semmestre;
     QSqlRelationalTableModel* tablemodel_distribution;
@@ -39,6 +39,7 @@ private:
     QSqlRelationalTableModel* tablemodel_spec;
     QSqlRelationalTableModel* tablemodel_stat;
 
+    StudentsSqlModel* sqlmodel_students;
     CurriculumSqlModel* sqlmodel_curriculum;
 
     void update_subject();

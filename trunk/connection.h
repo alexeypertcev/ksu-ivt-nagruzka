@@ -43,17 +43,17 @@ static bool create_all_tables(){
         QSqlQuery query;
         query.exec("PRAGMA foreign_keys = ON;");
         query.exec("CREATE TABLE form_training ( "
-                   "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-                   "name TEXT NOT NULL, ");
-        query.exec("CREATE TABLE speciality ( "
-                   "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-                   "faculty_name TEXT NOT NULL"
                    "name TEXT NOT NULL, "
-                   "form_training_name TEXT NOT NULL"
-                   "CONSTRAINT form_training_name FOREIGN KEY (form_training_name) "
-                   "REFERENCES form_training (name))");
+                   "CONSTRAINT name PRIMARY KEY (name))");
         query.exec("CREATE TABLE subject (name TEXT NOT NULL, "
                    "CONSTRAINT name PRIMARY KEY (name))");
+        query.exec("CREATE TABLE speciality ( "
+                   "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                   "faculty_name TEXT NOT NULL,"
+                   "special_name TEXT NOT NULL, "
+                   "form_training_name TEXT NOT NULL,"
+                   "CONSTRAINT form_training_name FOREIGN KEY (form_training_name) "
+                   "REFERENCES form_training (name))");
         query.exec("CREATE TABLE students ( "
                    "id INTEGER PRIMARY KEY AUTOINCREMENT, "
                    "speciality_id INTEGER NOT NULL, "
@@ -61,8 +61,8 @@ static bool create_all_tables(){
                    "num_group INTEGER NOT NULL, "
                    "num_undergroup INTEGER NOT NULL, "
                    "quantity_course INTEGER NOT NULL, "
-                   "CONSTRAINT speciality_name FOREIGN KEY (speciality_name) "
-                   "REFERENCES speciality (name))");
+                   "CONSTRAINT speciality_id FOREIGN KEY (speciality_id) "
+                   "REFERENCES speciality (id))");
         query.exec("CREATE TABLE status ( "
                    "name TEXT NOT NULL, "
                    "hours INTEGER NOT NULL, "
@@ -90,8 +90,8 @@ static bool create_all_tables(){
                    "is_coursework INTEGER, "
                    "CONSTRAINT subject_name FOREIGN KEY (subject_name) "
                    "  REFERENCES subject (name), "
-                   "CONSTRAINT speciality_name FOREIGN KEY (speciality_name) "
-                   "  REFERENCES speciality (name))");
+                   "CONSTRAINT speciality_id FOREIGN KEY (speciality_id) "
+                   "  REFERENCES speciality (id))");
         query.exec("CREATE TABLE subjects_in_semmester ( "
                    "id INTEGER PRIMARY KEY AUTOINCREMENT, "
                    "curriculum_id INTEGER NOT NULL, "
@@ -143,12 +143,15 @@ static bool insert_main_data()
     } else{
         QSqlQuery query;
         query.exec("PRAGMA foreign_keys = ON;");
+        query.exec("insert into form_training values('оч')");
+        query.exec("insert into form_training values('оч-заоч')");
+        query.exec("insert into form_training values('заоч')");
         query.exec("insert into subject values('ПП')");
         query.exec("insert into subject values('ООП')");
         query.exec("insert into subject values('СИИ')");
-        query.exec("insert into speciality values('МОиАИС')");
-        query.exec("insert into speciality values('ПО')");
-        query.exec("insert into speciality values('Ин.-яз.')");
+        query.exec("insert into speciality values(NULL, 'ФИВТ','МОиАИС', 'оч')");
+        query.exec("insert into speciality values(NULL, 'ФИВТ','ПО', 'оч')");
+        query.exec("insert into speciality values(NULL, 'ФИВТ','ИАЯ', 'оч')");
         query.exec("insert into status values('default', 0)");
         query.exec("insert into status values('профессор', 680)");
         query.exec("insert into status values('доцент', 730)");
@@ -157,7 +160,8 @@ static bool insert_main_data()
         query.exec("insert into teachers values(NULL, 'f', 'i', 'o', 'default', 1.0 );");
         query.exec("insert into teachers values(NULL, 'f', 'i', 'o', 'default',     1.0 );");
         query.exec("insert into teachers values(NULL, 'f', 'i', 'o', 'default',   1.0 );");
-
+        query.exec("insert into students values(NULL, 1, 1, 1, 2, 12);");
+        query.exec("insert into students values(NULL, 1, 1, 2, 2, 22);");
     }
     return true;
 }
@@ -183,6 +187,7 @@ static bool drop_all_tables()
         query.exec("DROP TABLE speciality");
         query.exec("DROP TABLE subject");
         query.exec("DROP TABLE status");
+        query.exec("DROP TABLE form_training");
     }
     return true;
 }

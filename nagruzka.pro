@@ -14,13 +14,17 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     settings.cpp \
     curriculum_sqlmodel.cpp \
-    delegates.cpp
+    delegates.cpp \
+    subjectinsemester_sqlmodel.cpp \
+    students_sqlmodel.cpp
 
 HEADERS  += mainwindow.h \
     connection.h \
     settings.h \
     curriculum_sqlmodel.h \
-    delegates.h
+    delegates.h \
+    subjectinsemester_sqlmodel.h \
+    students_sqlmodel.h
 
 FORMS    += mainwindow.ui \
     settings.ui

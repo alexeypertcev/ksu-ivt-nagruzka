@@ -3,10 +3,8 @@
 ****************************************************************************/
 
 #include <QtSql>
-
-#include "curriculum_sqlmodel.h"
-
 #include <QMessageBox>
+#include "curriculum_sqlmodel.h"
 
 CurriculumSqlModel::CurriculumSqlModel(QObject *parent)
     : QSqlQueryModel(parent)

@@ -6,9 +6,11 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "connection.h"
+#include "delegates.h"
 #include "settings.h"
 #include "curriculum_sqlmodel.h"
-#include "delegates.h"
+#include "students_sqlmodel.h"
+#include "subjectinsemester_sqlmodel.h"
 
 #include <QtGui>
 #include <QtSql>
@@ -62,14 +64,9 @@ MainWindow::MainWindow(QWidget *parent) :
         ui->tableView_2->update();
 
         // students table
-        tablemodel_students = new QSqlRelationalTableModel(this);
-        tablemodel_students->setTable("students");
-        tablemodel_students->setEditStrategy(QSqlTableModel::OnFieldChange);
-        tablemodel_students->select();
-        tablemodel_students->setRelation(1, QSqlRelation("speciality", "name", "name"));
-
-        ui->tableView_3->setModel(tablemodel_students);
-        ui->tableView_3->setItemDelegate(new QSqlRelationalDelegate(ui->tableView_3));
+        sqlmodel_students = new StudentsSqlModel(this);
+        sqlmodel_students->refresh();
+        ui->tableView_3->setModel(sqlmodel_students);
         ui->tableView_3->update();
 
         // curriculum table
@@ -201,6 +198,7 @@ void MainWindow::on_pushButton_clicked()
 
 void MainWindow::on_pushButton_add_student_clicked()
 {
+    /*
     QString s = "insert into students values(NULL, 'МОиАИС', 1, 1, 1, 1);";
     qDebug() << s;
 
@@ -210,10 +208,12 @@ void MainWindow::on_pushButton_add_student_clicked()
                              tr("The database reported an error: %1").arg(tablemodel_students->lastError().text()));
     }
     tablemodel_students->select();
+    */
 }
 
 void MainWindow::on_pushButton_del_student_clicked()
 {
+    /*
     int row = ui->tableView_3->currentIndex().row();
     QString s = "DELETE FROM students WHERE id = '" + tablemodel_students->data( tablemodel_students->index(row,0),
                                                                                  Qt::DisplayRole ).toString() + "';";
@@ -225,6 +225,7 @@ void MainWindow::on_pushButton_del_student_clicked()
                              tr("The database reported an error: %1").arg(tablemodel_students->lastError().text()));
     }
     tablemodel_students->select();
+    */
 
 }
 
@@ -360,14 +361,14 @@ void MainWindow::set_design_window()
     ui->tableView_3->setColumnWidth(3,145);
     ui->tableView_3->setColumnWidth(4,145);
     ui->tableView_3->setColumnWidth(5,145);
-
+/*
     tablemodel_students->setHeaderData(0, Qt::Horizontal, QObject::tr("ID"));
     tablemodel_students->setHeaderData(1, Qt::Horizontal, QObject::tr("Специальность"));
     tablemodel_students->setHeaderData(2, Qt::Horizontal, QObject::tr("Курс"));
     tablemodel_students->setHeaderData(3, Qt::Horizontal, QObject::tr("Кол-во групп"));
     tablemodel_students->setHeaderData(4, Qt::Horizontal, QObject::tr("Кол-во подгрупп"));
     tablemodel_students->setHeaderData(5, Qt::Horizontal, QObject::tr("Кол-во человек"));
-
+*/
     int h=85;
     ui->tableView_4->setColumnWidth(0,38);
     ui->tableView_4->setColumnWidth(1,140);

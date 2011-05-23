@@ -329,7 +329,7 @@ void MainWindow::update_students()
 void MainWindow::update_curriculum()
 {
     //sqlmodel_curriculum->setspeciality(ui->comboBox->currentText());
-    sqlmodel_curriculum->setspeciality_id(1/**/);
+    sqlmodel_curriculum->setspeciality_id(ui->comboBox->get_id());
     sqlmodel_curriculum->refresh();
 }
 

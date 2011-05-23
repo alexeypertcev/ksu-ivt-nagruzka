@@ -9,7 +9,7 @@
 CurriculumSqlModel::CurriculumSqlModel(QObject *parent)
     : QSqlQueryModel(parent)
 {
-    speciality_id = 1;
+    speciality_id = '1';
 }
 
 
@@ -85,20 +85,20 @@ void CurriculumSqlModel::refresh()
                    "subject_name, semmester, lection_hr, labs_hr, practice_hr, "
                    "KCP_hr, is_examen, is_offset, is_coursework "
                    "FROM curriculum, speciality "
-                   "WHERE curriculum.speciality_id = speciality.id AND speciality_id = " + QString::number(speciality_id, 10) +
+                   "WHERE curriculum.speciality_id = speciality.id AND speciality_id = " + speciality_id +
                    ";");
 
 
 }
 
-void CurriculumSqlModel::setspeciality_id(int id)
+void CurriculumSqlModel::setspeciality_id(QString id)
 {
     speciality_id = id;
 }
 
 bool CurriculumSqlModel::add()
 {
-    QString s = "insert into curriculum values(NULL, '" + QString::number(speciality_id, 10) + "', 'ПП', 1, 0, 0, 0, 0, 0, 0, 0);";
+    QString s = "insert into curriculum values(NULL, '" + speciality_id + "', 'ПП', 1, 0, 0, 0, 0, 0, 0, 0);";
     qDebug() << s;
 
     QSqlQuery query;

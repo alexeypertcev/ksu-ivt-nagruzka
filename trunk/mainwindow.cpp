@@ -438,6 +438,8 @@ void MainWindow::on_pushButton_2_clicked()
 {
     // перерасчет таблицы "предметы в семместре"
     QSqlQuery query;
+    QSqlQuery query2;
+    QSqlQuery query3;
     query.exec("DELETE FROM subjects_in_semmester");
 
     query.exec("SELECT curriculum.id, special_name || '(' || form_training_name || ')', "
@@ -445,11 +447,18 @@ void MainWindow::on_pushButton_2_clicked()
                "KCP_hr, is_examen, is_offset, is_coursework "
                "FROM curriculum, speciality "
                "WHERE curriculum.speciality_id = speciality.id;");
+    query2.exec("SELECT students.id, special_name || '(' || form_training_name || ')', "
+                "course, num_group, num_undergroup, quantity_course "
+                "FROM students, spQSqlQuery query2;eciality ");
     while (query.next()) {
         QString curriculum_id = query.value(0).toString();
-
-
-
+        QString lection_hr = query.value(4).toString();
+        QString labs_hr = query.value(5).toString();
+        QString practice_hr = query.value(6).toString();
+            while (query2.next()){
+                QString students_id = query2.value(0).toString();
+                query3.exec("insert into subjects_in_semmestre values(NULL, 1, 1);");
+            }
     }
 
 

@@ -11,7 +11,7 @@ public:
     QString get_id();
     void setModel( QAbstractItemModel * model );
 private:
-    QString *ids;
+    QStringList ids;
 
 };
 

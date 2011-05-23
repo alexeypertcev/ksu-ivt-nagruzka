@@ -76,8 +76,6 @@ class ComboBoxDelegate : public QItemDelegate
 public:
     ComboBoxDelegate(QString table_name, QObject *parent = 0);
 
-    //bool setTable(QString table_name);
-
     QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option,
                           const QModelIndex &index) const;
 
@@ -90,6 +88,24 @@ public:
 private:
     QString table;
 
+};
+
+class SpecialityDelegate : public QItemDelegate
+{
+    Q_OBJECT
+
+public:
+    SpecialityDelegate(QObject *parent = 0);
+
+    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option,
+                          const QModelIndex &index) const;
+
+    void setEditorData(QWidget *editor, const QModelIndex &index) const;
+    void setModelData(QWidget *editor, QAbstractItemModel *model,
+                      const QModelIndex &index) const;
+
+    void updateEditorGeometry(QWidget *editor,
+        const QStyleOptionViewItem &option, const QModelIndex &index) const;
 };
 
 class CheckBoxDelegate : public QItemDelegate

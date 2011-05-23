@@ -11,6 +11,7 @@
 #include "curriculum_sqlmodel.h"
 #include "students_sqlmodel.h"
 #include "subjectinsemester_sqlmodel.h"
+#include "saveidcombobox.h"
 
 #include <QtGui>
 #include <QtSql>
@@ -36,8 +37,12 @@ MainWindow::MainWindow(QWidget *parent) :
         tablemodel_spec->setEditStrategy(QSqlTableModel::OnFieldChange);
         tablemodel_spec->select();
 
-        ui->comboBox->setModel(tablemodel_spec);
-        ui->comboBox_2->setModel(tablemodel_spec);
+        sqlmodel_spec = new QSqlQueryModel(this);
+        sqlmodel_spec->setQuery("SELECT special_name || '(' || form_training_name || ')', id "
+                                "FROM speciality ORDER BY id;");
+
+        ui->comboBox->setModel(sqlmodel_spec);
+        ui->comboBox_2->setModel(sqlmodel_spec);
 
         tablemodel_stat = new QSqlRelationalTableModel(this);
         tablemodel_stat->setTable("status");
@@ -74,7 +79,7 @@ MainWindow::MainWindow(QWidget *parent) :
         update_curriculum();
         ui->tableView_4->setModel(sqlmodel_curriculum);
 
-        ComboBoxDelegate *speciality_delegate = new ComboBoxDelegate("speciality",this);
+        SpecialityDelegate *speciality_delegate = new SpecialityDelegate(this);
         ComboBoxDelegate *subject_delegate = new ComboBoxDelegate("subject",this);
         SpinBoxDelegate *semester_delegate = new SpinBoxDelegate(1,12,this);
         CheckBoxDelegate *checkBox_delegate = new CheckBoxDelegate(this);
@@ -323,7 +328,8 @@ void MainWindow::update_students()
 
 void MainWindow::update_curriculum()
 {
-    sqlmodel_curriculum->setspeciality(ui->comboBox->currentText());
+    //sqlmodel_curriculum->setspeciality(ui->comboBox->currentText());
+    sqlmodel_curriculum->setspeciality_id(1/**/);
     sqlmodel_curriculum->refresh();
 }
 
@@ -361,14 +367,14 @@ void MainWindow::set_design_window()
     ui->tableView_3->setColumnWidth(3,145);
     ui->tableView_3->setColumnWidth(4,145);
     ui->tableView_3->setColumnWidth(5,145);
-/*
-    tablemodel_students->setHeaderData(0, Qt::Horizontal, QObject::tr("ID"));
-    tablemodel_students->setHeaderData(1, Qt::Horizontal, QObject::tr("Специальность"));
-    tablemodel_students->setHeaderData(2, Qt::Horizontal, QObject::tr("Курс"));
-    tablemodel_students->setHeaderData(3, Qt::Horizontal, QObject::tr("Кол-во групп"));
-    tablemodel_students->setHeaderData(4, Qt::Horizontal, QObject::tr("Кол-во подгрупп"));
-    tablemodel_students->setHeaderData(5, Qt::Horizontal, QObject::tr("Кол-во человек"));
-*/
+
+    sqlmodel_students->setHeaderData(0, Qt::Horizontal, QObject::tr("ID"));
+    sqlmodel_students->setHeaderData(1, Qt::Horizontal, QObject::tr("Специальность"));
+    sqlmodel_students->setHeaderData(2, Qt::Horizontal, QObject::tr("Курс"));
+    sqlmodel_students->setHeaderData(3, Qt::Horizontal, QObject::tr("Кол-во групп"));
+    sqlmodel_students->setHeaderData(4, Qt::Horizontal, QObject::tr("Кол-во подгрупп"));
+    sqlmodel_students->setHeaderData(5, Qt::Horizontal, QObject::tr("Кол-во человек"));
+
     int h=85;
     ui->tableView_4->setColumnWidth(0,38);
     ui->tableView_4->setColumnWidth(1,140);

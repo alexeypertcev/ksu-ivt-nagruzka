@@ -18,11 +18,11 @@ public:
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
     bool setData(const QModelIndex &index, const QVariant &value, int role);
-    void setspeciality(QString s);
+    void setspeciality_id(int id);
     void refresh();
     bool add();
 private:
-    QString speciality;
+    int speciality_id;
 };
 
 #endif

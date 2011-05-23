@@ -80,7 +80,7 @@ void ComboBoxDelegate::setEditorData(QWidget *editor,
 
     QComboBox *comboBox = static_cast<QComboBox*>(editor);
     int i;
-    //опасная хуйня, но быстрая) тк. данные из модели ошибок быть не должно
+    // тк. данные из модели ошибок быть не должно
     for (i = 0; i<comboBox->count(); ++i)
     {
         if ( comboBox->itemText(i) == value ){ break; }
@@ -100,6 +100,56 @@ void ComboBoxDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
 }
 
 void ComboBoxDelegate::updateEditorGeometry(QWidget *editor,
+    const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
+{
+    editor->setGeometry(option.rect);
+}
+
+//---------------------------------------------------------------------------------------
+SpecialityDelegate::SpecialityDelegate(QObject *parent)
+    : QItemDelegate(parent)
+{
+}
+
+QWidget *SpecialityDelegate::createEditor(QWidget *parent,
+    const QStyleOptionViewItem &/* option */,
+    const QModelIndex &/* index */) const
+{
+    QComboBox *editor = new QComboBox(parent);
+    QSqlQueryModel* sqlmodel = new QSqlQueryModel(parent);
+    sqlmodel->setQuery("SELECT special_name || '(' || form_training_name || ')', "
+                       "FROM speciality;");
+    editor->setModel(sqlmodel);
+    // здесь же и создать массив id'шников
+    return editor;
+}
+
+void SpecialityDelegate::setEditorData(QWidget *editor,
+                                    const QModelIndex &index) const
+{/*
+    QString value = index.model()->data(index, Qt::EditRole).toString();
+
+    QComboBox *comboBox = static_cast<QComboBox*>(editor);
+    int i;
+    for (i = 0; i<comboBox->count(); ++i)
+    {
+        //if ( comboBox->itemText(i) == value ){ break; }
+    }
+    //
+    comboBox->setCurrentIndex(i);*/
+}
+
+void SpecialityDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
+                                   const QModelIndex &index) const
+{/*
+
+    QComboBox *comboBox = static_cast<QComboBox*>(editor);
+    QString value = comboBox->currentText();
+
+    model->setData(index, value, Qt::EditRole);*/
+}
+
+void SpecialityDelegate::updateEditorGeometry(QWidget *editor,
     const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
 {
     editor->setGeometry(option.rect);

@@ -9,7 +9,7 @@
 CurriculumSqlModel::CurriculumSqlModel(QObject *parent)
     : QSqlQueryModel(parent)
 {
-    speciality = "";
+    speciality_id = 1;
 }
 
 
@@ -26,11 +26,11 @@ Qt::ItemFlags CurriculumSqlModel::flags(
 
 bool CurriculumSqlModel::setData(const QModelIndex &index, const QVariant &value, int /* role */)
 {
-    if (index.column() < 1 || index.column() > 10)
+    if (index.column() < 2 || index.column() > 10)
         return false;
 
     QModelIndex primaryKeyIndex = QSqlQueryModel::index(index.row(), 0);
-    int id = data(primaryKeyIndex).toInt();
+    //int id = data(primaryKeyIndex).toInt();
     QString field = ";";
     switch (index.column()){
         case 1:
@@ -81,17 +81,24 @@ bool CurriculumSqlModel::setData(const QModelIndex &index, const QVariant &value
 
 void CurriculumSqlModel::refresh()
 {
-    this->setQuery("SELECT * FROM curriculum WHERE speciality_name = '" + speciality + "';");
+    this->setQuery("SELECT curriculum.id, special_name || '(' || form_training_name || ')', "
+                   "subject_name, semmester, lection_hr, labs_hr, practice_hr, "
+                   "KCP_hr, is_examen, is_offset, is_coursework "
+                   "FROM curriculum, speciality "
+                   "WHERE curriculum.speciality_id = speciality.id AND speciality_id = " + QString::number(speciality_id, 10) +
+                   ";");
+
+
 }
 
-void CurriculumSqlModel::setspeciality(QString s)
+void CurriculumSqlModel::setspeciality_id(int id)
 {
-    speciality = s;
+    speciality_id = id;
 }
 
 bool CurriculumSqlModel::add()
 {
-    QString s = "insert into curriculum values(NULL, '" + speciality + "', 'ПП', 1, 0, 0, 0, 0, 0, 0, 0);";
+    QString s = "insert into curriculum values(NULL, '" + QString::number(speciality_id, 10) + "', 'ПП', 1, 0, 0, 0, 0, 0, 0, 0);";
     qDebug() << s;
 
     QSqlQuery query;

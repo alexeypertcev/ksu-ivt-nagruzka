@@ -108,3 +108,12 @@ bool CurriculumSqlModel::add()
     }
     return true;
 }
+
+bool CurriculumSqlModel::del(QString id)
+{
+    QString s = "DELETE FROM curriculum WHERE id = '" + id + "';";
+    qDebug() << s;
+
+    QSqlQuery query;
+    query.exec(s);
+}

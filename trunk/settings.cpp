@@ -60,13 +60,13 @@ void Settings::on_pushButton_del_spec_clicked()
 {
     int row = ui->tableView->currentIndex().row();
     QString s = "DELETE FROM speciality WHERE id = '" + tablemodel_spec->data( tablemodel_spec->index(row,0),
-                                                                                Qt::DisplayRole ).toString() + "';";
+                                                                              Qt::DisplayRole ).toString() + "';";
     qDebug() << s;
 
     QSqlQuery query;
     if (!query.exec(s)){
         QMessageBox::warning(this, tr("Error querry"),
-                             tr("The database reported an error: %1").arg(tablemodel_spec->lastError().text()));
+                             tr(" Невозможно выполнить данное действие \n Возможно значение которое вы хотите удалить испульзуется в базе данных"));
     }
     tablemodel_spec->select();
 }

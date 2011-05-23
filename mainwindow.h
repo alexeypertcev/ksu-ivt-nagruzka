@@ -11,6 +11,7 @@ class CurriculumSqlModel;
 class Settings;
 class StudentsSqlModel;
 class SpecialityDelegate;
+class SubjectinsemesterSqlModel;
 QT_END_NAMESPACE
 
 namespace Ui {
@@ -35,7 +36,6 @@ private:
     QSqlRelationalTableModel* tablemodel_subject;
     QSqlRelationalTableModel* tablemodel_teachers;
     QSqlRelationalTableModel* tablemodel_curriculum;
-    QSqlRelationalTableModel* tablemodel_subjects_in_semmestre;
     QSqlRelationalTableModel* tablemodel_distribution;
 
     QSqlRelationalTableModel* tablemodel_spec;
@@ -44,6 +44,7 @@ private:
     QSqlQueryModel* sqlmodel_spec;
     StudentsSqlModel* sqlmodel_students;
     CurriculumSqlModel* sqlmodel_curriculum;
+    SubjectinsemesterSqlModel* sqlmodel_subinsem;
 
     void update_subject();
     void update_teachers();
@@ -74,6 +75,7 @@ private slots:
     void on_action_6_activated();
 
     void update_curriculum();
+    void update_subinsem();
     void on_pushButton_2_clicked();
     void on_pushButton_4_clicked();
     void on_pushButton_3_clicked();

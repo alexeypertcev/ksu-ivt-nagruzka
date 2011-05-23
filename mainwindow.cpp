@@ -74,7 +74,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
         SpecialityDelegate *speciality_delegate = new SpecialityDelegate(this);
+        SpinBoxDelegate *course_delegate = new SpinBoxDelegate(1,6,this);
+
         ui->tableView_3->setItemDelegateForColumn(1, speciality_delegate);
+        ui->tableView_3->setItemDelegateForColumn(2, course_delegate);
 
         ui->tableView_3->update();
 
@@ -97,8 +100,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
         ui->tableView_4->update();
 
-
-
+        //subjects_in_semmester table
+        sqlmodel_subinsem = new SubjectinsemesterSqlModel(this);
+        update_subinsem();
+        ui->tableView_5->setModel(sqlmodel_subinsem);
 
 
 
@@ -108,6 +113,7 @@ MainWindow::MainWindow(QWidget *parent) :
         set_design_window();
 
         QObject::connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(update_curriculum()));
+        QObject::connect(ui->comboBox_2, SIGNAL(currentIndexChanged(int)), this, SLOT(update_subinsem()));
      }
 }
 
@@ -193,56 +199,22 @@ void MainWindow::on_action_5_activated()
     settings->exec();
 }
 
-void MainWindow::on_pushButton_clicked()
-{
-    tablemodel_teachers->setTable("teachers");
-    tablemodel_teachers->setEditStrategy(QSqlTableModel::OnFieldChange);
-    tablemodel_teachers->select();
-    tablemodel_teachers->setRelation(4, QSqlRelation("status", "name", "name"));
-
-    ui->tableView_2->setModel(tablemodel_teachers);
-    ui->tableView_2->setItemDelegate(new QSqlRelationalDelegate(ui->tableView_2));
-    ui->tableView_2->update();
-}
+void MainWindow::on_pushButton_clicked(){}
 
 void MainWindow::on_pushButton_add_student_clicked()
 {
-    /*
-    QString s = "insert into students values(NULL, 'МОиАИС', 1, 1, 1, 1);";
-    qDebug() << s;
-
-    QSqlQuery query;
-    if (!query.exec(s)){
-        QMessageBox::warning(this, tr("Error querry"),
-                             tr("The database reported an error: %1").arg(tablemodel_students->lastError().text()));
-    }
-    tablemodel_students->select();
-    */
+    sqlmodel_students->add("1", "1", "1", "1", "0");
+    sqlmodel_students->refresh();
 }
 
 void MainWindow::on_pushButton_del_student_clicked()
 {
-    /*
-    int row = ui->tableView_3->currentIndex().row();
-    QString s = "DELETE FROM students WHERE id = '" + tablemodel_students->data( tablemodel_students->index(row,0),
-                                                                                 Qt::DisplayRole ).toString() + "';";
-    qDebug() << s;
-
-    QSqlQuery query;
-    if (!query.exec(s)){
-        QMessageBox::warning(this, tr("Error querry"),
-                             tr("The database reported an error: %1").arg(tablemodel_students->lastError().text()));
-    }
-    tablemodel_students->select();
-    */
-
+    sqlmodel_students->del(sqlmodel_students->data( sqlmodel_students->index(ui->tableView_3->currentIndex().row(),0), Qt::DisplayRole ).toString());
+    sqlmodel_students->refresh();
 }
 
 void MainWindow::on_pushButton_add_curriculum_clicked()
 {
-    // необязательно, тк в модели всегда актуальное значение
-    //sqlmodel_curriculum->setspeciality(ui->comboBox->currentText());
-
     if (!sqlmodel_curriculum->add()){
         QMessageBox::warning(this, tr("Error querry"),"");
     }
@@ -251,11 +223,12 @@ void MainWindow::on_pushButton_add_curriculum_clicked()
 
 void MainWindow::on_pushButton_del_curriculum_clicked()
 {
-
+    sqlmodel_curriculum->del(sqlmodel_curriculum->data( sqlmodel_curriculum->index(ui->tableView_4->currentIndex().row(),0), Qt::DisplayRole ).toString());
+    sqlmodel_curriculum->refresh();
 }
 
 void MainWindow::on_pushButton_add_subjects_in_semmestre_clicked()
-{
+{/*
     QString s = "insert into subjects_in_semmestre values(NULL, 1, 1);";
     qDebug() << s;
 
@@ -263,6 +236,7 @@ void MainWindow::on_pushButton_add_subjects_in_semmestre_clicked()
     if (!query.exec(s)){QMessageBox::warning(this, tr("Error querry"), "");}
 
     tablemodel_subjects_in_semmestre->select();
+    */
 }
 
 void MainWindow::on_pushButton_del_subjects_in_semmestre_clicked()
@@ -302,7 +276,7 @@ void MainWindow::on_tabWidget_currentChanged(int index)
         update_curriculum();
         break;
     case 4:
-        update_subject_in_semestre();
+        update_subinsem();
         break;
     case 5:
         update_disctibution();
@@ -315,26 +289,22 @@ void MainWindow::on_tabWidget_currentChanged(int index)
         break;
     }
 }
-void MainWindow::update_subject()
-{
+void MainWindow::update_subject(){}
 
-}
+void MainWindow::update_teachers(){}
 
-void MainWindow::update_teachers()
-{
-
-}
-
-void MainWindow::update_students()
-{
-
-}
+void MainWindow::update_students(){}
 
 void MainWindow::update_curriculum()
 {
-    //sqlmodel_curriculum->setspeciality(ui->comboBox->currentText());
     sqlmodel_curriculum->setspeciality_id(ui->comboBox->get_id());
     sqlmodel_curriculum->refresh();
+}
+
+void MainWindow::update_subinsem()
+{
+    sqlmodel_subinsem->setspeciality_id(ui->comboBox_2->get_id());
+    sqlmodel_subinsem->refresh();
 }
 
 void MainWindow::update_subject_in_semestre()
@@ -349,6 +319,7 @@ void MainWindow::update_disctibution()
 
 void MainWindow::set_design_window()
 {
+    int i = 0;
     tablemodel_subject->setHeaderData(0, Qt::Horizontal, QObject::tr("Название"));
 
     ui->tableView_2->setColumnWidth(0,40);
@@ -403,6 +374,36 @@ void MainWindow::set_design_window()
     sqlmodel_curriculum->setHeaderData(8, Qt::Horizontal, QObject::tr("Экз."));
     sqlmodel_curriculum->setHeaderData(9, Qt::Horizontal, QObject::tr("Зач."));
     sqlmodel_curriculum->setHeaderData(10,Qt::Horizontal, QObject::tr("Курс."));
+
+    i=0;
+    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("ID"));
+    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Предмет"));
+    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Семестр"));
+    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Факультет"));
+    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Специальность"));
+    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Форма обучения"));
+    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Курс"));
+    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Кол-во групп"));
+    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Кол-во подгрупп"));
+    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Кол-во студентов"));
+    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Лекции"));
+    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Семинары"));
+    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Лабораторные"));
+    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Индивид."));
+    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Аудитор."));
+    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Контр. раб"));
+    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Консульт."));
+    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Зачеты"));
+    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Экзамены"));
+    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Курс. раб"));
+    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Дипл. раб"));
+    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Практика"));
+    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("ГАК"));
+    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Прочее1"));
+    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Прочее2"));
+    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Прочее3"));
+    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Итого"));
+
 }
 
 void MainWindow::on_pushButton_2_clicked()

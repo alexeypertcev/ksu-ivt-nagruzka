@@ -64,3 +64,22 @@ bool StudentsSqlModel::setData(const QModelIndex &index, const QVariant &value, 
     this->refresh();
     return true;
 }
+bool StudentsSqlModel::add(QString speciality_id, QString course, QString num_group, QString num_undergroup,
+                           QString quantity_course)
+{
+    QString s = "insert into students values(NULL, "+ speciality_id +", "+ course +", "+ num_group +", "+
+                                                      num_undergroup +", "+ quantity_course +");";
+    qDebug() << s;
+
+    QSqlQuery query;
+    query.exec(s);
+}
+
+bool StudentsSqlModel::del(QString id)
+{
+    QString s = "DELETE FROM students WHERE id = '" + id + "';";
+    qDebug() << s;
+
+    QSqlQuery query;
+    query.exec(s);
+}

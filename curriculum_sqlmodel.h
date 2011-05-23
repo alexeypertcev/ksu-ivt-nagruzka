@@ -21,6 +21,7 @@ public:
     void setspeciality_id(QString id);
     void refresh();
     bool add();
+    bool del(QString id);
 private:
     QString speciality_id;
 };

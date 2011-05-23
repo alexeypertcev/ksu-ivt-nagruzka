@@ -26,7 +26,7 @@ Qt::ItemFlags CurriculumSqlModel::flags(
 
 bool CurriculumSqlModel::setData(const QModelIndex &index, const QVariant &value, int /* role */)
 {
-    if (index.column() < 2 || index.column() > 10)
+    if (index.column() < 1 || index.column() > 10)
         return false;
 
     QModelIndex primaryKeyIndex = QSqlQueryModel::index(index.row(), 0);
@@ -34,7 +34,7 @@ bool CurriculumSqlModel::setData(const QModelIndex &index, const QVariant &value
     QString field = ";";
     switch (index.column()){
         case 1:
-            field = "speciality_name";
+            field = "speciality_id";
             break;
         case 2:
             field = "subject_name";

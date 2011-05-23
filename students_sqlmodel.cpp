@@ -14,7 +14,7 @@ Qt::ItemFlags StudentsSqlModel::flags(
         const QModelIndex &index) const
 {
     Qt::ItemFlags flags = QSqlQueryModel::flags(index);
-    if (index.column() > 0 && index.column() < 10 )
+    if (index.column() > 0 && index.column() < 6 )
     {
         flags |= Qt::ItemIsEditable;
     }
@@ -27,4 +27,40 @@ void StudentsSqlModel::refresh()
                    "course, num_group, num_undergroup, quantity_course "
                    "FROM students, speciality "
                    "WHERE students.speciality_id = speciality.id;");
+}
+
+bool StudentsSqlModel::setData(const QModelIndex &index, const QVariant &value, int /* role */)
+{
+    if (index.column() < 1 || index.column() > 5)
+        return false;
+
+    QModelIndex primaryKeyIndex = QSqlQueryModel::index(index.row(), 0);
+    QString field = ";";
+    switch (index.column()){
+        case 1:
+            field = "speciality_id";
+            break;
+        case 2:
+            field = "course";
+            break;
+        case 3:
+            field = "num_group";
+            break;
+        case 4:
+            field = "num_undergroup";
+            break;
+        case 5:
+            field = "quantity_course";
+            break;
+        }
+
+    QString s = "update students set "+ field +" = '"+ value.toString() +"' where id = "+ data(primaryKeyIndex).toString();
+    qDebug() << s;
+
+    QSqlQuery query;
+    if (!query.exec(s)){
+        return false;
+    }
+    this->refresh();
+    return true;
 }

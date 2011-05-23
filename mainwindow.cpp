@@ -11,7 +11,6 @@
 #include "curriculum_sqlmodel.h"
 #include "students_sqlmodel.h"
 #include "subjectinsemester_sqlmodel.h"
-#include "saveidcombobox.h"
 
 #include <QtGui>
 #include <QtSql>
@@ -72,6 +71,11 @@ MainWindow::MainWindow(QWidget *parent) :
         sqlmodel_students = new StudentsSqlModel(this);
         sqlmodel_students->refresh();
         ui->tableView_3->setModel(sqlmodel_students);
+
+
+        SpecialityDelegate *speciality_delegate = new SpecialityDelegate(this);
+        ui->tableView_3->setItemDelegateForColumn(1, speciality_delegate);
+
         ui->tableView_3->update();
 
         // curriculum table
@@ -79,12 +83,12 @@ MainWindow::MainWindow(QWidget *parent) :
         update_curriculum();
         ui->tableView_4->setModel(sqlmodel_curriculum);
 
-        SpecialityDelegate *speciality_delegate = new SpecialityDelegate(this);
+        SpecialityDelegate *speciality_delegate1 = new SpecialityDelegate(this);
         ComboBoxDelegate *subject_delegate = new ComboBoxDelegate("subject",this);
         SpinBoxDelegate *semester_delegate = new SpinBoxDelegate(1,12,this);
         CheckBoxDelegate *checkBox_delegate = new CheckBoxDelegate(this);
 
-        ui->tableView_4->setItemDelegateForColumn(1, speciality_delegate);
+        ui->tableView_4->setItemDelegateForColumn(1, speciality_delegate1);
         ui->tableView_4->setItemDelegateForColumn(2, subject_delegate);
         ui->tableView_4->setItemDelegateForColumn(3, semester_delegate);
         ui->tableView_4->setItemDelegateForColumn(8, checkBox_delegate);

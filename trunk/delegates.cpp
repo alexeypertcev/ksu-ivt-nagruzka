@@ -8,6 +8,7 @@
 #include <QSqlTableModel>
 
 #include "delegates.h"
+#include "saveidcombobox.h"
 
 SpinBoxDelegate::SpinBoxDelegate(int min, int max, QObject *parent)
     : QItemDelegate(parent)
@@ -115,38 +116,37 @@ QWidget *SpecialityDelegate::createEditor(QWidget *parent,
     const QStyleOptionViewItem &/* option */,
     const QModelIndex &/* index */) const
 {
-    QComboBox *editor = new QComboBox(parent);
+    SaveIdComboBox *editor = new SaveIdComboBox(parent);
     QSqlQueryModel* sqlmodel = new QSqlQueryModel(parent);
-    sqlmodel->setQuery("SELECT special_name || '(' || form_training_name || ')', "
+    sqlmodel->setQuery("SELECT special_name || '(' || form_training_name || ')', id "
                        "FROM speciality;");
     editor->setModel(sqlmodel);
-    // здесь же и создать массив id'шников
     return editor;
 }
 
 void SpecialityDelegate::setEditorData(QWidget *editor,
                                     const QModelIndex &index) const
-{/*
+{
     QString value = index.model()->data(index, Qt::EditRole).toString();
 
-    QComboBox *comboBox = static_cast<QComboBox*>(editor);
+    SaveIdComboBox *saveIdBox = static_cast<SaveIdComboBox*>(editor);
     int i;
-    for (i = 0; i<comboBox->count(); ++i)
+    for (i = 0; i<saveIdBox->count(); ++i)
     {
-        //if ( comboBox->itemText(i) == value ){ break; }
+        if ( saveIdBox->itemText(i) == value ){ break; }
     }
-    //
-    comboBox->setCurrentIndex(i);*/
+
+    saveIdBox->setCurrentIndex(i);
 }
 
 void SpecialityDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
                                    const QModelIndex &index) const
-{/*
+{
 
-    QComboBox *comboBox = static_cast<QComboBox*>(editor);
-    QString value = comboBox->currentText();
+    SaveIdComboBox *comboBox = static_cast<SaveIdComboBox*>(editor);
+    QString value = comboBox->get_id();
 
-    model->setData(index, value, Qt::EditRole);*/
+    model->setData(index, value, Qt::EditRole);
 }
 
 void SpecialityDelegate::updateEditorGeometry(QWidget *editor,

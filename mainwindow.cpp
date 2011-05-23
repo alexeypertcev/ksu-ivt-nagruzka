@@ -365,7 +365,7 @@ void MainWindow::set_design_window()
 
     sqlmodel_curriculum->setHeaderData(0, Qt::Horizontal, QObject::tr("ID"));
     sqlmodel_curriculum->setHeaderData(1, Qt::Horizontal, QObject::tr("Специальность"));
-    sqlmodel_curriculum->setHeaderData(2, Qt::Horizontal, QObject::tr("Курс"));
+    sqlmodel_curriculum->setHeaderData(2, Qt::Horizontal, QObject::tr("Предмет"));
     sqlmodel_curriculum->setHeaderData(3, Qt::Horizontal, QObject::tr("Семестр"));
     sqlmodel_curriculum->setHeaderData(4, Qt::Horizontal, QObject::tr("Лекции"));
     sqlmodel_curriculum->setHeaderData(5, Qt::Horizontal, QObject::tr("Лаборат."));
@@ -406,14 +406,6 @@ void MainWindow::set_design_window()
 
 }
 
-void MainWindow::on_pushButton_2_clicked()
-{
-    // перерасчет таблицы "предметы в семместре"
-
-
-
-}
-
 void MainWindow::on_pushButton_4_clicked()
 {
     QString directory = QFileDialog::getOpenFileName(this,
@@ -439,5 +431,26 @@ void MainWindow::on_pushButton_3_clicked()
         query.exec("insert into subject values('" + line.trimmed() + "')");
     }
     tablemodel_subject->select();
+
+}
+
+void MainWindow::on_pushButton_2_clicked()
+{
+    // перерасчет таблицы "предметы в семместре"
+    QSqlQuery query;
+    query.exec("DELETE FROM subjects_in_semmester");
+
+    query.exec("SELECT curriculum.id, special_name || '(' || form_training_name || ')', "
+               "subject_name, semmester, lection_hr, labs_hr, practice_hr, "
+               "KCP_hr, is_examen, is_offset, is_coursework "
+               "FROM curriculum, speciality "
+               "WHERE curriculum.speciality_id = speciality.id;");
+    while (query.next()) {
+        QString curriculum_id = query.value(0).toString();
+
+
+
+    }
+
 
 }

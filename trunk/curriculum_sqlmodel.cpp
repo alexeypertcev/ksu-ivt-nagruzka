@@ -17,7 +17,7 @@ Qt::ItemFlags CurriculumSqlModel::flags(
         const QModelIndex &index) const
 {
     Qt::ItemFlags flags = QSqlQueryModel::flags(index);
-    if (index.column() > 0 && index.column() < 11 )
+    if (index.column() > 0 && index.column() < 12 )
     {
         flags |= Qt::ItemIsEditable;
     }
@@ -26,11 +26,10 @@ Qt::ItemFlags CurriculumSqlModel::flags(
 
 bool CurriculumSqlModel::setData(const QModelIndex &index, const QVariant &value, int /* role */)
 {
-    if (index.column() < 1 || index.column() > 10)
+    if (index.column() < 1 || index.column() > 11)
         return false;
 
     QModelIndex primaryKeyIndex = QSqlQueryModel::index(index.row(), 0);
-    //int id = data(primaryKeyIndex).toInt();
     QString field = ";";
     switch (index.column()){
         case 1:
@@ -52,19 +51,20 @@ bool CurriculumSqlModel::setData(const QModelIndex &index, const QVariant &value
             field = "practice_hr";
             break;
         case 7:
-            field = "KCP_hr";
+            field = "controlwork";
             break;
         case 8:
-            field = "is_examen";
+            field = "KCP_hr";
             break;
         case 9:
-            field = "is_offset";
+            field = "is_examen";
             break;
         case 10:
+            field = "is_offset";
+            break;
+        case 11:
             field = "is_coursework";
             break;
-        default:
-            field = ";";
         }
 
     QString s = "update curriculum set "+ field +" = '"+ value.toString() +"' where id = "+ data(primaryKeyIndex).toString();
@@ -72,7 +72,6 @@ bool CurriculumSqlModel::setData(const QModelIndex &index, const QVariant &value
 
     QSqlQuery query;
     if (!query.exec(s)){
-        //QMessageBox::warning(this, tr("Error querry"));
         return false;
     }
     this->refresh();
@@ -82,7 +81,7 @@ bool CurriculumSqlModel::setData(const QModelIndex &index, const QVariant &value
 void CurriculumSqlModel::refresh()
 {
     this->setQuery("SELECT curriculum.id, special_name || '(' || form_training_name || ')', "
-                   "subject_name, semmester, lection_hr, labs_hr, practice_hr, "
+                   "subject_name, semmester, lection_hr, labs_hr, practice_hr, controlwork, "
                    "KCP_hr, is_examen, is_offset, is_coursework "
                    "FROM curriculum, speciality "
                    "WHERE curriculum.speciality_id = speciality.id AND speciality_id = " + speciality_id +
@@ -98,7 +97,7 @@ void CurriculumSqlModel::setspeciality_id(QString id)
 
 bool CurriculumSqlModel::add()
 {
-    QString s = "insert into curriculum values(NULL, '" + speciality_id + "', 'ПП', 1, 0, 0, 0, 0, 0, 0, 0);";
+    QString s = "insert into curriculum values(NULL, '" + speciality_id + "', 'ПП', 1, 0, 0, 0, 0, 0, 0, 0, 0);";
     qDebug() << s;
 
     QSqlQuery query;

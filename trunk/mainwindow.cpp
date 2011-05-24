@@ -89,14 +89,16 @@ MainWindow::MainWindow(QWidget *parent) :
         SpecialityDelegate *speciality_delegate1 = new SpecialityDelegate(this);
         ComboBoxDelegate *subject_delegate = new ComboBoxDelegate("subject",this);
         SpinBoxDelegate *semester_delegate = new SpinBoxDelegate(1,12,this);
+        SpinBoxDelegate *contrwork_delegate = new SpinBoxDelegate(0,6,this);
         CheckBoxDelegate *checkBox_delegate = new CheckBoxDelegate(this);
 
         ui->tableView_4->setItemDelegateForColumn(1, speciality_delegate1);
         ui->tableView_4->setItemDelegateForColumn(2, subject_delegate);
         ui->tableView_4->setItemDelegateForColumn(3, semester_delegate);
-        ui->tableView_4->setItemDelegateForColumn(8, checkBox_delegate);
+        ui->tableView_4->setItemDelegateForColumn(7, contrwork_delegate);
         ui->tableView_4->setItemDelegateForColumn(9, checkBox_delegate);
         ui->tableView_4->setItemDelegateForColumn(10, checkBox_delegate);
+        ui->tableView_4->setItemDelegateForColumn(11, checkBox_delegate);
 
         ui->tableView_4->update();
 
@@ -320,6 +322,7 @@ void MainWindow::update_disctibution()
 void MainWindow::set_design_window()
 {
     int i = 0;
+    ui->tableView->setColumnWidth(0,400);
     tablemodel_subject->setHeaderData(0, Qt::Horizontal, QObject::tr("Название"));
 
     ui->tableView_2->setColumnWidth(0,40);
@@ -351,9 +354,9 @@ void MainWindow::set_design_window()
     sqlmodel_students->setHeaderData(5, Qt::Horizontal, QObject::tr("Кол-во человек"));
 
     int h=85;
-    ui->tableView_4->setColumnWidth(0,38);
-    ui->tableView_4->setColumnWidth(1,140);
-    ui->tableView_4->setColumnWidth(2,140);
+    ui->tableView_4->setColumnWidth(0,36);
+    ui->tableView_4->setColumnWidth(1,130);
+    ui->tableView_4->setColumnWidth(2,240);
     ui->tableView_4->setColumnWidth(3,h);
     ui->tableView_4->setColumnWidth(4,h);
     ui->tableView_4->setColumnWidth(5,h);
@@ -362,24 +365,28 @@ void MainWindow::set_design_window()
     ui->tableView_4->setColumnWidth(8,h/2);
     ui->tableView_4->setColumnWidth(9,h/2);
     ui->tableView_4->setColumnWidth(10,h/2);
+    ui->tableView_4->setColumnWidth(11,h/2);
 
-    sqlmodel_curriculum->setHeaderData(0, Qt::Horizontal, QObject::tr("ID"));
-    sqlmodel_curriculum->setHeaderData(1, Qt::Horizontal, QObject::tr("Специальность"));
-    sqlmodel_curriculum->setHeaderData(2, Qt::Horizontal, QObject::tr("Предмет"));
-    sqlmodel_curriculum->setHeaderData(3, Qt::Horizontal, QObject::tr("Семестр"));
-    sqlmodel_curriculum->setHeaderData(4, Qt::Horizontal, QObject::tr("Лекции"));
-    sqlmodel_curriculum->setHeaderData(5, Qt::Horizontal, QObject::tr("Лаборат."));
-    sqlmodel_curriculum->setHeaderData(6, Qt::Horizontal, QObject::tr("Практич."));
-    sqlmodel_curriculum->setHeaderData(7, Qt::Horizontal, QObject::tr("КСР"));
-    sqlmodel_curriculum->setHeaderData(8, Qt::Horizontal, QObject::tr("Экз."));
-    sqlmodel_curriculum->setHeaderData(9, Qt::Horizontal, QObject::tr("Зач."));
-    sqlmodel_curriculum->setHeaderData(10,Qt::Horizontal, QObject::tr("Курс."));
+    i=0;
+    sqlmodel_curriculum->setHeaderData(i++, Qt::Horizontal, QObject::tr("ID"));
+    sqlmodel_curriculum->setHeaderData(i++, Qt::Horizontal, QObject::tr("Специальность"));
+    sqlmodel_curriculum->setHeaderData(i++, Qt::Horizontal, QObject::tr("Предмет"));
+    sqlmodel_curriculum->setHeaderData(i++, Qt::Horizontal, QObject::tr("Семестр"));
+    sqlmodel_curriculum->setHeaderData(i++, Qt::Horizontal, QObject::tr("Лекции"));
+    sqlmodel_curriculum->setHeaderData(i++, Qt::Horizontal, QObject::tr("Лаборат."));
+    sqlmodel_curriculum->setHeaderData(i++, Qt::Horizontal, QObject::tr("Практич."));
+    sqlmodel_curriculum->setHeaderData(i++, Qt::Horizontal, QObject::tr("Контр. раб."));
+    sqlmodel_curriculum->setHeaderData(i++, Qt::Horizontal, QObject::tr("КСР"));
+    sqlmodel_curriculum->setHeaderData(i++, Qt::Horizontal, QObject::tr("Экз."));
+    sqlmodel_curriculum->setHeaderData(i++, Qt::Horizontal, QObject::tr("Зач."));
+    sqlmodel_curriculum->setHeaderData(i++, Qt::Horizontal, QObject::tr("Курс."));
+
+    ui->tableView_5->setColumnWidth(0,38);
 
     i=0;
     sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("ID"));
     sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Предмет"));
     sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Семестр"));
-    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Факультет"));
     sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Специальность"));
     sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Форма обучения"));
     sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Курс"));
@@ -387,10 +394,9 @@ void MainWindow::set_design_window()
     sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Кол-во подгрупп"));
     sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Кол-во студентов"));
     sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Лекции"));
-    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Семинары"));
-    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Лабораторные"));
+    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Лаборат."));
+    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Практич."));
     sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Индивид."));
-    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Аудитор."));
     sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Контр. раб"));
     sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Консульт."));
     sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Зачеты"));
@@ -443,12 +449,14 @@ void MainWindow::on_pushButton_2_clicked()
     QSqlQuery query3;
     QString curriculum_id;
     QString speciality_id;
+    int semmester, course;
     int lection_hr;
     int labs_hr;
     int practice_hr;
     int is_examen;
     int is_offset;
     int is_coursework;
+    int controlwork;
     QString students_id;
     int num_group, num_undergroup, quantity_course;
     QString squery = "";
@@ -456,22 +464,25 @@ void MainWindow::on_pushButton_2_clicked()
 
     query.exec("SELECT curriculum.id, speciality_id, "
                "subject_name, semmester, lection_hr, labs_hr, practice_hr, "
-               "KCP_hr, is_examen, is_offset, is_coursework "
+               "controlwork, is_examen, is_offset, is_coursework "
                "FROM curriculum");
     while (query.next()) {
         curriculum_id = query.value(0).toString();
         speciality_id = query.value(1).toString();
+        semmester = query.value(3).toInt();
         lection_hr = query.value(4).toInt();
         labs_hr = query.value(5).toInt();
         practice_hr = query.value(6).toInt();
+        controlwork = query.value(7).toInt();
         is_examen = query.value(8).toInt();
         is_offset = query.value(9).toInt();
         is_coursework = query.value(10).toInt();
-
+        course = (semmester+1)/2;
         query2.exec("SELECT students.id, speciality_id, "
                     "course, num_group, num_undergroup, quantity_course "
                     "FROM students "
-                    "WHERE speciality_id = '"+ speciality_id +"';");
+                    "WHERE speciality_id = '"+ speciality_id +"' AND"
+                    " course = '"+ QString::number(course, 10) + "';");
 
             while (query2.next()){
                 students_id = query2.value(0).toString();
@@ -479,26 +490,27 @@ void MainWindow::on_pushButton_2_clicked()
                 num_undergroup = query2.value(4).toInt();
                 quantity_course = query2.value(5).toInt();
 
-                squery =    "insert into subjects_in_semmester values(NULL, "+ // "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                squery =    "insert into subjects_in_semmester values("
+                            "NULL, "+                                        // "id INTEGER PRIMARY KEY AUTOINCREMENT, "
                             curriculum_id + ", "+                            // "curriculum_id INTEGER NOT NULL, "
                             students_id   + ", "+                            // "students_id INTEGER NOT NULL, "
                             QString::number(lection_hr*1, 10) + ", "+        // "lection_hr INTEGER NOT NULL, "
                             QString::number(labs_hr*num_undergroup, 10)+", "+// "labs_hr INTEGER NOT NULL, "
                             QString::number(practice_hr*num_group, 10) +", "+// "practice_hr INTEGER NOT NULL, "
-                            "0" + ", "+                   // "individ_hr REAL NOT NULL, "
-                            "0" + ", "+                   // "ayditor_hr REAL NOT NULL, "
-                            "0" + ", "+                   // "kontr_rab_hr REAL NOT NULL, "
-                            "0" + ", "+                   // "consultation_hr REAL NOT NULL, "
-                            "0" + ", "+                   // "offset_hr REAL NOT NULL, "
-                            "0" + ", "+                   // "examen_hr REAL NOT NULL, "
-                            "0" + ", "+                   // "coursework_hr REAL NOT NULL, "
-                            "0" + ", "+                   // "diplomwork_hr REAL NOT NULL, "
-                            "0" + ", "+                   // "praktika_hr REAL NOT NULL, "
-                            "0" + ", "+                   // "gak_hr REAL NOT NULL, "
-                            "0" + ", "+                   // "other1 REAL NOT NULL, "
-                            "0" + ", "+                   // "other2 REAL NOT NULL, "
-                            "0" +                         // "other3 REAL NOT NULL, "
-                            ");";
+                            "0" + ", "+                                      // "individ_hr REAL NOT NULL, "
+                            QString::number((int)ceil(controlwork*quantity_course/4), 10) + ", "+ // "kontr_rab_hr REAL NOT NULL, "
+                            consultation_get(lection_hr, speciality_id, num_group, is_examen) + ", "+ // "consultation_hr REAL NOT NULL, "
+                            QString::number((int)ceil(quantity_course/4), 10) + ", "+   // "offset_hr REAL NOT NULL, "
+                            QString::number((int)ceil(quantity_course/3), 10) + ", "+   // "examen_hr REAL NOT NULL, "
+                            QString::number(is_coursework*quantity_course*3, 10) + ", "+ // "coursework_hr REAL NOT NULL, "
+                            "0" + ", "+                                      // "diplomwork_hr REAL NOT NULL, "
+                            "0" + ", "+                                      // "praktika_hr REAL NOT NULL, "
+                            "0" + ", "+                                      // "gak_hr REAL NOT NULL, "
+                            "0" + ", "+                                      // "other1 REAL NOT NULL, "
+                            "0" + ", "+                                      // "other2 REAL NOT NULL, "
+                            "0" +                                            // "other3 REAL NOT NULL, "
+                            ");";              
+
                 qDebug() << squery;
                 if (!query3.exec(squery)){QMessageBox::warning(this, tr("Error querry"), "");}
 
@@ -507,3 +519,37 @@ void MainWindow::on_pushButton_2_clicked()
 
 update_subinsem();
 }
+
+QString MainWindow::consultation_get(int lection_hr, QString speciality_id, int num_group, int is_examen)
+{
+    int percent = 0;
+    double res = 0;
+    QSqlQuery query;
+    query.exec("SELECT form_training_name "
+               "FROM speciality WHERE id = " + speciality_id + ";");
+    query.next();
+    if (query.value(0).toString() == "оч")
+    {
+        percent = 5;
+    } else if (query.value(0).toString() == "оч-заоч")
+        {
+            percent = 10;
+        } else if (query.value(0).toString() == "заоч")
+            {
+                percent = 15;
+            }
+     res = (int)ceil((lection_hr*percent)/100);
+
+     if (is_examen == 1)
+     {
+        res+= 2*num_group;
+     }
+
+     return QString::number(res, 'g', 6);
+}
+
+
+
+
+
+

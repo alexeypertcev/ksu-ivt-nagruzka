@@ -237,7 +237,7 @@ static bool insert_main_data()
         query.exec("insert into teachers values(NULL, 'Кудинов', 'Виталий', 'Алексеевич', 'профессор', 0.5 );");
         query.exec("insert into teachers values(NULL, 'Добрица', 'Вячеслав', 'Порфирьевич', 'профессор', 0.5 );");
         query.exec("insert into teachers values(NULL, 'Григорьев', 'Сергей', 'Григорьевич', 'профессор', 0.5 );");
-        query.exec("insert into teachers values(NULL, 'Бабкин', 'Геннадии', 'Викторович', 'доцент', 1.0 );");
+        query.exec("insert into teachers values(NULL, 'Бабкин', 'Геннадий', 'Викторович', 'доцент', 1.0 );");
         query.exec("insert into teachers values(NULL, 'Прасолова', 'Ангелина', 'Евгеньевна', 'доцент', 1.0 );");
         query.exec("insert into teachers values(NULL, 'Бородин', 'Сергей', 'Георгиевич', 'доцент', 1.0 );");
         query.exec("insert into teachers values(NULL, 'Белов', 'Владимир', 'Геннадьевич', 'доцент', 0.5 );");

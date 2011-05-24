@@ -1,3 +1,5 @@
+#include <QtSql>
+#include <QMessageBox>
 #include "subjectinsemester_sqlmodel.h"
 
 SubjectinsemesterSqlModel::SubjectinsemesterSqlModel(QObject *parent) :
@@ -18,56 +20,67 @@ Qt::ItemFlags SubjectinsemesterSqlModel::flags(
 }
 
 bool SubjectinsemesterSqlModel::setData(const QModelIndex &index, const QVariant &value, int /* role */)
-{/*
-    if (index.column() < 1 || index.column() > 18)
+{
+    if (index.column() < 9 || index.column() > 23)
         return false;
 
     QModelIndex primaryKeyIndex = QSqlQueryModel::index(index.row(), 0);
     QString field = ";";
     switch (index.column()){
-        case 1:
-            field = "speciality_id";
-            break;
-        case 2:
-            field = "subject_name";
-            break;
-        case 3:
-            field = "semmester";
-            break;
-        case 4:
+        case 9:
             field = "lection_hr";
             break;
-        case 5:
+        case 10:
             field = "labs_hr";
             break;
-        case 6:
+        case 11:
             field = "practice_hr";
             break;
-        case 7:
-            field = "KCP_hr";
+        case 12:
+            field = "individ_hr";
             break;
-        case 8:
-            field = "is_examen";
+        case 13:
+            field = "kontr_rab_hr";
             break;
-        case 9:
-            field = "is_offset";
+        case 14:
+            field = "consultation_hr";
             break;
-        case 10:
-            field = "is_coursework";
+        case 15:
+            field = "offset_hr";
             break;
-        default:
-            field = ";";
+        case 16:
+            field = "examen_hr";
+            break;
+        case 17:
+            field = "coursework_hr";
+            break;
+        case 18:
+            field = "diplomwork_hr";
+            break;
+        case 19:
+            field = "praktika_hr";
+            break;
+        case 20:
+            field = "gak_hr";
+            break;
+        case 21:
+            field = "other1";
+            break;
+        case 22:
+            field = "other2";
+            break;
+        case 23:
+            field = "other3";
         }
 
-    QString s = "update curriculum set "+ field +" = '"+ value.toString() +"' where id = "+ data(primaryKeyIndex).toString();
+    QString s = "update subjects_in_semmester set "+ field +" = '"+ value.toString() +"' where id = "+ data(primaryKeyIndex).toString();
     qDebug() << s;
 
     QSqlQuery query;
     if (!query.exec(s)){
-        //QMessageBox::warning(this, tr("Error querry"));
         return false;
     }
-    this->refresh();*/
+    this->refresh();
     return true;
 }
 

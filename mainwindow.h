@@ -49,10 +49,9 @@ private:
     void update_subject();
     void update_teachers();
     void update_students();
-
     void update_subject_in_semestre();
     void update_disctibution();
-
+    QString consultation_get(int lection_hr, QString speciality_id, int num_group, int is_examen);
 
 private slots:
     void on_tabWidget_currentChanged(int index);

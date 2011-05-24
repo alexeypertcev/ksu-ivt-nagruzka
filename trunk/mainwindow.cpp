@@ -382,6 +382,26 @@ void MainWindow::set_design_window()
     sqlmodel_curriculum->setHeaderData(i++, Qt::Horizontal, QObject::tr("Курс."));
 
     ui->tableView_5->setColumnWidth(0,38);
+    ui->tableView_5->setColumnWidth(1,330);
+    ui->tableView_5->setColumnWidth(2,60);
+
+    i=9;
+    ui->tableView_5->setColumnWidth(i++,70);
+    ui->tableView_5->setColumnWidth(i++,70);
+    ui->tableView_5->setColumnWidth(i++,70);
+    ui->tableView_5->setColumnWidth(i++,70);
+    ui->tableView_5->setColumnWidth(i++,70);
+    ui->tableView_5->setColumnWidth(i++,70);
+    ui->tableView_5->setColumnWidth(i++,70);
+    ui->tableView_5->setColumnWidth(i++,70);
+    ui->tableView_5->setColumnWidth(i++,70);
+    ui->tableView_5->setColumnWidth(i++,70);
+    ui->tableView_5->setColumnWidth(i++,70);
+    ui->tableView_5->setColumnWidth(i++,70);
+    ui->tableView_5->setColumnWidth(i++,70);
+    ui->tableView_5->setColumnWidth(i++,70);
+    ui->tableView_5->setColumnWidth(i++,70);
+    ui->tableView_5->setColumnWidth(i++,70);
 
     i=0;
     sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("ID"));

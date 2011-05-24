@@ -436,30 +436,74 @@ void MainWindow::on_pushButton_3_clicked()
 
 void MainWindow::on_pushButton_2_clicked()
 {
+    qDebug() << "пересчет";
     // перерасчет таблицы "предметы в семместре"
     QSqlQuery query;
     QSqlQuery query2;
     QSqlQuery query3;
+    QString curriculum_id;
+    QString speciality_id;
+    int lection_hr;
+    int labs_hr;
+    int practice_hr;
+    int is_examen;
+    int is_offset;
+    int is_coursework;
+    QString students_id;
+    int num_group, num_undergroup, quantity_course;
+    QString squery = "";
     query.exec("DELETE FROM subjects_in_semmester");
 
-    query.exec("SELECT curriculum.id, special_name || '(' || form_training_name || ')', "
+    query.exec("SELECT curriculum.id, speciality_id, "
                "subject_name, semmester, lection_hr, labs_hr, practice_hr, "
                "KCP_hr, is_examen, is_offset, is_coursework "
-               "FROM curriculum, speciality "
-               "WHERE curriculum.speciality_id = speciality.id;");
-    query2.exec("SELECT students.id, special_name || '(' || form_training_name || ')', "
-                "course, num_group, num_undergroup, quantity_course "
-                "FROM students, spQSqlQuery query2;eciality ");
+               "FROM curriculum");
     while (query.next()) {
-        QString curriculum_id = query.value(0).toString();
-        QString lection_hr = query.value(4).toString();
-        QString labs_hr = query.value(5).toString();
-        QString practice_hr = query.value(6).toString();
+        curriculum_id = query.value(0).toString();
+        speciality_id = query.value(1).toString();
+        lection_hr = query.value(4).toInt();
+        labs_hr = query.value(5).toInt();
+        practice_hr = query.value(6).toInt();
+        is_examen = query.value(8).toInt();
+        is_offset = query.value(9).toInt();
+        is_coursework = query.value(10).toInt();
+
+        query2.exec("SELECT students.id, speciality_id, "
+                    "course, num_group, num_undergroup, quantity_course "
+                    "FROM students "
+                    "WHERE speciality_id = '"+ speciality_id +"';");
+
             while (query2.next()){
-                QString students_id = query2.value(0).toString();
-                query3.exec("insert into subjects_in_semmestre values(NULL, 1, 1);");
+                students_id = query2.value(0).toString();
+                num_group = query2.value(3).toInt();
+                num_undergroup = query2.value(4).toInt();
+                quantity_course = query2.value(5).toInt();
+
+                squery =    "insert into subjects_in_semmester values(NULL, "+ // "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                            curriculum_id + ", "+                            // "curriculum_id INTEGER NOT NULL, "
+                            students_id   + ", "+                            // "students_id INTEGER NOT NULL, "
+                            QString::number(lection_hr*1, 10) + ", "+        // "lection_hr INTEGER NOT NULL, "
+                            QString::number(labs_hr*num_undergroup, 10)+", "+// "labs_hr INTEGER NOT NULL, "
+                            QString::number(practice_hr*num_group, 10) +", "+// "practice_hr INTEGER NOT NULL, "
+                            "0" + ", "+                   // "individ_hr REAL NOT NULL, "
+                            "0" + ", "+                   // "ayditor_hr REAL NOT NULL, "
+                            "0" + ", "+                   // "kontr_rab_hr REAL NOT NULL, "
+                            "0" + ", "+                   // "consultation_hr REAL NOT NULL, "
+                            "0" + ", "+                   // "offset_hr REAL NOT NULL, "
+                            "0" + ", "+                   // "examen_hr REAL NOT NULL, "
+                            "0" + ", "+                   // "coursework_hr REAL NOT NULL, "
+                            "0" + ", "+                   // "diplomwork_hr REAL NOT NULL, "
+                            "0" + ", "+                   // "praktika_hr REAL NOT NULL, "
+                            "0" + ", "+                   // "gak_hr REAL NOT NULL, "
+                            "0" + ", "+                   // "other1 REAL NOT NULL, "
+                            "0" + ", "+                   // "other2 REAL NOT NULL, "
+                            "0" +                         // "other3 REAL NOT NULL, "
+                            ");";
+                qDebug() << squery;
+                if (!query3.exec(squery)){QMessageBox::warning(this, tr("Error querry"), "");}
+
             }
     }
 
-
+update_subinsem();
 }

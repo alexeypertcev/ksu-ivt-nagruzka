@@ -145,7 +145,12 @@ void MainWindow::on_pushButton_add_subject_clicked()
         QMessageBox::warning(this, tr("Error querry"),
                              tr("The database reported an error: %1").arg(tablemodel_subject->lastError().text()));
     }
+    QModelIndex index;
+    QPoint point(1,5);
+    index = ui->tableView->indexAt(point);
+
     tablemodel_subject->select();
+    ui->tableView->setCurrentIndex(index);
 }
 
 void MainWindow::on_pushButton_del_subject_clicked()

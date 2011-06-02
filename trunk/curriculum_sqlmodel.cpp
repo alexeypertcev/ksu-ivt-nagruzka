@@ -97,10 +97,14 @@ void CurriculumSqlModel::setspeciality_id(QString id)
 
 bool CurriculumSqlModel::add()
 {
-    QString s = "insert into curriculum values(NULL, '" + speciality_id + "', 'ПП', 1, 0, 0, 0, 0, 0, 0, 0, 0);";
+    QSqlQuery query;
+    query.exec("SELECT name "
+               "FROM subject;");
+    query.next();
+
+    QString s = "insert into curriculum values(NULL, '" + speciality_id + "', '" + query.value(0).toString() + "', 1, 0, 0, 0, 0, 0, 0, 0, 0);";
     qDebug() << s;
 
-    QSqlQuery query;
     if (!query.exec(s))
     {
         return false;

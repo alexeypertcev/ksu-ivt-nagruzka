@@ -45,7 +45,8 @@ static bool create_all_tables(){
         query.exec("CREATE TABLE form_training ( "
                    "name TEXT NOT NULL, "
                    "CONSTRAINT name PRIMARY KEY (name))");
-        query.exec("CREATE TABLE subject (name TEXT NOT NULL, "
+        query.exec("CREATE TABLE subject ( "
+                   "name TEXT NOT NULL, "
                    "CONSTRAINT name PRIMARY KEY (name))");
         query.exec("CREATE TABLE speciality ( "
                    "id INTEGER PRIMARY KEY AUTOINCREMENT, "

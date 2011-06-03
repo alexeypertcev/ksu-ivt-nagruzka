@@ -345,9 +345,9 @@
      <widget class="QPushButton" name="pushButton_add_distribution">
       <property name="geometry">
        <rect>
-        <x>850</x>
+        <x>10</x>
         <y>450</y>
-        <width>91</width>
+        <width>101</width>
         <height>24</height>
        </rect>
       </property>
@@ -358,9 +358,9 @@
      <widget class="QPushButton" name="pushButton_del_distribution">
       <property name="geometry">
        <rect>
-        <x>960</x>
+        <x>120</x>
         <y>450</y>
-        <width>91</width>
+        <width>101</width>
         <height>24</height>
        </rect>
       </property>
@@ -371,34 +371,21 @@
      <widget class="QTableView" name="tableView_7">
       <property name="geometry">
        <rect>
-        <x>20</x>
+        <x>10</x>
         <y>50</y>
-        <width>751</width>
-        <height>51</height>
+        <width>761</width>
+        <height>71</height>
        </rect>
       </property>
      </widget>
      <widget class="QTableView" name="tableView_8">
       <property name="geometry">
        <rect>
-        <x>20</x>
+        <x>10</x>
         <y>130</y>
-        <width>751</width>
-        <height>131</height>
+        <width>761</width>
+        <height>311</height>
        </rect>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="pushButton_5">
-      <property name="geometry">
-       <rect>
-        <x>20</x>
-        <y>270</y>
-        <width>75</width>
-        <height>23</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Добавить</string>
       </property>
      </widget>
      <widget class="QRadioButton" name="radioButton">
@@ -443,9 +430,9 @@
      <widget class="QComboBox" name="comboBox_3">
       <property name="geometry">
        <rect>
-        <x>20</x>
+        <x>10</x>
         <y>20</y>
-        <width>151</width>
+        <width>161</width>
         <height>22</height>
        </rect>
       </property>
@@ -464,7 +451,7 @@
      <x>0</x>
      <y>0</y>
      <width>1087</width>
-     <height>20</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">

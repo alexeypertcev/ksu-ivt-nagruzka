@@ -108,6 +108,13 @@ MainWindow::MainWindow(QWidget *parent) :
         ui->tableView_5->setModel(sqlmodel_subinsem);
 
 
+        //distribution table
+        QSqlQueryModel *qm = new QSqlQueryModel(this);
+        qm->setQuery("SELECT id, subject_name FROM curriculum;");
+        ui->tableView_6->setModel(qm);
+
+
+
 
 
         ui->lineEdit->setText("/home/perec/Загрузки/ПОиАИС_utf8.txt");

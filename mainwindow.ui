@@ -332,7 +332,7 @@
      <attribute name="title">
       <string>Распределение</string>
      </attribute>
-     <widget class="QTableView" name="tableView_6">
+     <widget class="SaveIdTableView" name="tableView_6">
       <property name="geometry">
        <rect>
         <x>790</x>
@@ -533,7 +533,12 @@
   <customwidget>
    <class>SaveIdComboBox</class>
    <extends>QComboBox</extends>
-   <header>saveidcombobox.h</header>
+   <header>components.h</header>
+  </customwidget>
+  <customwidget>
+   <class>SaveIdTableView</class>
+   <extends>QTableView</extends>
+   <header location="global">components.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

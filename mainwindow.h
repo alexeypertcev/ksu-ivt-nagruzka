@@ -12,6 +12,7 @@ class Settings;
 class StudentsSqlModel;
 class SpecialityDelegate;
 class SubjectinsemesterSqlModel;
+class Sins_to_distribSqlModel;
 QT_END_NAMESPACE
 
 namespace Ui {
@@ -45,6 +46,7 @@ private:
     StudentsSqlModel* sqlmodel_students;
     CurriculumSqlModel* sqlmodel_curriculum;
     SubjectinsemesterSqlModel* sqlmodel_subinsem;
+    Sins_to_distribSqlModel* sinstodistrib;
 
     void update_subject();
     void update_teachers();

@@ -11,6 +11,7 @@
 #include "curriculum_sqlmodel.h"
 #include "students_sqlmodel.h"
 #include "subjectinsemester_sqlmodel.h"
+#include "distribution.h"
 
 #include <QtGui>
 #include <QtSql>
@@ -110,8 +111,14 @@ MainWindow::MainWindow(QWidget *parent) :
 
         //distribution table
         QSqlQueryModel *qm = new QSqlQueryModel(this);
-        qm->setQuery("SELECT id, subject_name FROM curriculum;");
+        qm->setQuery("SELECT subject_name, semmester, subjects_in_semmester.id FROM subjects_in_semmester, curriculum "
+                     "WHERE subjects_in_semmester.curriculum_id = curriculum.id;");
         ui->tableView_6->setModel(qm);
+
+        sinstodistrib = new Sins_to_distribSqlModel(this);
+        //sinstodistrib->setsins(ui->tableView_6->get_id());
+        sinstodistrib->refresh();
+        ui->tableView_7->setModel(sinstodistrib);
 
 
 
@@ -326,6 +333,11 @@ void MainWindow::update_subject_in_semestre()
 
 void MainWindow::update_disctibution()
 {
+
+
+
+
+
 
 }
 

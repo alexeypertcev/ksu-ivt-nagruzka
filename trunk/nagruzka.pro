@@ -17,7 +17,8 @@ SOURCES += main.cpp\
     delegates.cpp \
     subjectinsemester_sqlmodel.cpp \
     students_sqlmodel.cpp \
-    saveidcombobox.cpp
+    distribution.cpp \
+    components.cpp
 
 HEADERS  += mainwindow.h \
     connection.h \
@@ -26,7 +27,8 @@ HEADERS  += mainwindow.h \
     delegates.h \
     subjectinsemester_sqlmodel.h \
     students_sqlmodel.h \
-    saveidcombobox.h
+    distribution.h \
+    components.h
 
 FORMS    += mainwindow.ui \
     settings.ui

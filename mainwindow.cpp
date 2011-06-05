@@ -116,8 +116,7 @@ MainWindow::MainWindow(QWidget *parent) :
         ui->tableView_6->setModel(qm);
 
         sinstodistrib = new Sins_to_distribSqlModel(this);
-        //sinstodistrib->setsins(ui->tableView_6->get_id());
-        sinstodistrib->refresh();
+        update_disctibution();
         ui->tableView_7->setModel(sinstodistrib);
 
 
@@ -333,12 +332,8 @@ void MainWindow::update_subject_in_semestre()
 
 void MainWindow::update_disctibution()
 {
-
-
-
-
-
-
+    //sinstodistrib->setsins(ui->tableView_6->get_id());
+    sinstodistrib->refresh();
 }
 
 void MainWindow::set_design_window()

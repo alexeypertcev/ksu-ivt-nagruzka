@@ -8,7 +8,7 @@
 #include <QSqlTableModel>
 
 #include "delegates.h"
-#include "saveidcombobox.h"
+#include "components.h"
 
 SpinBoxDelegate::SpinBoxDelegate(int min, int max, QObject *parent)
     : QItemDelegate(parent)

@@ -47,12 +47,14 @@ private:
     CurriculumSqlModel* sqlmodel_curriculum;
     SubjectinsemesterSqlModel* sqlmodel_subinsem;
     Sins_to_distribSqlModel* sinstodistrib;
+    QSqlQueryModel *select_subjects;
 
+    void update_subjectlist();
     void update_subject();
     void update_teachers();
     void update_students();
     void update_subject_in_semestre();
-    void update_disctibution();
+
     QString consultation_get(int lection_hr, QString speciality_id, int num_group, int is_examen);
 
 private slots:
@@ -75,6 +77,7 @@ private slots:
     void on_pushButton_add_subject_clicked();
     void on_action_6_activated();
 
+    void update_distribution();
     void update_curriculum();
     void update_subinsem();
     void on_pushButton_2_clicked();

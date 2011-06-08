@@ -23,6 +23,7 @@ public:
     SaveIdTableView(QWidget *parent = 0);
     QString get_id();
     void setModel( QAbstractItemModel * model );
+    void update_ids();
 private:
     QStringList ids;
 

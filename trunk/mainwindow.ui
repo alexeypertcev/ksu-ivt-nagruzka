@@ -542,8 +542,26 @@
   </customwidget>
  </customwidgets>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>tableView_6</sender>
+   <signal>activated(QModelIndex)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>update_distribution()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>870</x>
+     <y>96</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1082</x>
+     <y>46</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
  <slots>
   <slot>update_curriculum()</slot>
+  <slot>update_distribution()</slot>
  </slots>
 </ui>

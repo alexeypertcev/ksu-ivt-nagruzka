@@ -1,4 +1,5 @@
 #include "distribution.h"
+#include <QDebug>
 
 Distribution::Distribution(QObject *parent) :
     QSqlQueryModel(parent)
@@ -48,6 +49,7 @@ void Sins_to_distribSqlModel::setsins(QString id)
 }
 void Sins_to_distribSqlModel::refresh()
 {
+    qDebug() << subjects_in_semmestre_id << " : subjects_in_semmestre_id";
     this->setQuery("SELECT subjects_in_semmester.id, curriculum.subject_name, curriculum.semmester, "
                    "speciality.special_name, "
                    "speciality.form_training_name, students.course, "

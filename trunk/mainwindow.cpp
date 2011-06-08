@@ -110,13 +110,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
         //distribution table
-        QSqlQueryModel *qm = new QSqlQueryModel(this);
-        qm->setQuery("SELECT subject_name, semmester, subjects_in_semmester.id FROM subjects_in_semmester, curriculum "
+        select_subjects = new QSqlQueryModel(this);
+        select_subjects->setQuery("SELECT subject_name, semmester, subjects_in_semmester.id FROM subjects_in_semmester, curriculum "
                      "WHERE subjects_in_semmester.curriculum_id = curriculum.id;");
-        ui->tableView_6->setModel(qm);
+        ui->tableView_6->setModel(select_subjects);
 
         sinstodistrib = new Sins_to_distribSqlModel(this);
-        update_disctibution();
+        update_distribution();
         ui->tableView_7->setModel(sinstodistrib);
 
 
@@ -297,7 +297,8 @@ void MainWindow::on_tabWidget_currentChanged(int index)
         update_subinsem();
         break;
     case 5:
-        update_disctibution();
+        update_subjectlist();
+        update_distribution();
         break;
     case 6:
 
@@ -330,9 +331,16 @@ void MainWindow::update_subject_in_semestre()
 
 }
 
-void MainWindow::update_disctibution()
+void MainWindow::update_subjectlist()
 {
-    //sinstodistrib->setsins(ui->tableView_6->get_id());
+    select_subjects->setQuery("SELECT subject_name, semmester, subjects_in_semmester.id FROM subjects_in_semmester, curriculum "
+                 "WHERE subjects_in_semmester.curriculum_id = curriculum.id;");
+    ui->tableView_6->update_ids();
+}
+
+void MainWindow::update_distribution()
+{
+    sinstodistrib->setsins(ui->tableView_6->get_id());
     sinstodistrib->refresh();
 }
 
@@ -342,7 +350,7 @@ void MainWindow::set_design_window()
     ui->tableView->setColumnWidth(0,400);
     tablemodel_subject->setHeaderData(0, Qt::Horizontal, QObject::tr("Название"));
 
-    ui->tableView_2->setColumnWidth(0,40);
+    ui->tableView_2->setColumnWidth(0,0);   //id
     ui->tableView_2->setColumnWidth(1,180);
     ui->tableView_2->setColumnWidth(2,180);
     ui->tableView_2->setColumnWidth(3,180);
@@ -356,7 +364,7 @@ void MainWindow::set_design_window()
     tablemodel_teachers->setHeaderData(4, Qt::Horizontal, QObject::tr("Должность"));
     tablemodel_teachers->setHeaderData(5, Qt::Horizontal, QObject::tr("Ставка"));
 
-    ui->tableView_3->setColumnWidth(0,39);
+    ui->tableView_3->setColumnWidth(0,0);  //id
     ui->tableView_3->setColumnWidth(1,150);
     ui->tableView_3->setColumnWidth(2,145);
     ui->tableView_3->setColumnWidth(3,145);
@@ -371,7 +379,7 @@ void MainWindow::set_design_window()
     sqlmodel_students->setHeaderData(5, Qt::Horizontal, QObject::tr("Кол-во человек"));
 
     int h=85;
-    ui->tableView_4->setColumnWidth(0,36);
+    ui->tableView_4->setColumnWidth(0,0);  //id
     ui->tableView_4->setColumnWidth(1,130);
     ui->tableView_4->setColumnWidth(2,240);
     ui->tableView_4->setColumnWidth(3,h);
@@ -398,7 +406,7 @@ void MainWindow::set_design_window()
     sqlmodel_curriculum->setHeaderData(i++, Qt::Horizontal, QObject::tr("Зач."));
     sqlmodel_curriculum->setHeaderData(i++, Qt::Horizontal, QObject::tr("Курс."));
 
-    ui->tableView_5->setColumnWidth(0,38);
+    ui->tableView_5->setColumnWidth(0,0); //id
     ui->tableView_5->setColumnWidth(1,330);
     ui->tableView_5->setColumnWidth(2,60);
 
@@ -447,6 +455,12 @@ void MainWindow::set_design_window()
     sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Прочее3"));
     sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Итого"));
 
+    ui->tableView_6->setColumnWidth(0,180);
+    ui->tableView_6->setColumnWidth(1,40);
+    ui->tableView_6->setColumnWidth(2,0);  // id
+
+    ui->tableView_7->setColumnWidth(0,0);
+    ui->tableView_7->setColumnWidth(1,240);
 }
 
 void MainWindow::on_pushButton_4_clicked()

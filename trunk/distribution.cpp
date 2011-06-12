@@ -1,13 +1,13 @@
 #include "distribution.h"
 #include <QDebug>
 
-Distribution::Distribution(QObject *parent) :
+DistributionSqlModel::DistributionSqlModel(QObject *parent) :
     QSqlQueryModel(parent)
 {
     subjects_in_semmestre_id = '1';
 }
 
-Qt::ItemFlags Distribution::flags(
+Qt::ItemFlags DistributionSqlModel::flags(
         const QModelIndex &index) const
 {
     Qt::ItemFlags flags = QSqlQueryModel::flags(index);
@@ -18,11 +18,35 @@ Qt::ItemFlags Distribution::flags(
     return flags;
 }
 
-void Distribution::setsins(QString id)
+void DistributionSqlModel::setsins(QString id)
 {
     subjects_in_semmestre_id = id;
 }
-void Distribution::refresh(){}
+void DistributionSqlModel::refresh()
+{
+    this->setQuery("SELECT "
+                   "teachers.f || ' ' || teachers.i || ' ' || teachers.o "
+                   "subjects_in_semmester_id, "
+                   "lection_hr, "
+                   "labs_hr, "
+                   "practice_hr, "
+                   "individ_hr, "
+                   "kontr_rab_hr, "
+                   "consultation_hr, "
+                   "offset_hr, "
+                   "examen_hr, "
+                   "coursework_hr, "
+                   "diplomwork_hr, "
+                   "praktika_hr, "
+                   "gak_hr, "
+                   "other1, "
+                   "other2, "
+                   "other3 "
+                   "FROM distribution,teachers "
+                   "WHERE "
+                   "distribution.teachers_id = teachers.id AND "
+                   "distribution.subjects_in_semmester_id = " + subjects_in_semmestre_id + ";");
+}
 
 
 
@@ -49,7 +73,6 @@ void Sins_to_distribSqlModel::setsins(QString id)
 }
 void Sins_to_distribSqlModel::refresh()
 {
-    qDebug() << subjects_in_semmestre_id << " : subjects_in_semmestre_id";
     this->setQuery("SELECT subjects_in_semmester.id, curriculum.subject_name, curriculum.semmester, "
                    "speciality.special_name, "
                    "speciality.form_training_name, students.course, "

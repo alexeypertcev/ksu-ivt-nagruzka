@@ -120,7 +120,7 @@ static bool create_all_tables(){
         query.exec("CREATE TABLE distribution ( "
                    "id INTEGER PRIMARY KEY AUTOINCREMENT, "
                    "teachers_id INTEGER NOT NULL, "
-                   "subjects_in_semmestre_id INTEGER NOT NULL, "
+                   "subjects_in_semmester_id INTEGER NOT NULL, "
                    "lection_hr INTEGER NOT NULL, "
                    "labs_hr INTEGER NOT NULL, "
                    "practice_hr INTEGER NOT NULL, "

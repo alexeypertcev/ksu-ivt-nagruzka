@@ -109,16 +109,19 @@ MainWindow::MainWindow(QWidget *parent) :
         ui->tableView_5->setModel(sqlmodel_subinsem);
 
 
-        //distribution table
+        //distribution tables
         select_subjects = new QSqlQueryModel(this);
         select_subjects->setQuery("SELECT subject_name, semmester, subjects_in_semmester.id FROM subjects_in_semmester, curriculum "
-                     "WHERE subjects_in_semmester.curriculum_id = curriculum.id;");
+                                  "WHERE subjects_in_semmester.curriculum_id = curriculum.id;");
         ui->tableView_6->setModel(select_subjects);
 
         sinstodistrib = new Sins_to_distribSqlModel(this);
-        update_distribution();
+        update_sins_to_distribution();
         ui->tableView_7->setModel(sinstodistrib);
 
+        sqlmodel_distribution = new DistributionSqlModel(this);
+        update_sqlmodel_distribution();
+        ui->tableView_8->setModel(sqlmodel_distribution);
 
 
 
@@ -246,15 +249,8 @@ void MainWindow::on_pushButton_del_curriculum_clicked()
 }
 
 void MainWindow::on_pushButton_add_subjects_in_semmestre_clicked()
-{/*
-    QString s = "insert into subjects_in_semmestre values(NULL, 1, 1);";
-    qDebug() << s;
+{
 
-    QSqlQuery query;
-    if (!query.exec(s)){QMessageBox::warning(this, tr("Error querry"), "");}
-
-    tablemodel_subjects_in_semmestre->select();
-    */
 }
 
 void MainWindow::on_pushButton_del_subjects_in_semmestre_clicked()
@@ -264,13 +260,7 @@ void MainWindow::on_pushButton_del_subjects_in_semmestre_clicked()
 
 void MainWindow::on_pushButton_add_distribution_clicked()
 {
-    QString s = "insert into distribution values(NULL, 1, 1);";
-    qDebug() << s;
 
-    QSqlQuery query;
-    if (!query.exec(s)){QMessageBox::warning(this, tr("Error querry"), "");}
-
-    tablemodel_distribution->select();
 }
 
 void MainWindow::on_pushButton_del_distribution_clicked()
@@ -340,9 +330,22 @@ void MainWindow::update_subjectlist()
 
 void MainWindow::update_distribution()
 {
+    update_sins_to_distribution();
+    update_sqlmodel_distribution();
+}
+
+void MainWindow::update_sins_to_distribution()
+{
     sinstodistrib->setsins(ui->tableView_6->get_id());
     sinstodistrib->refresh();
 }
+
+void MainWindow::update_sqlmodel_distribution()
+{
+    sqlmodel_distribution->setsins(ui->tableView_6->get_id());
+    sqlmodel_distribution->refresh();
+}
+
 
 void MainWindow::set_design_window()
 {

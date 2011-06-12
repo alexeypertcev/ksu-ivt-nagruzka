@@ -3,11 +3,11 @@
 
 #include <QSqlQueryModel>
 
-class Distribution : public QSqlQueryModel
+class DistributionSqlModel : public QSqlQueryModel
 {
     Q_OBJECT
 public:
-    Distribution(QObject *parent = 0);
+    DistributionSqlModel(QObject *parent = 0);
     Qt::ItemFlags flags(const QModelIndex &index) const;
     void setsins(QString id);
     void refresh();

@@ -13,6 +13,7 @@ class StudentsSqlModel;
 class SpecialityDelegate;
 class SubjectinsemesterSqlModel;
 class Sins_to_distribSqlModel;
+class DistributionSqlModel;
 QT_END_NAMESPACE
 
 namespace Ui {
@@ -37,7 +38,6 @@ private:
     QSqlRelationalTableModel* tablemodel_subject;
     QSqlRelationalTableModel* tablemodel_teachers;
     QSqlRelationalTableModel* tablemodel_curriculum;
-    QSqlRelationalTableModel* tablemodel_distribution;
 
     QSqlRelationalTableModel* tablemodel_spec;
     QSqlRelationalTableModel* tablemodel_stat;
@@ -48,12 +48,15 @@ private:
     SubjectinsemesterSqlModel* sqlmodel_subinsem;
     Sins_to_distribSqlModel* sinstodistrib;
     QSqlQueryModel *select_subjects;
+    DistributionSqlModel *sqlmodel_distribution;
 
     void update_subjectlist();
     void update_subject();
     void update_teachers();
     void update_students();
     void update_subject_in_semestre();
+    void update_sins_to_distribution();
+    void update_sqlmodel_distribution();
 
     QString consultation_get(int lection_hr, QString speciality_id, int num_group, int is_examen);
 

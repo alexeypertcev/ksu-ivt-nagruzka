@@ -29,6 +29,8 @@ public:
     ~MainWindow();
 
 private:
+    unsigned short status; //0 - нет БД 1 - есть БД
+
     Ui::MainWindow *ui;
     void set_design_window();
 

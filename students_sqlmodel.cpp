@@ -73,6 +73,8 @@ bool StudentsSqlModel::add(QString speciality_id, QString course, QString num_gr
 
     QSqlQuery query;
     query.exec(s);
+
+    return true;
 }
 
 bool StudentsSqlModel::del(QString id)
@@ -82,4 +84,6 @@ bool StudentsSqlModel::del(QString id)
 
     QSqlQuery query;
     query.exec(s);
+
+    return true;
 }

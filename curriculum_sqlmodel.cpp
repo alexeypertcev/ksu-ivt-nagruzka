@@ -119,4 +119,6 @@ bool CurriculumSqlModel::del(QString id)
 
     QSqlQuery query;
     query.exec(s);
+
+    return TRUE;
 }

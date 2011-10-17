@@ -124,4 +124,5 @@ bool SubjectinsemesterSqlModel::add()
     }
     return true;
     */
+    return true;
 }

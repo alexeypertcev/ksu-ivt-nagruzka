@@ -117,7 +117,7 @@ int mainzip() {
 	}
 */
 
-    //decompress("/home/perec/example_ods.ods","/home/perec/temp","");
+    decompress("/home/perec/example_ods.ods","/home/perec/temp","");
     return 0;
 }
 
@@ -178,7 +178,7 @@ bool compress(const QString& zip, const QString& dir, const QString& pwd)
 	}
 
 	uz.setPassword(pwd);
-	ec = uz.addDirectory(dir);
+        ec = uz.addDirectoryContents(dir);
 	if (ec != Zip::Ok) {
 		cout << "Unable to add directory: " << uz.formatError(ec).toAscii().data() << endl << endl;
 	}

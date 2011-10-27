@@ -605,11 +605,12 @@ QString MainWindow::consultation_get(int lection_hr, QString speciality_id, int 
 }
 
 
-void MainWindow::on_pushButton_5_clicked()
+void MainWindow::on_pushButton_5_clicked()//распаковать
 {
+    decompress("/home/perec/example_ods.ods","/home/perec/temp","");
+}
 
-
-
-
-
+void MainWindow::on_pushButton_6_clicked()//упаковать
+{
+    compress("/home/perec/example_ods2.ods", "/home/perec/temp", "");
 }

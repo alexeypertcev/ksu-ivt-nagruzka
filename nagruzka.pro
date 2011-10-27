@@ -18,7 +18,11 @@ SOURCES += main.cpp\
     subjectinsemester_sqlmodel.cpp \
     students_sqlmodel.cpp \
     distribution.cpp \
-    components.cpp
+    components.cpp \
+    workzip.cpp \
+    workzip/zip.cpp \
+    workzip/unzip.cpp \
+    workzip/zipglobal.cpp \
 
 HEADERS  += mainwindow.h \
     connection.h \
@@ -28,7 +32,13 @@ HEADERS  += mainwindow.h \
     subjectinsemester_sqlmodel.h \
     students_sqlmodel.h \
     distribution.h \
-    components.h
+    components.h \
+    workzip/zip.h \
+    workzip/zip_p.h \
+    workzip/unzip.h \
+    workzip/unzip_p.h \
+    workzip/zipentry_p.h \
+    workzip/zipglobal.h
 
 FORMS    += mainwindow.ui \
     settings.ui

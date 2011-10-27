@@ -12,6 +12,7 @@
 #include "students_sqlmodel.h"
 #include "subjectinsemester_sqlmodel.h"
 #include "distribution.h"
+#include "workzip.cpp"
 
 #include <QtGui>
 #include <QtSql>

@@ -1,3 +1,6 @@
+/****************************************************************************
+** Alexey Pertcev alexey.pertcev@gmail.com
+****************************************************************************/
 #ifndef SUBJECTINSEMESTER_SQLMODEL_H
 #define SUBJECTINSEMESTER_SQLMODEL_H
 

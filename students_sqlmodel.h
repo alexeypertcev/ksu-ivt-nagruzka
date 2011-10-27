@@ -1,7 +1,6 @@
 /****************************************************************************
-
+** Alexey Pertcev alexey.pertcev@gmail.com
 ****************************************************************************/
-
 #ifndef STUDENTS_SQLMODEL_H
 #define STUDENTS_SQLMODEL_H
 

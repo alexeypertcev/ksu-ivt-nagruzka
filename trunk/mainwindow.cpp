@@ -18,6 +18,7 @@
 #include <QMessageBox>
 #include <QStatusBar>
 
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -603,7 +604,11 @@ QString MainWindow::consultation_get(int lection_hr, QString speciality_id, int 
 }
 
 
+void MainWindow::on_pushButton_5_clicked()
+{
 
 
 
 
+
+}

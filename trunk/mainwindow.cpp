@@ -614,3 +614,8 @@ void MainWindow::on_pushButton_6_clicked()//упаковать
 {
     compress("/home/perec/example_ods2.ods", "/home/perec/temp", "");
 }
+
+void MainWindow::on_pushButton_7_clicked()
+{
+
+}

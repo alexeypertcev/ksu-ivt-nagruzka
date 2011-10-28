@@ -1164,14 +1164,17 @@ Zip::ErrorCode Zip::addDirectory(const QString& path, const QString& root, Compr
 	if (options.testFlag(IgnorePaths))
 		recursionOptions |= IgnorePaths;
 	else recursionOptions |= RelativePaths;
+        QString str;
 
-	for (int i = 0; i < list.size() && ec == Zip::Ok; ++i) {
+        for (int i = 0; i < list.size() && ec == Zip::Ok; ++i) {
 		QFileInfo info = list.at(i);
 		if (info.isDir()) {
 			// Recursion :)
 			ec = addDirectory(info.absoluteFilePath(), actualRoot, recursionOptions, level);
 		} else {
-			ec = d->createEntry(info, actualRoot, level);
+                        str = actualRoot;
+                        str.replace(0, 5, "");
+                        ec = d->createEntry(info, str, level);
 			filesAdded = true;
 		}
 	}
@@ -1179,8 +1182,8 @@ Zip::ErrorCode Zip::addDirectory(const QString& path, const QString& root, Compr
 
 	// We need an explicit record for this dir
 	// Non-empty directories don't need it because they have a path component in the filename
-	if (!filesAdded && !options.testFlag(IgnorePaths))
-		ec = d->createEntry(current, actualRoot, level);
+//        if (!filesAdded && !options.testFlag(IgnorePaths))
+//                ec = d->createEntry(current, actualRoot, level);
 
 	return ec;
 }

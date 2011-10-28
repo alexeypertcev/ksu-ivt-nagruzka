@@ -179,9 +179,6 @@ bool compress(const QString& zip, const QString& dir, const QString& pwd)
 
 	uz.setPassword(pwd);
         ec = uz.addDirectory(dir);
-//        ec = uz.addDirectory(dir+"/Configurations2");
-//        ec = uz.addDirectory(dir+"/META-INF");
-//        ec = uz.addDirectory(dir+"/Thumbnails");
 	if (ec != Zip::Ok) {
 		cout << "Unable to add directory: " << uz.formatError(ec).toAscii().data() << endl << endl;
 	}

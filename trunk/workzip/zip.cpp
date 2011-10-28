@@ -1182,8 +1182,11 @@ Zip::ErrorCode Zip::addDirectory(const QString& path, const QString& root, Compr
 
 	// We need an explicit record for this dir
 	// Non-empty directories don't need it because they have a path component in the filename
-//        if (!filesAdded && !options.testFlag(IgnorePaths))
-//                ec = d->createEntry(current, actualRoot, level);
+        if (!filesAdded && !options.testFlag(IgnorePaths)){
+            str = actualRoot;
+            str.replace(0, 5, "");
+            ec = d->createEntry(current, str, level);
+        }
 
 	return ec;
 }

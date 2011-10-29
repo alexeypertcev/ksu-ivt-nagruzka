@@ -299,8 +299,6 @@ typedef uLong FAR uLongf;
 #  define NO_vsnprintf
 #endif
 
-
-
 #if defined(__MVS__)
 #  define NO_vsnprintf
 #  ifdef FAR

@@ -354,6 +354,7 @@ void MainWindow::set_design_window()
     int i = 0;
     ui->tableView->setColumnWidth(0,400);
     tablemodel_subject->setHeaderData(0, Qt::Horizontal, QObject::tr("Название"));
+    do{ ui->tableView->setRowHeight(i++,25); }while(i<=10);
 
     ui->tableView_2->setColumnWidth(0,0);   //id
     ui->tableView_2->setColumnWidth(1,180);
@@ -567,7 +568,8 @@ void MainWindow::on_pushButton_2_clicked()
                             "0" +                                            // "other3 REAL NOT NULL, "
                             ");";              
 
-                qDebug() << squery;
+//                qDebug() << squery;
+//                ui->statusBar->showMessage("please wait.",0);
                 if (!query3.exec(squery)){QMessageBox::warning(this, tr("Error querry"), "");}
 
             }

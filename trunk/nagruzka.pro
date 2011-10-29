@@ -38,7 +38,9 @@ HEADERS  += mainwindow.h \
     workzip/unzip.h \
     workzip/unzip_p.h \
     workzip/zipentry_p.h \
-    workzip/zipglobal.h
+    workzip/zipglobal.h \
+    workzip/zlib/zlib.h \
+    workzip/zlib/zconf.h
 
 FORMS    += mainwindow.ui \
     settings.ui

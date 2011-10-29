@@ -34,103 +34,14 @@
 #include <iomanip>
 #include <stdlib.h>
 
-void invalidCMD();
+
 bool decompress(const QString& file, const QString& out, const QString& pwd);
 bool compress(const QString& zip, const QString& dir, const QString& pwd);
 bool listFiles(const QString& file, const QString& pwd);
 
 using namespace std;
 
-int mainzip() {
-    /*
-      ////
-	if (argc < 3) {
-		cout << "Test routine for the OSDaB Project Zip/UnZip classes" << endl << endl;
-		cout << "Compression: zip [-p PWD] ZIPFILE DIRECTORY" << endl;
-		cout << "List files: zip -l [-p PWD] ZIPFILE" << endl;
-		cout << "Decompression: zip -d [-p PWD] ZIPFILE OUTPUT_DIR" << endl << endl;
-		cout << "(C) 2007-2011 Angius Fabrizio\nLicensed under the terms of the GNU GPL Version 2 or later" << endl;
-		return -1;
-	}
-
-	QString fname;
-	QString dname;
-	QString pwd;
-
-	bool resOK = true;
-
-	if (strlen(argv[1]) == 2 &&	argv[1][0] == '-') 	{
-		switch (argv[1][1]) {
-			case 'd':
-			{
-				if (argc >= 6) {
-					if (strcmp(argv[2], "-p") == 0) {
-						pwd = QString(argv[3]);
-						fname = QString(argv[4]);
-						dname = QString(argv[5]);
-					} else invalidCMD();
-				} else if (argc >= 4) {
-					fname = QString(argv[2]);
-					dname = QString(argv[3]);
-				} else invalidCMD();
-
-				resOK = decompress(fname, dname, pwd);
-			}
-			break;
-
-			case 'l': {
-				if (argc >= 5) {
-					if (strcmp(argv[2], "-p") == 0) {
-						pwd = QString(argv[3]);
-						fname = QString(argv[4]);
-					} else invalidCMD();
-				} else if (argc >= 3) {
-					fname = QString(argv[2]);
-				} else invalidCMD();
-
-				resOK = listFiles(fname, pwd);
-			}
-			break;
-
-			case 'p': {
-				if (argc >= 5) {
-					pwd = QString(argv[2]);
-					fname = QString(argv[3]);
-					dname = QString(argv[4]);
-				} else invalidCMD();
-
-				resOK = compress(fname, dname, pwd);
-			}
-			break;
-
-			default: invalidCMD();
-		}
-
-	} else {
-		// no parameters -- compress directly
-		resOK = compress(QString(argv[1]), QString(argv[2]), 0);
-	}
-
-	if (!resOK) {
-		cout << "Sorry, some error occurred!" << endl;
-		return -1;
-	}
-*/
-
-    decompress("/home/perec/example_ods.ods","/home/perec/temp","");
-    return 0;
-}
-
-void invalidCMD()
-{
-    cout << "Invalid command line. Usage:" << endl;
-    cout << "Compression: zip [-p PWD] DIRECTORY" << endl;
-    cout << "List files: zip -l [-p PWD] ZIPFILE" << endl;
-    cout << "Decompression: zip -d [-p PWD] ZIPFILE OUTPUT_DIR" << endl << endl;
-    exit(-1);
-}
-
-bool decompress(const QString& file, const QString& out, const QString& pwd)
+bool decompress(const QString& file, const QString& out)
 {
 
 	if (!QFile::exists(file)) {
@@ -140,9 +51,6 @@ bool decompress(const QString& file, const QString& out, const QString& pwd)
 
 	UnZip::ErrorCode ec;
 	UnZip uz;
-
-	if (!pwd.isEmpty())
-		uz.setPassword(pwd);
 
 	ec = uz.openArchive(file);
 	if (ec != UnZip::Ok) {
@@ -160,7 +68,7 @@ bool decompress(const QString& file, const QString& out, const QString& pwd)
 	return true;
 }
 
-bool compress(const QString& zip, const QString& dir, const QString& pwd)
+bool compress(const QString& zip, const QString& dir)
 {
 	QFileInfo fi(dir);
 	if (!fi.isDir()) {
@@ -177,13 +85,11 @@ bool compress(const QString& zip, const QString& dir, const QString& pwd)
 		return false;
 	}
 
-	uz.setPassword(pwd);
         ec = uz.addDirectory(dir);
 	if (ec != Zip::Ok) {
 		cout << "Unable to add directory: " << uz.formatError(ec).toAscii().data() << endl << endl;
 	}
 
-	uz.setArchiveComment("This archive has been created using OSDaB Zip (http://osdab.42cows.org/).");
 
 	if (uz.closeArchive() != Zip::Ok) {
 		cout << "Unable to close the archive: " << uz.formatError(ec).toAscii().data() << endl << endl;

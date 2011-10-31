@@ -66,7 +66,7 @@ int OSDAB_ZIP_MANGLE(currentUtcOffset)()
     tm res;
     tm_struct = gmtime_r(&curr_time_t, &res);
 #elif defined Q_OS_WIN
-    if (gmtime_s(tm_struct, &curr_time_t))
+//    if (gmtime_s(tm_struct, &curr_time_t))  //  gmtime_s и localtime_s - не нашел под виндой, вроде работает и без нее
         return 0;
 #else
     tm_struct = gmtime(&curr_time_t);
@@ -81,7 +81,7 @@ int OSDAB_ZIP_MANGLE(currentUtcOffset)()
     // use the reentrant version of localtime() where available
     tm_struct = localtime_r(&curr_time_t, &res);
 #elif defined Q_OS_WIN
-    if (localtime_s(tm_struct, &curr_time_t))
+//    if (localtime_s(tm_struct, &curr_time_t)) //  gmtime_s и localtime_s - не нашел под виндой, вроде работает и без нее
         return 0;
 #else
     tm_struct = localtime(&curr_time_t);

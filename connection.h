@@ -10,13 +10,17 @@
 #include <QSqlError>
 #include <QSqlQuery>
 
+
+#include <QtGui>
+#include <QtSql>
+
 QSqlDatabase db;
 
 static bool createConnection(QString path_db)
 {
     db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName(path_db);
-    
+
     if (!db.open()) {
         QMessageBox::critical(0, qApp->tr("Cannot open database"),
             qApp->tr("Unable to establish a database connection.\n"

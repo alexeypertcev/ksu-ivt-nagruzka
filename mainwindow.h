@@ -28,8 +28,10 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(QString apppath, QWidget *parent = 0);
     ~MainWindow();
+    void set_applicationDirPath(QString app_path);
+    QString get_applicationDirPath();
 
 private:
     unsigned short status; //0 - нет БД 1 - есть БД
@@ -40,6 +42,7 @@ private:
     Settings* settings;
     QString path_db;
     QSqlDatabase db;
+    QString applicationDirPath;
     QSqlRelationalTableModel* tablemodel_subject;
     QSqlRelationalTableModel* tablemodel_teachers;
     QSqlRelationalTableModel* tablemodel_curriculum;
@@ -64,6 +67,7 @@ private:
     void update_sqlmodel_distribution();
 
     QString consultation_get(int lection_hr, QString speciality_id, int num_group, int is_examen);
+
 
 private slots:
     void on_tabWidget_currentChanged(int index);

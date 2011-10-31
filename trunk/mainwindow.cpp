@@ -20,14 +20,14 @@
 #include <QStatusBar>
 
 
-MainWindow::MainWindow(QWidget *parent) :
+MainWindow::MainWindow(QString apppath, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
 
-    path_db = "/home/perec/nagruzka.db";
-    //ui->statusBar->showMessage("The database is used from " + path_db);
+    applicationDirPath = apppath;
+    path_db = applicationDirPath + "/nagruzka.db";
 
     if (createConnection(path_db)){
 
@@ -140,6 +140,14 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::set_applicationDirPath(QString app_path){
+    applicationDirPath = app_path;
+}
+
+QString MainWindow::get_applicationDirPath(){
+    return applicationDirPath;
 }
 
 void MainWindow::on_action_6_activated()

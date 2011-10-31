@@ -10,7 +10,8 @@ int main(int argc, char *argv[])
     QTextCodec::setCodecForTr(codec);
     QTextCodec::setCodecForCStrings(codec);
 
-    MainWindow w;
+
+    MainWindow w(a.applicationDirPath());
     w.show();
 
     return a.exec();

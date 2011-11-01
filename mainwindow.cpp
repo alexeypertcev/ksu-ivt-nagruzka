@@ -234,7 +234,7 @@ void MainWindow::on_pushButton_clicked(){}
 
 void MainWindow::on_pushButton_add_student_clicked()
 {
-    sqlmodel_students->add("1", "1", "1", "1", "0");
+    //sqlmodel_students->add("1", "1", "1", "1", "0");
     sqlmodel_students->refresh();
 }
 
@@ -470,11 +470,40 @@ void MainWindow::set_design_window()
     sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Итого"));
 
     ui->tableView_6->setColumnWidth(0,180);
-    ui->tableView_6->setColumnWidth(1,40);
+    ui->tableView_6->setColumnWidth(1,50);
     ui->tableView_6->setColumnWidth(2,0);  // id
+
+    select_subjects->setHeaderData(0, Qt::Horizontal, QObject::tr("Предмет"));
+    select_subjects->setHeaderData(1, Qt::Horizontal, QObject::tr("Семестр"));
 
     ui->tableView_7->setColumnWidth(0,0);
     ui->tableView_7->setColumnWidth(1,240);
+
+    i=0;
+    sinstodistrib->setHeaderData(i++, Qt::Horizontal, QObject::tr("Предмет"));
+    sinstodistrib->setHeaderData(i++, Qt::Horizontal, QObject::tr("Семестр"));
+    sinstodistrib->setHeaderData(i++, Qt::Horizontal, QObject::tr("Специальность"));
+    sinstodistrib->setHeaderData(i++, Qt::Horizontal, QObject::tr("Форма обучения"));
+    sinstodistrib->setHeaderData(i++, Qt::Horizontal, QObject::tr("Курс"));
+    sinstodistrib->setHeaderData(i++, Qt::Horizontal, QObject::tr("Кол-во групп"));
+    sinstodistrib->setHeaderData(i++, Qt::Horizontal, QObject::tr("Кол-во подгрупп"));
+    sinstodistrib->setHeaderData(i++, Qt::Horizontal, QObject::tr("Кол-во студентов"));
+    sinstodistrib->setHeaderData(i++, Qt::Horizontal, QObject::tr("Лекции"));
+    sinstodistrib->setHeaderData(i++, Qt::Horizontal, QObject::tr("Лаборат."));
+    sinstodistrib->setHeaderData(i++, Qt::Horizontal, QObject::tr("Практич."));
+    sinstodistrib->setHeaderData(i++, Qt::Horizontal, QObject::tr("Индивид."));
+    sinstodistrib->setHeaderData(i++, Qt::Horizontal, QObject::tr("Контр. раб"));
+    sinstodistrib->setHeaderData(i++, Qt::Horizontal, QObject::tr("Консульт."));
+    sinstodistrib->setHeaderData(i++, Qt::Horizontal, QObject::tr("Зачеты"));
+    sinstodistrib->setHeaderData(i++, Qt::Horizontal, QObject::tr("Экзамены"));
+    sinstodistrib->setHeaderData(i++, Qt::Horizontal, QObject::tr("Курс. раб"));
+    sinstodistrib->setHeaderData(i++, Qt::Horizontal, QObject::tr("Дипл. раб"));
+    sinstodistrib->setHeaderData(i++, Qt::Horizontal, QObject::tr("Практика"));
+    sinstodistrib->setHeaderData(i++, Qt::Horizontal, QObject::tr("ГАК"));
+    sinstodistrib->setHeaderData(i++, Qt::Horizontal, QObject::tr("Прочее1"));
+    sinstodistrib->setHeaderData(i++, Qt::Horizontal, QObject::tr("Прочее2"));
+    sinstodistrib->setHeaderData(i++, Qt::Horizontal, QObject::tr("Прочее3"));
+    sinstodistrib->setHeaderData(i++, Qt::Horizontal, QObject::tr("Итого"));
 }
 
 void MainWindow::on_pushButton_4_clicked()

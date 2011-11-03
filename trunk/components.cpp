@@ -29,11 +29,15 @@ SaveIdTableView::SaveIdTableView(QWidget *parent) :
 
 QString SaveIdTableView::get_id()
 {
-    if (this->currentIndex().row() == -1)
-    {
-        return ids.at(0);
+    if (ids.isEmpty()){
+        return "NULL";
     } else {
-        return ids.at(this->currentIndex().row());
+        if (this->currentIndex().row() == -1)
+        {
+            return ids.at(0);
+        } else {
+            return ids.at(this->currentIndex().row());
+        }
     }
 }
 

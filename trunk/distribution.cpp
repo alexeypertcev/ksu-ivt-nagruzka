@@ -1,6 +1,10 @@
 #include "distribution.h"
 #include <QDebug>
 
+//********************************************************************************
+//  class DistributionSqlModel
+//********************************************************************************
+
 DistributionSqlModel::DistributionSqlModel(QObject *parent) :
     QSqlQueryModel(parent)
 {
@@ -48,15 +52,18 @@ void DistributionSqlModel::refresh()
                    "distribution.subjects_in_semmester_id = " + subjects_in_semmestre_id + ";");
 }
 
+//********************************************************************************
+//  class Sins_to_distrib_preview_SqlModel
+//********************************************************************************
 
-
-Sins_to_distribSqlModel::Sins_to_distribSqlModel(QObject *parent) :
+Sins_to_distrib_preview_SqlModel::Sins_to_distrib_preview_SqlModel(QObject *parent) :
     QSqlQueryModel(parent)
 {
-    subjects_in_semmestre_id = "1";
+    semester = " 1 ";
+    speciality_id = '1';
 }
 
-Qt::ItemFlags Sins_to_distribSqlModel::flags(
+Qt::ItemFlags Sins_to_distrib_preview_SqlModel::flags(
         const QModelIndex &index) const
 {
     Qt::ItemFlags flags = QSqlQueryModel::flags(index);
@@ -67,11 +74,78 @@ Qt::ItemFlags Sins_to_distribSqlModel::flags(
     return flags;
 }
 
-void Sins_to_distribSqlModel::setsins(QString id)
+void Sins_to_distrib_preview_SqlModel::refresh()
+{
+    this->setQuery("SELECT subject_name, semmester, subjects_in_semmester.id FROM subjects_in_semmester, curriculum "
+                   "WHERE (subjects_in_semmester.curriculum_id = curriculum.id AND "
+                   "curriculum.speciality_id = " + speciality_id + ") AND ("
+                   + semester + " );");
+}
+
+void Sins_to_distrib_preview_SqlModel::setspeciality_id(QString id)
+{
+    speciality_id = id;
+}
+
+void Sins_to_distrib_preview_SqlModel::setsemester_0()
+{
+    setsemester(0);
+}
+void Sins_to_distrib_preview_SqlModel::setsemester_1()
+{
+    setsemester(1);
+}
+void Sins_to_distrib_preview_SqlModel::setsemester_2()
+{
+    setsemester(2);
+}
+
+void Sins_to_distrib_preview_SqlModel::setsemester(int sem)
+{
+    if (sem == 1){
+        semester = " curriculum.semmester = '1' "
+                "OR curriculum.semmester = '3' "
+                "OR curriculum.semmester = '5' "
+                "OR curriculum.semmester = '7' "
+                "OR curriculum.semmester = '9' "
+                "OR curriculum.semmester = '11' ";
+    } else if (sem == 2){
+        semester = " curriculum.semmester = '2' "
+                "OR curriculum.semmester = '4' "
+                "OR curriculum.semmester = '6' "
+                "OR curriculum.semmester = '8' "
+                "OR curriculum.semmester = '10' "
+                "OR curriculum.semmester = '12' ";
+    } else if (sem == 0){
+        semester = " 1 ";
+    }
+}
+//********************************************************************************
+//  class Sins_to_distrib_detail_SqlModel
+//********************************************************************************
+
+Sins_to_distrib_detail_SqlModel::Sins_to_distrib_detail_SqlModel(QObject *parent) :
+    QSqlQueryModel(parent)
+{
+    subjects_in_semmestre_id = "1";
+}
+
+Qt::ItemFlags Sins_to_distrib_detail_SqlModel::flags(
+        const QModelIndex &index) const
+{
+    Qt::ItemFlags flags = QSqlQueryModel::flags(index);
+    /*if (index.column() > 8 && index.column() < 24 )
+    {
+        flags |= Qt::ItemIsEditable;
+    }*/
+    return flags;
+}
+
+void Sins_to_distrib_detail_SqlModel::setsins(QString id)
 {
     subjects_in_semmestre_id = id;
 }
-void Sins_to_distribSqlModel::refresh()
+void Sins_to_distrib_detail_SqlModel::refresh()
 {
     this->setQuery("SELECT subjects_in_semmester.id, curriculum.subject_name, curriculum.semmester, "
                    "speciality.special_name, "

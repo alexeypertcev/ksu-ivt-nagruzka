@@ -444,8 +444,11 @@
       <property name="text">
        <string>год</string>
       </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
      </widget>
-     <widget class="QComboBox" name="comboBox_3">
+     <widget class="SaveIdComboBox" name="comboBox_3">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -518,7 +521,7 @@
      <x>0</x>
      <y>0</y>
      <width>1205</width>
-     <height>20</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">
@@ -609,24 +612,7 @@
   </customwidget>
  </customwidgets>
  <resources/>
- <connections>
-  <connection>
-   <sender>tableView_6</sender>
-   <signal>activated(QModelIndex)</signal>
-   <receiver>MainWindow</receiver>
-   <slot>update_distribution()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>870</x>
-     <y>96</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>1082</x>
-     <y>46</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
  <slots>
   <slot>update_curriculum()</slot>
   <slot>update_distribution()</slot>

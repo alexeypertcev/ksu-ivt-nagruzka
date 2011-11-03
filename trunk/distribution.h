@@ -16,12 +16,29 @@ private:
 
 };
 
-
-class Sins_to_distribSqlModel : public QSqlQueryModel
+class Sins_to_distrib_preview_SqlModel : public QSqlQueryModel
 {
     Q_OBJECT
 public:
-    Sins_to_distribSqlModel(QObject *parent = 0);
+    Sins_to_distrib_preview_SqlModel(QObject *parent = 0);
+
+    Qt::ItemFlags flags(const QModelIndex &index) const;
+    void refresh();
+    void setspeciality_id(QString id);
+    void setsemester(int sem);    // 0 - all, 1 - нечет , 2 - чет
+    void setsemester_0();
+    void setsemester_1();
+    void setsemester_2();
+private:
+    QString speciality_id;
+    QString semester;
+};
+
+class Sins_to_distrib_detail_SqlModel : public QSqlQueryModel
+{
+    Q_OBJECT
+public:
+    Sins_to_distrib_detail_SqlModel(QObject *parent = 0);
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
     void setsins(QString id);

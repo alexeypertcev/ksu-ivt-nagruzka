@@ -500,7 +500,7 @@ void MainWindow::set_design_window()
     ui->tableView_7->setColumnWidth(0,0);
     ui->tableView_7->setColumnWidth(1,240);
 
-    i=0;
+    i=1;
     sinstodistrib_detail->setHeaderData(i++, Qt::Horizontal, QObject::tr("Предмет"));
     sinstodistrib_detail->setHeaderData(i++, Qt::Horizontal, QObject::tr("Семестр"));
     sinstodistrib_detail->setHeaderData(i++, Qt::Horizontal, QObject::tr("Специальность"));

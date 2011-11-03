@@ -1,4 +1,5 @@
 #include "components.h"
+#include <QDebug>
 
 SaveIdComboBox::SaveIdComboBox(QWidget *parent) :
     QComboBox(parent)
@@ -40,9 +41,14 @@ void SaveIdTableView::update_ids()
 {
     ids.clear();
     QAbstractItemModel* temp_model = this->model();
-    for (int i = 0; i < temp_model->rowCount(); ++i)
-    {
-        ids << temp_model->data(temp_model->index(i,2)).toString();
+    if (temp_model != NULL){
+        for (int i = 0; i < temp_model->rowCount(); ++i)
+        {
+            ids << temp_model->data(temp_model->index(i,2)).toString();
+        }
+    } else {
+        qDebug() << "temp_model is NULL";
+
     }
 }
 

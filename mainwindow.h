@@ -15,7 +15,8 @@ class Settings;
 class StudentsSqlModel;
 class SpecialityDelegate;
 class SubjectinsemesterSqlModel;
-class Sins_to_distribSqlModel;
+class Sins_to_distrib_preview_SqlModel;
+class Sins_to_distrib_detail_SqlModel;
 class DistributionSqlModel;
 QT_END_NAMESPACE
 
@@ -54,7 +55,8 @@ private:
     StudentsSqlModel* sqlmodel_students;
     CurriculumSqlModel* sqlmodel_curriculum;
     SubjectinsemesterSqlModel* sqlmodel_subinsem;
-    Sins_to_distribSqlModel* sinstodistrib;
+    Sins_to_distrib_preview_SqlModel* sinstodistrib_preview;
+    Sins_to_distrib_detail_SqlModel* sinstodistrib_detail;
     QSqlQueryModel *select_subjects;
     DistributionSqlModel *sqlmodel_distribution;
 
@@ -63,8 +65,8 @@ private:
     void update_teachers();
     void update_students();
     void update_subject_in_semestre();
-    void update_sins_to_distribution();
-    void update_sqlmodel_distribution();
+    void update_sins_to_distribution_preview();
+
 
     QString consultation_get(int lection_hr, QString speciality_id, int num_group, int is_examen);
 
@@ -89,6 +91,8 @@ private slots:
     void on_pushButton_add_subject_clicked();
     void on_action_6_activated();
 
+    void update_sins_to_distribution_detail();
+    void update_sqlmodel_distribution();
     void update_distribution();
     void update_curriculum();
     void update_subinsem();

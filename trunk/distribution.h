@@ -10,6 +10,7 @@ public:
     DistributionSqlModel(QObject *parent = 0);
     Qt::ItemFlags flags(const QModelIndex &index) const;
     void setsins(QString id);
+    void check_entry();
     void refresh();
 private:
     QString subjects_in_semmestre_id;

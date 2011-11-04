@@ -363,8 +363,8 @@
      <widget class="QPushButton" name="pushButton_add_distribution">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>450</y>
+        <x>670</x>
+        <y>390</y>
         <width>101</width>
         <height>24</height>
        </rect>
@@ -376,8 +376,8 @@
      <widget class="QPushButton" name="pushButton_del_distribution">
       <property name="geometry">
        <rect>
-        <x>120</x>
-        <y>450</y>
+        <x>780</x>
+        <y>390</y>
         <width>101</width>
         <height>24</height>
        </rect>
@@ -402,14 +402,14 @@
         <x>10</x>
         <y>130</y>
         <width>871</width>
-        <height>421</height>
+        <height>251</height>
        </rect>
       </property>
      </widget>
      <widget class="QRadioButton" name="radioButton">
       <property name="geometry">
        <rect>
-        <x>200</x>
+        <x>700</x>
         <y>20</y>
         <width>82</width>
         <height>17</height>
@@ -422,7 +422,7 @@
      <widget class="QRadioButton" name="radioButton_2">
       <property name="geometry">
        <rect>
-        <x>300</x>
+        <x>800</x>
         <y>20</y>
         <width>82</width>
         <height>17</height>
@@ -435,7 +435,7 @@
      <widget class="QRadioButton" name="radioButton_3">
       <property name="geometry">
        <rect>
-        <x>400</x>
+        <x>900</x>
         <y>20</y>
         <width>82</width>
         <height>17</height>
@@ -451,11 +451,30 @@
      <widget class="SaveIdComboBox" name="comboBox_3">
       <property name="geometry">
        <rect>
-        <x>10</x>
+        <x>1000</x>
         <y>20</y>
         <width>161</width>
         <height>22</height>
        </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_8">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>20</y>
+        <width>151</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Список преподавателей</string>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+      <property name="flat">
+       <bool>false</bool>
       </property>
      </widget>
     </widget>

@@ -241,7 +241,7 @@ void MainWindow::on_pushButton_clicked(){}
 
 void MainWindow::on_pushButton_add_student_clicked()
 {
-    //sqlmodel_students->add("1", "1", "1", "1", "0");
+    sqlmodel_students->add("1", "1", "1", "1", "0");
     sqlmodel_students->refresh();
 }
 
@@ -278,10 +278,12 @@ void MainWindow::on_pushButton_del_subjects_in_semmestre_clicked()
 void MainWindow::on_pushButton_add_distribution_clicked()
 {
 
+
 }
 
 void MainWindow::on_pushButton_del_distribution_clicked()
 {
+
 
 }
 
@@ -367,6 +369,7 @@ void MainWindow::update_sins_to_distribution_detail()
 void MainWindow::update_sqlmodel_distribution()
 {
     sqlmodel_distribution->setsins(ui->tableView_6->get_id());
+    sqlmodel_distribution->check_entry();
     sqlmodel_distribution->refresh();
 }
 
@@ -557,24 +560,17 @@ void MainWindow::on_pushButton_3_clicked()
 
 void MainWindow::on_pushButton_2_clicked()
 {
-    qDebug() << "пересчет";
+    qDebug() << "идет пересчет...";
     // перерасчет таблицы "предметы в семместре"
-    QSqlQuery query;
-    QSqlQuery query2;
-    QSqlQuery query3;
-    QString curriculum_id;
-    QString speciality_id;
-    int semmester, course;
-    int lection_hr;
-    int labs_hr;
-    int practice_hr;
-    int is_examen;
-    int is_offset;
-    int is_coursework;
-    int controlwork;
-    QString students_id;
-    int num_group, num_undergroup, quantity_course;
-    QString squery = "";
+
+    QSqlQuery query, query2, query3;
+    QString curriculum_id, speciality_id;
+    int semmester, course,
+    lection_hr, labs_hr,
+    practice_hr, is_examen,
+    is_offset, is_coursework,
+    controlwork, num_group, num_undergroup, quantity_course;
+    QString students_id, squery = "";
     query.exec("DELETE FROM subjects_in_semmester");
 
     query.exec("SELECT curriculum.id, speciality_id, "
@@ -615,7 +611,7 @@ void MainWindow::on_pushButton_2_clicked()
                             "0" + ", "+                                      // "individ_hr REAL NOT NULL, "
                             QString::number((int)ceil(controlwork*quantity_course/4), 10) + ", "+ // "kontr_rab_hr REAL NOT NULL, "
                             consultation_get(lection_hr, speciality_id, num_group, is_examen) + ", "+ // "consultation_hr REAL NOT NULL, "
-                            QString::number((int)ceil(quantity_course/4), 10) + ", "+   // "offset_hr REAL NOT NULL, "
+  /* возможно косяк*/       QString::number((int)ceil(quantity_course/4), 10) + ", "+   // "offset_hr REAL NOT NULL, "
                             QString::number((int)ceil(quantity_course/3), 10) + ", "+   // "examen_hr REAL NOT NULL, "
                             QString::number(is_coursework*quantity_course*3, 10) + ", "+ // "coursework_hr REAL NOT NULL, "
                             "0" + ", "+                                      // "diplomwork_hr REAL NOT NULL, "
@@ -627,13 +623,14 @@ void MainWindow::on_pushButton_2_clicked()
                             ");";              
 
 //                qDebug() << squery;
-//                ui->statusBar->showMessage("please wait.",0);
-                if (!query3.exec(squery)){QMessageBox::warning(this, tr("Error querry"), "");}
 
+                if (!query3.exec(squery)){QMessageBox::warning(this, tr("Error querry"), "");}
             }
     }
 
-update_subinsem();
+    update_subinsem();
+    qDebug() << "готово";
+//    ui->statusBar->showMessage("готово",0);
 }
 
 QString MainWindow::consultation_get(int lection_hr, QString speciality_id, int num_group, int is_examen)

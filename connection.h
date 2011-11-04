@@ -123,7 +123,7 @@ static bool create_all_tables(){
                    "  REFERENCES curriculum (id)) ");
         query.exec("CREATE TABLE distribution ( "
                    "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-                   "teachers_id INTEGER NOT NULL, "
+                   "teachers_id INTEGER, "
                    "subjects_in_semmester_id INTEGER NOT NULL, "
                    "lection_hr INTEGER NOT NULL, "
                    "labs_hr INTEGER NOT NULL, "
@@ -140,8 +140,8 @@ static bool create_all_tables(){
                    "other1 REAL NOT NULL, "
                    "other2 REAL NOT NULL, "
                    "other3 REAL NOT NULL, "
-                   "CONSTRAINT subjects_in_semmestre_id FOREIGN KEY (subjects_in_semmestre_id) "
-                   "  REFERENCES subjects_in_semmestre (id), "
+                   "CONSTRAINT subjects_in_semmester_id FOREIGN KEY (subjects_in_semmester_id) "
+                   "  REFERENCES subjects_in_semmester (id), "
                    "CONSTRAINT teachers_id FOREIGN KEY (teachers_id) "
                    "  REFERENCES teachers (id))");
 

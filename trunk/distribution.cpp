@@ -112,7 +112,7 @@ qDebug() << "insert in distrib";
 
         s =    "insert into distribution values("
                "NULL, "                             // "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-               "NULL, "+                            // "teachers_id INTEGER, "
+               "1, "+                            // "teachers_id INTEGER, "
                 subjects_in_semmestre_id + ", "+    // "subjects_in_semmester_id INTEGER NOT NULL, "
                 lection_hr + ", "+                  // "lection_hr INTEGER NOT NULL, "
                 labs_hr + ", "+                     // "labs_hr INTEGER NOT NULL, "

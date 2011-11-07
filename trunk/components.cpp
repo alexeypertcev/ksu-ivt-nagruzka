@@ -1,6 +1,11 @@
 #include "components.h"
 #include <QDebug>
 
+//***************************************************************
+//  Class  SaveIdComboBox
+//***************************************************************
+
+
 SaveIdComboBox::SaveIdComboBox(QWidget *parent) :
     QComboBox(parent)
 {
@@ -21,6 +26,9 @@ QString SaveIdComboBox::get_id()
     return ids.at(this->currentIndex());
 }
 
+//***************************************************************
+//  Class  SaveIdTableView
+//***************************************************************
 
 SaveIdTableView::SaveIdTableView(QWidget *parent) :
     QTableView(parent)

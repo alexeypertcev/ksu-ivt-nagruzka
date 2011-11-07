@@ -9,7 +9,8 @@
 #include "delegates.h"
 #include "settings.h"
 #include "curriculum_sqlmodel.h"
-#include "students_sqlmodel.h"
+#include "students.h"
+#include "teachers.h"
 #include "subjectinsemester_sqlmodel.h"
 #include "distribution.h"
 #include "workzip.cpp"
@@ -61,6 +62,8 @@ MainWindow::MainWindow(QString apppath, QWidget *parent) :
         ui->tableView->update();
 
         // teachers table
+        // создать свой класс и не выводить поле "выберите препода"
+        // баг - если отредактировать таблицу поле "выберите препода" не выводится
         tablemodel_teachers = new QSqlRelationalTableModel(this);
         tablemodel_teachers->setTable("teachers");
         tablemodel_teachers->setEditStrategy(QSqlTableModel::OnFieldChange);

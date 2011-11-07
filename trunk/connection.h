@@ -77,7 +77,7 @@ static bool create_all_tables(){
                    "f TEXT NOT NULL, "
                    "i TEXT NOT NULL, "
                    "o TEXT NOT NULL, "
-                   "status_name TEXT NOT NULL, "
+                   "status_name TEXT, "
                    "rate REAL NOT NULL, "
                    "CONSTRAINT status_name FOREIGN KEY (status_name) "
                    "  REFERENCES status (name)) ");
@@ -123,7 +123,7 @@ static bool create_all_tables(){
                    "  REFERENCES curriculum (id)) ");
         query.exec("CREATE TABLE distribution ( "
                    "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-                   "teachers_id INTEGER, "
+                   "teachers_id INTEGER NOT NULL, "
                    "subjects_in_semmester_id INTEGER NOT NULL, "
                    "lection_hr INTEGER NOT NULL, "
                    "labs_hr INTEGER NOT NULL, "
@@ -251,6 +251,7 @@ static bool insert_main_data()
         query.exec("insert into subject values('Математическое моделирование социальных процессов')");
         query.exec("insert into subject values('Руководство аспирантами')");
 
+        query.exec("insert into teachers values(NULL, 'Выберите преподавателя', ' ', ' ', NULL, 1 );");
         query.exec("insert into teachers values(NULL, 'Жмакин', 'Анатолий', 'Петрович', 'зав. кафедрой', 1.2 );");
         query.exec("insert into teachers values(NULL, 'Лопин', 'Вячеслав', 'Николаевич', 'профессор', 1.0 );");
         query.exec("insert into teachers values(NULL, 'Бабкин', 'Евгений', 'Александрович', 'профессор', 1.0 );");

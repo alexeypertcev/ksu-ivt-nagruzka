@@ -3,7 +3,7 @@
 ****************************************************************************/
 
 #include <QtSql>
-#include "students_sqlmodel.h"
+#include "students.h"
 
 StudentsSqlModel::StudentsSqlModel(QObject *parent) :
     QSqlQueryModel(parent)

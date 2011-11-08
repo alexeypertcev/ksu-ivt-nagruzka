@@ -47,7 +47,7 @@ void DistributionSqlModel::check_entry()
         if (!query.exec(s)){
             qDebug() << "error select";
         }
-        if (!query.next()){
+        if (query.next()){
 
             id              = query.value(0).toString();
             lection_hr      = query.value(1).toString();

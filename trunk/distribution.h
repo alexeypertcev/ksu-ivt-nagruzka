@@ -9,6 +9,7 @@ class DistributionSqlModel : public QSqlQueryModel
 public:
     DistributionSqlModel(QObject *parent = 0);
     Qt::ItemFlags flags(const QModelIndex &index) const;
+    bool setData(const QModelIndex &index, const QVariant &value, int role);
     void setsins(QString id);
     void check_entry();
     void refresh();

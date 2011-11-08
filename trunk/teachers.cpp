@@ -62,6 +62,7 @@ bool TeachersSqlModel::setData(const QModelIndex &index, const QVariant &value, 
     this->refresh();
     return true;
 }
+
 bool TeachersSqlModel::add(QString f, QString i, QString o, QString status_name,
                            QString rate)
 {

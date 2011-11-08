@@ -125,6 +125,9 @@ MainWindow::MainWindow(QString apppath, QWidget *parent) :
         update_sqlmodel_distribution();
         ui->tableView_8->setModel(sqlmodel_distribution);
 
+        FioDelegate *fio_delegate = new FioDelegate(this);
+        ui->tableView_8->setItemDelegateForColumn(2, fio_delegate);
+        ui->tableView_8->update();
 
 
 
@@ -498,7 +501,7 @@ void MainWindow::set_design_window()
     sinstodistrib_preview->setHeaderData(1, Qt::Horizontal, QObject::tr("Семестр"));
 
     ui->tableView_7->setColumnWidth(0,0);
-    ui->tableView_7->setColumnWidth(1,240);
+    ui->tableView_7->setColumnWidth(1,250);
 
     i=1;
     sinstodistrib_detail->setHeaderData(i++, Qt::Horizontal, QObject::tr("Предмет"));
@@ -525,6 +528,12 @@ void MainWindow::set_design_window()
     sinstodistrib_detail->setHeaderData(i++, Qt::Horizontal, QObject::tr("Прочее2"));
     sinstodistrib_detail->setHeaderData(i++, Qt::Horizontal, QObject::tr("Прочее3"));
     sinstodistrib_detail->setHeaderData(i++, Qt::Horizontal, QObject::tr("Итого"));
+
+
+    //    sqlmodel_distribution
+    ui->tableView_8->setColumnWidth(0,0);
+    ui->tableView_8->setColumnWidth(1,250);
+    ui->tableView_8->setColumnWidth(2,250);
 }
 
 void MainWindow::on_pushButton_4_clicked()

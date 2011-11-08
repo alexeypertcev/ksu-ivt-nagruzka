@@ -17,7 +17,7 @@ Qt::ItemFlags DistributionSqlModel::flags(
         const QModelIndex &index) const
 {
     Qt::ItemFlags flags = QSqlQueryModel::flags(index);
-    if (index.column() > 1 && index.column() < 10 )
+    if (index.column() > 1 && index.column() < 18 )
     {
         flags |= Qt::ItemIsEditable;
     }
@@ -104,52 +104,72 @@ void DistributionSqlModel::refresh()
     query.next();
 
     if (query.isNull(0)){
-        this->setQuery("SELECT "
-                   "teachers_id, "
-                   "subjects_in_semmester_id, "
-                   "lection_hr, "
-                   "labs_hr, "
-                   "practice_hr, "
-                   "individ_hr, "
-                   "kontr_rab_hr, "
-                   "consultation_hr, "
-                   "offset_hr, "
-                   "examen_hr, "
-                   "coursework_hr, "
-                   "diplomwork_hr, "
-                   "praktika_hr, "
-                   "gak_hr, "
-                   "other1, "
-                   "other2, "
-                   "other3 "
-                   "FROM distribution "
-                   "WHERE "
-                   "distribution.subjects_in_semmester_id = " + subjects_in_semmestre_id + ";");
+        // убрать ветку
 
     }else{
+        // time 0.02
         this->setQuery("SELECT "
-                   "teachers.f || ' ' || teachers.i || ' ' || teachers.o "
-                   "subjects_in_semmester_id, "
-                   "lection_hr, "
-                   "labs_hr, "
-                   "practice_hr, "
-                   "individ_hr, "
-                   "kontr_rab_hr, "
-                   "consultation_hr, "
-                   "offset_hr, "
-                   "examen_hr, "
-                   "coursework_hr, "
-                   "diplomwork_hr, "
-                   "praktika_hr, "
-                   "gak_hr, "
-                   "other1, "
-                   "other2, "
-                   "other3 "
-                   "FROM distribution,teachers "
+                   "distribution.id, "
+                   "curriculum.subject_name, "
+                   "teachers.f || ' ' || teachers.i || ' ' || teachers.o AS 'FIO', "
+                   "distribution.lection_hr, "
+                   "distribution.labs_hr, "
+                   "distribution.practice_hr, "
+                   "distribution.individ_hr, "
+                   "distribution.kontr_rab_hr, "
+                   "distribution.consultation_hr, "
+                   "distribution.offset_hr, "
+                   "distribution.examen_hr, "
+                   "distribution.coursework_hr, "
+                   "distribution.diplomwork_hr, "
+                   "distribution.praktika_hr, "
+                   "distribution.gak_hr, "
+                   "distribution.other1, "
+                   "distribution.other2, "
+                   "distribution.other3 "
+                   "FROM distribution,teachers,subjects_in_semmester,curriculum "
                    "WHERE "
                    "distribution.teachers_id = teachers.id AND "
+                   "distribution.subjects_in_semmester_id = subjects_in_semmester.id AND "
+                   "subjects_in_semmester.curriculum_id = curriculum.id AND "
                    "distribution.subjects_in_semmester_id = " + subjects_in_semmestre_id + ";");
     }
+}
+
+bool DistributionSqlModel::setData(const QModelIndex &index, const QVariant &value, int /* role */)
+{
+    if (index.column() < 1 || index.column() > 5)
+        return false;
+
+    QModelIndex primaryKeyIndex = QSqlQueryModel::index(index.row(), 0);
+    QString field = ";";
+    switch (index.column()){
+        case 1:
+            field = "f";
+            break;
+        case 2:
+            field = "i";
+            break;
+        case 3:
+            field = "o";
+            break;
+        case 4:
+            field = "status_name";
+            break;
+        case 5:
+            field = "rate";
+            break;
+        }
+
+    QString s = "update teachers set "+ field +" = '"+ value.toString() +"' where id = "+ data(primaryKeyIndex).toString();
+    qDebug() << s;
+
+    QSqlQuery query;
+//    if (!query.exec(s)){
+//        return false;
+//    }
+    this->refresh();
+    return true;
 }
 
 //********************************************************************************

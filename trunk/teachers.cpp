@@ -23,10 +23,8 @@ Qt::ItemFlags TeachersSqlModel::flags(
 
 void TeachersSqlModel::refresh()
 {
-    this->setQuery("SELECT students.id, special_name || '(' || form_training_name || ')', "
-                   "course, num_group, num_undergroup, quantity_course "
-                   "FROM students, speciality "
-                   "WHERE students.speciality_id = speciality.id;");
+    this->setQuery("SELECT id, f, i, o, status_name, rate "
+                   "FROM teachers WHERE id != '0'; ");
 }
 
 bool TeachersSqlModel::setData(const QModelIndex &index, const QVariant &value, int /* role */)
@@ -38,23 +36,23 @@ bool TeachersSqlModel::setData(const QModelIndex &index, const QVariant &value, 
     QString field = ";";
     switch (index.column()){
         case 1:
-            field = "speciality_id";
+            field = "f";
             break;
         case 2:
-            field = "course";
+            field = "i";
             break;
         case 3:
-            field = "num_group";
+            field = "o";
             break;
         case 4:
-            field = "num_undergroup";
+            field = "status_name";
             break;
         case 5:
-            field = "quantity_course";
+            field = "rate";
             break;
         }
 
-    QString s = "update students set "+ field +" = '"+ value.toString() +"' where id = "+ data(primaryKeyIndex).toString();
+    QString s = "update teachers set "+ field +" = '"+ value.toString() +"' where id = "+ data(primaryKeyIndex).toString();
     qDebug() << s;
 
     QSqlQuery query;
@@ -64,26 +62,24 @@ bool TeachersSqlModel::setData(const QModelIndex &index, const QVariant &value, 
     this->refresh();
     return true;
 }
-bool TeachersSqlModel::add(QString speciality_id, QString course, QString num_group, QString num_undergroup,
-                           QString quantity_course)
+bool TeachersSqlModel::add(QString f, QString i, QString o, QString status_name,
+                           QString rate)
 {
-    QString s = "insert into students values(NULL, "+ speciality_id +", "+ course +", "+ num_group +", "+
-                                                      num_undergroup +", "+ quantity_course +");";
-    qDebug() << s;
+    QString s = "insert into teachers values(NULL, "+ f +", "+ i +", "+ o +", "+
+                                                      status_name +", "+ rate +");";
+//    qDebug() << s;
 
     QSqlQuery query;
-    query.exec(s);
 
-    return true;
+    return query.exec(s);
 }
 
 bool TeachersSqlModel::del(QString id)
 {
-    QString s = "DELETE FROM students WHERE id = '" + id + "';";
-    qDebug() << s;
+    QString s = "DELETE FROM teachers WHERE id = '" + id + "';";
+//    qDebug() << s;
 
     QSqlQuery query;
-    query.exec(s);
 
-    return true;
+    return query.exec(s);
 }

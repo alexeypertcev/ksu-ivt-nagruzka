@@ -13,6 +13,7 @@ class QSqlQueryModel;
 class CurriculumSqlModel;
 class Settings;
 class StudentsSqlModel;
+class TeachersSqlModel;
 class SpecialityDelegate;
 class SubjectinsemesterSqlModel;
 class Sins_to_distrib_preview_SqlModel;
@@ -53,6 +54,7 @@ private:
 
     QSqlQueryModel* sqlmodel_spec;
     StudentsSqlModel* sqlmodel_students;
+    TeachersSqlModel* sqlmodel_teachers;
     CurriculumSqlModel* sqlmodel_curriculum;
     SubjectinsemesterSqlModel* sqlmodel_subinsem;
     Sins_to_distrib_preview_SqlModel* sinstodistrib_preview;

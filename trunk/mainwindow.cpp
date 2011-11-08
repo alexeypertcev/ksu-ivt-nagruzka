@@ -62,16 +62,12 @@ MainWindow::MainWindow(QString apppath, QWidget *parent) :
         ui->tableView->update();
 
         // teachers table
-        // создать свой класс и не выводить поле "выберите препода"
-        // баг - если отредактировать таблицу поле "выберите препода" не выводится
-        tablemodel_teachers = new QSqlRelationalTableModel(this);
-        tablemodel_teachers->setTable("teachers");
-        tablemodel_teachers->setEditStrategy(QSqlTableModel::OnFieldChange);
-        tablemodel_teachers->select();
-        tablemodel_teachers->setRelation(4, QSqlRelation("status", "name", "name"));
+        sqlmodel_teachers = new TeachersSqlModel(this);
+        sqlmodel_teachers->refresh();
+        ui->tableView_2->setModel(sqlmodel_teachers);
 
-        ui->tableView_2->setModel(tablemodel_teachers);
-        ui->tableView_2->setItemDelegate(new QSqlRelationalDelegate(ui->tableView_2));
+        StatusDelegate *status_delegate = new StatusDelegate(this);
+        ui->tableView_2->setItemDelegateForColumn(4, status_delegate);
         ui->tableView_2->update();
 
         // students table
@@ -202,30 +198,28 @@ void MainWindow::on_pushButton_del_subject_clicked()
 
 void MainWindow::on_pushButton_add_teachers_clicked()
 {
-    QString s = "insert into teachers values(NULL, 'f', 'i', 'o', 'default', 1.0 );";
+    QString s = "insert into teachers values(NULL, 'f', 'i', 'o', 'выберите..', 1.0 );";
     qDebug() << s;
 
     QSqlQuery query;
     if (!query.exec(s)){
-        QMessageBox::warning(this, tr("Error querry"),
-                             tr("The database reported an error: %1").arg(tablemodel_subject->lastError().text()));
+        qDebug() << "error exec";
     }
-    tablemodel_teachers->select();
+    sqlmodel_teachers->refresh();
 }
 
 void MainWindow::on_pushButton_del_teachers_clicked()
 {
     int row = ui->tableView_2->currentIndex().row();
-    QString s = "DELETE FROM teachers WHERE id = '" + tablemodel_teachers->data( tablemodel_teachers->index(row,0),
+    QString s = "DELETE FROM teachers WHERE id = '" + sqlmodel_teachers->data( sqlmodel_teachers->index(row,0),
                                                                                 Qt::DisplayRole ).toString() + "';";
     qDebug() << s;
 
     QSqlQuery query;
     if (!query.exec(s)){
-        QMessageBox::warning(this, tr("Error querry"),
-                             tr("The database reported an error: %1").arg(tablemodel_subject->lastError().text()));
+        qDebug() << "error exec";
     }
-    tablemodel_teachers->select();
+    sqlmodel_teachers->refresh();
 }
 
 void MainWindow::on_action_4_activated()
@@ -398,12 +392,12 @@ void MainWindow::set_design_window()
     ui->tableView_2->setColumnWidth(4,120);
     ui->tableView_2->setColumnWidth(5,60);
 
-    tablemodel_teachers->setHeaderData(0, Qt::Horizontal, QObject::tr("ID"));
-    tablemodel_teachers->setHeaderData(1, Qt::Horizontal, QObject::tr("Фамилия"));
-    tablemodel_teachers->setHeaderData(2, Qt::Horizontal, QObject::tr("Имя"));
-    tablemodel_teachers->setHeaderData(3, Qt::Horizontal, QObject::tr("Отчество"));
-    tablemodel_teachers->setHeaderData(4, Qt::Horizontal, QObject::tr("Должность"));
-    tablemodel_teachers->setHeaderData(5, Qt::Horizontal, QObject::tr("Ставка"));
+    sqlmodel_teachers->setHeaderData(0, Qt::Horizontal, QObject::tr("ID"));
+    sqlmodel_teachers->setHeaderData(1, Qt::Horizontal, QObject::tr("Фамилия"));
+    sqlmodel_teachers->setHeaderData(2, Qt::Horizontal, QObject::tr("Имя"));
+    sqlmodel_teachers->setHeaderData(3, Qt::Horizontal, QObject::tr("Отчество"));
+    sqlmodel_teachers->setHeaderData(4, Qt::Horizontal, QObject::tr("Должность"));
+    sqlmodel_teachers->setHeaderData(5, Qt::Horizontal, QObject::tr("Ставка"));
 
     ui->tableView_3->setColumnWidth(0,0);  //id
     ui->tableView_3->setColumnWidth(1,150);

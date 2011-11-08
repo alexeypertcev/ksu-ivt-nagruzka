@@ -170,7 +170,7 @@ static bool insert_main_data()
         query.exec("insert into speciality values(NULL, 'ФИВТ','МОиАИС', 'оч-заоч')");
         query.exec("insert into speciality values(NULL, 'ФИВТ','ПО', 'оч')");
         query.exec("insert into speciality values(NULL, 'ФИВТ','ИАЯ', 'оч')");
-        query.exec("insert into status values('default', 0)");
+        query.exec("insert into status values('выберите..', 0)");
         query.exec("insert into status values('профессор', 680)");
         query.exec("insert into status values('доцент', 730)");
         query.exec("insert into status values('ст. препод.', 780)");
@@ -251,7 +251,7 @@ static bool insert_main_data()
         query.exec("insert into subject values('Математическое моделирование социальных процессов')");
         query.exec("insert into subject values('Руководство аспирантами')");
 
-        query.exec("insert into teachers values(0, 'Выберите преподавателя', ' ', ' ', 'ассистент', 1 );");
+        query.exec("insert into teachers values(0, 'выберите..', ' ', ' ', 'выберите..', 1 );");
         query.exec("insert into teachers values(NULL, 'Жмакин', 'Анатолий', 'Петрович', 'зав. кафедрой', 1.2 );");
         query.exec("insert into teachers values(NULL, 'Лопин', 'Вячеслав', 'Николаевич', 'профессор', 1.0 );");
         query.exec("insert into teachers values(NULL, 'Бабкин', 'Евгений', 'Александрович', 'профессор', 1.0 );");

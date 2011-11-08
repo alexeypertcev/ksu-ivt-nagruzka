@@ -36,7 +36,7 @@ void DistributionSqlModel::check_entry()
     query.exec(s);
 
     if(!query.next()){
-        qDebug() << "insert in distrib";
+//        qDebug() << "insert in distrib";
         QString id,lection_hr,labs_hr,practice_hr,individ_hr,kontr_rab_hr,consultation_hr,
                 offset_hr,examen_hr,coursework_hr,diplomwork_hr,praktika_hr,gak_hr,
                 other1,other2,other3;

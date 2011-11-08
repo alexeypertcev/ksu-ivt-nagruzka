@@ -1,8 +1,8 @@
 /****************************************************************************
 ** Alexey Pertcev alexey.pertcev@gmail.com
 ****************************************************************************/
-#ifndef STUDENTS_SQLMODEL_H
-#define STUDENTS_SQLMODEL_H
+#ifndef TEACHERS_H
+#define TEACHERS_H
 
 #include <QSqlQueryModel>
 #include <QItemDelegate>
@@ -22,4 +22,4 @@ public:
     bool del(QString id);
 };
 
-#endif // STUDENTS_SQLMODEL_H
+#endif // TEACHERS_H

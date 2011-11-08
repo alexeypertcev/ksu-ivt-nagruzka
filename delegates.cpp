@@ -10,6 +10,12 @@
 #include "delegates.h"
 #include "components.h"
 
+
+
+//**********************************************************
+//  class  SpinBoxDelegate
+//**********************************************************
+
 SpinBoxDelegate::SpinBoxDelegate(int min, int max, QObject *parent)
     : QItemDelegate(parent)
 {
@@ -53,7 +59,12 @@ void SpinBoxDelegate::updateEditorGeometry(QWidget *editor,
     editor->setGeometry(option.rect);
 }
 
-//---------------------------------------------------------------------------------------
+
+
+//**********************************************************
+//  class  ComboBoxDelegate
+//**********************************************************
+
 ComboBoxDelegate::ComboBoxDelegate(QString table_name, QObject *parent)
     : QItemDelegate(parent)
 {
@@ -106,7 +117,12 @@ void ComboBoxDelegate::updateEditorGeometry(QWidget *editor,
     editor->setGeometry(option.rect);
 }
 
-//---------------------------------------------------------------------------------------
+
+
+//**********************************************************
+//  class  SpecialityDelegate
+//**********************************************************
+
 SpecialityDelegate::SpecialityDelegate(QObject *parent)
     : QItemDelegate(parent)
 {
@@ -155,7 +171,12 @@ void SpecialityDelegate::updateEditorGeometry(QWidget *editor,
     editor->setGeometry(option.rect);
 }
 
-//---------------------------------------------------------------------------------------
+
+
+//**********************************************************
+//  class  CheckBoxDelegate
+//**********************************************************
+
 CheckBoxDelegate::CheckBoxDelegate(QObject *parent)
     : QItemDelegate(parent)
 {
@@ -200,3 +221,60 @@ void CheckBoxDelegate::updateEditorGeometry(QWidget *editor,
 {
     editor->setGeometry(option.rect);
 }
+
+
+
+//**********************************************************
+//  class  StatusDelegate
+//**********************************************************
+
+
+StatusDelegate::StatusDelegate(QObject *parent)
+    : QItemDelegate(parent)
+{
+}
+
+QWidget *StatusDelegate::createEditor(QWidget *parent,
+    const QStyleOptionViewItem &/* option */,
+    const QModelIndex &/* index */) const
+{
+    QComboBox *editor = new QComboBox(parent);
+    QSqlQueryModel* sqlmodel = new QSqlQueryModel(parent);
+    sqlmodel->setQuery("SELECT name "
+                       "FROM status WHERE name != 'выберите..';");
+    editor->setModel(sqlmodel);
+    return editor;
+}
+
+void StatusDelegate::setEditorData(QWidget *editor,
+                                    const QModelIndex &index) const
+{
+    QString value = index.model()->data(index, Qt::EditRole).toString();
+
+    QComboBox *comboBox = static_cast<QComboBox*>(editor);
+    int i;
+    // тк. данные из модели ошибок быть не должно
+    for (i = 0; i<comboBox->count(); ++i)
+    {
+        if ( comboBox->itemText(i) == value ){ break; }
+    }
+    //
+    comboBox->setCurrentIndex(i);
+}
+
+void StatusDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
+                                   const QModelIndex &index) const
+{
+
+    QComboBox *comboBox = static_cast<QComboBox*>(editor);
+    QString value = comboBox->currentText();
+
+    model->setData(index, value, Qt::EditRole);
+}
+
+void StatusDelegate::updateEditorGeometry(QWidget *editor,
+    const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
+{
+    editor->setGeometry(option.rect);
+}
+

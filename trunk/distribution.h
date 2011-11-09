@@ -13,6 +13,8 @@ public:
     void setsins(QString id);
     void check_entry();
     void refresh();
+    bool add();
+    bool del(QString id);
 private:
     QString subjects_in_semmestre_id;
 

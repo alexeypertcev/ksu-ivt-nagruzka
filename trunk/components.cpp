@@ -23,7 +23,13 @@ void SaveIdComboBox::setModel( QAbstractItemModel * model )
 
 QString SaveIdComboBox::get_id()
 {
-    return ids.at(this->currentIndex());
+    // -1
+    if (this->currentIndex() != -1){
+        return ids.at(this->currentIndex());
+    } else {
+        return ids.at(0);
+    }
+
 }
 
 //***************************************************************

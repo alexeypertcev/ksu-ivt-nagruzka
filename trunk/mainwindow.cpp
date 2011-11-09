@@ -126,7 +126,7 @@ MainWindow::MainWindow(QString apppath, QWidget *parent) :
         ui->tableView_8->setModel(sqlmodel_distribution);
 
         FioDelegate *fio_delegate = new FioDelegate(this);
-        ui->tableView_8->setItemDelegateForColumn(2, fio_delegate);
+        ui->tableView_8->setItemDelegateForColumn(3, fio_delegate);
         ui->tableView_8->update();
 
 
@@ -265,26 +265,21 @@ void MainWindow::on_pushButton_del_curriculum_clicked()
     sqlmodel_curriculum->refresh();
 }
 
-void MainWindow::on_pushButton_add_subjects_in_semmestre_clicked()
-{
+void MainWindow::on_pushButton_add_subjects_in_semmestre_clicked(){}
 
-}
-
-void MainWindow::on_pushButton_del_subjects_in_semmestre_clicked()
-{
-
-}
+void MainWindow::on_pushButton_del_subjects_in_semmestre_clicked(){}
 
 void MainWindow::on_pushButton_add_distribution_clicked()
 {
-
-
+    sqlmodel_distribution->add();
+    sqlmodel_distribution->refresh();
 }
 
 void MainWindow::on_pushButton_del_distribution_clicked()
 {
-
-
+    sqlmodel_distribution->del(sqlmodel_distribution->data( sqlmodel_distribution->index(ui->tableView_8->currentIndex().row(),0), Qt::DisplayRole ).toString());
+    sqlmodel_distribution->check_entry();
+    sqlmodel_distribution->refresh();
 }
 
 void MainWindow::on_tabWidget_currentChanged(int index)
@@ -501,7 +496,8 @@ void MainWindow::set_design_window()
     sinstodistrib_preview->setHeaderData(1, Qt::Horizontal, QObject::tr("Семестр"));
 
     ui->tableView_7->setColumnWidth(0,0);
-    ui->tableView_7->setColumnWidth(1,250);
+    ui->tableView_7->setColumnWidth(1,230);
+    ui->tableView_7->setColumnWidth(2,70);
 
     i=1;
     sinstodistrib_detail->setHeaderData(i++, Qt::Horizontal, QObject::tr("Предмет"));
@@ -532,8 +528,30 @@ void MainWindow::set_design_window()
 
     //    sqlmodel_distribution
     ui->tableView_8->setColumnWidth(0,0);
-    ui->tableView_8->setColumnWidth(1,250);
-    ui->tableView_8->setColumnWidth(2,250);
+    ui->tableView_8->setColumnWidth(1,230);
+    ui->tableView_8->setColumnWidth(2,70);
+    ui->tableView_8->setColumnWidth(3,230);
+
+    i=0;
+    sqlmodel_distribution->setHeaderData(++i, Qt::Horizontal, QObject::tr("Предмет"));
+    sqlmodel_distribution->setHeaderData(++i, Qt::Horizontal, QObject::tr("Семестр"));
+    sqlmodel_distribution->setHeaderData(++i, Qt::Horizontal, QObject::tr("ФИО"));
+    sqlmodel_distribution->setHeaderData(++i, Qt::Horizontal, QObject::tr("Лекции"));
+    sqlmodel_distribution->setHeaderData(++i, Qt::Horizontal, QObject::tr("Лаборат."));
+    sqlmodel_distribution->setHeaderData(++i, Qt::Horizontal, QObject::tr("Практич."));
+    sqlmodel_distribution->setHeaderData(++i, Qt::Horizontal, QObject::tr("Индивид."));
+    sqlmodel_distribution->setHeaderData(++i, Qt::Horizontal, QObject::tr("Контр. раб"));
+    sqlmodel_distribution->setHeaderData(++i, Qt::Horizontal, QObject::tr("Консульт."));
+    sqlmodel_distribution->setHeaderData(++i, Qt::Horizontal, QObject::tr("Зачеты"));
+    sqlmodel_distribution->setHeaderData(++i, Qt::Horizontal, QObject::tr("Экзамены"));
+    sqlmodel_distribution->setHeaderData(++i, Qt::Horizontal, QObject::tr("Курс. раб"));
+    sqlmodel_distribution->setHeaderData(++i, Qt::Horizontal, QObject::tr("Дипл. раб"));
+    sqlmodel_distribution->setHeaderData(++i, Qt::Horizontal, QObject::tr("Практика"));
+    sqlmodel_distribution->setHeaderData(++i, Qt::Horizontal, QObject::tr("ГАК"));
+    sqlmodel_distribution->setHeaderData(++i, Qt::Horizontal, QObject::tr("Прочее1"));
+    sqlmodel_distribution->setHeaderData(++i, Qt::Horizontal, QObject::tr("Прочее2"));
+    sqlmodel_distribution->setHeaderData(++i, Qt::Horizontal, QObject::tr("Прочее3"));
+
 }
 
 void MainWindow::on_pushButton_4_clicked()

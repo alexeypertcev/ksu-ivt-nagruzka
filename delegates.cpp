@@ -319,9 +319,9 @@ void FioDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
 {
 
     SaveIdComboBox *comboBox = static_cast<SaveIdComboBox*>(editor);
-    QString value = comboBox->get_id();
-
-    model->setData(index, value, Qt::EditRole);
+    if (comboBox->currentIndex() != -1){
+        model->setData(index, comboBox->get_id(), Qt::EditRole);
+    }
 }
 
 void FioDelegate::updateEditorGeometry(QWidget *editor,

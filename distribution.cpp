@@ -17,7 +17,7 @@ Qt::ItemFlags DistributionSqlModel::flags(
         const QModelIndex &index) const
 {
     Qt::ItemFlags flags = QSqlQueryModel::flags(index);
-    if (index.column() > 1 && index.column() < 18 )
+    if (index.column() > 2 && index.column() < 18 )
     {
         flags |= Qt::ItemIsEditable;
     }
@@ -36,7 +36,6 @@ void DistributionSqlModel::check_entry()
     query.exec(s);
 
     if(!query.next()){
-//        qDebug() << "insert in distrib";
         QString id,lection_hr,labs_hr,practice_hr,individ_hr,kontr_rab_hr,consultation_hr,
                 offset_hr,examen_hr,coursework_hr,diplomwork_hr,praktika_hr,gak_hr,
                 other1,other2,other3;
@@ -96,6 +95,41 @@ void DistributionSqlModel::check_entry()
     }
 }
 
+bool DistributionSqlModel::add()
+{
+QString s;
+QSqlQuery query;
+    s =    "insert into distribution values("
+           "NULL, "                             // "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+           "0, "+                               // "teachers_id INTEGER, "
+            subjects_in_semmestre_id + ", "     // "subjects_in_semmester_id INTEGER NOT NULL, "
+            "0, "                  // "lection_hr INTEGER NOT NULL, "
+            "0, "                  // "labs_hr INTEGER NOT NULL, "
+            "0, "                  // "practice_hr INTEGER NOT NULL, "
+            "0, "                  // "individ_hr REAL NOT NULL, "
+            "0, "                  // "kontr_rab_hr REAL NOT NULL, "
+            "0, "                  // "consultation_hr REAL NOT NULL, "
+            "0, "                  // "offset_hr REAL NOT NULL, "
+            "0, "                  // "examen_hr REAL NOT NULL, "
+            "0, "                  // "coursework_hr REAL NOT NULL, "
+            "0, "                  // "diplomwork_hr REAL NOT NULL, "
+            "0, "                  // "praktika_hr REAL NOT NULL, "
+            "0, "                  // "gak_hr REAL NOT NULL, "
+            "0, "                  // "other1 REAL NOT NULL, "
+            "0, "                  // "other2 REAL NOT NULL, "
+            "0 "                   // "other3 REAL NOT NULL, "
+            ");";
+
+    return query.exec(s);
+}
+
+bool DistributionSqlModel::del(QString id)
+{
+    QString s = "DELETE FROM distribution WHERE id = '" + id + "';";
+    QSqlQuery query;
+
+    return query.exec(s);
+}
 
 void DistributionSqlModel::refresh()
 {
@@ -111,6 +145,7 @@ void DistributionSqlModel::refresh()
         this->setQuery("SELECT "
                    "distribution.id, "
                    "curriculum.subject_name, "
+                   "curriculum.semmester, "
                    "teachers.f || ' ' || teachers.i || ' ' || teachers.o AS 'FIO', "
                    "distribution.lection_hr, "
                    "distribution.labs_hr, "
@@ -138,36 +173,70 @@ void DistributionSqlModel::refresh()
 
 bool DistributionSqlModel::setData(const QModelIndex &index, const QVariant &value, int /* role */)
 {
-    if (index.column() < 1 || index.column() > 5)
+    if (index.column() < 3 || index.column() > 18)
         return false;
 
     QModelIndex primaryKeyIndex = QSqlQueryModel::index(index.row(), 0);
     QString field = ";";
     switch (index.column()){
-        case 1:
-            field = "f";
-            break;
-        case 2:
-            field = "i";
-            break;
+
         case 3:
-            field = "o";
+            field = "teachers_id";
             break;
         case 4:
-            field = "status_name";
+            field = "lection_hr";
             break;
         case 5:
-            field = "rate";
+            field = "labs_hr";
+            break;
+        case 6:
+            field = "practice_hr";
+            break;
+        case 7:
+            field = "individ_hr";
+            break;
+        case 8:
+            field = "kontr_rab_hr";
+            break;
+        case 9:
+            field = "consultation_hr";
+            break;
+        case 10:
+            field = "offset_hr";
+            break;
+        case 11:
+            field = "examen_hr";
+            break;
+        case 12:
+            field = "coursework_hr";
+            break;
+        case 13:
+            field = "diplomwork_hr";
+            break;
+        case 14:
+            field = "praktika_hr";
+            break;
+        case 15:
+            field = "gak_hr";
+            break;
+        case 16:
+            field = "other1";
+            break;
+        case 17:
+            field = "other2";
+            break;
+        case 18:
+            field = "other3";
             break;
         }
 
-    QString s = "update teachers set "+ field +" = '"+ value.toString() +"' where id = "+ data(primaryKeyIndex).toString();
+    QString s = "update distribution set "+ field +" = "+ value.toString() +" where id = "+ data(primaryKeyIndex).toString();
     qDebug() << s;
 
     QSqlQuery query;
-//    if (!query.exec(s)){
-//        return false;
-//    }
+    if (!query.exec(s)){
+        return false;
+    }
     this->refresh();
     return true;
 }

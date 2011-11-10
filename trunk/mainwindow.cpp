@@ -237,7 +237,12 @@ void MainWindow::on_action_5_activated()
     settings->exec();
 }
 
-void MainWindow::on_pushButton_clicked(){}
+void MainWindow::on_pushButton_clicked(){
+//refresh
+
+//    ui->tableView_2->
+
+}
 
 void MainWindow::on_pushButton_add_student_clicked()
 {

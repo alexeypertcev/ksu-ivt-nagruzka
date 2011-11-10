@@ -15,9 +15,12 @@ public:
     void refresh();
     bool add();
     bool del(QString id);
+    int rowCount (const QModelIndex & parent) const;
+    QVariant data(const QModelIndex &index, int role) const;
+    int rowCountDB();
 private:
     QString subjects_in_semmestre_id;
-
+    int rowsCountDB;
 };
 
 class Sins_to_distrib_preview_SqlModel : public QSqlQueryModel

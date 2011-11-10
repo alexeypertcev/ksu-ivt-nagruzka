@@ -17,7 +17,8 @@ Qt::ItemFlags DistributionSqlModel::flags(
         const QModelIndex &index) const
 {
     Qt::ItemFlags flags = QSqlQueryModel::flags(index);
-    if (index.column() > 2 && index.column() < 18 )
+
+    if (index.column() > 2 && index.column() < 18 && index.row() < rowsCountDB)
     {
         flags |= Qt::ItemIsEditable;
     }
@@ -133,6 +134,8 @@ bool DistributionSqlModel::del(QString id)
 
 void DistributionSqlModel::refresh()
 {
+    rowsCountDB = rowCountDB();
+
     QSqlQuery query;
     query.exec("SELECT teachers_id FROM distribution WHERE distribution.subjects_in_semmester_id = " + subjects_in_semmestre_id + ";");
     query.next();
@@ -141,7 +144,7 @@ void DistributionSqlModel::refresh()
         // убрать ветку
 
     }else{
-        // time 0.02
+        //
         this->setQuery("SELECT "
                    "distribution.id, "
                    "curriculum.subject_name, "
@@ -167,8 +170,51 @@ void DistributionSqlModel::refresh()
                    "distribution.teachers_id = teachers.id AND "
                    "distribution.subjects_in_semmester_id = subjects_in_semmester.id AND "
                    "subjects_in_semmester.curriculum_id = curriculum.id AND "
-                   "distribution.subjects_in_semmester_id = " + subjects_in_semmestre_id + ";");
+                   "distribution.subjects_in_semmester_id = " + subjects_in_semmestre_id + "; ");
+        /*
+                   "UNION "
+                   "SELECT 999999 , ' ', ' ', ' ', 30, 40, 50, 60, 70, 80, 10, 20, 30, 40, 50, 60, 70, 80, 90;"
+                   ); // решить проблему с id чтобы не повторялся
+                   */
     }
+}
+
+int DistributionSqlModel::rowCount (const QModelIndex & parent) const
+{
+    if (parent.isValid()) return 0;
+    return QSqlQueryModel::rowCount(parent) + 1;
+}
+
+QVariant DistributionSqlModel::data(const QModelIndex &index, int role) const
+{
+    QVariant value = QSqlQueryModel::data(index, role);
+
+    switch (role)
+    {
+    case Qt::DisplayRole:
+        if (index.row() == rowsCountDB)
+        {
+            if (index.column() == 3){
+                return "Неиспользованные часы: ";
+            }
+        }
+        break;
+    case Qt::BackgroundColorRole:
+        {
+            if (index.row() == rowsCountDB) return qVariantFromValue(QColor(224, 255, 193));
+            else return value;
+        }
+    case Qt::FontRole:
+        if (index.row() == rowsCountDB)
+        {
+            QFont fnt = QFont(qvariant_cast<QFont>(value));
+            fnt.setBold(true);
+            return qVariantFromValue(fnt);
+        }
+        else return value;
+        break;
+    }
+    return value;
 }
 
 bool DistributionSqlModel::setData(const QModelIndex &index, const QVariant &value, int /* role */)
@@ -230,7 +276,7 @@ bool DistributionSqlModel::setData(const QModelIndex &index, const QVariant &val
             break;
         }
 
-    QString s = "update distribution set "+ field +" = "+ value.toString() +" where id = "+ data(primaryKeyIndex).toString();
+    QString s = "update distribution set "+ field +" = "+ value.toString() +" where id = "+ data(primaryKeyIndex, Qt::DisplayRole).toString();
     qDebug() << s;
 
     QSqlQuery query;
@@ -239,6 +285,14 @@ bool DistributionSqlModel::setData(const QModelIndex &index, const QVariant &val
     }
     this->refresh();
     return true;
+}
+
+int DistributionSqlModel::rowCountDB(){
+    QSqlQuery query;
+    QString s = "SELECT COUNT(*) FROM distribution WHERE distribution.subjects_in_semmester_id = " + subjects_in_semmestre_id + ";";
+    query.exec(s);
+    query.next();
+    return query.value(0).toInt();
 }
 
 //********************************************************************************

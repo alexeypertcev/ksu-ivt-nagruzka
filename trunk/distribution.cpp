@@ -18,7 +18,7 @@ Qt::ItemFlags DistributionSqlModel::flags(
 {
     Qt::ItemFlags flags = QSqlQueryModel::flags(index);
 
-    if (index.column() > 2 && index.column() < 18 && index.row() < rowsCountDB)
+    if (index.column() > 2 && index.column() < 19 && index.row() < rowsCountDB)
     {
         flags |= Qt::ItemIsEditable;
     }
@@ -135,16 +135,36 @@ bool DistributionSqlModel::del(QString id)
 void DistributionSqlModel::refresh()
 {
     rowsCountDB = rowCountDB();
-
+    QString s;
     QSqlQuery query;
+    s = "SELECT id,lection_hr,labs_hr,practice_hr,individ_hr,kontr_rab_hr,consultation_hr, "
+        " offset_hr,examen_hr,coursework_hr,diplomwork_hr,praktika_hr,gak_hr, "
+        " other1,other2,other3 FROM subjects_in_semmester WHERE subjects_in_semmester.id = " + subjects_in_semmestre_id + ";";
+    query.exec(s);
+    query.next();
+
+    not_used_lection_hr  = query.value(1).toInt() - sum_field("lection_hr");
+    not_used_labs_hr     = query.value(2).toInt() - sum_field("labs_hr");
+    not_used_practice_hr = query.value(3).toInt() - sum_field("practice_hr");
+    not_used_individ_hr  = query.value(4).toInt() - sum_field("individ_hr");
+    not_used_kontr_rab_hr    = query.value(5).toInt() - sum_field("kontr_rab_hr");
+    not_used_consultation_hr = query.value(6).toInt() - sum_field("consultation_hr");
+    not_used_offset_hr     = query.value(7).toInt() - sum_field("offset_hr");
+    not_used_examen_hr     = query.value(8).toInt() - sum_field("examen_hr");
+    not_used_coursework_hr = query.value(9).toInt() - sum_field("coursework_hr");
+    not_used_diplomwork_hr = query.value(10).toInt() - sum_field("diplomwork_hr");
+    not_used_praktika_hr   = query.value(11).toInt() - sum_field("praktika_hr");
+    not_used_gak_hr = query.value(12).toInt() - sum_field("gak_hr");
+    not_used_other1 = query.value(13).toInt() - sum_field("other1");
+    not_used_other2 = query.value(14).toInt() - sum_field("other2");
+    not_used_other3 = query.value(15).toInt() - sum_field("other3");
+
+
     query.exec("SELECT teachers_id FROM distribution WHERE distribution.subjects_in_semmester_id = " + subjects_in_semmestre_id + ";");
     query.next();
 
-    if (query.isNull(0)){
-        // убрать ветку
+    if (!query.isNull(0)){
 
-    }else{
-        //
         this->setQuery("SELECT "
                    "distribution.id, "
                    "curriculum.subject_name, "
@@ -171,11 +191,6 @@ void DistributionSqlModel::refresh()
                    "distribution.subjects_in_semmester_id = subjects_in_semmester.id AND "
                    "subjects_in_semmester.curriculum_id = curriculum.id AND "
                    "distribution.subjects_in_semmester_id = " + subjects_in_semmestre_id + "; ");
-        /*
-                   "UNION "
-                   "SELECT 999999 , ' ', ' ', ' ', 30, 40, 50, 60, 70, 80, 10, 20, 30, 40, 50, 60, 70, 80, 90;"
-                   ); // решить проблему с id чтобы не повторялся
-                   */
     }
 }
 
@@ -194,8 +209,41 @@ QVariant DistributionSqlModel::data(const QModelIndex &index, int role) const
     case Qt::DisplayRole:
         if (index.row() == rowsCountDB)
         {
-            if (index.column() == 3){
-                return "Неиспользованные часы: ";
+            switch(index.column()){
+            case 3:
+               return "Неиспользованные часы: ";
+            case 4:
+               return QString::number( not_used_lection_hr );
+            case 5:
+               return QString::number( not_used_labs_hr );
+            case 6:
+               return QString::number( not_used_practice_hr );
+            case 7:
+               return QString::number( not_used_individ_hr );
+            case 8:
+               return QString::number( not_used_kontr_rab_hr );
+            case 9:
+               return QString::number( not_used_consultation_hr );
+            case 10:
+               return QString::number( not_used_offset_hr );
+            case 11:
+               return QString::number( not_used_examen_hr );
+            case 12:
+               return QString::number( not_used_coursework_hr );
+            case 13:
+               return QString::number( not_used_diplomwork_hr );
+            case 14:
+               return QString::number( not_used_praktika_hr );
+            case 15:
+               return QString::number( not_used_gak_hr );
+            case 16:
+               return QString::number( not_used_other1 );
+            case 17:
+               return QString::number( not_used_other2 );
+            case 18:
+               return QString::number( not_used_other3 );
+            default:
+               return "";
             }
         }
         break;
@@ -204,14 +252,20 @@ QVariant DistributionSqlModel::data(const QModelIndex &index, int role) const
             if (index.row() == rowsCountDB) return qVariantFromValue(QColor(224, 255, 193));
             else return value;
         }
+        break;
     case Qt::FontRole:
         if (index.row() == rowsCountDB)
         {
             QFont fnt = QFont(qvariant_cast<QFont>(value));
             fnt.setBold(true);
+
             return qVariantFromValue(fnt);
         }
         else return value;
+        break;
+    case Qt::TextColorRole:
+
+
         break;
     }
     return value;
@@ -290,6 +344,14 @@ bool DistributionSqlModel::setData(const QModelIndex &index, const QVariant &val
 int DistributionSqlModel::rowCountDB(){
     QSqlQuery query;
     QString s = "SELECT COUNT(*) FROM distribution WHERE distribution.subjects_in_semmester_id = " + subjects_in_semmestre_id + ";";
+    query.exec(s);
+    query.next();
+    return query.value(0).toInt();
+}
+
+int DistributionSqlModel::sum_field(QString field){
+    QSqlQuery query;
+    QString s = "SELECT SUM(distribution."+ field +") FROM distribution WHERE distribution.subjects_in_semmester_id = " + subjects_in_semmestre_id + ";";
     query.exec(s);
     query.next();
     return query.value(0).toInt();

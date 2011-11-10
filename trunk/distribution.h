@@ -19,8 +19,24 @@ public:
     QVariant data(const QModelIndex &index, int role) const;
     int rowCountDB();
 private:
+    int sum_field(QString field);
     QString subjects_in_semmestre_id;
-    int rowsCountDB;
+    int rowsCountDB,
+    not_used_lection_hr,
+    not_used_labs_hr,
+    not_used_practice_hr,
+    not_used_individ_hr,
+    not_used_kontr_rab_hr,
+    not_used_consultation_hr,
+    not_used_offset_hr,
+    not_used_examen_hr,
+    not_used_coursework_hr,
+    not_used_diplomwork_hr,
+    not_used_praktika_hr,
+    not_used_gak_hr,
+    not_used_other1,
+    not_used_other2,
+    not_used_other3;
 };
 
 class Sins_to_distrib_preview_SqlModel : public QSqlQueryModel

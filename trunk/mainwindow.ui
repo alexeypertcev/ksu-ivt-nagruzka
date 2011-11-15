@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1205</width>
-    <height>646</height>
+    <width>1258</width>
+    <height>696</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,8 +19,8 @@
      <rect>
       <x>10</x>
       <y>0</y>
-      <width>1191</width>
-      <height>591</height>
+      <width>1241</width>
+      <height>651</height>
      </rect>
     </property>
     <property name="currentIndex">
@@ -350,10 +350,10 @@
      <widget class="SaveIdTableView" name="tableView_6">
       <property name="geometry">
        <rect>
-        <x>890</x>
-        <y>130</y>
+        <x>940</x>
+        <y>40</y>
         <width>281</width>
-        <height>421</height>
+        <height>271</height>
        </rect>
       </property>
       <attribute name="verticalHeaderDefaultSectionSize">
@@ -363,8 +363,8 @@
      <widget class="QPushButton" name="pushButton_add_distribution">
       <property name="geometry">
        <rect>
-        <x>670</x>
-        <y>390</y>
+        <x>1010</x>
+        <y>600</y>
         <width>101</width>
         <height>24</height>
        </rect>
@@ -376,8 +376,8 @@
      <widget class="QPushButton" name="pushButton_del_distribution">
       <property name="geometry">
        <rect>
-        <x>780</x>
-        <y>390</y>
+        <x>1120</x>
+        <y>600</y>
         <width>101</width>
         <height>24</height>
        </rect>
@@ -390,9 +390,9 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>50</y>
-        <width>1161</width>
-        <height>71</height>
+        <y>330</y>
+        <width>1211</width>
+        <height>61</height>
        </rect>
       </property>
      </widget>
@@ -400,17 +400,17 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>130</y>
-        <width>871</width>
-        <height>251</height>
+        <y>400</y>
+        <width>1211</width>
+        <height>191</height>
        </rect>
       </property>
      </widget>
      <widget class="QRadioButton" name="radioButton">
       <property name="geometry">
        <rect>
-        <x>700</x>
-        <y>20</y>
+        <x>760</x>
+        <y>10</y>
         <width>82</width>
         <height>17</height>
        </rect>
@@ -422,8 +422,8 @@
      <widget class="QRadioButton" name="radioButton_2">
       <property name="geometry">
        <rect>
-        <x>800</x>
-        <y>20</y>
+        <x>860</x>
+        <y>10</y>
         <width>82</width>
         <height>17</height>
        </rect>
@@ -435,8 +435,8 @@
      <widget class="QRadioButton" name="radioButton_3">
       <property name="geometry">
        <rect>
-        <x>900</x>
-        <y>20</y>
+        <x>960</x>
+        <y>10</y>
         <width>82</width>
         <height>17</height>
        </rect>
@@ -451,8 +451,8 @@
      <widget class="SaveIdComboBox" name="comboBox_3">
       <property name="geometry">
        <rect>
-        <x>1000</x>
-        <y>20</y>
+        <x>1060</x>
+        <y>10</y>
         <width>161</width>
         <height>22</height>
        </rect>
@@ -461,8 +461,8 @@
      <widget class="QPushButton" name="pushButton_8">
       <property name="geometry">
        <rect>
-        <x>20</x>
-        <y>20</y>
+        <x>570</x>
+        <y>10</y>
         <width>151</width>
         <height>24</height>
        </rect>
@@ -475,6 +475,16 @@
       </property>
       <property name="flat">
        <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QTableView" name="tableView_10">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>321</width>
+        <height>301</height>
+       </rect>
       </property>
      </widget>
     </widget>
@@ -539,7 +549,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1205</width>
+     <width>1258</width>
      <height>20</height>
     </rect>
    </property>

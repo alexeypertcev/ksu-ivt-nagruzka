@@ -500,9 +500,16 @@ void MainWindow::set_design_window()
     sinstodistrib_preview->setHeaderData(0, Qt::Horizontal, QObject::tr("Предмет"));
     sinstodistrib_preview->setHeaderData(1, Qt::Horizontal, QObject::tr("Семестр"));
 
-    ui->tableView_7->setColumnWidth(0,0);
-    ui->tableView_7->setColumnWidth(1,230);
-    ui->tableView_7->setColumnWidth(2,70);
+    i=0;
+    ui->tableView_7->setColumnWidth(i++,0);
+    ui->tableView_7->setColumnWidth(i++,174);
+    ui->tableView_7->setColumnWidth(i++,40);
+    ui->tableView_7->setColumnWidth(i++,54);
+    while (i<24){
+        ui->tableView_7->setColumnWidth(i++,44);
+    }
+    ui->tableView_7->setColumnWidth(24,42);
+
 
     i=1;
     sinstodistrib_detail->setHeaderData(i++, Qt::Horizontal, QObject::tr("Предмет"));
@@ -532,10 +539,14 @@ void MainWindow::set_design_window()
 
 
     //    sqlmodel_distribution
-    ui->tableView_8->setColumnWidth(0,0);
-    ui->tableView_8->setColumnWidth(1,230);
-    ui->tableView_8->setColumnWidth(2,70);
-    ui->tableView_8->setColumnWidth(3,230);
+    i=0;
+    ui->tableView_8->setColumnWidth(i++,0);
+    ui->tableView_8->setColumnWidth(i++,230);
+    ui->tableView_8->setColumnWidth(i++,50);
+    ui->tableView_8->setColumnWidth(i++,230);
+    while (i<20){
+        ui->tableView_8->setColumnWidth(i++,45);
+    }
 
     i=0;
     sqlmodel_distribution->setHeaderData(++i, Qt::Horizontal, QObject::tr("Предмет"));

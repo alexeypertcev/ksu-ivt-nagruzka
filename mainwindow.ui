@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1258</width>
-    <height>696</height>
+    <width>1270</width>
+    <height>700</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,14 +17,14 @@
    <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>5</x>
       <y>0</y>
-      <width>1241</width>
-      <height>651</height>
+      <width>1260</width>
+      <height>650</height>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>5</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab_6">
      <attribute name="title">
@@ -33,8 +33,8 @@
      <widget class="QPushButton" name="pushButton_add_subject">
       <property name="geometry">
        <rect>
-        <x>580</x>
-        <y>60</y>
+        <x>570</x>
+        <y>10</y>
         <width>91</width>
         <height>24</height>
        </rect>
@@ -49,7 +49,7 @@
         <x>10</x>
         <y>10</y>
         <width>551</width>
-        <height>541</height>
+        <height>601</height>
        </rect>
       </property>
       <attribute name="horizontalHeaderDefaultSectionSize">
@@ -65,8 +65,8 @@
      <widget class="QPushButton" name="pushButton_del_subject">
       <property name="geometry">
        <rect>
-        <x>580</x>
-        <y>90</y>
+        <x>570</x>
+        <y>40</y>
         <width>91</width>
         <height>24</height>
        </rect>
@@ -78,8 +78,8 @@
      <widget class="QPushButton" name="pushButton_3">
       <property name="geometry">
        <rect>
-        <x>960</x>
-        <y>500</y>
+        <x>1030</x>
+        <y>560</y>
         <width>151</width>
         <height>24</height>
        </rect>
@@ -91,8 +91,8 @@
      <widget class="QLineEdit" name="lineEdit">
       <property name="geometry">
        <rect>
-        <x>690</x>
-        <y>530</y>
+        <x>760</x>
+        <y>590</y>
         <width>421</width>
         <height>23</height>
        </rect>
@@ -101,8 +101,8 @@
      <widget class="QPushButton" name="pushButton_4">
       <property name="geometry">
        <rect>
-        <x>1120</x>
-        <y>530</y>
+        <x>1190</x>
+        <y>590</y>
         <width>51</width>
         <height>24</height>
        </rect>
@@ -119,8 +119,8 @@
      <widget class="QPushButton" name="pushButton_del_teachers">
       <property name="geometry">
        <rect>
-        <x>1080</x>
-        <y>530</y>
+        <x>1150</x>
+        <y>590</y>
         <width>91</width>
         <height>24</height>
        </rect>
@@ -134,8 +134,8 @@
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>1161</width>
-        <height>511</height>
+        <width>1231</width>
+        <height>571</height>
        </rect>
       </property>
       <attribute name="verticalHeaderVisible">
@@ -148,8 +148,8 @@
      <widget class="QPushButton" name="pushButton_add_teachers">
       <property name="geometry">
        <rect>
-        <x>980</x>
-        <y>530</y>
+        <x>1050</x>
+        <y>590</y>
         <width>91</width>
         <height>24</height>
        </rect>
@@ -162,7 +162,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>530</y>
+        <y>590</y>
         <width>75</width>
         <height>23</height>
        </rect>
@@ -181,8 +181,8 @@
        <rect>
         <x>10</x>
         <y>10</y>
-        <width>1161</width>
-        <height>511</height>
+        <width>1231</width>
+        <height>571</height>
        </rect>
       </property>
       <attribute name="verticalHeaderDefaultSectionSize">
@@ -192,8 +192,8 @@
      <widget class="QPushButton" name="pushButton_add_student">
       <property name="geometry">
        <rect>
-        <x>970</x>
-        <y>530</y>
+        <x>1040</x>
+        <y>590</y>
         <width>91</width>
         <height>24</height>
        </rect>
@@ -205,8 +205,8 @@
      <widget class="QPushButton" name="pushButton_del_student">
       <property name="geometry">
        <rect>
-        <x>1080</x>
-        <y>530</y>
+        <x>1150</x>
+        <y>590</y>
         <width>91</width>
         <height>24</height>
        </rect>
@@ -225,8 +225,8 @@
        <rect>
         <x>10</x>
         <y>40</y>
-        <width>1161</width>
-        <height>481</height>
+        <width>1231</width>
+        <height>541</height>
        </rect>
       </property>
       <attribute name="verticalHeaderDefaultSectionSize">
@@ -236,8 +236,8 @@
      <widget class="QPushButton" name="pushButton_del_curriculum">
       <property name="geometry">
        <rect>
-        <x>1080</x>
-        <y>530</y>
+        <x>1150</x>
+        <y>590</y>
         <width>91</width>
         <height>24</height>
        </rect>
@@ -249,8 +249,8 @@
      <widget class="QPushButton" name="pushButton_add_curriculum">
       <property name="geometry">
        <rect>
-        <x>970</x>
-        <y>530</y>
+        <x>1040</x>
+        <y>590</y>
         <width>91</width>
         <height>24</height>
        </rect>
@@ -262,7 +262,7 @@
      <widget class="SaveIdComboBox" name="comboBox">
       <property name="geometry">
        <rect>
-        <x>1030</x>
+        <x>1100</x>
         <y>10</y>
         <width>141</width>
         <height>24</height>
@@ -279,8 +279,8 @@
        <rect>
         <x>10</x>
         <y>40</y>
-        <width>1161</width>
-        <height>481</height>
+        <width>1231</width>
+        <height>541</height>
        </rect>
       </property>
       <attribute name="verticalHeaderDefaultSectionSize">
@@ -293,8 +293,8 @@
       </property>
       <property name="geometry">
        <rect>
-        <x>1080</x>
-        <y>530</y>
+        <x>1150</x>
+        <y>590</y>
         <width>91</width>
         <height>24</height>
        </rect>
@@ -309,8 +309,8 @@
       </property>
       <property name="geometry">
        <rect>
-        <x>970</x>
-        <y>530</y>
+        <x>1040</x>
+        <y>590</y>
         <width>91</width>
         <height>24</height>
        </rect>
@@ -322,7 +322,7 @@
      <widget class="SaveIdComboBox" name="comboBox_2">
       <property name="geometry">
        <rect>
-        <x>1040</x>
+        <x>1110</x>
         <y>10</y>
         <width>131</width>
         <height>24</height>
@@ -332,7 +332,7 @@
      <widget class="QPushButton" name="pushButton_2">
       <property name="geometry">
        <rect>
-        <x>940</x>
+        <x>1010</x>
         <y>10</y>
         <width>91</width>
         <height>24</height>
@@ -350,21 +350,21 @@
      <widget class="SaveIdTableView" name="tableView_6">
       <property name="geometry">
        <rect>
-        <x>940</x>
-        <y>40</y>
-        <width>281</width>
-        <height>271</height>
+        <x>1000</x>
+        <y>110</y>
+        <width>250</width>
+        <height>511</height>
        </rect>
       </property>
       <attribute name="verticalHeaderDefaultSectionSize">
-       <number>25</number>
+       <number>30</number>
       </attribute>
      </widget>
      <widget class="QPushButton" name="pushButton_add_distribution">
       <property name="geometry">
        <rect>
-        <x>1010</x>
-        <y>600</y>
+        <x>780</x>
+        <y>380</y>
         <width>101</width>
         <height>24</height>
        </rect>
@@ -376,8 +376,8 @@
      <widget class="QPushButton" name="pushButton_del_distribution">
       <property name="geometry">
        <rect>
-        <x>1120</x>
-        <y>600</y>
+        <x>890</x>
+        <y>380</y>
         <width>101</width>
         <height>24</height>
        </rect>
@@ -390,8 +390,8 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>330</y>
-        <width>1211</width>
+        <y>40</y>
+        <width>1241</width>
         <height>61</height>
        </rect>
       </property>
@@ -400,9 +400,9 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>400</y>
-        <width>1211</width>
-        <height>191</height>
+        <y>110</y>
+        <width>981</width>
+        <height>161</height>
        </rect>
       </property>
      </widget>
@@ -477,16 +477,6 @@
        <bool>false</bool>
       </property>
      </widget>
-     <widget class="QTableView" name="tableView_10">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>10</y>
-        <width>321</width>
-        <height>301</height>
-       </rect>
-      </property>
-     </widget>
     </widget>
     <widget class="QWidget" name="tab_7">
      <attribute name="title">
@@ -549,7 +539,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1258</width>
+     <width>1270</width>
      <height>20</height>
     </rect>
    </property>

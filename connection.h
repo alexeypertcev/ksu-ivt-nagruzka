@@ -72,6 +72,10 @@ static bool create_all_tables(){
                    "name TEXT NOT NULL, "
                    "hours INTEGER NOT NULL, "
                    "CONSTRAINT name PRIMARY KEY (name))");
+        query.exec("CREATE TABLE staff ( "
+                   "id INTEGER NOT NULL, "
+                   "name TEXT NOT NULL, "
+                   "CONSTRAINT id PRIMARY KEY (id))");
         query.exec("CREATE TABLE teachers ( "
                    "id INTEGER PRIMARY KEY AUTOINCREMENT, "
                    "f TEXT NOT NULL, "
@@ -79,6 +83,9 @@ static bool create_all_tables(){
                    "o TEXT NOT NULL, "
                    "status_name TEXT, "
                    "rate REAL NOT NULL, "
+                   "staff_id INTEGER NOT NULL, "
+                   "CONSTRAINT staff_id FOREIGN KEY (staff_id) "
+                   "  REFERENCES staff (id), "
                    "CONSTRAINT status_name FOREIGN KEY (status_name) "
                    "  REFERENCES status (name)) ");
         query.exec("CREATE TABLE curriculum ( "
@@ -177,7 +184,8 @@ static bool insert_main_data()
         query.exec("insert into status values('ассистент', 830)");
         query.exec("insert into status values('декан', 500)");
         query.exec("insert into status values('зав. кафедрой', 700)");
-
+        query.exec("insert into staff values(0, 'штатный')");
+        query.exec("insert into staff values(1, 'нештатный')");
         //from anatoly zhmakin
 
         query.exec("insert into subject values('Информационные системы')");
@@ -251,29 +259,29 @@ static bool insert_main_data()
         query.exec("insert into subject values('Математическое моделирование социальных процессов')");
         query.exec("insert into subject values('Руководство аспирантами')");
 
-        query.exec("insert into teachers values(0, 'выберите..', ' ', ' ', 'выберите..', 1 );");
-        query.exec("insert into teachers values(NULL, 'Жмакин', 'Анатолий', 'Петрович', 'зав. кафедрой', 1.2 );");
-        query.exec("insert into teachers values(NULL, 'Лопин', 'Вячеслав', 'Николаевич', 'профессор', 1.0 );");
-        query.exec("insert into teachers values(NULL, 'Бабкин', 'Евгений', 'Александрович', 'профессор', 1.0 );");
-        query.exec("insert into teachers values(NULL, 'Кудинов', 'Виталий', 'Алексеевич', 'профессор', 0.5 );");
-        query.exec("insert into teachers values(NULL, 'Добрица', 'Вячеслав', 'Порфирьевич', 'профессор', 0.5 );");
-        query.exec("insert into teachers values(NULL, 'Григорьев', 'Сергей', 'Григорьевич', 'профессор', 0.5 );");
-        query.exec("insert into teachers values(NULL, 'Бабкин', 'Геннадий', 'Викторович', 'доцент', 1.0 );");
-        query.exec("insert into teachers values(NULL, 'Прасолова', 'Ангелина', 'Евгеньевна', 'доцент', 1.0 );");
-        query.exec("insert into teachers values(NULL, 'Бородин', 'Сергей', 'Георгиевич', 'доцент', 1.0 );");
-        query.exec("insert into teachers values(NULL, 'Белов', 'Владимир', 'Геннадьевич', 'доцент', 0.5 );");
-        query.exec("insert into teachers values(NULL, 'Белова', 'Татьяна', 'Михайловна', 'доцент', 0.5 );");
-        query.exec("insert into teachers values(NULL, 'Сухотерин', 'Евгений', 'Александрович', 'доцент', 0.5 );");
-        query.exec("insert into teachers values(NULL, 'Фрумкин', 'Александр', 'Михайлович', 'доцент', 0.5 );");
-        query.exec("insert into teachers values(NULL, 'Цуканов', 'Михаил', 'Владимирович', 'доцент', 0.5 );");
-        query.exec("insert into teachers values(NULL, 'Желанов', 'Алексей', 'Леонидович', 'ст. препод.', 1.0 );");
-        query.exec("insert into teachers values(NULL, 'Жуйков', 'Виктор', 'Викторович', 'ст. препод.', 1.0 );");
-        query.exec("insert into teachers values(NULL, 'Конников', 'Павел', 'Владимирович', 'ст. препод.', 0.5 );");
-        query.exec("insert into teachers values(NULL, 'Орлова', 'Марина', 'Сергеевна', 'ст. препод.', 0.3 );");
-        query.exec("insert into teachers values(NULL, 'Бабкина', 'Ольга', 'Митрофановна', 'ст. препод.', 0.4 );");
-        query.exec("insert into teachers values(NULL, 'Ураева', 'Елена', 'Евгеньевна', 'ассистент', 1.0 );");
-        query.exec("insert into teachers values(NULL, 'Абрамов', 'Андрей', 'Викторович', 'ассистент', 0.5 );");
-        query.exec("insert into teachers values(NULL, 'Шумакова', 'Наталья', 'Владимировна', 'ассистент', 0.5 );");
+        query.exec("insert into teachers values(0, 'выберите..', ' ', ' ', 'выберите..', 1 , 0);");
+        query.exec("insert into teachers values(NULL, 'Жмакин', 'Анатолий', 'Петрович', 'зав. кафедрой', 1.2 , 0 );");
+        query.exec("insert into teachers values(NULL, 'Лопин', 'Вячеслав', 'Николаевич', 'профессор', 1.0 , 0 );");
+        query.exec("insert into teachers values(NULL, 'Бабкин', 'Евгений', 'Александрович', 'профессор', 1.0 , 0 );");
+        query.exec("insert into teachers values(NULL, 'Кудинов', 'Виталий', 'Алексеевич', 'профессор', 0.5 , 0 );");
+        query.exec("insert into teachers values(NULL, 'Добрица', 'Вячеслав', 'Порфирьевич', 'профессор', 0.5 , 0 );");
+        query.exec("insert into teachers values(NULL, 'Григорьев', 'Сергей', 'Григорьевич', 'профессор', 0.5 , 0 );");
+        query.exec("insert into teachers values(NULL, 'Бабкин', 'Геннадий', 'Викторович', 'доцент', 1.0 , 0 );");
+        query.exec("insert into teachers values(NULL, 'Прасолова', 'Ангелина', 'Евгеньевна', 'доцент', 1.0 , 0 );");
+        query.exec("insert into teachers values(NULL, 'Бородин', 'Сергей', 'Георгиевич', 'доцент', 1.0 , 0 );");
+        query.exec("insert into teachers values(NULL, 'Белов', 'Владимир', 'Геннадьевич', 'доцент', 0.5 , 0 );");
+        query.exec("insert into teachers values(NULL, 'Белова', 'Татьяна', 'Михайловна', 'доцент', 0.5 , 0 );");
+        query.exec("insert into teachers values(NULL, 'Сухотерин', 'Евгений', 'Александрович', 'доцент', 0.5 , 0 );");
+        query.exec("insert into teachers values(NULL, 'Фрумкин', 'Александр', 'Михайлович', 'доцент', 0.5 , 0 );");
+        query.exec("insert into teachers values(NULL, 'Цуканов', 'Михаил', 'Владимирович', 'доцент', 0.5 , 0 );");
+        query.exec("insert into teachers values(NULL, 'Желанов', 'Алексей', 'Леонидович', 'ст. препод.', 1.0 , 0 );");
+        query.exec("insert into teachers values(NULL, 'Жуйков', 'Виктор', 'Викторович', 'ст. препод.', 1.0 , 0 );");
+        query.exec("insert into teachers values(NULL, 'Конников', 'Павел', 'Владимирович', 'ст. препод.', 0.5 , 0 );");
+        query.exec("insert into teachers values(NULL, 'Орлова', 'Марина', 'Сергеевна', 'ст. препод.', 0.3 , 0 );");
+        query.exec("insert into teachers values(NULL, 'Бабкина', 'Ольга', 'Митрофановна', 'ст. препод.', 0.4 , 0 );");
+        query.exec("insert into teachers values(NULL, 'Ураева', 'Елена', 'Евгеньевна', 'ассистент', 1.0 , 0 );");
+        query.exec("insert into teachers values(NULL, 'Абрамов', 'Андрей', 'Викторович', 'ассистент', 0.5 , 0 );");
+        query.exec("insert into teachers values(NULL, 'Шумакова', 'Наталья', 'Владимировна', 'ассистент', 0.5 , 0 );");
 
         query.exec("insert into students values(NULL, 1, 1, 1, 2, 25 );");
         query.exec("insert into students values(NULL, 1, 2, 1, 2, 22 );");
@@ -361,6 +369,7 @@ static bool drop_all_tables()
         query.exec("DROP TABLE subject");
         query.exec("DROP TABLE status");
         query.exec("DROP TABLE form_training");
+        query.exec("DROP TABLE staff");
     }
     return true;
 }

@@ -14,7 +14,7 @@ Qt::ItemFlags TeachersSqlModel::flags(
         const QModelIndex &index) const
 {
     Qt::ItemFlags flags = QSqlQueryModel::flags(index);
-    if (index.column() > 0 && index.column() < 6 )
+    if (index.column() > 0 && index.column() < 7 )
     {
         flags |= Qt::ItemIsEditable;
     }
@@ -23,13 +23,13 @@ Qt::ItemFlags TeachersSqlModel::flags(
 
 void TeachersSqlModel::refresh()
 {
-    this->setQuery("SELECT id, f, i, o, status_name, rate "
-                   "FROM teachers WHERE id != '0'; ");
+    this->setQuery("SELECT teachers.id, f, i, o, status_name, rate , staff.name "
+                   "FROM teachers, staff WHERE teachers.id != '0' AND teachers.staff_id = staff.id; ");
 }
 
 bool TeachersSqlModel::setData(const QModelIndex &index, const QVariant &value, int /* role */)
 {
-    if (index.column() < 1 || index.column() > 5)
+    if (index.column() < 1 || index.column() > 6)
         return false;
 
     QModelIndex primaryKeyIndex = QSqlQueryModel::index(index.row(), 0);
@@ -49,6 +49,9 @@ bool TeachersSqlModel::setData(const QModelIndex &index, const QVariant &value, 
             break;
         case 5:
             field = "rate";
+            break;
+        case 6:
+            field = "staff_id";
             break;
         }
 

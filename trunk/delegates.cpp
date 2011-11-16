@@ -330,9 +330,56 @@ void FioDelegate::updateEditorGeometry(QWidget *editor,
     editor->setGeometry(option.rect);
 }
 
+//**********************************************************
+//  class  StaffDelegate
+//**********************************************************
 
+StaffDelegate::StaffDelegate(QObject *parent)
+    : QItemDelegate(parent)
+{
+}
 
+QWidget *StaffDelegate::createEditor(QWidget *parent,
+    const QStyleOptionViewItem &/* option */,
+    const QModelIndex &/* index */) const
+{
+    SaveIdComboBox *editor = new SaveIdComboBox(parent);
+    QSqlQueryModel* sqlmodel = new QSqlQueryModel(parent);
+    sqlmodel->setQuery("SELECT name, id "
+                       "FROM staff;");
+    editor->setModel(sqlmodel);
+    return editor;
+}
 
+void StaffDelegate::setEditorData(QWidget *editor,
+                                    const QModelIndex &index) const
+{
+    QString value = index.model()->data(index, Qt::EditRole).toString();
 
+    SaveIdComboBox *saveIdBox = static_cast<SaveIdComboBox*>(editor);
+    int i;
+    for (i = 0; i<saveIdBox->count(); ++i)
+    {
+        if ( saveIdBox->itemText(i) == value ){ break; }
+    }
+
+    saveIdBox->setCurrentIndex(i);
+}
+
+void StaffDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
+                                   const QModelIndex &index) const
+{
+
+    SaveIdComboBox *comboBox = static_cast<SaveIdComboBox*>(editor);
+    QString value = comboBox->get_id();
+
+    model->setData(index, value, Qt::EditRole);
+}
+
+void StaffDelegate::updateEditorGeometry(QWidget *editor,
+    const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
+{
+    editor->setGeometry(option.rect);
+}
 
 

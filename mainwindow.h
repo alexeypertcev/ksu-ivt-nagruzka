@@ -62,6 +62,8 @@ private:
     QSqlQueryModel *select_subjects;
     DistributionSqlModel *sqlmodel_distribution;
 
+    QString version;
+
     void update_subjectlist();
     void update_subject();
     void update_teachers();
@@ -104,6 +106,7 @@ private slots:
     void on_pushButton_5_clicked();
     void on_pushButton_6_clicked();
     void on_pushButton_7_clicked();
+    void on_action_txt_triggered();
 };
 
 #endif // MAINWINDOW_H

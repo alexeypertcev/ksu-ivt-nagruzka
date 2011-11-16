@@ -27,6 +27,7 @@ MainWindow::MainWindow(QString apppath, QWidget *parent) :
 {
     ui->setupUi(this);
 
+    version = "v0.114";
     applicationDirPath = apppath;
     path_db = applicationDirPath + "/nagruzka.db";
 
@@ -720,4 +721,134 @@ void MainWindow::on_pushButton_6_clicked()//упаковать
 void MainWindow::on_pushButton_7_clicked()
 {
 
+}
+
+void MainWindow::on_action_txt_triggered()
+{
+    qDebug() << "backup";
+
+    QFile file(applicationDirPath + "/nagruzka_backup.txt");
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text)){
+
+        QTextStream out(&file);
+        out << "Backup database ksu-ivt-nagruzka " << version << ",  " << QDate::currentDate().toString() << " " << QTime::currentTime().toString() << "\n";
+        QSqlQuery query, query2;
+        QString s;
+        int i;
+
+        query.exec("SELECT name FROM form_training");
+        out << "\n" << "Table name : form_training" << "\n";
+        while(query.next()){
+            out << query.value(0).toString() << "\n";
+        }
+
+        query.exec("SELECT name FROM subject");
+        out << "\n" << "Table name : subject" << "\n";
+        while(query.next()){
+            out << query.value(0).toString() << "\n";
+        }
+
+        query.exec("SELECT id, faculty_name, special_name, form_training_name FROM speciality");
+        out << "\n" << "Table name : speciality" << "\n";
+        while(query.next()){
+            i = 0;
+            s = query.value(i).toString();
+            while (i<3){
+                s += ", " + query.value(++i).toString();
+            }
+
+            out << s << "\n";
+        }
+
+        query.exec("SELECT id, speciality_id, course, num_group, num_undergroup, quantity_course FROM students");
+        out << "\n" << "Table name : students" << "\n";
+        while(query.next()){
+            i = 0;
+            s = query.value(i).toString();
+            while (i<5){
+                s += ", " + query.value(++i).toString();
+            }
+
+            out << s << "\n";
+        }
+
+        query.exec("SELECT name,hours FROM status");
+        out << "\n" << "Table name : status" << "\n";
+        while(query.next()){
+            i = 0;
+            s = query.value(i).toString();
+            while (i<1){
+                s += ", " + query.value(++i).toString();
+            }
+
+            out << s << "\n";
+        }
+
+        query.exec("SELECT id,name FROM staff");
+        out << "\n" << "Table name : staff" << "\n";
+        while(query.next()){
+            i = 0;
+            s = query.value(i).toString();
+            while (i<1){
+                s += ", " + query.value(++i).toString();
+            }
+
+            out << s << "\n";
+        }
+
+        query.exec("SELECT id, f, i, o, status_name, rate, staff_id FROM teachers");
+        out << "\n" << "Table name : teachers" << "\n";
+        while(query.next()){
+            i = 0;
+            s = query.value(i).toString();
+            while (i<6){
+                s += ", " + query.value(++i).toString();
+            }
+
+            out << s << "\n";
+        }
+
+
+        query.exec("SELECT id, speciality_id, subject_name, semmester, lection_hr, labs_hr, practice_hr, controlwork, KCP_hr, is_examen, is_offset, is_coursework FROM curriculum");
+        out << "\n" << "Table name : curriculum" << "\n";
+        while(query.next()){
+            i = 0;
+            s = query.value(i).toString();
+            while (i<11){
+                s += ", " + query.value(++i).toString();
+            }
+
+            out << s << "\n";
+        }
+
+        query.exec("SELECT id, curriculum_id, students_id, lection_hr, labs_hr, practice_hr, individ_hr, kontr_rab_hr, consultation_hr, offset_hr, "
+                   "examen_hr, coursework_hr, diplomwork_hr, praktika_hr, gak_hr, other1, other2, other3 FROM subjects_in_semmester");
+        out << "\n" << "Table name : subjects_in_semmester" << "\n";
+        while(query.next()){
+            i = 0;
+            s = query.value(i).toString();
+            while (i<17){
+                s += ", " + query.value(++i).toString();
+            }
+
+            out << s << "\n";
+        }
+
+        query.exec("SELECT id, teachers_id, subjects_in_semmester_id, lection_hr, labs_hr, practice_hr, individ_hr, kontr_rab_hr, consultation_hr, "
+                   "offset_hr, examen_hr, coursework_hr, diplomwork_hr, praktika_hr, gak_hr, other1, other2, other3 FROM distribution");
+        out << "\n" << "Table name : distribution" << "\n";
+        while(query.next()){
+            i = 0;
+            s = query.value(i).toString();
+            while (i<17){
+                s += ", " + query.value(++i).toString();
+            }
+
+            out << s << "\n";
+        }
+
+        file.close();
+    }
+
+qDebug() << "ok";
 }

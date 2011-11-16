@@ -540,7 +540,7 @@
      <x>0</x>
      <y>0</y>
      <width>1270</width>
-     <height>20</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">
@@ -549,6 +549,7 @@
     </property>
     <addaction name="action_6"/>
     <addaction name="action_7"/>
+    <addaction name="action_txt"/>
    </widget>
    <widget class="QMenu" name="menu_2">
     <property name="title">
@@ -614,6 +615,11 @@
   <action name="action_7">
    <property name="text">
     <string>Удалить</string>
+   </property>
+  </action>
+  <action name="action_txt">
+   <property name="text">
+    <string>экспорт в txt</string>
    </property>
   </action>
  </widget>

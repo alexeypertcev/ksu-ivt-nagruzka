@@ -31,9 +31,22 @@ MainWindow::MainWindow(QString apppath, QWidget *parent) :
     applicationDirPath = apppath;
     path_db = applicationDirPath + "/nagruzka.db";
 
+    QSqlQuery query;
+    tablemodel_spec = new QSqlRelationalTableModel(this);
+    sqlmodel_spec = new QSqlQueryModel(this);
+    tablemodel_stat = new QSqlRelationalTableModel(this);
+    tablemodel_subject = new QSqlRelationalTableModel(this);
+    sqlmodel_teachers = new TeachersSqlModel(this);
+    sqlmodel_students = new StudentsSqlModel(this);
+    sqlmodel_curriculum = new CurriculumSqlModel(this);
+    sqlmodel_subinsem = new SubjectinsemesterSqlModel(this);
+    sinstodistrib_preview = new Sins_to_distrib_preview_SqlModel(this);
+    sinstodistrib_detail = new Sins_to_distrib_detail_SqlModel(this);
+    sqlmodel_distribution = new DistributionSqlModel(this);
+
     if (createConnection(path_db)){
 
-        QSqlQuery query;
+
         query.exec("PRAGMA foreign_keys = ON;");
 
         tablemodel_spec = new QSqlRelationalTableModel(this);
@@ -41,7 +54,7 @@ MainWindow::MainWindow(QString apppath, QWidget *parent) :
         tablemodel_spec->setEditStrategy(QSqlTableModel::OnFieldChange);
         tablemodel_spec->select();
 
-        sqlmodel_spec = new QSqlQueryModel(this);
+        //sqlmodel_spec = new QSqlQueryModel(this);
         sqlmodel_spec->setQuery("SELECT special_name || '(' || form_training_name || ')', id "
                                 "FROM speciality ORDER BY id;");
 
@@ -63,7 +76,7 @@ MainWindow::MainWindow(QString apppath, QWidget *parent) :
         ui->tableView->update();
 
         // teachers table
-        sqlmodel_teachers = new TeachersSqlModel(this);
+        //sqlmodel_teachers = new TeachersSqlModel(this);
         sqlmodel_teachers->refresh();
         ui->tableView_2->setModel(sqlmodel_teachers);
 
@@ -76,7 +89,7 @@ MainWindow::MainWindow(QString apppath, QWidget *parent) :
         ui->tableView_2->update();
 
         // students table
-        sqlmodel_students = new StudentsSqlModel(this);
+        //sqlmodel_students = new StudentsSqlModel(this);
         sqlmodel_students->refresh();
         ui->tableView_3->setModel(sqlmodel_students);
 
@@ -90,7 +103,7 @@ MainWindow::MainWindow(QString apppath, QWidget *parent) :
         ui->tableView_3->update();
 
         // curriculum table
-        sqlmodel_curriculum = new CurriculumSqlModel(this);
+        //sqlmodel_curriculum = new CurriculumSqlModel(this);
         update_curriculum();
         ui->tableView_4->setModel(sqlmodel_curriculum);
 
@@ -111,22 +124,22 @@ MainWindow::MainWindow(QString apppath, QWidget *parent) :
         ui->tableView_4->update();
 
         //subjects_in_semmester table
-        sqlmodel_subinsem = new SubjectinsemesterSqlModel(this);
+        //sqlmodel_subinsem = new SubjectinsemesterSqlModel(this);
         update_subinsem();
         ui->tableView_5->setModel(sqlmodel_subinsem);
 
 
         //distribution tables
 
-        sinstodistrib_preview = new Sins_to_distrib_preview_SqlModel(this);
+        //sinstodistrib_preview = new Sins_to_distrib_preview_SqlModel(this);
         update_sins_to_distribution_preview();
         ui->tableView_6->setModel(sinstodistrib_preview);
 
-        sinstodistrib_detail = new Sins_to_distrib_detail_SqlModel(this);
+        //sinstodistrib_detail = new Sins_to_distrib_detail_SqlModel(this);
         update_sins_to_distribution_detail();
         ui->tableView_7->setModel(sinstodistrib_detail);
 
-        sqlmodel_distribution = new DistributionSqlModel(this);
+        //sqlmodel_distribution = new DistributionSqlModel(this);
         update_sqlmodel_distribution();
         ui->tableView_8->setModel(sqlmodel_distribution);
 

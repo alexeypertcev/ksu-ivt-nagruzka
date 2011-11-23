@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>6</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab_6">
      <attribute name="title">
@@ -160,7 +160,7 @@
      </widget>
      <widget class="QPushButton" name="pushButton">
       <property name="enabled">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
       <property name="geometry">
        <rect>
@@ -171,7 +171,7 @@
        </rect>
       </property>
       <property name="text">
-       <string>refresh</string>
+       <string>отмена</string>
       </property>
      </widget>
     </widget>

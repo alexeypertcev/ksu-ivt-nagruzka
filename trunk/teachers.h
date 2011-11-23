@@ -7,7 +7,6 @@
 #include <QSqlQueryModel>
 #include <QItemDelegate>
 
-
 class TeachersSqlModel : public QSqlQueryModel
 {
     Q_OBJECT
@@ -20,6 +19,17 @@ public:
     void refresh();
     bool add();
     bool del(QString id);
+    bool cancel_del();
+    bool save_removed();
+private:
+    QString id;
+    QString f;
+    QString i;
+    QString o;
+    QString status_name;
+    QString rate;
+    QString staff_id;
+    bool bool_save_removed;
 };
 
 #endif // TEACHERS_H

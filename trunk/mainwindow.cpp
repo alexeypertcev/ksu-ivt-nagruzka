@@ -21,6 +21,7 @@
 #include <QMessageBox>
 #include <QStatusBar>
 
+int removeFolder(QDir & dir);
 
 MainWindow::MainWindow(QString apppath, QWidget *parent) :
     QMainWindow(parent),
@@ -227,14 +228,7 @@ void MainWindow::on_pushButton_add_teachers_clicked()
 void MainWindow::on_pushButton_del_teachers_clicked()
 {
     int row = ui->tableView_2->currentIndex().row();
-    QString s = "DELETE FROM teachers WHERE id = '" + sqlmodel_teachers->data( sqlmodel_teachers->index(row,0),
-                                                                                Qt::DisplayRole ).toString() + "';";
-    qDebug() << s;
-
-    QSqlQuery query;
-    if (!query.exec(s)){
-        qDebug() << "error exec";
-    }
+    sqlmodel_teachers->del( sqlmodel_teachers->data( sqlmodel_teachers->index(row,0), Qt::DisplayRole ).toString() );
     sqlmodel_teachers->refresh();
 }
 
@@ -251,10 +245,11 @@ void MainWindow::on_action_5_activated()
 }
 
 void MainWindow::on_pushButton_clicked(){
-//refresh
-
-//    ui->tableView_2->
-
+//отмена удаления преподавателя
+    if (sqlmodel_teachers->save_removed()){
+        sqlmodel_teachers->cancel_del();
+    }
+    sqlmodel_teachers->refresh();
 }
 
 void MainWindow::on_pushButton_add_student_clicked()
@@ -886,5 +881,38 @@ void MainWindow::on_pushButton_9_clicked()
         //пакует немного криво
         compress(ui->lineEdit_2->text(), temp_patch);
 
+        d.setPath(applicationDirPath + "/" + temp_dir);
+        removeFolder(d);
     }
+}
+
+//Функция удаления папки
+int removeFolder(QDir & dir)
+{
+   int res = 0;
+   //Получаем список каталогов
+   QStringList lstDirs  = dir.entryList(QDir::Dirs  |
+                                   QDir::AllDirs |
+                                   QDir::NoDotAndDotDot);
+   //Получаем список файлов
+   QStringList lstFiles = dir.entryList(QDir::Files);
+   //Удаляем файлы
+   foreach (QString entry, lstFiles)
+   {
+      QString entryAbsPath = dir.absolutePath() + "/" + entry;
+      QFile::remove(entryAbsPath);
+   }
+   //Для папок делаем рекурсивный вызов
+   foreach (QString entry, lstDirs)
+   {
+      QString entryAbsPath = dir.absolutePath() + "/" + entry;
+      QDir temp_dir(entryAbsPath);
+      removeFolder(temp_dir);
+   }
+   //Удаляем обрабатываемую папку
+   if (!QDir().rmdir(dir.absolutePath()))
+   {
+      res = 1;
+   }
+   return res;
 }

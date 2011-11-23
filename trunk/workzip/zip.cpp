@@ -1173,7 +1173,7 @@ Zip::ErrorCode Zip::addDirectory(const QString& path, const QString& root, Compr
 			ec = addDirectory(info.absoluteFilePath(), actualRoot, recursionOptions, level);
 		} else {
                         str = actualRoot;
-                        str.replace(0, 5, "");
+                        str.replace(0, 12, "");
                         ec = d->createEntry(info, str, level);
 			filesAdded = true;
 		}

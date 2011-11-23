@@ -23,7 +23,8 @@ SOURCES += main.cpp\
     workzip/unzip.cpp \
     workzip/zipglobal.cpp \
     students.cpp \
-    teachers.cpp
+    teachers.cpp \
+    report.cpp
 
 HEADERS  += mainwindow.h \
     connection.h \

@@ -8,6 +8,14 @@
 TeachersSqlModel::TeachersSqlModel(QObject *parent) :
     QSqlQueryModel(parent)
 {
+    id = "";
+    f = "";
+    i = "";
+    o = "";
+    status_name = "";
+    rate = "";
+    staff_id = "";
+    bool_save_removed = false;
 }
 
 Qt::ItemFlags TeachersSqlModel::flags(
@@ -70,9 +78,9 @@ bool TeachersSqlModel::add()
 {
     QString s = "insert into teachers values(NULL, ' ', ' ', ' ', 'выберете..', '1', 0);";
     qDebug() << s;
-
     QSqlQuery query;
 
+    bool_save_removed = false;
     return query.exec(s);
 }
 
@@ -83,5 +91,31 @@ bool TeachersSqlModel::del(QString id)
 
     QSqlQuery query;
 
+    query.exec("SELECT id, f, i, o, status_name, rate, staff_id FROM teachers WHERE id = '"+ id + "';");
+    query.next();
+   this->id = query.value(0).toString();
+    f = query.value(1).toString();
+    i = query.value(2).toString();
+    o = query.value(3).toString();
+    status_name = query.value(4).toString();
+    rate = query.value(5).toString();
+    staff_id = query.value(6).toString();
+
+    bool_save_removed = true;
     return query.exec(s);
+}
+
+bool TeachersSqlModel::cancel_del()
+{
+    QString s = "insert into teachers values('"+id+"', '"+f+"', '" +i+"', '"+o+"', '"+status_name+"', '"+rate+"', '"+staff_id+"');";
+    qDebug() << s;
+
+    QSqlQuery query;
+    bool_save_removed = false;
+    return query.exec(s);
+}
+
+bool TeachersSqlModel::save_removed()
+{
+    return bool_save_removed;
 }

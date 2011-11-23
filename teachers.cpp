@@ -66,12 +66,10 @@ bool TeachersSqlModel::setData(const QModelIndex &index, const QVariant &value, 
     return true;
 }
 
-bool TeachersSqlModel::add(QString f, QString i, QString o, QString status_name,
-                           QString rate)
+bool TeachersSqlModel::add()
 {
-    QString s = "insert into teachers values(NULL, "+ f +", "+ i +", "+ o +", "+
-                                                      status_name +", "+ rate +");";
-//    qDebug() << s;
+    QString s = "insert into teachers values(NULL, ' ', ' ', ' ', 'выберете..', '1', 0);";
+    qDebug() << s;
 
     QSqlQuery query;
 

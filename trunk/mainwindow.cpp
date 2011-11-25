@@ -622,7 +622,8 @@ void MainWindow::on_pushButton_2_clicked()
     int semmester, course,
     lection_hr, labs_hr,
     practice_hr, is_examen,
-    is_offset, is_coursework,
+//    is_offset,
+            is_coursework,
     controlwork, num_group, num_undergroup, quantity_course;
     QString students_id, squery = "";
     query.exec("DELETE FROM subjects_in_semmester");
@@ -640,7 +641,7 @@ void MainWindow::on_pushButton_2_clicked()
         practice_hr = query.value(6).toInt();
         controlwork = query.value(7).toInt();
         is_examen = query.value(8).toInt();
-        is_offset = query.value(9).toInt();
+//        is_offset = query.value(9).toInt();
         is_coursework = query.value(10).toInt();
         course = (semmester+1)/2;
         query2.exec("SELECT students.id, speciality_id, "

@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += static core gui sql zlib
+QT       += static core gui sql zlib xml
 
 TARGET = nagruzka
 TEMPLATE = app

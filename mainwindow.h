@@ -64,12 +64,14 @@ private:
 
     QString version;
 
+    void load_db();
     void update_subjectlist();
     void update_subject();
     void update_teachers();
     void update_students();
     void update_subject_in_semestre();
     void update_sins_to_distribution_preview();
+
 
 
     QString consultation_get(int lection_hr, QString speciality_id, int num_group, int is_examen);
@@ -108,6 +110,8 @@ private slots:
     void on_pushButton_7_clicked();
     void on_action_txt_triggered();
     void on_pushButton_9_clicked();
+    void on_action_txt_2_triggered();
+    void on_action_6_triggered();
 };
 
 #endif // MAINWINDOW_H

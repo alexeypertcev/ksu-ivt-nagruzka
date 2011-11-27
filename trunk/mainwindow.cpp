@@ -29,11 +29,11 @@ MainWindow::MainWindow(QString apppath, QWidget *parent) :
 {
     ui->setupUi(this);
 
-    version = "v0.114";
+    version = "v0.119";
     applicationDirPath = apppath;
     path_db = applicationDirPath + "/nagruzka.db";
 
-    QSqlQuery query;
+
     tablemodel_spec = new QSqlRelationalTableModel(this);
     sqlmodel_spec = new QSqlQueryModel(this);
     tablemodel_stat = new QSqlRelationalTableModel(this);
@@ -47,128 +47,133 @@ MainWindow::MainWindow(QString apppath, QWidget *parent) :
     sqlmodel_distribution = new DistributionSqlModel(this);
 
     if (createConnection(path_db)){
-
-
-        query.exec("PRAGMA foreign_keys = ON;");
-
-        tablemodel_spec = new QSqlRelationalTableModel(this);
-        tablemodel_spec->setTable("speciality");
-        tablemodel_spec->setEditStrategy(QSqlTableModel::OnFieldChange);
-        tablemodel_spec->select();
-
-        //sqlmodel_spec = new QSqlQueryModel(this);
-        sqlmodel_spec->setQuery("SELECT special_name || '(' || form_training_name || ')', id "
-                                "FROM speciality ORDER BY id;");
-
-        ui->comboBox->setModel(sqlmodel_spec);
-        ui->comboBox_2->setModel(sqlmodel_spec);
-        ui->comboBox_3->setModel(sqlmodel_spec);
-
-        tablemodel_stat = new QSqlRelationalTableModel(this);
-        tablemodel_stat->setTable("status");
-        tablemodel_stat->setEditStrategy(QSqlTableModel::OnFieldChange);
-        tablemodel_stat->select();
-
-        // subject table
-        tablemodel_subject = new QSqlRelationalTableModel(this);
-        tablemodel_subject->setTable("subject");
-        tablemodel_subject->setEditStrategy(QSqlTableModel::OnFieldChange);
-        tablemodel_subject->select();
-        ui->tableView->setModel(tablemodel_subject);
-        ui->tableView->update();
-
-        // teachers table
-        //sqlmodel_teachers = new TeachersSqlModel(this);
-        sqlmodel_teachers->refresh();
-        ui->tableView_2->setModel(sqlmodel_teachers);
-
-        StatusDelegate *status_delegate = new StatusDelegate(this);
-        ui->tableView_2->setItemDelegateForColumn(4, status_delegate);
-
-        StaffDelegate *staff_delegate = new StaffDelegate(this);
-        ui->tableView_2->setItemDelegateForColumn(6, staff_delegate);
-
-        ui->tableView_2->update();
-
-        // students table
-        //sqlmodel_students = new StudentsSqlModel(this);
-        sqlmodel_students->refresh();
-        ui->tableView_3->setModel(sqlmodel_students);
-
-
-        SpecialityDelegate *speciality_delegate = new SpecialityDelegate(this);
-        SpinBoxDelegate *course_delegate = new SpinBoxDelegate(1,6,this);
-
-        ui->tableView_3->setItemDelegateForColumn(1, speciality_delegate);
-        ui->tableView_3->setItemDelegateForColumn(2, course_delegate);
-
-        ui->tableView_3->update();
-
-        // curriculum table
-        //sqlmodel_curriculum = new CurriculumSqlModel(this);
-        update_curriculum();
-        ui->tableView_4->setModel(sqlmodel_curriculum);
-
-        SpecialityDelegate *speciality_delegate1 = new SpecialityDelegate(this);
-        ComboBoxDelegate *subject_delegate = new ComboBoxDelegate("subject",this);
-        SpinBoxDelegate *semester_delegate = new SpinBoxDelegate(1,12,this);
-        SpinBoxDelegate *contrwork_delegate = new SpinBoxDelegate(0,6,this);
-        CheckBoxDelegate *checkBox_delegate = new CheckBoxDelegate(this);
-
-        ui->tableView_4->setItemDelegateForColumn(1, speciality_delegate1);
-        ui->tableView_4->setItemDelegateForColumn(2, subject_delegate);
-        ui->tableView_4->setItemDelegateForColumn(3, semester_delegate);
-        ui->tableView_4->setItemDelegateForColumn(7, contrwork_delegate);
-        ui->tableView_4->setItemDelegateForColumn(9, checkBox_delegate);
-        ui->tableView_4->setItemDelegateForColumn(10, checkBox_delegate);
-        ui->tableView_4->setItemDelegateForColumn(11, checkBox_delegate);
-
-        ui->tableView_4->update();
-
-        //subjects_in_semmester table
-        //sqlmodel_subinsem = new SubjectinsemesterSqlModel(this);
-        update_subinsem();
-        ui->tableView_5->setModel(sqlmodel_subinsem);
-
-
-        //distribution tables
-
-        //sinstodistrib_preview = new Sins_to_distrib_preview_SqlModel(this);
-        update_sins_to_distribution_preview();
-        ui->tableView_6->setModel(sinstodistrib_preview);
-
-        //sinstodistrib_detail = new Sins_to_distrib_detail_SqlModel(this);
-        update_sins_to_distribution_detail();
-        ui->tableView_7->setModel(sinstodistrib_detail);
-
-        //sqlmodel_distribution = new DistributionSqlModel(this);
-        update_sqlmodel_distribution();
-        ui->tableView_8->setModel(sqlmodel_distribution);
-
-        FioDelegate *fio_delegate = new FioDelegate(this);
-        ui->tableView_8->setItemDelegateForColumn(3, fio_delegate);
-        ui->tableView_8->update();
-
-
-
-        ui->lineEdit->setText("/home/perec/Загрузки/ПОиАИС_utf8.txt");
-        settings = new Settings(this, tablemodel_spec, tablemodel_stat);
-        set_design_window();
-
-        QObject::connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(update_curriculum()));
-        QObject::connect(ui->comboBox_2, SIGNAL(currentIndexChanged(int)), this, SLOT(update_subinsem()));
-        QObject::connect(ui->comboBox_3, SIGNAL(currentIndexChanged(int)), this, SLOT(update_distribution()));
-        QObject::connect(ui->tableView_6, SIGNAL(activated(QModelIndex)), this, SLOT(update_sins_to_distribution_detail()));
-        QObject::connect(ui->tableView_6, SIGNAL(activated(QModelIndex)), this, SLOT(update_sqlmodel_distribution()));
-        QObject::connect(ui->radioButton_3, SIGNAL(clicked()), this, SLOT(update_distribution()));
-        QObject::connect(ui->radioButton_2, SIGNAL(clicked()), this, SLOT(update_distribution()));
-        QObject::connect(ui->radioButton, SIGNAL(clicked()), this, SLOT(update_distribution()));
+        load_db();
     }
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::load_db()
+{
+    QSqlQuery query;
+
+    query.exec("PRAGMA foreign_keys = ON;");
+
+    tablemodel_spec = new QSqlRelationalTableModel(this);
+    tablemodel_spec->setTable("speciality");
+    tablemodel_spec->setEditStrategy(QSqlTableModel::OnFieldChange);
+    tablemodel_spec->select();
+
+    //sqlmodel_spec = new QSqlQueryModel(this);
+    sqlmodel_spec->setQuery("SELECT special_name || '(' || form_training_name || ')', id "
+                            "FROM speciality ORDER BY id;");
+
+    ui->comboBox->setModel(sqlmodel_spec);
+    ui->comboBox_2->setModel(sqlmodel_spec);
+    ui->comboBox_3->setModel(sqlmodel_spec);
+
+    tablemodel_stat = new QSqlRelationalTableModel(this);
+    tablemodel_stat->setTable("status");
+    tablemodel_stat->setEditStrategy(QSqlTableModel::OnFieldChange);
+    tablemodel_stat->select();
+
+    // subject table
+    tablemodel_subject = new QSqlRelationalTableModel(this);
+    tablemodel_subject->setTable("subject");
+    tablemodel_subject->setEditStrategy(QSqlTableModel::OnFieldChange);
+    tablemodel_subject->select();
+    ui->tableView->setModel(tablemodel_subject);
+    ui->tableView->update();
+
+    // teachers table
+    //sqlmodel_teachers = new TeachersSqlModel(this);
+    sqlmodel_teachers->refresh();
+    ui->tableView_2->setModel(sqlmodel_teachers);
+
+    StatusDelegate *status_delegate = new StatusDelegate(this);
+    ui->tableView_2->setItemDelegateForColumn(4, status_delegate);
+
+    StaffDelegate *staff_delegate = new StaffDelegate(this);
+    ui->tableView_2->setItemDelegateForColumn(6, staff_delegate);
+
+    ui->tableView_2->update();
+
+    // students table
+    //sqlmodel_students = new StudentsSqlModel(this);
+    sqlmodel_students->refresh();
+    ui->tableView_3->setModel(sqlmodel_students);
+
+
+    SpecialityDelegate *speciality_delegate = new SpecialityDelegate(this);
+    SpinBoxDelegate *course_delegate = new SpinBoxDelegate(1,6,this);
+
+    ui->tableView_3->setItemDelegateForColumn(1, speciality_delegate);
+    ui->tableView_3->setItemDelegateForColumn(2, course_delegate);
+
+    ui->tableView_3->update();
+
+    // curriculum table
+    // sqlmodel_curriculum = new CurriculumSqlModel(this);
+    update_curriculum();
+    ui->tableView_4->setModel(sqlmodel_curriculum);
+
+    SpecialityDelegate *speciality_delegate1 = new SpecialityDelegate(this);
+    ComboBoxDelegate *subject_delegate = new ComboBoxDelegate("subject",this);
+    SpinBoxDelegate *semester_delegate = new SpinBoxDelegate(1,12,this);
+    SpinBoxDelegate *contrwork_delegate = new SpinBoxDelegate(0,6,this);
+    CheckBoxDelegate *checkBox_delegate = new CheckBoxDelegate(this);
+
+    ui->tableView_4->setItemDelegateForColumn(1, speciality_delegate1);
+    ui->tableView_4->setItemDelegateForColumn(2, subject_delegate);
+    ui->tableView_4->setItemDelegateForColumn(3, semester_delegate);
+    ui->tableView_4->setItemDelegateForColumn(7, contrwork_delegate);
+    ui->tableView_4->setItemDelegateForColumn(9, checkBox_delegate);
+    ui->tableView_4->setItemDelegateForColumn(10, checkBox_delegate);
+    ui->tableView_4->setItemDelegateForColumn(11, checkBox_delegate);
+
+    ui->tableView_4->update();
+
+    // subjects_in_semmester table
+    // sqlmodel_subinsem = new SubjectinsemesterSqlModel(this);
+    update_subinsem();
+    ui->tableView_5->setModel(sqlmodel_subinsem);
+
+
+    // distribution tables
+
+    // sinstodistrib_preview = new Sins_to_distrib_preview_SqlModel(this);
+    update_sins_to_distribution_preview();
+    ui->tableView_6->setModel(sinstodistrib_preview);
+
+    // sinstodistrib_detail = new Sins_to_distrib_detail_SqlModel(this);
+    update_sins_to_distribution_detail();
+    ui->tableView_7->setModel(sinstodistrib_detail);
+
+    // sqlmodel_distribution = new DistributionSqlModel(this);
+    update_sqlmodel_distribution();
+    ui->tableView_8->setModel(sqlmodel_distribution);
+
+    FioDelegate *fio_delegate = new FioDelegate(this);
+    ui->tableView_8->setItemDelegateForColumn(3, fio_delegate);
+    ui->tableView_8->update();
+
+
+
+    ui->lineEdit->setText("/home/perec/Загрузки/ПОиАИС_utf8.txt");
+    settings = new Settings(this, tablemodel_spec, tablemodel_stat);
+    set_design_window();
+
+    QObject::connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(update_curriculum()));
+    QObject::connect(ui->comboBox_2, SIGNAL(currentIndexChanged(int)), this, SLOT(update_subinsem()));
+    QObject::connect(ui->comboBox_3, SIGNAL(currentIndexChanged(int)), this, SLOT(update_distribution()));
+    QObject::connect(ui->tableView_6, SIGNAL(activated(QModelIndex)), this, SLOT(update_sins_to_distribution_detail()));
+    QObject::connect(ui->tableView_6, SIGNAL(activated(QModelIndex)), this, SLOT(update_sqlmodel_distribution()));
+    QObject::connect(ui->radioButton_3, SIGNAL(clicked()), this, SLOT(update_distribution()));
+    QObject::connect(ui->radioButton_2, SIGNAL(clicked()), this, SLOT(update_distribution()));
+    QObject::connect(ui->radioButton, SIGNAL(clicked()), this, SLOT(update_distribution()));
 }
 
 void MainWindow::set_applicationDirPath(QString app_path){
@@ -245,7 +250,7 @@ void MainWindow::on_action_5_activated()
 }
 
 void MainWindow::on_pushButton_clicked(){
-//отмена удаления преподавателя
+// отмена удаления преподавателя
     if (sqlmodel_teachers->save_removed()){
         sqlmodel_teachers->cancel_del();
     }
@@ -552,7 +557,7 @@ void MainWindow::set_design_window()
     sinstodistrib_detail->setHeaderData(i++, Qt::Horizontal, QObject::tr("Итого"));
 
 
-    //    sqlmodel_distribution
+    // sqlmodel_distribution
     i=0;
     ui->tableView_8->setColumnWidth(i++,0);
     ui->tableView_8->setColumnWidth(i++,180);
@@ -622,7 +627,7 @@ void MainWindow::on_pushButton_2_clicked()
     int semmester, course,
     lection_hr, labs_hr,
     practice_hr, is_examen,
-//    is_offset,
+    // is_offset,
             is_coursework,
     controlwork, num_group, num_undergroup, quantity_course;
     QString students_id, squery = "";
@@ -916,4 +921,42 @@ int removeFolder(QDir & dir)
       res = 1;
    }
    return res;
+}
+
+void MainWindow::on_action_txt_2_triggered()
+{
+    QFile file(applicationDirPath + "/nagruzka_backup_zhmakin.txt");
+    if (!file.open(QFile::ReadOnly))
+        return;
+
+    create_all_tables();
+    insert_main_data();
+
+    std::cout << std::endl;
+//    QRegExp rx ("#include (<|\").*\\..*(>|\").*");
+    QRegExp rx("#.*");
+    QByteArray line;
+    QString string;
+    QSqlQuery query;
+    query.exec("PRAGMA foreign_keys = ON;");
+
+
+    while (!file.atEnd()) {
+        line = file.readLine();
+        string = line;
+        string = string.simplified();
+        if (!string.contains(rx)){
+//            qDebug() << string;
+            query.exec("insert into " + string);
+
+        }
+    }
+
+    file.close();
+    load_db();
+}
+
+void MainWindow::on_action_6_triggered()
+{
+
 }

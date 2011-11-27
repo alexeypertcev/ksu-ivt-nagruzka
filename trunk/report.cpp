@@ -19,15 +19,15 @@ bool xml_work(QString path){/*
     iFile.open(QFile::ReadOnly);
     opt.setContent(&iFile);
 
-    QDomElement docElement = opt.documentElement(); // получаю корень
+    QDomElement domElement = opt.documentElement(); // получаю корень
     QDomNode node;
 
-            node = docElement.firstChild(); /*для тренировки пытаюсь хотябы какой-нибудь элемент   изменить, т.е. первый */
-            qDebug() << node.toElement().text(); // элемент правильно извлекается
+            node = domElement.firstChild(); /*для тренировки пытаюсь хотябы какой-нибудь элемент   изменить, т.е. первый */
+//            qDebug() << node.toElement().text(); // элемент правильно извлекается
 
             node.childNodes().item(0).setNodeValue( "wefe" ); // такая вот интересная конструкция !
             //node.toElement().setNodeValue("wefe");                   // но здесь
-            qDebug() << node.toElement().text();   // он не устанавливается !!!
+//            qDebug() << node.toElement().text();   // он не устанавливается !!!
 
      iFile.close();
 

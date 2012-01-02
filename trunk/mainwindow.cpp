@@ -512,8 +512,8 @@ void MainWindow::set_design_window()
     sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Прочее3"));
     sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Итого"));
 
-    ui->tableView_6->setColumnWidth(0,178);
-    ui->tableView_6->setColumnWidth(1,33);
+    ui->tableView_6->setColumnWidth(0,173);
+    ui->tableView_6->setColumnWidth(1,32);
     ui->tableView_6->setColumnWidth(2,0);  // id
 
     sinstodistrib_preview->setHeaderData(0, Qt::Horizontal, QObject::tr("Предмет"));
@@ -521,11 +521,11 @@ void MainWindow::set_design_window()
 
     i=0;
     ui->tableView_7->setColumnWidth(i++,0);
-    ui->tableView_7->setColumnWidth(i++,213);
-    ui->tableView_7->setColumnWidth(i++,35);
-    ui->tableView_7->setColumnWidth(i++,54);
+    ui->tableView_7->setColumnWidth(i++,220);
+    ui->tableView_7->setColumnWidth(i++,34);
+    ui->tableView_7->setColumnWidth(i++,65);
     while (i<24){
-        ui->tableView_7->setColumnWidth(i++,44);
+        ui->tableView_7->setColumnWidth(i++,43);
     }
     ui->tableView_7->setColumnWidth(24,42);
 

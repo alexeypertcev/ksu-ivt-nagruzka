@@ -63,7 +63,7 @@ private:
     DistributionSqlModel *sqlmodel_distribution;
 
     QString version;
-    QString report_path, report_format;
+    QString report_path, report_format, report_name;
 
     void load_db();
     void update_subjectlist();

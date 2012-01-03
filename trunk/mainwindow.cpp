@@ -13,7 +13,7 @@
 #include "teachers.h"
 #include "subjectinsemester_sqlmodel.h"
 #include "distribution.h"
-#include "workzip.cpp"
+
 #include "report.cpp"
 
 #include <QtGui>
@@ -21,7 +21,6 @@
 #include <QMessageBox>
 #include <QStatusBar>
 
-int removeFolder(QDir & dir);
 
 MainWindow::MainWindow(QString apppath, QWidget *parent) :
     QMainWindow(parent),
@@ -32,7 +31,8 @@ MainWindow::MainWindow(QString apppath, QWidget *parent) :
     version = "v0.119";
     applicationDirPath = apppath;
     path_db = applicationDirPath + "/nagruzka.db";
-
+    report_path = applicationDirPath;
+    report_format = "xls";
 
     tablemodel_spec = new QSqlRelationalTableModel(this);
     sqlmodel_spec = new QSqlQueryModel(this);
@@ -159,6 +159,9 @@ void MainWindow::load_db()
     FioDelegate *fio_delegate = new FioDelegate(this);
     ui->tableView_8->setItemDelegateForColumn(3, fio_delegate);
     ui->tableView_8->update();
+
+
+
 
 
 
@@ -854,75 +857,6 @@ void MainWindow::on_action_txt_triggered()
 qDebug() << "ok";
 }
 
-void MainWindow::on_pushButton_5_clicked()//распаковать
-{
-//    decompress("/home/perec/example_ods.ods","/home/perec/temp");
-}
-
-void MainWindow::on_pushButton_6_clicked()//упаковать
-{
-//    compress("/home/perec/example_ods2.ods", "/home/perec/temp");
-}
-
-void MainWindow::on_pushButton_7_clicked()
-{
-
-}
-
-void MainWindow::on_pushButton_9_clicked()
-{
-    QString temp_dir = "temp_002311";
-    QString temp_patch = applicationDirPath + "/" + temp_dir;
-    QDir d(temp_patch);
-
-    if ( !d.exists()){
-        qDebug() << "mkdir";
-        d.setPath(applicationDirPath);
-        d.mkdir(temp_dir);
-
-        decompress(applicationDirPath + "/template.ods", temp_patch);
-
-        xml_work(temp_patch + "/content.xml");
-
-        //пакует немного криво
-        compress(ui->lineEdit_2->text(), temp_patch);
-
-        d.setPath(applicationDirPath + "/" + temp_dir);
-        removeFolder(d);
-    }
-}
-
-//Функция удаления папки
-int removeFolder(QDir & dir)
-{
-   int res = 0;
-   //Получаем список каталогов
-   QStringList lstDirs  = dir.entryList(QDir::Dirs  |
-                                   QDir::AllDirs |
-                                   QDir::NoDotAndDotDot);
-   //Получаем список файлов
-   QStringList lstFiles = dir.entryList(QDir::Files);
-   //Удаляем файлы
-   foreach (QString entry, lstFiles)
-   {
-      QString entryAbsPath = dir.absolutePath() + "/" + entry;
-      QFile::remove(entryAbsPath);
-   }
-   //Для папок делаем рекурсивный вызов
-   foreach (QString entry, lstDirs)
-   {
-      QString entryAbsPath = dir.absolutePath() + "/" + entry;
-      QDir temp_dir(entryAbsPath);
-      removeFolder(temp_dir);
-   }
-   //Удаляем обрабатываемую папку
-   if (!QDir().rmdir(dir.absolutePath()))
-   {
-      res = 1;
-   }
-   return res;
-}
-
 void MainWindow::on_action_txt_2_triggered()
 {
     QFile file(applicationDirPath + "/nagruzka_backup_zhmakin.txt");
@@ -959,4 +893,10 @@ void MainWindow::on_action_txt_2_triggered()
 void MainWindow::on_action_6_triggered()
 {
 
+}
+
+void MainWindow::on_radioButton_7_clicked()
+{
+    //report_format;
+    ui->lineEdit_2->setText(report_path + "/all_teachers." + report_format);
 }

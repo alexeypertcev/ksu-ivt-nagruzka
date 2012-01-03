@@ -1,9 +1,71 @@
 #include <QtXml>
 #include <QtCore/QFile>
+#include "workzip.cpp"
 
-#include <iostream>
-using namespace std;
 bool xml_work(QString path);
+int removeFolder(QDir & dir);
+
+
+
+void create_report_ods(QString applicationDirPath)
+{
+    QString temp_dir = "temp_002311";
+    QString temp_patch = applicationDirPath + "/" + temp_dir;
+    QDir d(temp_patch);
+
+    if ( !d.exists()){
+        qDebug() << "mkdir";
+        d.setPath(applicationDirPath);
+        d.mkdir(temp_dir);
+
+        decompress(applicationDirPath + "/template.ods", temp_patch);
+
+        xml_work(temp_patch + "/content.xml");
+
+        //пакует немного криво
+        compress("path_output_ods_file", temp_patch);
+
+        d.setPath(applicationDirPath + "/" + temp_dir);
+        removeFolder(d);
+    }
+}
+
+//Функция удаления папки
+int removeFolder(QDir & dir)
+{
+   int res = 0;
+   //Получаем список каталогов
+   QStringList lstDirs  = dir.entryList(QDir::Dirs  |
+                                   QDir::AllDirs |
+                                   QDir::NoDotAndDotDot);
+   //Получаем список файлов
+   QStringList lstFiles = dir.entryList(QDir::Files);
+   //Удаляем файлы
+   foreach (QString entry, lstFiles)
+   {
+      QString entryAbsPath = dir.absolutePath() + "/" + entry;
+      QFile::remove(entryAbsPath);
+   }
+   //Для папок делаем рекурсивный вызов
+   foreach (QString entry, lstDirs)
+   {
+      QString entryAbsPath = dir.absolutePath() + "/" + entry;
+      QDir temp_dir(entryAbsPath);
+      removeFolder(temp_dir);
+   }
+   //Удаляем обрабатываемую папку
+   if (!QDir().rmdir(dir.absolutePath()))
+   {
+      res = 1;
+   }
+   return res;
+}
+
+
+
+
+
+
 
 
 bool xml_work(QString path){

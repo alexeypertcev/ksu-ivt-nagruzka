@@ -63,6 +63,7 @@ private:
     DistributionSqlModel *sqlmodel_distribution;
 
     QString version;
+    QString report_path, report_format;
 
     void load_db();
     void update_subjectlist();
@@ -105,13 +106,11 @@ private slots:
     void on_pushButton_2_clicked();
     void on_pushButton_4_clicked();
     void on_pushButton_3_clicked();
-    void on_pushButton_5_clicked();
-    void on_pushButton_6_clicked();
-    void on_pushButton_7_clicked();
     void on_action_txt_triggered();
-    void on_pushButton_9_clicked();
     void on_action_txt_2_triggered();
     void on_action_6_triggered();
+
+    void on_radioButton_7_clicked();
 };
 
 #endif // MAINWINDOW_H

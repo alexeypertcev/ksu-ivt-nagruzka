@@ -19,6 +19,7 @@ class SubjectinsemesterSqlModel;
 class Sins_to_distrib_preview_SqlModel;
 class Sins_to_distrib_detail_SqlModel;
 class DistributionSqlModel;
+class TeachersReportSqlModel;
 QT_END_NAMESPACE
 
 namespace Ui {
@@ -61,6 +62,7 @@ private:
     Sins_to_distrib_detail_SqlModel* sinstodistrib_detail;
     QSqlQueryModel *select_subjects;
     DistributionSqlModel *sqlmodel_distribution;
+    TeachersReportSqlModel* sqlmodel_teachers_report;
 
     QString version;
     QString report_path, report_format, report_name;
@@ -73,6 +75,7 @@ private:
     void update_subject_in_semestre();
     void update_sins_to_distribution_preview();
 
+    QString translit(QString s);
 
 
     QString consultation_get(int lection_hr, QString speciality_id, int num_group, int is_examen);
@@ -103,14 +106,14 @@ private slots:
     void update_distribution();
     void update_curriculum();
     void update_subinsem();
+    void update_report();
     void on_pushButton_2_clicked();
     void on_pushButton_4_clicked();
     void on_pushButton_3_clicked();
     void on_action_txt_triggered();
     void on_action_txt_2_triggered();
     void on_action_6_triggered();
-
-    void on_radioButton_7_clicked();
+    void on_pushButton_9_clicked();
 };
 
 #endif // MAINWINDOW_H

@@ -381,7 +381,7 @@ Qt::ItemFlags Sins_to_distrib_preview_SqlModel::flags(
 
 void Sins_to_distrib_preview_SqlModel::refresh()
 {
-    this->setQuery("SELECT subject_name, semmester, subjects_in_semmester.id FROM subjects_in_semmester, curriculum "
+    this->setQuery("SELECT subjects_in_semmester.id, subject_name, semmester FROM subjects_in_semmester, curriculum "
                    "WHERE (subjects_in_semmester.curriculum_id = curriculum.id AND "
                    "curriculum.speciality_id = " + speciality_id + ") AND ("
                    + semester + " );");

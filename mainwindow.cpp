@@ -45,6 +45,7 @@ MainWindow::MainWindow(QString apppath, QWidget *parent) :
     sinstodistrib_preview = new Sins_to_distrib_preview_SqlModel(this);
     sinstodistrib_detail = new Sins_to_distrib_detail_SqlModel(this);
     sqlmodel_distribution = new DistributionSqlModel(this);
+    sqlmodel_teachers_report = new TeachersReportSqlModel(this);
 
     if (createConnection(path_db)){
         load_db();
@@ -160,7 +161,10 @@ void MainWindow::load_db()
     ui->tableView_8->setItemDelegateForColumn(3, fio_delegate);
     ui->tableView_8->update();
 
-
+    // report table
+    sqlmodel_teachers_report->refresh();
+    ui->tableView_9->setModel(sqlmodel_teachers_report);
+    ui->tableView_9->update();
 
 
 
@@ -168,6 +172,7 @@ void MainWindow::load_db()
     ui->lineEdit->setText("/home/perec/Загрузки/ПОиАИС_utf8.txt");
     settings = new Settings(this, tablemodel_spec, tablemodel_stat);
     set_design_window();
+    update_report();
 
     QObject::connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(update_curriculum()));
     QObject::connect(ui->comboBox_2, SIGNAL(currentIndexChanged(int)), this, SLOT(update_subinsem()));
@@ -177,6 +182,12 @@ void MainWindow::load_db()
     QObject::connect(ui->radioButton_3, SIGNAL(clicked()), this, SLOT(update_distribution()));
     QObject::connect(ui->radioButton_2, SIGNAL(clicked()), this, SLOT(update_distribution()));
     QObject::connect(ui->radioButton, SIGNAL(clicked()), this, SLOT(update_distribution()));
+    QObject::connect(ui->tableView_9, SIGNAL(activated(QModelIndex)), this, SLOT(update_report()));
+
+    QObject::connect(ui->radioButton_4, SIGNAL(clicked()), this, SLOT(update_report()));
+    QObject::connect(ui->radioButton_5, SIGNAL(clicked()), this, SLOT(update_report()));
+    QObject::connect(ui->radioButton_6, SIGNAL(clicked()), this, SLOT(update_report()));
+    QObject::connect(ui->radioButton_7, SIGNAL(clicked()), this, SLOT(update_report()));
 }
 
 void MainWindow::set_applicationDirPath(QString app_path){
@@ -515,9 +526,9 @@ void MainWindow::set_design_window()
     sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Прочее3"));
     sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Итого"));
 
-    ui->tableView_6->setColumnWidth(0,173);
-    ui->tableView_6->setColumnWidth(1,32);
-    ui->tableView_6->setColumnWidth(2,0);  // id
+    ui->tableView_6->setColumnWidth(0,0);  // id
+    ui->tableView_6->setColumnWidth(1,173);
+    ui->tableView_6->setColumnWidth(2,32);
 
     sinstodistrib_preview->setHeaderData(0, Qt::Horizontal, QObject::tr("Предмет"));
     sinstodistrib_preview->setHeaderData(1, Qt::Horizontal, QObject::tr("Сем."));
@@ -589,6 +600,15 @@ void MainWindow::set_design_window()
     sqlmodel_distribution->setHeaderData(++i, Qt::Horizontal, QObject::tr("Прочее1"));
     sqlmodel_distribution->setHeaderData(++i, Qt::Horizontal, QObject::tr("Прочее2"));
     sqlmodel_distribution->setHeaderData(++i, Qt::Horizontal, QObject::tr("Прочее3"));
+
+
+
+    ui->tableView_9->setColumnWidth(0,0);
+    ui->tableView_9->setColumnWidth(1,300);
+    ui->tableView_9->setColumnWidth(2,100);
+
+    sqlmodel_teachers_report->setHeaderData(1, Qt::Horizontal, QObject::tr("ФИО"));
+    sqlmodel_teachers_report->setHeaderData(2, Qt::Horizontal, QObject::tr("должность"));
 
 }
 
@@ -895,8 +915,68 @@ void MainWindow::on_action_6_triggered()
 
 }
 
-void MainWindow::on_radioButton_7_clicked()
+void MainWindow::update_report()
 {
-    //report_format;
-    ui->lineEdit_2->setText(report_path + "/all_teachers." + report_format);
+    if (!ui->radioButton_7->isChecked()){
+        QSqlQuery query;
+        query.exec("SELECT f FROM teachers WHERE id = " + ui->tableView_9->get_id() + ";");
+        query.next();
+        ui->lineEdit_2->setText(report_path + "/" + translit(query.value(0).toString()) + "." + report_format);
+        //   qDebug() << "get_id: " << ui->tableView_9->get_id() ;
+    }else{
+        //report_format;
+        ui->lineEdit_2->setText(report_path + "/all_teachers." + report_format);
+    }
+}
+
+QString MainWindow::translit(QString s){
+    QString out = "";
+
+    QMap<QString, QString> map;
+    map.insert("а", "a");
+    map.insert("б", "b");
+    map.insert("в", "v");
+    map.insert("г", "g");
+    map.insert("д", "d");
+    map.insert("е", "e");
+    map.insert("ё", "jo");
+    map.insert("ж", "zh");
+    map.insert("з", "z");
+    map.insert("и", "i");
+    map.insert("й", "i");
+    map.insert("к", "k");
+    map.insert("л", "l");
+    map.insert("м", "m");
+    map.insert("н", "n");
+    map.insert("о", "o");
+    map.insert("п", "p");
+    map.insert("р", "r");
+    map.insert("с", "s");
+    map.insert("т", "t");
+    map.insert("у", "u");
+    map.insert("ф", "f");
+    map.insert("х", "h");
+    map.insert("ц", "c");
+    map.insert("ч", "ch");
+    map.insert("ш", "sh");
+    map.insert("щ", "xh");
+    map.insert("ь", "");
+    map.insert("ы", "y");
+    map.insert("ъ", "");
+    map.insert("э", "je");
+    map.insert("ю", "ju");
+    map.insert("я", "ja");
+
+    s = s.toLower();
+
+    for (int i=0; i<s.length(); ++i){
+        out+=map[s.at(i)];
+    }
+
+    return out;
+}
+
+void MainWindow::on_pushButton_9_clicked()
+{
+// create report (QList(teachers.id), path_report+name_report, ods,)
 }

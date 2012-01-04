@@ -119,3 +119,28 @@ bool TeachersSqlModel::save_removed()
 {
     return bool_save_removed;
 }
+
+
+/************************************************************************
+/  TeachersReportSqlModel
+************************************************************************/
+
+TeachersReportSqlModel::TeachersReportSqlModel(QObject *parent) :
+    QSqlQueryModel(parent)
+{
+}
+
+Qt::ItemFlags TeachersReportSqlModel::flags(
+        const QModelIndex &index) const
+{
+    Qt::ItemFlags flags = QSqlQueryModel::flags(index);
+    return flags;
+}
+
+void TeachersReportSqlModel::refresh()
+{
+    this->setQuery("SELECT teachers.id, f || ', ' || i || ', ' || o, status_name "
+                   "FROM teachers WHERE teachers.id != '0'");
+}
+
+

@@ -32,4 +32,20 @@ private:
     bool bool_save_removed;
 };
 
+
+class TeachersReportSqlModel : public QSqlQueryModel
+{
+    Q_OBJECT
+
+public:
+    TeachersReportSqlModel(QObject *parent = 0);
+
+    Qt::ItemFlags flags(const QModelIndex &index) const;
+    void refresh();
+
+private:
+
+};
+
+
 #endif // TEACHERS_H

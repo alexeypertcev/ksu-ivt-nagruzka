@@ -62,7 +62,7 @@ void SaveIdTableView::update_ids()
     if (temp_model != NULL){
         for (int i = 0; i < temp_model->rowCount(); ++i)
         {
-            ids << temp_model->data(temp_model->index(i,2)).toString();
+            ids << temp_model->data(temp_model->index(i,0)).toString();
         }
     } else {
         qDebug() << "temp_model is NULL";

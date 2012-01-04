@@ -1,6 +1,7 @@
 #include <QtXml>
 #include <QtCore/QFile>
 #include "workzip.cpp"
+#include "xlslib_2_3_0/xlslib.h"
 
 bool xml_work(QString path);
 int removeFolder(QDir & dir);

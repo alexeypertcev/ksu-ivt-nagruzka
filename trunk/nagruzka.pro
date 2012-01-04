@@ -58,7 +58,8 @@ SOURCES += main.cpp\
     xlslib_2_3_0/oledoc/binfile.cpp \
     xlslib_2_3_0/oledoc/oledoc.cpp \
     xlslib_2_3_0/oledoc/olefs.cpp \
-    xlslib_2_3_0/oledoc/oleprop.cpp
+    xlslib_2_3_0/oledoc/oleprop.cpp \
+    xlslib_2_3_0/common/overnew.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -80,6 +81,8 @@ HEADERS  += mainwindow.h \
     students.h \
     teachers.h \
     xlslib_2_3_0/xlslib.h \
+    xlslib_2_3_0/common/ac-config.linux32.h \
+    xlslib_2_3_0/common/overnew.h \
     xlslib_2_3_0/common/xlconfig.h \
     xlslib_2_3_0/common/xlsys.h \
     xlslib_2_3_0/common/stringtok.h \
@@ -108,6 +111,7 @@ HEADERS  += mainwindow.h \
     xlslib_2_3_0/xlslib/extformat.h \
     xlslib_2_3_0/xlslib/font.h \
     xlslib_2_3_0/xlslib/format.h \
+    xlslib_2_3_0/xlslib/formtags.h \
     xlslib_2_3_0/xlslib/formula.h \
     xlslib_2_3_0/xlslib/globalrec.h \
     xlslib_2_3_0/xlslib/HPSF.h \
@@ -126,6 +130,7 @@ HEADERS  += mainwindow.h \
     xlslib_2_3_0/xlslib/unit.h \
     xlslib_2_3_0/xlslib/workbook.h \
     xlslib_2_3_0/xlslib/tostr.h
+
 
 FORMS    += mainwindow.ui \
     settings.ui

@@ -191,6 +191,9 @@ void MainWindow::load_db()
     QObject::connect(ui->radioButton_5, SIGNAL(clicked()), this, SLOT(update_report_name()));
     QObject::connect(ui->radioButton_6, SIGNAL(clicked()), this, SLOT(update_report_name()));
     QObject::connect(ui->radioButton_7, SIGNAL(clicked()), this, SLOT(update_report_name()));
+
+    QObject::connect(sqlmodel_distribution, SIGNAL(table_changed()), teachers_list, SLOT(update()));
+
 }
 
 void MainWindow::set_applicationDirPath(QString app_path){

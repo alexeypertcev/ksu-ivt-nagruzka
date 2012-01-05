@@ -36,4 +36,7 @@ private slots:
     void on_pushButton_add_spec_clicked();
 };
 
+
+
+
 #endif // SETTINGS_H

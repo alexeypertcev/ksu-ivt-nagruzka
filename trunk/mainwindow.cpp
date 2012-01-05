@@ -13,8 +13,8 @@
 #include "teachers.h"
 #include "subjectinsemester_sqlmodel.h"
 #include "distribution.h"
-
 #include "report.cpp"
+#include "teachers_list.h"
 
 #include <QtGui>
 #include <QtSql>
@@ -100,6 +100,8 @@ void MainWindow::load_db()
     StaffDelegate *staff_delegate = new StaffDelegate(this);
     ui->tableView_2->setItemDelegateForColumn(6, staff_delegate);
 
+
+
     ui->tableView_2->update();
 
     // students table
@@ -171,6 +173,7 @@ void MainWindow::load_db()
 
     ui->lineEdit->setText("/home/perec/Загрузки/ПОиАИС_utf8.txt");
     settings = new Settings(this, tablemodel_spec, tablemodel_stat);
+    teachers_list = new Teachers_list();
     set_design_window();
     update_report_name();
 
@@ -412,6 +415,9 @@ void MainWindow::update_distribution()
     update_sins_to_distribution_preview();
     update_sins_to_distribution_detail();
     update_sqlmodel_distribution();
+    if (ui->pushButton_8->isChecked()){
+        teachers_list->update();
+    }
 }
 
 
@@ -991,4 +997,18 @@ void MainWindow::on_pushButton_9_clicked()
 
 // create report (QList(teachers.id), path_report+name_report, ods,)
 create_report(teachers_id_list,ui->lineEdit_2->text(),report_format);
+}
+
+
+
+void MainWindow::on_pushButton_8_clicked(bool checked)
+{
+
+    if (checked){
+    //открыть окно список преподователей
+        teachers_list->show();
+        teachers_list->update();
+    } else {
+        teachers_list->close();
+    }
 }

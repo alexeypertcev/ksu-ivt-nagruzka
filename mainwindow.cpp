@@ -172,7 +172,7 @@ void MainWindow::load_db()
     ui->lineEdit->setText("/home/perec/Загрузки/ПОиАИС_utf8.txt");
     settings = new Settings(this, tablemodel_spec, tablemodel_stat);
     set_design_window();
-    update_report();
+    update_report_name();
 
     QObject::connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(update_curriculum()));
     QObject::connect(ui->comboBox_2, SIGNAL(currentIndexChanged(int)), this, SLOT(update_subinsem()));
@@ -182,12 +182,12 @@ void MainWindow::load_db()
     QObject::connect(ui->radioButton_3, SIGNAL(clicked()), this, SLOT(update_distribution()));
     QObject::connect(ui->radioButton_2, SIGNAL(clicked()), this, SLOT(update_distribution()));
     QObject::connect(ui->radioButton, SIGNAL(clicked()), this, SLOT(update_distribution()));
-    QObject::connect(ui->tableView_9, SIGNAL(activated(QModelIndex)), this, SLOT(update_report()));
+    QObject::connect(ui->tableView_9, SIGNAL(activated(QModelIndex)), this, SLOT(update_report_name()));
 
-    QObject::connect(ui->radioButton_4, SIGNAL(clicked()), this, SLOT(update_report()));
-    QObject::connect(ui->radioButton_5, SIGNAL(clicked()), this, SLOT(update_report()));
-    QObject::connect(ui->radioButton_6, SIGNAL(clicked()), this, SLOT(update_report()));
-    QObject::connect(ui->radioButton_7, SIGNAL(clicked()), this, SLOT(update_report()));
+    QObject::connect(ui->radioButton_4, SIGNAL(clicked()), this, SLOT(update_report_name()));
+    QObject::connect(ui->radioButton_5, SIGNAL(clicked()), this, SLOT(update_report_name()));
+    QObject::connect(ui->radioButton_6, SIGNAL(clicked()), this, SLOT(update_report_name()));
+    QObject::connect(ui->radioButton_7, SIGNAL(clicked()), this, SLOT(update_report_name()));
 }
 
 void MainWindow::set_applicationDirPath(QString app_path){
@@ -343,7 +343,9 @@ void MainWindow::on_tabWidget_currentChanged(int index)
         update_distribution();
         break;
     case 6:
-
+        //qDebug() << "update_report()";
+        sqlmodel_teachers_report->refresh();
+        update_report_name();
         break;
     default:
 
@@ -915,9 +917,15 @@ void MainWindow::on_action_6_triggered()
 
 }
 
-void MainWindow::update_report()
+void MainWindow::update_report_name()
 {
-    if (!ui->radioButton_7->isChecked()){
+    if (ui->radioButton_4->isChecked()){
+        report_format = "xls";
+    } else{
+        report_format = "ods";
+    }
+
+    if (ui->radioButton_6->isChecked()){
         QSqlQuery query;
         query.exec("SELECT f FROM teachers WHERE id = " + ui->tableView_9->get_id() + ";");
         query.next();
@@ -956,7 +964,7 @@ QString MainWindow::translit(QString s){
     map.insert("у", "u");
     map.insert("ф", "f");
     map.insert("х", "h");
-    map.insert("ц", "c");
+    map.insert("ц", "tc");
     map.insert("ч", "ch");
     map.insert("ш", "sh");
     map.insert("щ", "xh");
@@ -978,5 +986,9 @@ QString MainWindow::translit(QString s){
 
 void MainWindow::on_pushButton_9_clicked()
 {
+    QStringList teachers_id_list;
+    QString type_report;
+
 // create report (QList(teachers.id), path_report+name_report, ods,)
+create_report(teachers_id_list,ui->lineEdit_2->text(),report_format);
 }

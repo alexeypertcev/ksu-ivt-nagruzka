@@ -1,5 +1,6 @@
 #include <QtXml>
 #include <QtCore/QFile>
+#include <QSqlQuery>
 #include "workzip.cpp"
 #include "xlslib_2_3_0/xlslib.h"
 
@@ -7,6 +8,21 @@ bool xml_work(QString path);
 int removeFolder(QDir & dir);
 
 
+bool create_report(QStringList teachers_id_list, QString report_patch, QString type_report){
+
+    QSqlQuery query;
+    //query.exec("SELECT f FROM teachers WHERE id = 0;");
+    //query.next();
+
+
+
+
+
+
+
+
+    return true;
+}
 
 void create_report_ods(QString applicationDirPath)
 {

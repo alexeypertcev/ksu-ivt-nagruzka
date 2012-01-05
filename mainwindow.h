@@ -20,6 +20,7 @@ class Sins_to_distrib_preview_SqlModel;
 class Sins_to_distrib_detail_SqlModel;
 class DistributionSqlModel;
 class TeachersReportSqlModel;
+class Teachers_list;
 QT_END_NAMESPACE
 
 namespace Ui {
@@ -43,6 +44,7 @@ private:
     void set_design_window();
 
     Settings* settings;
+    Teachers_list* teachers_list;
     QString path_db;
     QSqlDatabase db;
     QString applicationDirPath;
@@ -114,6 +116,8 @@ private slots:
     void on_action_txt_2_triggered();
     void on_action_6_triggered();
     void on_pushButton_9_clicked();
+
+    void on_pushButton_8_clicked(bool checked);
 };
 
 #endif // MAINWINDOW_H

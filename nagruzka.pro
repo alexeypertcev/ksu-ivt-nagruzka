@@ -59,7 +59,8 @@ SOURCES += main.cpp\
     xlslib_2_3_0/oledoc/oledoc.cpp \
     xlslib_2_3_0/oledoc/olefs.cpp \
     xlslib_2_3_0/oledoc/oleprop.cpp \
-    xlslib_2_3_0/common/overnew.cpp
+    xlslib_2_3_0/common/overnew.cpp \
+    teachers_list.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -129,11 +130,13 @@ HEADERS  += mainwindow.h \
     xlslib_2_3_0/xlslib/summinfo.h \
     xlslib_2_3_0/xlslib/unit.h \
     xlslib_2_3_0/xlslib/workbook.h \
-    xlslib_2_3_0/xlslib/tostr.h
+    xlslib_2_3_0/xlslib/tostr.h \
+    teachers_list.h
 
 
 FORMS    += mainwindow.ui \
-    settings.ui
+    settings.ui \
+    teachers_list.ui
 
 CONFIG += link_pkgconfig
 PKGCONFIG = xls

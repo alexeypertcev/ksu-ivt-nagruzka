@@ -106,7 +106,7 @@ private slots:
     void update_distribution();
     void update_curriculum();
     void update_subinsem();
-    void update_report();
+    void update_report_name();
     void on_pushButton_2_clicked();
     void on_pushButton_4_clicked();
     void on_pushButton_3_clicked();

@@ -21,6 +21,7 @@ class Teachers_list : public QWidget
 public:
     explicit Teachers_list(QWidget *parent = 0);
     ~Teachers_list();
+public slots:
     void update();
 private:
     Ui::Teachers_list *ui;

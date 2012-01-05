@@ -192,6 +192,8 @@ void DistributionSqlModel::refresh()
                    "subjects_in_semmester.curriculum_id = curriculum.id AND "
                    "distribution.subjects_in_semmester_id = " + subjects_in_semmestre_id + "; ");
     }
+    // испустить сигнал для списка преподавателей
+    table_changed();
 }
 
 int DistributionSqlModel::rowCount (const QModelIndex & parent) const

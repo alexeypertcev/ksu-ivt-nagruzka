@@ -37,6 +37,9 @@ private:
     not_used_other1,
     not_used_other2,
     not_used_other3;
+signals:
+    void table_changed();
+
 };
 
 class Sins_to_distrib_preview_SqlModel : public QSqlQueryModel

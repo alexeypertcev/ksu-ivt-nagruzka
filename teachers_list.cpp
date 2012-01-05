@@ -18,7 +18,7 @@ Teachers_list::Teachers_list(QWidget *parent) :
     sqlmodel_teachers_list->setHeaderData(3, Qt::Horizontal, QObject::tr("аудиторные"));
     ui->tableView->setColumnWidth(0,0);
     ui->tableView->setColumnWidth(1,200);
-    ui->tableView->setColumnWidth(2,80);
+    ui->tableView->setColumnWidth(2,95);
     //ui->tableView->setColumnWidth(3,80);
 
 }
@@ -76,7 +76,7 @@ void Teachers_list_model::refresh()
 
         query2.exec("SELECT hours FROM status WHERE name = '"+ query.value(1).toString() +"';");
         if (query2.next()){
-            auditors_hours << (QString::number(buf) + "/" + query2.value(0).toString()/* + "  "+ QString::number(buf / query2.value(0).toInt()) + "%"*/);
+            auditors_hours << (QString::number(buf) + "/" + query2.value(0).toString() + "  "+ QString::number((double)buf / query2.value(0).toDouble() * 100, 'f', 0) + "%");
         } else {
             auditors_hours << QString::number(buf);
         }

@@ -179,7 +179,7 @@ namespace xlslib_core
 		friend class workbook;
 
 	private:
-		font_t(CGlobalRecords& gRecords);
+                //font_t(CGlobalRecords& gRecords);
 		font_t(const font_t& right);
 		font_t(CGlobalRecords& gRecords,
 			   unsigned16_t index, const std::string& name,
@@ -195,6 +195,7 @@ namespace xlslib_core
 		void      SetIndex(unsigned16_t fntidx);
 
 	public:
+                font_t(CGlobalRecords& gRecords);
 		static font_t* fontDup(const font_t* orig)
 		{
 			font_t*	font = new font_t(*orig);

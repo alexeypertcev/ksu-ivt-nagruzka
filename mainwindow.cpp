@@ -996,7 +996,19 @@ QString MainWindow::translit(QString s){
 void MainWindow::on_pushButton_9_clicked()
 {
     QStringList teachers_id_list;
-    QString type_report;
+    QSqlQuery query;
+
+    // заполнить teachers_id_list
+    teachers_id_list.clear();
+    if (ui->radioButton_6->isChecked()){
+        teachers_id_list << sqlmodel_teachers_report->data( sqlmodel_teachers_report->index(ui->tableView_9->currentIndex().row(),0), Qt::DisplayRole ).toString();
+    } else {
+        query.exec("SELECT teachers.id "
+                   "FROM teachers WHERE teachers.id != '0'");
+        while(query.next()){
+            teachers_id_list << query.value(0).toString();
+        }
+    }
 
 // create report (QList(teachers.id), path_report+name_report, ods,)
 create_report(teachers_id_list,ui->lineEdit_2->text(),report_format);

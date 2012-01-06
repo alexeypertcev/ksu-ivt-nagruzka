@@ -39,7 +39,7 @@ public:
     Qt::ItemFlags flags(const QModelIndex &index) const;
     void refresh();
 private:
-    QStringList auditors_hours;
+    QStringList all_hours;
 };
 
 

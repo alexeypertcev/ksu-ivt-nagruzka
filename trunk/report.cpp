@@ -14,14 +14,18 @@ bool create_report(QStringList teachers_id_list, QString report_patch, QString t
     //query.exec("SELECT f FROM teachers WHERE id = 0;");
     //query.next();
 
-
-
-
-
+    for (int i=0;i<teachers_id_list.size();++i){
+        qDebug() << teachers_id_list.at(i);
+    }
 
 
 
     return true;
+}
+
+void create_report_xls()
+{
+
 }
 
 void create_report_ods(QString applicationDirPath)
@@ -79,12 +83,6 @@ int removeFolder(QDir & dir)
 }
 
 
-
-
-
-
-
-
 bool xml_work(QString path){
 
     bool parsed_ok = true;
@@ -131,7 +129,6 @@ bool xml_work(QString path){
                     node2 = node2.nextSibling();
                     node2 = node2.nextSibling();
 
-
                     node3 = node2.firstChild();
                     node3 = node3.nextSibling();
                     node3 = node3.firstChild();
@@ -147,10 +144,7 @@ bool xml_work(QString path){
               }
 
 //              node.childNodes().item(0).setNodeValue( "кирилица" );  office:document-content
-
-
 //              qDebug() << node.toElement().text();
-
 //              node = node.nextSibling();
 //              qDebug() << node.toElement().text();
 

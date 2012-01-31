@@ -53,5 +53,4 @@ FORMS    += mainwindow.ui \
     settings.ui \
     teachers_list.ui
 
-CONFIG += link_pkgconfig
-PKGCONFIG = xls
+

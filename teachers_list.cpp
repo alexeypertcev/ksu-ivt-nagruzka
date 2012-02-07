@@ -1,4 +1,4 @@
-﻿#include "teachers_list.h"
+#include "teachers_list.h"
 #include "ui_teachers_list.h"
 //#include <QSqlQueryModel>
 

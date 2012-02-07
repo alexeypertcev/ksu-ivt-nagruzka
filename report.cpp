@@ -1,4 +1,4 @@
-﻿#include <QtXml>
+#include <QtXml>
 #include <QtCore/QFile>
 #include <QSqlQuery>
 #include "workzip.cpp"

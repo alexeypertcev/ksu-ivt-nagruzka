@@ -1,4 +1,4 @@
-﻿#ifndef DISTRIBUTION_H
+#ifndef DISTRIBUTION_H
 #define DISTRIBUTION_H
 
 #include <QSqlQueryModel>

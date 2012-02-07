@@ -1,4 +1,4 @@
-#ifndef TEACHERS_LIST_H
+﻿#ifndef TEACHERS_LIST_H
 #define TEACHERS_LIST_H
 
 #include <QWidget>

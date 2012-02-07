@@ -1,4 +1,4 @@
-#include <QtSql>
+﻿#include <QtSql>
 #include <QMessageBox>
 #include "subjectinsemester_sqlmodel.h"
 

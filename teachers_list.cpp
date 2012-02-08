@@ -62,8 +62,13 @@ void Teachers_list_model::refresh()
     unsigned int buf_aud_hours;
     all_hours.clear();
 
+    //**********************************************************
+    // error0x01
+    // Ошибка после закрытия программы из-за этой конструкции
     this->setQuery("SELECT teachers.id, f || ', ' || i || ', ' || o, status_name "
                    "FROM teachers WHERE teachers.id != '0'");
+    //
+    //**********************************************************
 
     query.exec("SELECT teachers.id, status_name "
                "FROM teachers WHERE teachers.id != '0'");

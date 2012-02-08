@@ -25,7 +25,8 @@ SOURCES += main.cpp\
     students.cpp \
     teachers.cpp \
     report.cpp \
-    teachers_list.cpp
+    teachers_list.cpp \
+    reports_writter_ods.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -46,7 +47,8 @@ HEADERS  += mainwindow.h \
     workzip/zlib/zconf.h \
     students.h \
     teachers.h \
-    teachers_list.h
+    teachers_list.h \
+    reports_writter_ods.h
 
 
 FORMS    += mainwindow.ui \

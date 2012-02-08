@@ -7,6 +7,7 @@
 bool xml_work(QString path);
 int removeFolder(QDir & dir);
 bool create_report_xls(QStringList teachers_id_list, QString report_patch);
+bool create_report_ods(QStringList teachers_id_list, QString report_patch);
 
 
 bool create_report(QStringList teachers_id_list, QString report_patch, QString type_report){
@@ -14,7 +15,7 @@ bool create_report(QStringList teachers_id_list, QString report_patch, QString t
     if(type_report == "xls"){
         return create_report_xls(teachers_id_list,report_patch);
     } else if (type_report == "ods"){
-
+        return create_report_ods(teachers_id_list,report_patch);
     } else {
         return false;
     }
@@ -96,8 +97,10 @@ bool create_report_xls(QStringList teachers_id_list, QString report_patch)
     return true;
 }
 
-void create_report_ods(QString applicationDirPath)
+bool create_report_ods(QStringList teachers_id_list, QString report_patch)
 {
+    QString applicationDirPath;
+
     QString temp_dir = "temp_002311";
     QString temp_patch = applicationDirPath + "/" + temp_dir;
     QDir d(temp_patch);
@@ -117,6 +120,8 @@ void create_report_ods(QString applicationDirPath)
         d.setPath(applicationDirPath + "/" + temp_dir);
         removeFolder(d);
     }
+
+    return true;
 }
 
 //Функция удаления папки

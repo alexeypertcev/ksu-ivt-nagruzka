@@ -621,6 +621,19 @@ void MainWindow::set_design_window()
     sqlmodel_teachers_report->setHeaderData(1, Qt::Horizontal, QObject::tr("ФИО"));
     sqlmodel_teachers_report->setHeaderData(2, Qt::Horizontal, QObject::tr("должность"));
 
+    ui->tableView_9->setSelectionMode(QAbstractItemView::ExtendedSelection);
+
+
+
+
+    ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->tableView_2->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->tableView_3->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->tableView_4->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->tableView_5->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->tableView_6->setSelectionBehavior(QAbstractItemView::SelectRows);
+
+    ui->tableView_9->setSelectionBehavior(QAbstractItemView::SelectRows);
 }
 
 void MainWindow::on_pushButton_4_clicked()

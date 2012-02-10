@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>6</number>
+     <number>5</number>
     </property>
     <widget class="QWidget" name="tab_6">
      <attribute name="title">
@@ -582,6 +582,9 @@
        <string>Формат файла</string>
       </property>
       <widget class="QRadioButton" name="radioButton_4">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="geometry">
         <rect>
          <x>10</x>
@@ -593,8 +596,11 @@
        <property name="text">
         <string>.xls</string>
        </property>
-       <property name="checked">
+       <property name="checkable">
         <bool>true</bool>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
        </property>
       </widget>
       <widget class="QRadioButton" name="radioButton_5">
@@ -611,6 +617,9 @@
        </property>
        <property name="text">
         <string>.ods</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
        </property>
       </widget>
      </widget>

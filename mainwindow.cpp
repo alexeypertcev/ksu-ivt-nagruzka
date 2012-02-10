@@ -28,7 +28,7 @@ MainWindow::MainWindow(QString apppath, QWidget *parent) :
 {
     ui->setupUi(this);
 
-    version = "v0.119";
+    version = "v0.141";
     applicationDirPath = apppath;
     path_db = applicationDirPath + "/nagruzka.db";
     report_path = applicationDirPath;
@@ -1024,8 +1024,22 @@ void MainWindow::on_pushButton_9_clicked()
     }
 
 // create report (QList(teachers.id), path_report+name_report, ods,)
-create_report(teachers_id_list,ui->lineEdit_2->text(),report_format);
+//create_report(teachers_id_list,ui->lineEdit_2->text(),report_format);
 
+    //ui->tableView_9
+
+            QModelIndexList indexes = ui->tableView_9->selectionModel()->selectedRows(); //->selection().indexes();
+            for (int i = 0; i < indexes.count(); ++i)
+            {
+                QModelIndex index = indexes.at(i);
+                // To get the row/column numbers use index.row() / index.column()
+                qDebug() << index.row();
+            }
+
+            qDebug() << "---";
+//    qDebug() << "ui->tableView_9->currentIndex().row(): " << ui->tableView_9->currentIndex().row() ;
+//    qDebug() << "sqlmodel_teachers_report->index(ui->tableView_9->currentIndex().row(),0): " << sqlmodel_teachers_report->index(ui->tableView_9->currentIndex().row(),0);
+//    qDebug() << "sqlmodel_teachers_report->data(): " << sqlmodel_teachers_report->data( sqlmodel_teachers_report->index(ui->tableView_9->currentIndex().row(),0), Qt::DisplayRole ).toString();
 }
 
 

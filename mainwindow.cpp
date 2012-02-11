@@ -32,7 +32,7 @@ MainWindow::MainWindow(QString apppath, QWidget *parent) :
     applicationDirPath = apppath;
     path_db = applicationDirPath + "/nagruzka.db";
     report_path = applicationDirPath;
-    report_format = "xls";
+    report_format = "ods";
 
     tablemodel_spec = new QSqlRelationalTableModel(this);
     sqlmodel_spec = new QSqlQueryModel(this);
@@ -612,8 +612,6 @@ void MainWindow::set_design_window()
     sqlmodel_distribution->setHeaderData(++i, Qt::Horizontal, QObject::tr("Прочее2"));
     sqlmodel_distribution->setHeaderData(++i, Qt::Horizontal, QObject::tr("Прочее3"));
 
-
-
     ui->tableView_9->setColumnWidth(0,0);
     ui->tableView_9->setColumnWidth(1,300);
     ui->tableView_9->setColumnWidth(2,100);
@@ -621,10 +619,16 @@ void MainWindow::set_design_window()
     sqlmodel_teachers_report->setHeaderData(1, Qt::Horizontal, QObject::tr("ФИО"));
     sqlmodel_teachers_report->setHeaderData(2, Qt::Horizontal, QObject::tr("должность"));
 
+
+    ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui->tableView_2->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui->tableView_3->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui->tableView_4->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui->tableView_5->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui->tableView_6->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui->tableView_7->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui->tableView_8->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->tableView_9->setSelectionMode(QAbstractItemView::ExtendedSelection);
-
-
-
 
     ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->tableView_2->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -1013,8 +1017,14 @@ void MainWindow::on_pushButton_9_clicked()
 
     // заполнить teachers_id_list
     teachers_id_list.clear();
+
     if (ui->radioButton_6->isChecked()){
-        teachers_id_list << sqlmodel_teachers_report->data( sqlmodel_teachers_report->index(ui->tableView_9->currentIndex().row(),0), Qt::DisplayRole ).toString();
+        QModelIndexList indexes = ui->tableView_9->selectionModel()->selectedRows();
+        QModelIndex index;
+        for (int i = 0; i < indexes.count(); ++i){
+            index = indexes.at(i);
+            teachers_id_list << sqlmodel_teachers_report->data( sqlmodel_teachers_report->index(index.row(),0), Qt::DisplayRole ).toString();
+        }
     } else {
         query.exec("SELECT teachers.id "
                    "FROM teachers WHERE teachers.id != '0'");
@@ -1024,22 +1034,13 @@ void MainWindow::on_pushButton_9_clicked()
     }
 
 // create report (QList(teachers.id), path_report+name_report, ods,)
-//create_report(teachers_id_list,ui->lineEdit_2->text(),report_format);
+create_report(teachers_id_list,ui->lineEdit_2->text(),report_format);
 
-    //ui->tableView_9
 
-            QModelIndexList indexes = ui->tableView_9->selectionModel()->selectedRows(); //->selection().indexes();
-            for (int i = 0; i < indexes.count(); ++i)
-            {
-                QModelIndex index = indexes.at(i);
-                // To get the row/column numbers use index.row() / index.column()
-                qDebug() << index.row();
-            }
 
-            qDebug() << "---";
-//    qDebug() << "ui->tableView_9->currentIndex().row(): " << ui->tableView_9->currentIndex().row() ;
-//    qDebug() << "sqlmodel_teachers_report->index(ui->tableView_9->currentIndex().row(),0): " << sqlmodel_teachers_report->index(ui->tableView_9->currentIndex().row(),0);
-//    qDebug() << "sqlmodel_teachers_report->data(): " << sqlmodel_teachers_report->data( sqlmodel_teachers_report->index(ui->tableView_9->currentIndex().row(),0), Qt::DisplayRole ).toString();
+
+
+
 }
 
 

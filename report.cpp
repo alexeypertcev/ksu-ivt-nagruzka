@@ -2,6 +2,7 @@
 #include <QtCore/QFile>
 #include <QSqlQuery>
 #include "workzip.cpp"
+#include "reports_writter_ods.h"
 //#include "xlslib_2_3_0/xlslib.h"
 
 bool xml_work(QString path);

@@ -46,12 +46,14 @@ QString SaveIdTableView::get_id()
     if (ids.isEmpty()){
         return "NULL";
     } else {
-        if (this->currentIndex().row() == -1)
-        {
-            return ids.at(0);
+        QModelIndexList indexes = this->selectionModel()->selectedRows();
+        int selected_row;
+        if (indexes.length() == 0){
+            selected_row = 0;
         } else {
-            return ids.at(this->currentIndex().row());
+            selected_row = indexes.at(0).row();
         }
+        return ids.at(selected_row);
     }
 }
 

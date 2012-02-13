@@ -7,118 +7,65 @@
 
 bool xml_work(QString path);
 int removeFolder(QDir & dir);
-bool create_report_xls(QStringList teachers_id_list, QString report_patch);
-bool create_report_ods(QStringList teachers_id_list, QString report_patch);
+bool create_report_xls(QStringList teachers_id_list, QString template_patch, QString report_patch);
+bool create_report_ods(QStringList teachers_id_list, QString template_patch, QString report_patch);
 
 
-bool create_report(QStringList teachers_id_list, QString report_patch, QString type_report){
+bool create_report(QStringList teachers_id_list, QString template_patch, QString report_patch, QString type_report){
+
+    // тут запрос к БД на все данные, подсчет суммарных данных
+    QSqlQuery query;
+
+    QList<QStringList> list_one;
+
+    QStringList s;
+    s << "a" << "b" <<  "c";
+    list_one << s;
+    s.clear();
+    s << "d" << "e";
+    list_one << s;
+    qDebug() << list_one;
+
+
 
     if(type_report == "xls"){
-        return create_report_xls(teachers_id_list,report_patch);
+        return create_report_xls(teachers_id_list,template_patch, report_patch);
     } else if (type_report == "ods"){
-        return create_report_ods(teachers_id_list,report_patch);
+        return create_report_ods(teachers_id_list,template_patch, report_patch);
     } else {
         return false;
     }
     return true;
 }
 
-bool create_report_xls(QStringList teachers_id_list, QString report_patch)
+bool create_report_ods(QStringList teachers_id_list, QString template_patch, QString report_patch)
 {
-    QSqlQuery query;
-    QStringList head;
-    head << "Министерство образования и науки Российской Федерации" <<         /* 0 */
-            "Государственное образовательное учреждение" <<
-            "высшего профессионального образования" <<
-            "Курский государственный университет" <<
+    qDebug() << "teachers_id_list: " << teachers_id_list;
+    qDebug() << "report_patch: " << report_patch;
 
-            "УТВЕРЖДАЮ" <<                                                      /* 4*/
-            "Проректор по научной работе" <<
-            "____________________/Худин А.Н." <<
+    QDir template_patch_qdir(template_patch);
+    template_patch_qdir.cdUp();
 
-            "                                                              КАРТОЧКА УЧЕБНЫХ ПОРУЧЕНИЙ НА 2010/2011 УЧЕБНЫЙ ГОД (бюджет)" <<
+    qDebug() << template_patch_qdir;
 
-            "Фамилия, имя, отчество преподавателя" <<                           /* 8 */
-            "Ученая степень, звание, должность" <<
-            "Кафедра, факультет" <<
-            "Объем и вид нагрузки" <<
-
-            "Наименование учебной дисциплины или учебных поручений" <<          /* 12 */
-            "Факультет" <<
-            "Специальность" <<
-            "Форма обучения" <<
-            "Курс" <<
-            "Количество групп" <<
-            "Количество подгрупп" <<
-            "Количество студентов" <<
-            "По учебному плану" <<                   /* 20 */
-            "Лекции" <<
-            "Семинары и практич. работы" <<
-            "Лабораторные работы" <<
-            "Рук-во сам. раб" <<                    /* 24 */
-            "индивидуальная" <<
-            "аудиторная" <<
-            "Контрольные работы" <<
-            "Консультации" <<
-            "Зачеты" <<
-            "Экзамены" <<                            /* 30 */
-            "Курсовые работы" <<
-            "Дипломные работы" <<
-            "Практика" <<
-            "ГАК" <<
-            "Прочие виды работ" <<
-            "Итого" <<
-            "Примечания" <<
-
-            "Итого за 1-ое полугодие" <<             /* 38 */
-            "Итого за 2-ое полугодие" <<
-            "Итого за год" <<
-            "Декан" <<
-            "Зав. кафедрой" <<
-            "Преподаватель";                         /* 43 */
-
-
-
-    for (int i=0; i<teachers_id_list.size(); ++i){
-        query.exec("SELECT f FROM teachers WHERE id = " + teachers_id_list.at(i) + ";");
-        query.next();
-
-
-
-
-
-
-
-
-
-
-
-    }
-    //wb.Dump(report_patch.toStdString());
-    return true;
-}
-
-bool create_report_ods(QStringList teachers_id_list, QString report_patch)
-{
-    QString applicationDirPath;
 
     QString temp_dir = "temp_002311";
-    QString temp_patch = applicationDirPath + "/" + temp_dir;
+    QString temp_patch = template_patch_qdir.absolutePath() + "/" + temp_dir;
     QDir d(temp_patch);
 
     if ( !d.exists()){
         qDebug() << "mkdir";
-        d.setPath(applicationDirPath);
+        d.setPath(template_patch_qdir.absolutePath());
         d.mkdir(temp_dir);
 
-        decompress(applicationDirPath + "/template.ods", temp_patch);
+        //decompress(, temp_patch);
 
         xml_work(temp_patch + "/content.xml");
 
         //пакует немного криво
         compress("path_output_ods_file", temp_patch);
 
-        d.setPath(applicationDirPath + "/" + temp_dir);
+        //d.setPath(" " + "/" + temp_dir);
         removeFolder(d);
     }
 
@@ -235,5 +182,80 @@ bool xml_work(QString path){
       } else {
           qDebug() << "error template format";
       }
+    return true;
+}
+
+bool create_report_xls(QStringList teachers_id_list, QString template_patch, QString report_patch)
+{
+    QSqlQuery query;
+    QStringList head;
+    head << "Министерство образования и науки Российской Федерации" <<         /* 0 */
+            "Государственное образовательное учреждение" <<
+            "высшего профессионального образования" <<
+            "Курский государственный университет" <<
+
+            "УТВЕРЖДАЮ" <<                                                      /* 4*/
+            "Проректор по научной работе" <<
+            "____________________/Худин А.Н." <<
+
+            "                                                              КАРТОЧКА УЧЕБНЫХ ПОРУЧЕНИЙ НА 2010/2011 УЧЕБНЫЙ ГОД (бюджет)" <<
+
+            "Фамилия, имя, отчество преподавателя" <<                           /* 8 */
+            "Ученая степень, звание, должность" <<
+            "Кафедра, факультет" <<
+            "Объем и вид нагрузки" <<
+
+            "Наименование учебной дисциплины или учебных поручений" <<          /* 12 */
+            "Факультет" <<
+            "Специальность" <<
+            "Форма обучения" <<
+            "Курс" <<
+            "Количество групп" <<
+            "Количество подгрупп" <<
+            "Количество студентов" <<
+            "По учебному плану" <<                   /* 20 */
+            "Лекции" <<
+            "Семинары и практич. работы" <<
+            "Лабораторные работы" <<
+            "Рук-во сам. раб" <<                    /* 24 */
+            "индивидуальная" <<
+            "аудиторная" <<
+            "Контрольные работы" <<
+            "Консультации" <<
+            "Зачеты" <<
+            "Экзамены" <<                            /* 30 */
+            "Курсовые работы" <<
+            "Дипломные работы" <<
+            "Практика" <<
+            "ГАК" <<
+            "Прочие виды работ" <<
+            "Итого" <<
+            "Примечания" <<
+
+            "Итого за 1-ое полугодие" <<             /* 38 */
+            "Итого за 2-ое полугодие" <<
+            "Итого за год" <<
+            "Декан" <<
+            "Зав. кафедрой" <<
+            "Преподаватель";                         /* 43 */
+
+
+
+    for (int i=0; i<teachers_id_list.size(); ++i){
+        query.exec("SELECT f FROM teachers WHERE id = " + teachers_id_list.at(i) + ";");
+        query.next();
+
+
+
+
+
+
+
+
+
+
+
+    }
+    //wb.Dump(report_patch.toStdString());
     return true;
 }

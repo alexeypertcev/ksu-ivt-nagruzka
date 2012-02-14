@@ -13,7 +13,7 @@
 #include "teachers.h"
 #include "subjectinsemester_sqlmodel.h"
 #include "distribution.h"
-#include "report.cpp"
+#include "reports_creater.h"
 #include "teachers_list.h"
 
 #include <QtGui>
@@ -911,7 +911,7 @@ void MainWindow::on_action_txt_2_triggered()
     create_all_tables();
     insert_main_data();
 
-    std::cout << std::endl;
+//    std::cout << std::endl;
 //    QRegExp rx ("#include (<|\").*\\..*(>|\").*");
     QRegExp rx("#.*");
     QByteArray line;
@@ -1031,7 +1031,7 @@ void MainWindow::on_pushButton_9_clicked()
     }
 
 // create report (QList(teachers.id), path_report+name_report, ods,)
-    create_report(teachers_id_list, applicationDirPath + "/template.ods", ui->lineEdit_2->text(),report_format);
+//    create_report(teachers_id_list, applicationDirPath + "/template.ods", ui->lineEdit_2->text(),report_format);
 
 }
 

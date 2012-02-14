@@ -24,9 +24,9 @@ SOURCES += main.cpp\
     workzip/zipglobal.cpp \
     students.cpp \
     teachers.cpp \
-    report.cpp \
     teachers_list.cpp \
-    reports_writter_ods.cpp
+    reports_creater.cpp \
+    report_writter_ods.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -48,7 +48,8 @@ HEADERS  += mainwindow.h \
     students.h \
     teachers.h \
     teachers_list.h \
-    reports_writter_ods.h
+    reports_creater.h \
+    report_writter_ods.h
 
 
 FORMS    += mainwindow.ui \

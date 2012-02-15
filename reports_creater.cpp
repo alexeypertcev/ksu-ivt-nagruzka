@@ -19,13 +19,13 @@ bool create_report(QStringList teachers_id_list, QString template_patch, QString
         temp_tabledata.set_header_sheet(temp);
 
 
+
+
+
         list_tabledata << temp_tabledata;
     }
 
     for (int i=0; i<list_tabledata.length(); ++i){
-        //temp = list_tabledata.at(i).get_header_sheet();
-
-
         temp_tabledata = list_tabledata.at(i);
         qDebug() << temp_tabledata.get_header_sheet();
     }

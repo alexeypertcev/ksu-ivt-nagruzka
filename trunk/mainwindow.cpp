@@ -1031,7 +1031,7 @@ void MainWindow::on_pushButton_9_clicked()
     }
 
 // create report (QList(teachers.id), path_report+name_report, ods,)
-//    create_report(teachers_id_list, applicationDirPath + "/template.ods", ui->lineEdit_2->text(),report_format);
+    create_report(teachers_id_list, applicationDirPath + "/template.ods", ui->lineEdit_2->text(),report_format);
 
 }
 

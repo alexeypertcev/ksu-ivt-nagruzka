@@ -6,23 +6,34 @@ bool create_report(QStringList teachers_id_list, QString template_patch, QString
 
     // тут запрос к БД на все данные, подсчет суммарных данных
     QSqlQuery query;
+    Tabledata temp_tabledata;
+    QList<Tabledata> list_tabledata;
+    QStringList temp;
 
-    QList<QStringList> list_one;
-
-    QStringList s;
-    s << "a" << "b" <<  "c";
-    list_one << s;
-    s.clear();
-    s << "d" << "e";
-    list_one << s;
-    qDebug() << list_one;
+    for (int i=0; i<teachers_id_list.length(); ++i){
+        query.exec("SELECT teachers.f "
+                   "FROM teachers WHERE teachers.id = " + teachers_id_list.at(i));
+        query.next();
+        temp.clear();
+        temp << query.value(0).toString();
+        temp_tabledata.set_header_sheet(temp);
 
 
+        list_tabledata << temp_tabledata;
+    }
+
+    for (int i=0; i<list_tabledata.length(); ++i){
+        //temp = list_tabledata.at(i).get_header_sheet();
+
+
+        temp_tabledata = list_tabledata.at(i);
+        qDebug() << temp_tabledata.get_header_sheet();
+    }
 
     if(type_report == "xls"){
         return create_report_xls(teachers_id_list,template_patch, report_patch);
     } else if (type_report == "ods"){
-        return create_report_ods(teachers_id_list,template_patch, report_patch);
+//        return create_report_ods(teachers_id_list,template_patch, report_patch);
     } else {
         return false;
     }
@@ -255,4 +266,46 @@ bool create_report_xls(QStringList teachers_id_list, QString template_patch, QSt
 
 reports_creater::reports_creater()
 {
+}
+
+Tabledata::Tabledata()
+{
+}
+
+void Tabledata::set_header_sheet(QStringList hs){
+    header_sheet = hs;
+}
+void Tabledata::set_list_one(QList<QStringList> lo){
+    list_one = lo;
+}
+void Tabledata::set_list_two(QList<QStringList> lt){
+    list_two = lt;
+}
+void Tabledata::set_list_one_sum(QStringList lon){
+    list_one_sum = lon;
+}
+void Tabledata::set_list_two_sum(QStringList lts){
+    list_two_sum = lts;
+}
+void Tabledata::set_list_all_sum(QStringList las){
+    list_all_sum = las;
+}
+
+QStringList Tabledata::get_header_sheet(){
+    return header_sheet;
+}
+QList<QStringList> Tabledata::get_list_one(){
+    return list_one;
+}
+QList<QStringList> Tabledata::get_list_two(){
+    return list_two;
+}
+QStringList Tabledata::get_list_one_sum(){
+    return list_one_sum;
+}
+QStringList Tabledata::get_list_two_sum(){
+    return list_two_sum;
+}
+QStringList Tabledata::get_list_all_sum(){
+    return list_all_sum;
 }

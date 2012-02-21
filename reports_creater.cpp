@@ -10,6 +10,7 @@ bool create_report(QStringList teachers_id_list, QString template_patch, QString
     QList<Tabledata> list_tabledata;
     QStringList temp;
     QList<QStringList> temp_list_of_stringlist;
+    QList<int> temp_list_of_int;
 
     QString select_list_data = "SELECT curriculum.subject_name, "
             "speciality.faculty_name, "
@@ -87,6 +88,8 @@ bool create_report(QStringList teachers_id_list, QString template_patch, QString
             temp.clear();
             for(int j=0; j<24; ++j){
                 temp << query2.value(j).toString();
+//                query2.value(j).toInt()
+
             }
             temp_list_of_stringlist << temp;
         }
@@ -127,9 +130,9 @@ bool create_report(QStringList teachers_id_list, QString template_patch, QString
         temp_tabledata = list_tabledata.at(i);
 //        qDebug() << temp_tabledata.get_header_sheet();
         qDebug() << "table_data:";
-        qDebug() << "---";
+        qDebug() << "--- osen:";
         qDebug() << temp_tabledata.get_list_one();
-        qDebug() << "---";
+        qDebug() << "--- vesna:";
         qDebug() << temp_tabledata.get_list_two();
     }
 

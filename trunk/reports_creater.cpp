@@ -10,7 +10,8 @@ bool create_report(QStringList teachers_id_list, QString template_patch, QString
     QList<Tabledata> list_tabledata;
     QStringList temp;
     QList<QStringList> temp_list_of_stringlist;
-    QList<int> temp_list_of_int;
+    int temp_of_int1[24];
+    int temp_of_int2[24];
 
     QString select_list_data = "SELECT curriculum.subject_name, "
             "speciality.faculty_name, "
@@ -84,18 +85,31 @@ bool create_report(QStringList teachers_id_list, QString template_patch, QString
                     " )");
 
         temp_list_of_stringlist.clear();
+        for(int j=0; j<24; ++j){
+            temp_of_int1[j] =  0;
+        }
+
         while (query2.next()){
             temp.clear();
             for(int j=0; j<24; ++j){
                 temp << query2.value(j).toString();
 //                query2.value(j).toInt()
+                temp_of_int1[j] += query2.value(j).toInt();
+
 
             }
             temp_list_of_stringlist << temp;
         }
         temp_tabledata.set_list_one(temp_list_of_stringlist);
-
-
+        temp.clear();
+        for(int j=0; j<24; ++j){
+            QString s="";
+            if (temp_of_int1[j] != 0){
+                s.setNum(temp_of_int1[j]);
+            }
+            temp << s;
+        }
+        temp_tabledata.set_list_one_sum(temp);
 
 
         // temp_tabledata.list_two
@@ -110,47 +124,74 @@ bool create_report(QStringList teachers_id_list, QString template_patch, QString
                     " )");
 
         temp_list_of_stringlist.clear();
+        for(int j=0; j<24; ++j){
+            temp_of_int2[j] =  0;
+        }
         while (query2.next()){
             temp.clear();
             for(int j=0; j<24; ++j){
                 temp << query2.value(j).toString();
+                temp_of_int2[j] += query2.value(j).toInt();
             }
             temp_list_of_stringlist << temp;
         }
         temp_tabledata.set_list_two(temp_list_of_stringlist);
+        temp.clear();
+        for(int j=0; j<24; ++j){
+            QString s = "";
+            if (temp_of_int2[j] != 0){
+                s.setNum(temp_of_int2[j]);
+            }
+            temp << s;
+        }
+        temp_tabledata.set_list_two_sum(temp);
 
+        //   set  temp_tabledata.set_list_all_sum
+        temp.clear();
+        for(int j=0; j<24; ++j){
+            QString s = "";
+            if (temp_of_int1[j] + temp_of_int2[j] != 0){
+                s.setNum(temp_of_int1[j] + temp_of_int2[j]);
+            }
+            temp << s;
+        }
 
-
-
+        temp_tabledata.set_list_all_sum(temp);
 
         list_tabledata << temp_tabledata;
-    }
-
-    for (int i=0; i<list_tabledata.length(); ++i){
-        temp_tabledata = list_tabledata.at(i);
-//        qDebug() << temp_tabledata.get_header_sheet();
-        qDebug() << "table_data:";
-        qDebug() << "--- osen:";
-        qDebug() << temp_tabledata.get_list_one();
-        qDebug() << "--- vesna:";
-        qDebug() << temp_tabledata.get_list_two();
     }
 
     if(type_report == "xls"){
 //        return create_report_xls(teachers_id_list,template_patch, report_patch);
     } else if (type_report == "ods"){
-//        return create_report_ods(teachers_id_list,template_patch, report_patch);
+        return create_report_ods(list_tabledata,template_patch, report_patch);
     } else {
         return false;
     }
     return true;
 }
 
-bool create_report_ods(QStringList teachers_id_list, QString template_patch, QString report_patch)
+bool create_report_ods(QList<Tabledata> list_tabledata, QString template_patch, QString report_patch)
 {
-    qDebug() << "teachers_id_list: " << teachers_id_list;
-    qDebug() << "report_patch: " << report_patch;
+    Tabledata temp_tabledata;
 
+    for (int i=0; i<list_tabledata.length(); ++i){
+        temp_tabledata = list_tabledata.at(i);
+        qDebug() << temp_tabledata.get_header_sheet();
+        qDebug() << "table_data:";
+        qDebug() << "--- osen:";
+        qDebug() << temp_tabledata.get_list_one();
+        qDebug() << "- sum:";
+        qDebug() << temp_tabledata.get_list_one_sum();
+        qDebug() << "--- vesna:";
+        qDebug() << temp_tabledata.get_list_two();
+        qDebug() << "- sum:";
+        qDebug() << temp_tabledata.get_list_two_sum();
+        qDebug() << "- all sum:";
+        qDebug() << temp_tabledata.get_list_all_sum();
+    }
+
+    /*
     QDir template_patch_qdir(template_patch);
     template_patch_qdir.cdUp();
 
@@ -176,7 +217,7 @@ bool create_report_ods(QStringList teachers_id_list, QString template_patch, QSt
         //d.setPath(" " + "/" + temp_dir);
         removeFolder(d);
     }
-
+*/
     return true;
 }
 

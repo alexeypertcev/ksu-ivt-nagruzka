@@ -6,11 +6,15 @@
 #include <QSqlQuery>
 #include "report_writter_ods.h"
 
+QT_BEGIN_NAMESPACE
+class Tabledata;
+QT_END_NAMESPACE
+
 bool create_report(QStringList teachers_id_list, QString template_patch, QString report_patch, QString type_report);
 bool xml_work(QString path);
 int removeFolder(QDir & dir);
-bool create_report_xls(QStringList teachers_id_list, QString template_patch, QString report_patch);
-bool create_report_ods(QStringList teachers_id_list, QString template_patch, QString report_patch);
+bool create_report_xls(QList<Tabledata> list_tabledata, QString template_patch, QString report_patch);
+bool create_report_ods(QList<Tabledata> list_tabledata, QString template_patch, QString report_patch);
 
 
 class reports_creater

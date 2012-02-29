@@ -1,5 +1,5 @@
 #include "reports_creater.h"
-#include "workzip.cpp"
+//#include "workzip.cpp"
 
 
 bool create_report(QStringList teachers_id_list, QString template_patch, QString report_patch, QString type_report){
@@ -191,6 +191,10 @@ bool create_report_ods(QList<Tabledata> list_tabledata, QString template_patch, 
         qDebug() << temp_tabledata.get_list_all_sum();
     }
 
+    CardOdsWriter cardOdsWriter;
+
+
+
     /*
     QDir template_patch_qdir(template_patch);
     template_patch_qdir.cdUp();
@@ -221,6 +225,11 @@ bool create_report_ods(QList<Tabledata> list_tabledata, QString template_patch, 
     return true;
 }
 
+
+
+
+
+/*
 //Функция удаления папки
 int removeFolder(QDir & dir)
 {
@@ -251,8 +260,8 @@ int removeFolder(QDir & dir)
    }
    return res;
 }
-
-
+*/
+/*
 bool xml_work(QString path){
 
     bool parsed_ok = true;
@@ -334,6 +343,7 @@ bool xml_work(QString path){
     return true;
 }
 
+*/
 bool create_report_xls(QStringList teachers_id_list, QString template_patch, QString report_patch)
 {
     QSqlQuery query;
@@ -393,15 +403,6 @@ bool create_report_xls(QStringList teachers_id_list, QString template_patch, QSt
     for (int i=0; i<teachers_id_list.size(); ++i){
         query.exec("SELECT f FROM teachers WHERE id = " + teachers_id_list.at(i) + ";");
         query.next();
-
-
-
-
-
-
-
-
-
 
 
     }

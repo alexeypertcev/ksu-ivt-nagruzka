@@ -1,4 +1,5 @@
 #include "report_writter_ods.h"
+#include "workzip.cpp"
 
 reports_writter_ods::reports_writter_ods()
 {
@@ -27,6 +28,6 @@ bool CardOdsWriter::writeTable(Tabledata table_data){
 bool CardOdsWriter::add_sheet(){
     return true;
 }
-bool CardOdsWriter::removeoldsheet(){
+bool CardOdsWriter::remove_old_sheet(){
     return true;
 }

@@ -1,4 +1,11 @@
 #include "report_writter_ods.h"
+#include <QDir>
+#include <QDirIterator>
+#include <QProcess>
+#include <QDateTime>
+#include <QDebug>
+#include <QTextOStream>
+#include <QMessageBox>
 #include "workzip.cpp"
 
 reports_writter_ods::reports_writter_ods()
@@ -16,7 +23,27 @@ bool OdsWriter::save(QString fname){
     return true;
 }
 bool OdsWriter::removeDir(QString dirName){
-    return true;
+
+    bool result = true;
+    QDir dir(dirName);
+
+    if (dir.exists(dirName)) {
+    Q_FOREACH(QFileInfo info, dir.entryInfoList(QDir::NoDotAndDotDot | QDir::System | QDir::Hidden  | QDir::AllDirs | QDir::Files, QDir::DirsFirst)) {
+        if (info.isDir()) {
+        result = removeDir(info.absoluteFilePath());
+        }
+        else {
+        result = QFile::remove(info.absoluteFilePath());
+        }
+
+        if (!result) {
+        return result;
+        }
+    }
+    result = dir.rmdir(dirName);
+    }
+
+    return result;
 }
 
 

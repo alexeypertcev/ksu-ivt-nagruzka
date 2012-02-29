@@ -37,15 +37,8 @@ public:
     bool writeTable(Tabledata table_data);
 private:
     bool add_sheet();
-    bool removeoldsheet();
+    bool remove_old_sheet();
 };
-
-
-
-
-
-
-
 
 
 

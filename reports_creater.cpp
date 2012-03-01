@@ -192,7 +192,7 @@ bool create_report_ods(QList<Tabledata> list_tabledata, QString template_patch, 
     }
 
     CardOdsWriter cardOdsWriter;
-
+    cardOdsWriter.open(template_patch);
 
 
     /*

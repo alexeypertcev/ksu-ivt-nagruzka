@@ -18,37 +18,37 @@ OdsWriter::~OdsWriter(){}
 
 bool OdsWriter::open(QString fname){
     QDir dir;
-    QString temp;
-    QString copyName;
+    QString temp;   
     QString templateDir = QDir::currentPath();
     temp = QDir::tempPath();
+    tempdir_name = QDir::convertSeparators(QString(temp + "/nagr_temp_%1").arg(QDateTime::currentDateTime().toTime_t())+'/');
 
-    copyName = QDir::convertSeparators(QString(temp + "/nagr_temp_%1").arg(QDateTime::currentDateTime().toTime_t())+'/');
-
-
+//----------------------------------------------------------------
     qDebug() << "QDir::currentPath(): " << QDir::currentPath();
     qDebug() << "fname: " << fname;
     qDebug() << "templateDir: " << templateDir;
     qDebug() << "temp: " << temp;
-    qDebug() << "copyName: " << copyName;
+    qDebug() << "tempdir_name: " << tempdir_name;
+//----------------------------------------------------------------
 
-    if(!dir.mkdir(copyName))
+    if(!dir.mkdir(tempdir_name))
     {
         //QString::fromUtf8("Невозможно создать временный каталог")
         return false;
+    } else {
+        // extract from zip
+        decompress(fname, tempdir_name);
     }
-/*
-    QZipReader zip_reader(fname);
-    if (zip_reader.exists()) {
-        // распаковка архива по указанному пути
-        zip_reader.extractAll(copyName);
-    }
-    */
     return true;
 }
 
 
 bool OdsWriter::save(QString fname){
+
+    compress(fname, tempdir_name);
+
+    removeDir(tempdir_name);
+
     return true;
 }
 bool OdsWriter::removeDir(QString dirName){
@@ -66,7 +66,7 @@ bool OdsWriter::removeDir(QString dirName){
         }
 
         if (!result) {
-        return result;
+            return result;
         }
     }
     result = dir.rmdir(dirName);

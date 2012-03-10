@@ -25,7 +25,7 @@ public:
 
 private:
     bool removeDir(QString dirName);
-
+    QString tempdir_name;
 };
 
 class CardOdsWriter : public OdsWriter

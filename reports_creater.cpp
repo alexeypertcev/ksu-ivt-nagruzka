@@ -92,7 +92,11 @@ bool create_report(QStringList teachers_id_list, QString template_patch, QString
         while (query2.next()){
             temp.clear();
             for(int j=0; j<24; ++j){
-                temp << query2.value(j).toString();
+                if (query2.value(j).toInt() == 0){
+                    temp << "";
+                } else {
+                    temp << query2.value(j).toString();
+                }
 //                query2.value(j).toInt()
                 temp_of_int1[j] += query2.value(j).toInt();
 
@@ -130,7 +134,11 @@ bool create_report(QStringList teachers_id_list, QString template_patch, QString
         while (query2.next()){
             temp.clear();
             for(int j=0; j<24; ++j){
-                temp << query2.value(j).toString();
+                if (query2.value(j).toInt() == 0){
+                    temp << "";
+                } else {
+                    temp << query2.value(j).toString();
+                }
                 temp_of_int2[j] += query2.value(j).toInt();
             }
             temp_list_of_stringlist << temp;
@@ -194,6 +202,8 @@ bool create_report_ods(QList<Tabledata> list_tabledata, QString template_patch, 
     CardOdsWriter cardOdsWriter;
     cardOdsWriter.open(template_patch);
 
+
+    cardOdsWriter.save(report_patch);
 
     /*
     QDir template_patch_qdir(template_patch);

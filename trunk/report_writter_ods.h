@@ -23,9 +23,11 @@ public:
     bool open(QString fname);
     bool save(QString fname);
 
+protected:
+    QString tempdir_name;
+
 private:
     bool removeDir(QString dirName);
-    QString tempdir_name;
 };
 
 class CardOdsWriter : public OdsWriter
@@ -34,7 +36,7 @@ class CardOdsWriter : public OdsWriter
 public:
     explicit CardOdsWriter(QObject *parent = 0);
     ~CardOdsWriter();
-    bool writeTable(Tabledata table_data);
+    bool writeSheet(Tabledata table_data, int i/*номер листа*/);
 private:
     bool add_sheet();
     bool remove_old_sheet();

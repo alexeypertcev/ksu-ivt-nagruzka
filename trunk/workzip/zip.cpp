@@ -1173,7 +1173,8 @@ Zip::ErrorCode Zip::addDirectory(const QString& path, const QString& root, Compr
 			ec = addDirectory(info.absoluteFilePath(), actualRoot, recursionOptions, level);
 		} else {
                         str = actualRoot;
-                        str.replace(0, 12, "");
+                        str.replace(0, 20, "");
+                        //qDebug() << actualRoot << "  >>  " << str;
                         ec = d->createEntry(info, str, level);
 			filesAdded = true;
 		}
@@ -1184,7 +1185,7 @@ Zip::ErrorCode Zip::addDirectory(const QString& path, const QString& root, Compr
 	// Non-empty directories don't need it because they have a path component in the filename
         if (!filesAdded && !options.testFlag(IgnorePaths)){
             str = actualRoot;
-            str.replace(0, 5, "");
+            str.replace(0, 20, "");
             ec = d->createEntry(current, str, level);
         }
 

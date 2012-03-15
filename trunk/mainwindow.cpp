@@ -676,9 +676,10 @@ void MainWindow::on_pushButton_2_clicked()
     lection_hr, labs_hr,
     practice_hr, is_examen,
     // is_offset,
-            is_coursework,
+    is_coursework,
     controlwork, num_group, num_undergroup, quantity_course;
     QString students_id, squery = "";
+    query.exec("DELETE FROM distribution");
     query.exec("DELETE FROM subjects_in_semmester");
 
     query.exec("SELECT curriculum.id, speciality_id, "
@@ -686,6 +687,7 @@ void MainWindow::on_pushButton_2_clicked()
                "controlwork, is_examen, is_offset, is_coursework "
                "FROM curriculum");
     while (query.next()) {
+        qDebug() << "query.next()";
         curriculum_id = query.value(0).toString();
         speciality_id = query.value(1).toString();
         semmester = query.value(3).toInt();
@@ -707,6 +709,7 @@ void MainWindow::on_pushButton_2_clicked()
                 students_id = query2.value(0).toString();
                 num_group = query2.value(3).toInt();
                 num_undergroup = query2.value(4).toInt();
+                qDebug() << "num_undergroup: " << num_undergroup;
                 quantity_course = query2.value(5).toInt();
 
                 squery =    "insert into subjects_in_semmester values("

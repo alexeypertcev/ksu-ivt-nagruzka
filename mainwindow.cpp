@@ -679,6 +679,7 @@ void MainWindow::on_pushButton_2_clicked()
     is_coursework,
     controlwork, num_group, num_undergroup, quantity_course;
     QString students_id, squery = "";
+
     query.exec("DELETE FROM distribution");
     query.exec("DELETE FROM subjects_in_semmester");
 

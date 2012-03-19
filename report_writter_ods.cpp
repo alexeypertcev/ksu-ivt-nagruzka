@@ -6,7 +6,7 @@
 #include <QDebug>
 #include <QTextOStream>
 #include <QMessageBox>
-#include <QtXml>
+
 #include "workzip.cpp"
 
 reports_writter_ods::reports_writter_ods()
@@ -14,7 +14,9 @@ reports_writter_ods::reports_writter_ods()
 }
 
 
-OdsWriter::OdsWriter(QObject *parent){}
+OdsWriter::OdsWriter(QObject *parent){
+    parsed_ods_file = true;
+}
 OdsWriter::~OdsWriter(){}
 
 bool OdsWriter::open(QString fname){
@@ -24,13 +26,13 @@ bool OdsWriter::open(QString fname){
     temp = QDir::tempPath();
     tempdir_name = QDir::convertSeparators(QString(temp + "/nagr_temp_%1").arg(QDateTime::currentDateTime().toTime_t())+'/');
 
-//----------------------------------------------------------------
+/*----------------------------------------------------------------
     qDebug() << "QDir::currentPath(): " << QDir::currentPath();
     qDebug() << "fname: " << fname;
     qDebug() << "templateDir: " << templateDir;
     qDebug() << "temp: " << temp;
     qDebug() << "tempdir_name: " << tempdir_name;
-//----------------------------------------------------------------
+----------------------------------------------------------------*/
 
     if(!dir.mkdir(tempdir_name))
     {
@@ -40,11 +42,65 @@ bool OdsWriter::open(QString fname){
         // extract from zip
         decompress(fname, tempdir_name);
     }
-    return true;
+
+    QDomDocument opt;
+    iFile.setFileName(tempdir_name + "content.xml");
+    iFile.open(QFile::ReadOnly);
+    domDocument.setContent(&iFile);
+    domElement = domDocument.documentElement();
+
+    parsed_ods_file = true;
+    QDomNode temp_node;
+    int count;
+    if(domElement.tagName() == "office:document-content"){
+        temp_node = domElement.firstChild();
+        count = 0;
+        while ((temp_node.toElement().tagName() != "office:body" )){
+            temp_node = temp_node.nextSibling();
+            ++count;
+            if (count == 100){
+                parsed_ods_file = false;
+                break;
+            }
+            node_office_body = temp_node;
+        }
+        if (parsed_ods_file){
+            temp_node = node_office_body.toElement().firstChild();
+            if (temp_node.toElement().tagName() == "office:spreadsheet"){
+                node_office_spreadsheet = temp_node;
+                temp_node = node_office_spreadsheet.toElement().firstChild();
+
+                if (temp_node.toElement().tagName() == "table:table"){
+                    node_office_first_sheet = temp_node;
+                } else {
+                    parsed_ods_file = false;
+                }
+            } else {
+                parsed_ods_file = false;
+            }
+        }
+    }
+
+//    qDebug() << "node_office_body: " << node_office_body.toElement().tagName();
+//    qDebug() << "node_office_spreadsheet: " << node_office_spreadsheet.toElement().tagName();
+//    qDebug() << "node_office_first_sheet: " << node_office_first_sheet.toElement().tagName();
+
+    node_office_current_sheet = node_office_first_sheet;
+
+    return parsed_ods_file;
 }
 
 
 bool OdsWriter::save(QString fname){
+
+    iFile.close();
+    oFile.setFileName(tempdir_name + "content.xml");
+
+    oFile.open(QFile::ReadWrite);
+    QTextStream out(&oFile);
+    out.setCodec( QTextCodec::codecForName("UTF-8") );
+    domDocument.save(out, 4);//, QDomNode::EncodingFromTextStream);
+    oFile.close();
 
     compress(fname, tempdir_name);
 
@@ -84,172 +140,81 @@ CardOdsWriter::~CardOdsWriter(){}
 
 bool CardOdsWriter::writeSheet(Tabledata table_data, int i){
 
-    QDomDocument opt;
-    QFile iFile(tempdir_name + "content.xml");
-    iFile.open(QFile::ReadOnly);
-    opt.setContent(&iFile);
-
-    bool parsed_ok = true;
-
-    QDomElement domElement = opt.documentElement();
-    QDomNode node1, node2, node3;
-    int count;
-    if(domElement.tagName() == "office:document-content"){
-            node1 = domElement.firstChild();
-            count = 0;
-            while ((node1.toElement().tagName() != "office:body" )){
-              node1 = node1.nextSibling();
-              ++count;
-              if (count == 100){
-                  parsed_ok = false;
-                  break;
-              }
-            }
-            if (parsed_ok){
-              node1 = node1.toElement().firstChild();
-              node1 = node1.toElement().firstChild();
-              node1 = node1.toElement().firstChild();
-              count = 0;
-              while ((node1.toElement().tagName() != "table:table-row" )){
-                node1 = node1.nextSibling();
-                ++count;
-                if (count == 1000){
-                    parsed_ok = false;
-                    break;
-                }
-              }
-
-              if (parsed_ok){
-                  node2 = node1.nextSibling();
-                  node2 = node2.nextSibling();
-                  node2 = node2.nextSibling();
-                  node2 = node2.nextSibling();
-                  node2 = node2.nextSibling();
-
-                  node3 = node2.firstChild();
-                  node3 = node3.nextSibling();
-                  node3 = node3.firstChild();
-                  qDebug() << node3.toElement().tagName();
-                  qDebug() << node3.toElement().text();
-
-                  if (node3.toElement().text() == "_ФИО"){
-                      node3.childNodes().item(0).setNodeValue( table_data.get_header_sheet().at(0) + ", " + table_data.get_header_sheet().at(1) + ", " + table_data.get_header_sheet().at(2)); // ФИО преподавателя
-                  }
-              }
-
-
-            }
-     } else {parsed_ok = false;}
-
-    if (parsed_ok){
-     iFile.close();
-        QFile oFile(tempdir_name + "content.xml");
-        oFile.open(QFile::ReadWrite);
-            QTextStream out(&oFile);
-            out.setCodec( QTextCodec::codecForName("UTF-8") );
-            opt.save(out, 4);//, QDomNode::EncodingFromTextStream);
-            oFile.close();
-    } else {
-        qDebug() << "error template format";
+    QDomNode temp_node;
+    int count = 0;
+    temp_node = node_office_first_sheet.firstChild();
+   // qDebug() << "writeSheet method: " << node_office_first_sheet.toElement().tagName();
+    while ((temp_node.toElement().tagName() != "table:table-row" )){
+        temp_node = temp_node.nextSibling();
+        ++count;
+        if (count == 1000){
+            parsed_ods_file = false;
+            break;
+        }
     }
 
+    if (parsed_ods_file){
+        temp_node = temp_node.nextSibling();
+        temp_node = temp_node.nextSibling();
+        temp_node = temp_node.nextSibling();
+        temp_node = temp_node.nextSibling();
+        temp_node = temp_node.nextSibling();
 
+        temp_node = temp_node.firstChild();
+        temp_node = temp_node.nextSibling();
+        temp_node = temp_node.firstChild();
 
-
-
-    return true;
-
-    /*
-    bool xml_work(QString path){
-
-        bool parsed_ok = true;
-
-        QDomDocument opt;
-          QFile iFile(path);
-          iFile.open(QFile::ReadOnly);
-          opt.setContent(&iFile);
-
-          QDomElement domElement = opt.documentElement();
-          QDomNode node1, node2, node3;
-          int count;
-          if(domElement.tagName() == "office:document-content"){
-                  node1 = domElement.firstChild();
-                  count = 0;
-                  while ((node1.toElement().tagName() != "office:body" )){
-                    node1 = node1.nextSibling();
-                    ++count;
-                    if (count == 100){
-                        parsed_ok = false;
-                        break;
-                    }
-                  }
-                  if (parsed_ok){
-                    node1 = node1.toElement().firstChild();
-                    node1 = node1.toElement().firstChild();
-
-
-                    node1 = node1.toElement().firstChild();
-                    count = 0;
-                    while ((node1.toElement().tagName() != "table:table-row" )){
-                      node1 = node1.nextSibling();
-                      ++count;
-                      if (count == 1000){
-                          parsed_ok = false;
-                          break;
-                      }
-                    }
-
-                    if (parsed_ok){
-                        node2 = node1.nextSibling();
-                        node2 = node2.nextSibling();
-                        node2 = node2.nextSibling();
-                        node2 = node2.nextSibling();
-                        node2 = node2.nextSibling();
-
-                        node3 = node2.firstChild();
-                        node3 = node3.nextSibling();
-                        node3 = node3.firstChild();
-                        qDebug() << node3.toElement().tagName();
-                        qDebug() << node3.toElement().text();
-
-                        if (node3.toElement().text() == "_ФИО"){
-                            node3.childNodes().item(0).setNodeValue( "ЛОПИН" ); // ФИО преподавателя
-                        }
-                    }
-
-
-                  }
-
-    //              node.childNodes().item(0).setNodeValue( "кирилица" );  office:document-content
-    //              qDebug() << node.toElement().text();
-    //              node = node.nextSibling();
-    //              qDebug() << node.toElement().text();
-
-           } else {parsed_ok = false;}
-
-          if (parsed_ok){
-           iFile.close();
-              QFile oFile(path);
-              oFile.open(QFile::ReadWrite);
-                  QTextStream out(&oFile);
-                  out.setCodec( QTextCodec::codecForName("UTF-8") );
-                  opt.save(out, 4);//, QDomNode::EncodingFromTextStream);
-                  oFile.close();
-          } else {
-              qDebug() << "error template format";
-          }
-        return true;
+        if (temp_node.toElement().text() == "_ФИО"){
+            qDebug() << "set fio";
+            temp_node.childNodes().item(0).setNodeValue( table_data.get_header_sheet().at(0) + " " + table_data.get_header_sheet().at(1) + " " + table_data.get_header_sheet().at(2)); // ФИО преподавателя
+        }
     }
 
-    */
+    setTextToCell(1,1,"test");
+    return parsed_ods_file;
 }
-
-
-
 
 bool CardOdsWriter::add_sheet(){
     return true;
 }
 bool CardOdsWriter::remove_old_sheet(){
     return true;
+}
+
+bool CardOdsWriter::setTextToCell(unsigned int row, unsigned int collumn, QString text)
+{/*0-numering, нумерация с нуля*/
+    QDomNode temp_node;
+    temp_node = node_office_current_sheet.firstChild();
+
+    int count = 0;
+    while ((temp_node.toElement().tagName() != "table:table-row" )){
+        temp_node = temp_node.nextSibling();
+        ++count;
+        if (count == 1000){
+            parsed_ods_file = false;
+            break;
+        }
+    }
+    /*temp_node = первая строка*/
+
+    for (unsigned int i=0; i<row; ++i){
+        if (temp_node.toElement().tagName() == ""){
+            /*записи закончились*/
+            /*анализировать сколько осталось и создавать новые строки*/
+        } else{
+            temp_node = temp_node.nextSibling();
+        }
+    }
+
+    /*temp_node - нужная строка*/
+    temp_node = temp_node.firstChild();  /*temp_node первый столбец*/
+
+    for (unsigned int i=0; i<collumn; ++i){
+        /*если есть атрибут table:number-columns-repeated увеличить i на его значение*/
+
+
+    }
+
+
+   return false;
 }

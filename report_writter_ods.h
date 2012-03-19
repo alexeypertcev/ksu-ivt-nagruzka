@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QMap>
 #include <QStringList>
+#include <QtXml>
 #include "report_tabledates.h"
 
 
@@ -25,6 +26,15 @@ public:
 
 protected:
     QString tempdir_name;
+    QFile iFile;
+    QFile oFile;
+    QDomDocument domDocument;
+    QDomElement domElement;
+    QDomNode node_office_body;
+    QDomNode node_office_spreadsheet;
+    QDomNode node_office_first_sheet;
+    QDomNode node_office_current_sheet;
+    bool parsed_ods_file;
 
 private:
     bool removeDir(QString dirName);
@@ -40,6 +50,7 @@ public:
 private:
     bool add_sheet();
     bool remove_old_sheet();
+    bool setTextToCell(unsigned int row, unsigned int collumn, QString text);
 };
 
 

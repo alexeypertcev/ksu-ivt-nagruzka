@@ -182,7 +182,7 @@ bool create_report(QStringList teachers_id_list, QString template_patch, QString
 bool create_report_ods(QList<Tabledata> list_tabledata, QString template_patch, QString report_patch)
 {
     Tabledata temp_tabledata;
-
+/*
     for (int i=0; i<list_tabledata.length(); ++i){
         temp_tabledata = list_tabledata.at(i);
         qDebug() << temp_tabledata.get_header_sheet();
@@ -198,7 +198,7 @@ bool create_report_ods(QList<Tabledata> list_tabledata, QString template_patch, 
         qDebug() << "- all sum:";
         qDebug() << temp_tabledata.get_list_all_sum();
     }
-
+*/
     CardOdsWriter cardOdsWriter;
     // пакует - распаковывает нормально
 

@@ -70,6 +70,8 @@ bool create_report(QStringList teachers_id_list, QString template_patch, QString
         temp << query.value(1).toString();
         temp << query.value(2).toString();
         temp << query.value(3).toString();
+        temp << "  Кафедра Факультет";
+        temp << "  Объем";
         temp_tabledata.set_header_sheet(temp);
 
         // temp_tabledata.list_one

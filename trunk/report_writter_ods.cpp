@@ -140,7 +140,7 @@ CardOdsWriter::~CardOdsWriter(){}
 
 bool CardOdsWriter::writeSheet(Tabledata table_data, int i){
 
-    QDomNode temp_node;
+    QDomNode temp_node, temp_node2;
     int count = 0;
     temp_node = node_office_first_sheet.firstChild();
    // qDebug() << "writeSheet method: " << node_office_first_sheet.toElement().tagName();
@@ -152,25 +152,57 @@ bool CardOdsWriter::writeSheet(Tabledata table_data, int i){
             break;
         }
     }
+    /*temp_node = первая строка*/
 
     if (parsed_ods_file){
-        temp_node = temp_node.nextSibling();
-        temp_node = temp_node.nextSibling();
-        temp_node = temp_node.nextSibling();
-        temp_node = temp_node.nextSibling();
-        temp_node = temp_node.nextSibling();
+        temp_node = temp_node.nextSibling(); /* 2я */
+        temp_node = temp_node.nextSibling(); /* 3я */
+        temp_node = temp_node.nextSibling(); /* 4я */
+        temp_node = temp_node.nextSibling(); /* 5я */
+        temp_node = temp_node.nextSibling(); /* 6я */
 
-        temp_node = temp_node.firstChild();
-        temp_node = temp_node.nextSibling();
-        temp_node = temp_node.firstChild();
+        temp_node2 = temp_node.firstChild();  /*вошли в 1ю ячейку 6й строки*/
+        temp_node2 = temp_node2.nextSibling(); /*перешли к 2й ячейке 6й строки*/
 
-        if (temp_node.toElement().text() == "_ФИО"){
-            qDebug() << "set fio";
-            temp_node.childNodes().item(0).setNodeValue( table_data.get_header_sheet().at(0) + " " + table_data.get_header_sheet().at(1) + " " + table_data.get_header_sheet().at(2)); // ФИО преподавателя
-        }
+        if (temp_node2.firstChild().toElement().text() == "_ФИО"){
+            temp_node2.firstChild().childNodes().item(0).setNodeValue( table_data.get_header_sheet().at(0) + " " + table_data.get_header_sheet().at(1) + " " + table_data.get_header_sheet().at(2)); // ФИО преподавателя
+        } else {parsed_ods_file = false;}
+
+        temp_node = temp_node.nextSibling(); /* 7я строка*/
+
+        temp_node2 = temp_node.firstChild();  /*вошли в 1ю ячейку 7й строки*/
+        temp_node2 = temp_node2.nextSibling(); /*перешли к 2й ячейке 7й строки*/
+
+        if (temp_node2.firstChild().toElement().text() == "_Ученаястепень"){
+            temp_node2.firstChild().childNodes().item(0).setNodeValue( table_data.get_header_sheet().at(3));
+        } else {parsed_ods_file = false;}
+
+        temp_node = temp_node.nextSibling(); /* 8я строка*/
+
+        temp_node2 = temp_node.firstChild();  /*вошли в 1ю ячейку 8й строки*/
+        temp_node2 = temp_node2.nextSibling(); /*перешли к 2й ячейке 8й строки*/
+
+        if (temp_node2.firstChild().toElement().text() == "_Каффакульт"){
+            temp_node2.firstChild().childNodes().item(0).setNodeValue( table_data.get_header_sheet().at(4));
+        } else {parsed_ods_file = false;}
+
+        temp_node = temp_node.nextSibling(); /* 9я строка*/
+
+        temp_node2 = temp_node.firstChild();  /*вошли в 1ю ячейку 9й строки*/
+        temp_node2 = temp_node2.nextSibling(); /*перешли к 2й ячейке 9й строки*/
+
+        if (temp_node2.firstChild().toElement().text() == "_объем"){
+            temp_node2.firstChild().childNodes().item(0).setNodeValue( table_data.get_header_sheet().at(5));
+        } else {parsed_ods_file = false;}
+
+        temp_node = temp_node.nextSibling(); /* 10я строка*/
+        temp_node = temp_node.nextSibling(); /* 11я строка*/
+        temp_node = temp_node.nextSibling(); /* 12я строка*/
+        temp_node = temp_node.nextSibling(); /* 13я строка*/
+
+
     }
 
-    setTextToCell(1,1,"test");
     return parsed_ods_file;
 }
 
@@ -181,7 +213,46 @@ bool CardOdsWriter::remove_old_sheet(){
     return true;
 }
 
-bool CardOdsWriter::setTextToCell(unsigned int row, unsigned int collumn, QString text)
+bool OdsWriter::prepareCurrentSheet()
+{/*Замена всех записей о повторяющихся строках/столбцах повторяющимися строками/столбцами*/
+ /*Удаление последних записей о повторяющихся столбцах/строках*/
+    QDomNode temp_node;
+    temp_node = node_office_current_sheet.firstChild();
+
+    int count = 0;
+    while ((temp_node.toElement().tagName() != "table:table-row" )){
+        temp_node = temp_node.nextSibling();
+        ++count;
+        if (count == 1000){
+            parsed_ods_file = false;
+            break;
+        }
+    }
+    /*temp_node = первая строка*/
+    QString style_name = "ro1";
+
+    while (temp_node.toElement().tagName() != ""){
+        if (temp_node.toElement().attribute("table:number-rows-repeated", "none") == "none"){
+            /* запись об одной строке*/
+            temp_node = temp_node.nextSibling();
+        } else {
+            /*запись о повторяющихся*/
+            if (temp_node.nextSibling().toElement().isNull()){
+                /*это последняя запись с повторениями - удаляем атрибут table:number-rows-repeated*/
+
+            } else {
+                /*это непоследняя запись с повторениями - добавляем копии*/
+
+
+            }
+        }
+    }
+
+
+    return false;
+}
+
+bool OdsWriter::setTextToCell(unsigned int row, unsigned int collumn, QString text)
 {/*0-numering, нумерация с нуля*/
     QDomNode temp_node;
     temp_node = node_office_current_sheet.firstChild();
@@ -196,13 +267,25 @@ bool CardOdsWriter::setTextToCell(unsigned int row, unsigned int collumn, QStrin
         }
     }
     /*temp_node = первая строка*/
+    QString style_name = "ro1";
+
 
     for (unsigned int i=0; i<row; ++i){
         if (temp_node.toElement().tagName() == ""){
             /*записи закончились*/
             /*анализировать сколько осталось и создавать новые строки*/
         } else{
-            temp_node = temp_node.nextSibling();
+            /*запись о строке есть, анализ - одна или несколько повторяющихся*/
+            if (temp_node.toElement().attribute("table:number-rows-repeated", "none") == "none"){
+                /* запись об одной строке*/
+                temp_node = temp_node.nextSibling();
+            } else {
+                /*запись о повторяющихся*/
+                style_name = temp_node.toElement().attribute("table:style-name", "ro1");
+                temp_node.toElement().attribute("table:number-rows-repeated", "none").toInt();
+
+
+            }
         }
     }
 

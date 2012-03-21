@@ -35,6 +35,8 @@ protected:
     QDomNode node_office_first_sheet;
     QDomNode node_office_current_sheet;
     bool parsed_ods_file;
+    bool prepareCurrentSheet();
+    bool setTextToCell(unsigned int row, unsigned int collumn, QString text);
 
 private:
     bool removeDir(QString dirName);
@@ -50,7 +52,7 @@ public:
 private:
     bool add_sheet();
     bool remove_old_sheet();
-    bool setTextToCell(unsigned int row, unsigned int collumn, QString text);
+
 };
 
 

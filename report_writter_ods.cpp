@@ -140,7 +140,7 @@ CardOdsWriter::~CardOdsWriter(){}
 
 bool CardOdsWriter::writeSheet(Tabledata table_data, int i){
 
-    QDomNode temp_node, temp_node2;
+    QDomNode temp_node, temp_node2, temp_node3;
     int count = 0;
     temp_node = node_office_first_sheet.firstChild();
    // qDebug() << "writeSheet method: " << node_office_first_sheet.toElement().tagName();
@@ -199,7 +199,13 @@ bool CardOdsWriter::writeSheet(Tabledata table_data, int i){
         temp_node = temp_node.nextSibling(); /* 11я строка*/
         temp_node = temp_node.nextSibling(); /* 12я строка*/
         temp_node = temp_node.nextSibling(); /* 13я строка*/
+/*
+        temp_node2 = temp_node.cloneNode();
 
+        node_office_first_sheet.insertBefore(temp_node2, temp_node);
+
+        temp_node.toElement().setAttribute("table:style-name", "new_style");
+*/
 
     }
 

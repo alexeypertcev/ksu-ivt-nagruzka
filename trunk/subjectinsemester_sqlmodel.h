@@ -17,8 +17,14 @@ public:
     void setspeciality_id(QString id);
     void refresh();
     bool add();
+    int rowCount (const QModelIndex & parent) const;
+    QVariant data(const QModelIndex &index, int role) const;
+    int rowCountDB();
 private:
+    unsigned int get_sum_current_speciality();
     QString speciality_id;
+    unsigned int rowsCountDB;
+    unsigned int sum;
 
 };
 

@@ -27,7 +27,8 @@ SOURCES += main.cpp\
     teachers_list.cpp \
     reports_creater.cpp \
     report_writter_ods.cpp \
-    report_tabledates.cpp
+    report_tabledates.cpp \
+    subject.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -51,7 +52,8 @@ HEADERS  += mainwindow.h \
     teachers_list.h \
     reports_creater.h \
     report_writter_ods.h \
-    report_tabledates.h
+    report_tabledates.h \
+    subject.h
 
 
 FORMS    += mainwindow.ui \

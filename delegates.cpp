@@ -78,6 +78,7 @@ QWidget *ComboBoxDelegate::createEditor(QWidget *parent,
     QComboBox *editor = new QComboBox(parent);
     QSqlTableModel* tablemodel = new QSqlTableModel(parent);
     tablemodel->setTable(table);
+    tablemodel->setSort(0, Qt::AscendingOrder);
     tablemodel->setEditStrategy(QSqlTableModel::OnFieldChange);
     tablemodel->select();
     editor->setModel(tablemodel);
@@ -293,8 +294,9 @@ QWidget *FioDelegate::createEditor(QWidget *parent,
 {
     SaveIdComboBox *editor = new SaveIdComboBox(parent);
     QSqlQueryModel* sqlmodel = new QSqlQueryModel(parent);
-    sqlmodel->setQuery("SELECT teachers.f || ' ' || teachers.i || ' ' || teachers.o AS 'FIO', teachers.id "
-                       "FROM teachers WHERE teachers.id != '0';");
+    sqlmodel->setQuery("SELECT f || ' ' || i || ' ' || o AS 'FIO', id "
+                       "FROM teachers WHERE id != '0' "
+                       "ORDER BY f, i;");
     editor->setModel(sqlmodel);
     return editor;
 }

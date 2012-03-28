@@ -85,7 +85,7 @@ void CurriculumSqlModel::refresh()
                    "KCP_hr, is_examen, is_offset, is_coursework "
                    "FROM curriculum, speciality "
                    "WHERE curriculum.speciality_id = speciality.id AND speciality_id = " + speciality_id +
-                   ";");
+                   " ORDER BY semmester, subject_name;");
 
 
 }

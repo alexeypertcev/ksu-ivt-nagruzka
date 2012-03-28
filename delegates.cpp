@@ -296,7 +296,7 @@ QWidget *FioDelegate::createEditor(QWidget *parent,
     QSqlQueryModel* sqlmodel = new QSqlQueryModel(parent);
     sqlmodel->setQuery("SELECT f || ' ' || i || ' ' || o AS 'FIO', id "
                        "FROM teachers WHERE id != '0' "
-                       "ORDER BY f, i;");
+                       "ORDER BY f, i, o;");
     editor->setModel(sqlmodel);
     return editor;
 }

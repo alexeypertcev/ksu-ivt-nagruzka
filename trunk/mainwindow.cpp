@@ -15,6 +15,7 @@
 #include "distribution.h"
 #include "reports_creater.h"
 #include "teachers_list.h"
+#include "subject.h"
 
 #include <QtGui>
 #include <QtSql>
@@ -34,10 +35,10 @@ MainWindow::MainWindow(QString apppath, QWidget *parent) :
     report_path = applicationDirPath;
     report_format = "ods";
 
+    sqlmodel_subject = new SubjectSqlModel(this);
     tablemodel_spec = new QSqlRelationalTableModel(this);
     sqlmodel_spec = new QSqlQueryModel(this);
     tablemodel_stat = new QSqlRelationalTableModel(this);
-    tablemodel_subject = new QSqlRelationalTableModel(this);
     sqlmodel_teachers = new TeachersSqlModel(this);
     sqlmodel_students = new StudentsSqlModel(this);
     sqlmodel_curriculum = new CurriculumSqlModel(this);
@@ -82,12 +83,16 @@ void MainWindow::load_db()
     tablemodel_stat->select();
 
     // subject table
+    /*
     tablemodel_subject = new QSqlRelationalTableModel(this);
     tablemodel_subject->setTable("subject");
     tablemodel_subject->setEditStrategy(QSqlTableModel::OnFieldChange);
     tablemodel_subject->select();
     ui->tableView->setModel(tablemodel_subject);
     ui->tableView->update();
+    */
+    sqlmodel_subject->refresh();
+    ui->tableView->setModel(sqlmodel_subject);
 
     // teachers table
     //sqlmodel_teachers = new TeachersSqlModel(this);
@@ -108,14 +113,10 @@ void MainWindow::load_db()
     //sqlmodel_students = new StudentsSqlModel(this);
     sqlmodel_students->refresh();
     ui->tableView_3->setModel(sqlmodel_students);
-
-
     SpecialityDelegate *speciality_delegate = new SpecialityDelegate(this);
     SpinBoxDelegate *course_delegate = new SpinBoxDelegate(1,6,this);
-
     ui->tableView_3->setItemDelegateForColumn(1, speciality_delegate);
     ui->tableView_3->setItemDelegateForColumn(2, course_delegate);
-
     ui->tableView_3->update();
 
     // curriculum table
@@ -128,7 +129,6 @@ void MainWindow::load_db()
     SpinBoxDelegate *semester_delegate = new SpinBoxDelegate(1,12,this);
     SpinBoxDelegate *contrwork_delegate = new SpinBoxDelegate(0,6,this);
     CheckBoxDelegate *checkBox_delegate = new CheckBoxDelegate(this);
-
     ui->tableView_4->setItemDelegateForColumn(1, speciality_delegate1);
     ui->tableView_4->setItemDelegateForColumn(2, subject_delegate);
     ui->tableView_4->setItemDelegateForColumn(3, semester_delegate);
@@ -214,31 +214,14 @@ void MainWindow::on_action_7_activated()
 
 void MainWindow::on_pushButton_add_subject_clicked()
 {
-    QString s = "insert into subject values('')";
-    qDebug() << s;
-
-    QSqlQuery query;
-    if (!query.exec(s)){
-        QMessageBox::warning(this, tr("Error querry"),
-                             tr("The database reported an error: %1").arg(tablemodel_subject->lastError().text()));
-    }
-
-    tablemodel_subject->select();
-    QModelIndex index = tablemodel_subject->index(tablemodel_subject->rowCount()-1,0);
-    ui->tableView->setCurrentIndex(index);
+    sqlmodel_subject->add(QString(""));
+    sqlmodel_subject->refresh();
 }
 
 void MainWindow::on_pushButton_del_subject_clicked()
 {
-    QString s = "DELETE FROM subject WHERE name = '"+ ui->tableView->currentIndex().data(Qt::DisplayRole).toString() + "';";
-    qDebug() << s;
-
-    QSqlQuery query;
-    if (!query.exec(s)){
-        QMessageBox::warning(this, tr("Error querry"),
-                             tr("The database reported an error: %1").arg(tablemodel_subject->lastError().text()));
-    }
-    tablemodel_subject->select();
+    sqlmodel_subject->del(ui->tableView->currentIndex().data(Qt::DisplayRole).toString());
+    sqlmodel_subject->refresh();
 }
 
 void MainWindow::on_pushButton_add_teachers_clicked()
@@ -425,7 +408,7 @@ void MainWindow::set_design_window()
 {
     int i = 0;
     ui->tableView->setColumnWidth(0,400);
-    tablemodel_subject->setHeaderData(0, Qt::Horizontal, QObject::tr("Название"));
+    sqlmodel_subject->setHeaderData(0, Qt::Horizontal, QObject::tr("Название"));
     do{ ui->tableView->setRowHeight(i++,25); }while(i<=10);
 
     ui->tableView_2->setColumnWidth(0,0);   //id
@@ -657,12 +640,10 @@ void MainWindow::on_pushButton_3_clicked()
     QSqlQuery query;
     while (!file.atEnd()) {
         line = file.readLine();
-        qDebug() << line.trimmed();
-
-        query.exec("insert into subject values('" + line.trimmed() + "')");
+        //qDebug() << line.trimmed();
+        sqlmodel_subject->add(QString(line.trimmed()));
     }
-    tablemodel_subject->select();
-
+    sqlmodel_subject->refresh();
 }
 
 void MainWindow::on_pushButton_2_clicked()

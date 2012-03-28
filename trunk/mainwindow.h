@@ -9,6 +9,7 @@
 
 QT_BEGIN_NAMESPACE
 class QSqlRelationalTableModel;
+class SubjectSqlModel;
 class QSqlQueryModel;
 class CurriculumSqlModel;
 class Settings;
@@ -48,7 +49,7 @@ private:
     QString path_db;
     QSqlDatabase db;
     QString applicationDirPath;
-    QSqlRelationalTableModel* tablemodel_subject;
+    SubjectSqlModel* sqlmodel_subject;
     QSqlRelationalTableModel* tablemodel_teachers;
     QSqlRelationalTableModel* tablemodel_curriculum;
 

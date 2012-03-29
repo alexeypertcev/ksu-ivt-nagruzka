@@ -37,7 +37,7 @@ MainWindow::MainWindow(QString apppath, QWidget *parent) :
 
     sqlmodel_subject = new SubjectSqlModel(this);
     tablemodel_spec = new QSqlRelationalTableModel(this);
-    sqlmodel_spec = new QSqlQueryModel(this);
+    spec_for_combobox_sqlmodel = new SpecialityForComboBoxSqlModel(this);
     tablemodel_stat = new QSqlRelationalTableModel(this);
     sqlmodel_teachers = new TeachersSqlModel(this);
     sqlmodel_students = new StudentsSqlModel(this);
@@ -70,12 +70,11 @@ void MainWindow::load_db()
     tablemodel_spec->select();
 
     //sqlmodel_spec = new QSqlQueryModel(this);
-    sqlmodel_spec->setQuery("SELECT special_name || '(' || form_training_name || ')', id "
-                            "FROM speciality ORDER BY id;");
+    spec_for_combobox_sqlmodel->refresh();
 
-    ui->comboBox->setModel(sqlmodel_spec);
-    ui->comboBox_2->setModel(sqlmodel_spec);
-    ui->comboBox_3->setModel(sqlmodel_spec);
+    ui->comboBox->setModel(spec_for_combobox_sqlmodel);
+    ui->comboBox_2->setModel(spec_for_combobox_sqlmodel);
+    ui->comboBox_3->setModel(spec_for_combobox_sqlmodel);
 
     tablemodel_stat = new QSqlRelationalTableModel(this);
     tablemodel_stat->setTable("status");
@@ -659,8 +658,8 @@ void MainWindow::on_pushButton_2_clicked()
     QString curriculum_id, speciality_id;
     int semmester, course,
     lection_hr, labs_hr,
-    practice_hr, is_examen,
-    // is_offset,
+    practice_hr, is_examen, KCR_hr,
+    is_offset,
     is_coursework,
     controlwork, num_group, num_undergroup, quantity_course;
     QString students_id, squery = "";
@@ -670,7 +669,7 @@ void MainWindow::on_pushButton_2_clicked()
 
     query.exec("SELECT curriculum.id, speciality_id, "
                "subject_name, semmester, lection_hr, labs_hr, practice_hr, "
-               "controlwork, is_examen, is_offset, is_coursework "
+               "controlwork, KCP_hr, is_examen, is_offset, is_coursework "
                "FROM curriculum");
     while (query.next()) {
         qDebug() << "query.next()";
@@ -681,9 +680,10 @@ void MainWindow::on_pushButton_2_clicked()
         labs_hr = query.value(5).toInt();
         practice_hr = query.value(6).toInt();
         controlwork = query.value(7).toInt();
-        is_examen = query.value(8).toInt();
-//        is_offset = query.value(9).toInt();
-        is_coursework = query.value(10).toInt();
+        KCR_hr = query.value(8).toInt();
+        is_examen = query.value(9).toInt();
+        is_offset = query.value(10).toInt();
+        is_coursework = query.value(11).toInt();
         course = (semmester+1)/2;
         query2.exec("SELECT students.id, speciality_id, "
                     "course, num_group, num_undergroup, quantity_course "
@@ -705,11 +705,11 @@ void MainWindow::on_pushButton_2_clicked()
                             QString::number(lection_hr*1, 10) + ", "+        // "lection_hr INTEGER NOT NULL, "
                             QString::number(labs_hr*num_undergroup, 10)+", "+// "labs_hr INTEGER NOT NULL, "
                             QString::number(practice_hr*num_group, 10) +", "+// "practice_hr INTEGER NOT NULL, "
-                            "0" + ", "+                                      // "individ_hr REAL NOT NULL, "
+                            QString::number(KCR_hr*1, 10) + ", "+            // "individ_hr REAL NOT NULL, "
                             QString::number((int)ceil(controlwork*quantity_course/4), 10) + ", "+ // "kontr_rab_hr REAL NOT NULL, "
                             consultation_get(lection_hr, speciality_id, num_group, is_examen) + ", "+ // "consultation_hr REAL NOT NULL, "
-  /* возможно косяк*/       QString::number((int)ceil(quantity_course/4), 10) + ", "+   // "offset_hr REAL NOT NULL, "
-                            QString::number((int)ceil(quantity_course/3), 10) + ", "+   // "examen_hr REAL NOT NULL, "
+  /* возможно косяк*/       offset_get((int)ceil(quantity_course/4), is_offset) + ", "+   // "offset_hr REAL NOT NULL, "
+                            examen_get((int)ceil(quantity_course/3), is_examen) + ", "+   // "examen_hr REAL NOT NULL, "
                             QString::number(is_coursework*quantity_course*3, 10) + ", "+ // "coursework_hr REAL NOT NULL, "
                             "0" + ", "+                                      // "diplomwork_hr REAL NOT NULL, "
                             "0" + ", "+                                      // "praktika_hr REAL NOT NULL, "
@@ -729,6 +729,23 @@ void MainWindow::on_pushButton_2_clicked()
     qDebug() << "готово";
 //    ui->statusBar->showMessage("готово",0);
 }
+
+QString MainWindow::offset_get(int hours, int is_exists){
+    if (is_exists == 0){
+        return QString("0");
+    } else {
+        return QString::number(hours, 10);
+    }
+}
+
+QString MainWindow::examen_get(int hours, int is_exists){
+    if (is_exists == 0){
+        return QString("0");
+    } else {
+        return QString::number(hours, 10);
+    }
+}
+
 
 QString MainWindow::consultation_get(int lection_hr, QString speciality_id, int num_group, int is_examen)
 {

@@ -383,10 +383,18 @@ Qt::ItemFlags Sins_to_distrib_preview_SqlModel::flags(
 
 void Sins_to_distrib_preview_SqlModel::refresh()
 {
-    this->setQuery("SELECT subjects_in_semmester.id, subject_name, semmester FROM subjects_in_semmester, curriculum "
-                   "WHERE (subjects_in_semmester.curriculum_id = curriculum.id AND "
-                   "curriculum.speciality_id = " + speciality_id + ") AND ("
-                   + semester + " );");
+    if (speciality_id == "all"){
+        this->setQuery("SELECT subjects_in_semmester.id, subject_name, semmester FROM subjects_in_semmester, curriculum "
+                       "WHERE (subjects_in_semmester.curriculum_id = curriculum.id "
+                       ") AND ("
+                       + semester + " ) ORDER BY semmester, subject_name;");
+    } else {
+        this->setQuery("SELECT subjects_in_semmester.id, subject_name, semmester FROM subjects_in_semmester, curriculum "
+                       "WHERE (subjects_in_semmester.curriculum_id = curriculum.id "
+                       "AND curriculum.speciality_id = " + speciality_id + ") AND ("
+                       + semester + " ) ORDER BY semmester, subject_name;");
+    }
+
 }
 
 void Sins_to_distrib_preview_SqlModel::setspeciality_id(QString id)

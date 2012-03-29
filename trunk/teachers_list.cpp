@@ -63,10 +63,11 @@ void Teachers_list_model::refresh()
     all_hours.clear();
 
     //**********************************************************
-    // error0x01
+    // error 0x01
     // Ошибка после закрытия программы из-за этой конструкции
     this->setQuery("SELECT teachers.id, f || ', ' || i || ', ' || o, status_name "
-                   "FROM teachers WHERE teachers.id != '0'");
+                   "FROM teachers WHERE teachers.id != '0' "
+                   "ORDER BY f,i,o");
     //
     //**********************************************************
 

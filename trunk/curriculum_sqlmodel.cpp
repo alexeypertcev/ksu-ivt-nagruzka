@@ -80,13 +80,21 @@ bool CurriculumSqlModel::setData(const QModelIndex &index, const QVariant &value
 
 void CurriculumSqlModel::refresh()
 {
-    this->setQuery("SELECT curriculum.id, special_name || '(' || form_training_name || ')', "
-                   "subject_name, semmester, lection_hr, labs_hr, practice_hr, controlwork, "
-                   "KCP_hr, is_examen, is_offset, is_coursework "
-                   "FROM curriculum, speciality "
-                   "WHERE curriculum.speciality_id = speciality.id AND speciality_id = " + speciality_id +
-                   " ORDER BY semmester, subject_name;");
-
+    if (speciality_id == "all"){
+        this->setQuery("SELECT curriculum.id, special_name || '(' || form_training_name || ')' AS spec_form, "
+                       "subject_name, semmester, lection_hr, labs_hr, practice_hr, controlwork, "
+                       "KCP_hr, is_examen, is_offset, is_coursework "
+                       "FROM curriculum, speciality "
+                       "WHERE curriculum.speciality_id = speciality.id "
+                       " ORDER BY spec_form, semmester, subject_name;");
+    } else {
+        this->setQuery("SELECT curriculum.id, special_name || '(' || form_training_name || ')', "
+                       "subject_name, semmester, lection_hr, labs_hr, practice_hr, controlwork, "
+                       "KCP_hr, is_examen, is_offset, is_coursework "
+                       "FROM curriculum, speciality "
+                       "WHERE curriculum.speciality_id = speciality.id AND speciality_id = " + speciality_id +
+                       " ORDER BY semmester, subject_name;");
+    }
 
 }
 
@@ -102,8 +110,13 @@ bool CurriculumSqlModel::add()
                "FROM subject;");
     query.next();
 
-    QString s = "insert into curriculum values(NULL, '" + speciality_id + "', '" + query.value(0).toString() + "', 1, 0, 0, 0, 0, 0, 0, 0, 0);";
-    qDebug() << s;
+    QString s;
+    if (speciality_id == "all"){
+        s = "insert into curriculum values(NULL, '1', '" + query.value(0).toString() + "', 1, 0, 0, 0, 0, 0, 0, 0, 0);";
+    } else {
+        s = "insert into curriculum values(NULL, '" + speciality_id + "', '" + query.value(0).toString() + "', 1, 0, 0, 0, 0, 0, 0, 0, 0);";
+    }
+    //qDebug() << s;
 
     if (!query.exec(s))
     {

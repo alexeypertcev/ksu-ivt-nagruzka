@@ -214,13 +214,17 @@ void MainWindow::on_action_7_activated()
 
 void MainWindow::on_pushButton_add_subject_clicked()
 {
-    sqlmodel_subject->add(QString(""));
+    sqlmodel_subject->add(QString(" "));
     sqlmodel_subject->refresh();
 }
 
 void MainWindow::on_pushButton_del_subject_clicked()
 {
-    sqlmodel_subject->del(ui->tableView->currentIndex().data(Qt::DisplayRole).toString());
+    QModelIndexList indexes = ui->tableView->selectionModel()->selectedRows();
+    QModelIndex index = indexes.at(0);
+    sqlmodel_subject->del( sqlmodel_subject->data( sqlmodel_subject->index(index.row(),0), Qt::DisplayRole ).toString());
+
+//    sqlmodel_subject->del(ui->tableView->currentIndex().data(Qt::DisplayRole).toString());
     sqlmodel_subject->refresh();
 }
 

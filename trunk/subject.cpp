@@ -12,7 +12,7 @@ Qt::ItemFlags SubjectSqlModel::flags(
         const QModelIndex &index) const
 {
     Qt::ItemFlags flags = QSqlQueryModel::flags(index);
-    if (index.column() > 0 && index.column() < 1 )
+    if (index.column() == 0 )
     {
         flags |= Qt::ItemIsEditable;
     }
@@ -35,12 +35,12 @@ bool SubjectSqlModel::setData(const QModelIndex &index, const QVariant &value, i
     QModelIndex primaryKeyIndex = QSqlQueryModel::index(index.row(), 0);
     QString field = ";";
     switch (index.column()){
-        case 1:
+        case 0:
             field = "name";
             break;
         }
 
-    QString s = "update subject set "+ field +" = '"+ value.toString() +"' where name = "+ data(primaryKeyIndex).toString();
+    QString s = "update subject set "+ field +" = '"+ value.toString() +"' where name = '"+ data(primaryKeyIndex).toString() + "';";
     qDebug() << s;
 
     QSqlQuery query;
@@ -53,7 +53,7 @@ bool SubjectSqlModel::setData(const QModelIndex &index, const QVariant &value, i
 
 bool SubjectSqlModel::add(QString subject)
 {
-    QString s = "insert into subject values( " + subject + ");";
+    QString s = "insert into subject values( '" + subject + "');";
     qDebug() << s;
 
     QSqlQuery query;

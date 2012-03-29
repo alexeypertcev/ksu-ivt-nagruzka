@@ -22,6 +22,7 @@ class Sins_to_distrib_detail_SqlModel;
 class DistributionSqlModel;
 class TeachersReportSqlModel;
 class Teachers_list;
+class SpecialityForComboBoxSqlModel;
 QT_END_NAMESPACE
 
 namespace Ui {
@@ -56,7 +57,7 @@ private:
     QSqlRelationalTableModel* tablemodel_spec;
     QSqlRelationalTableModel* tablemodel_stat;
 
-    QSqlQueryModel* sqlmodel_spec;
+    SpecialityForComboBoxSqlModel* spec_for_combobox_sqlmodel;
     StudentsSqlModel* sqlmodel_students;
     TeachersSqlModel* sqlmodel_teachers;
     CurriculumSqlModel* sqlmodel_curriculum;
@@ -80,7 +81,8 @@ private:
 
     QString translit(QString s);
 
-
+    QString offset_get(int hours, int is_exists);
+    QString examen_get(int hours, int is_exists);
     QString consultation_get(int lection_hr, QString speciality_id, int num_group, int is_examen);
 
 

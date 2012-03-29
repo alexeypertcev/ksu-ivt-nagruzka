@@ -88,41 +88,77 @@ void SubjectinsemesterSqlModel::refresh()
 {
     rowsCountDB = rowCountDB();
     sum = get_sum_current_speciality();
-    this->setQuery("SELECT subjects_in_semmester.id, curriculum.subject_name, curriculum.semmester, "
-                   "speciality.special_name, "
-                   "speciality.form_training_name, students.course, "
-                   "students.num_group, students.num_undergroup, "
-                   "students.quantity_course, subjects_in_semmester.lection_hr, "
-                   "subjects_in_semmester.labs_hr, subjects_in_semmester.practice_hr,"
-                   "individ_hr, kontr_rab_hr, consultation_hr, "
-                   "offset_hr,  examen_hr, coursework_hr, diplomwork_hr, praktika_hr, gak_hr, "
-                   "other1,  other2, other3, "
-                   "subjects_in_semmester.lection_hr+subjects_in_semmester.labs_hr+subjects_in_semmester.practice_hr+"
-                   "individ_hr+kontr_rab_hr+consultation_hr+"
-                   "offset_hr+examen_hr+coursework_hr+diplomwork_hr+praktika_hr+gak_hr+"
-                   "other1+other2+other3 AS sum "
-                   "FROM subjects_in_semmester, curriculum, students, speciality "
-                   "WHERE subjects_in_semmester.curriculum_id = curriculum.id AND "
-                   "subjects_in_semmester.students_id = students.id AND "
-                   "students.speciality_id = speciality.id AND "
-                   "students.speciality_id = " + speciality_id + " "
-                   "ORDER BY curriculum.semmester, curriculum.subject_name;");
+    if (speciality_id == "all"){
+        this->setQuery("SELECT subjects_in_semmester.id, curriculum.subject_name, curriculum.semmester, "
+                       "speciality.special_name, "
+                       "speciality.form_training_name, students.course, "
+                       "students.num_group, students.num_undergroup, "
+                       "students.quantity_course, subjects_in_semmester.lection_hr, "
+                       "subjects_in_semmester.labs_hr, subjects_in_semmester.practice_hr,"
+                       "individ_hr, kontr_rab_hr, consultation_hr, "
+                       "offset_hr,  examen_hr, coursework_hr, diplomwork_hr, praktika_hr, gak_hr, "
+                       "other1,  other2, other3, "
+                       "subjects_in_semmester.lection_hr+subjects_in_semmester.labs_hr+subjects_in_semmester.practice_hr+"
+                       "individ_hr+kontr_rab_hr+consultation_hr+"
+                       "offset_hr+examen_hr+coursework_hr+diplomwork_hr+praktika_hr+gak_hr+"
+                       "other1+other2+other3 AS sum "
+                       "FROM subjects_in_semmester, curriculum, students, speciality "
+                       "WHERE subjects_in_semmester.curriculum_id = curriculum.id AND "
+                       "subjects_in_semmester.students_id = students.id AND "
+                       "students.speciality_id = speciality.id "
+                       "ORDER BY speciality.special_name, speciality.form_training_name, curriculum.semmester, curriculum.subject_name;");
+    } else {
+        this->setQuery("SELECT subjects_in_semmester.id, curriculum.subject_name, curriculum.semmester, "
+                       "speciality.special_name, "
+                       "speciality.form_training_name, students.course, "
+                       "students.num_group, students.num_undergroup, "
+                       "students.quantity_course, subjects_in_semmester.lection_hr, "
+                       "subjects_in_semmester.labs_hr, subjects_in_semmester.practice_hr,"
+                       "individ_hr, kontr_rab_hr, consultation_hr, "
+                       "offset_hr,  examen_hr, coursework_hr, diplomwork_hr, praktika_hr, gak_hr, "
+                       "other1,  other2, other3, "
+                       "subjects_in_semmester.lection_hr+subjects_in_semmester.labs_hr+subjects_in_semmester.practice_hr+"
+                       "individ_hr+kontr_rab_hr+consultation_hr+"
+                       "offset_hr+examen_hr+coursework_hr+diplomwork_hr+praktika_hr+gak_hr+"
+                       "other1+other2+other3 AS sum "
+                       "FROM subjects_in_semmester, curriculum, students, speciality "
+                       "WHERE subjects_in_semmester.curriculum_id = curriculum.id AND "
+                       "subjects_in_semmester.students_id = students.id AND "
+                       "students.speciality_id = speciality.id AND "
+                       "students.speciality_id = " + speciality_id + " "
+                       "ORDER BY curriculum.semmester, curriculum.subject_name;");
+    }
 }
 
 unsigned int SubjectinsemesterSqlModel::get_sum_current_speciality(){
     QSqlQuery query;
-    QString s =
-            "SELECT "
-            "subjects_in_semmester.lection_hr+subjects_in_semmester.labs_hr+subjects_in_semmester.practice_hr+"
-            "individ_hr+kontr_rab_hr+consultation_hr+"
-            "offset_hr+examen_hr+coursework_hr+diplomwork_hr+praktika_hr+gak_hr+"
-            "other1+other2+other3 AS sum "
-            "FROM subjects_in_semmester, curriculum, students, speciality "
-            "WHERE subjects_in_semmester.curriculum_id = curriculum.id AND "
-            "subjects_in_semmester.students_id = students.id AND "
-            "students.speciality_id = speciality.id AND "
-            "students.speciality_id = " + speciality_id + " "
-            "ORDER BY curriculum.semmester, curriculum.subject_name;";
+    QString s;
+    if (speciality_id == "all"){
+        s =
+                "SELECT "
+                "subjects_in_semmester.lection_hr+subjects_in_semmester.labs_hr+subjects_in_semmester.practice_hr+"
+                "individ_hr+kontr_rab_hr+consultation_hr+"
+                "offset_hr+examen_hr+coursework_hr+diplomwork_hr+praktika_hr+gak_hr+"
+                "other1+other2+other3 AS sum "
+                "FROM subjects_in_semmester, curriculum, students, speciality "
+                "WHERE subjects_in_semmester.curriculum_id = curriculum.id AND "
+                "subjects_in_semmester.students_id = students.id AND "
+                "students.speciality_id = speciality.id "
+                "ORDER BY speciality.special_name, speciality.form_training_name, curriculum.semmester, curriculum.subject_name;";
+    } else {
+        s =
+                "SELECT "
+                "subjects_in_semmester.lection_hr+subjects_in_semmester.labs_hr+subjects_in_semmester.practice_hr+"
+                "individ_hr+kontr_rab_hr+consultation_hr+"
+                "offset_hr+examen_hr+coursework_hr+diplomwork_hr+praktika_hr+gak_hr+"
+                "other1+other2+other3 AS sum "
+                "FROM subjects_in_semmester, curriculum, students, speciality "
+                "WHERE subjects_in_semmester.curriculum_id = curriculum.id AND "
+                "subjects_in_semmester.students_id = students.id AND "
+                "students.speciality_id = speciality.id AND "
+                "students.speciality_id = " + speciality_id + " "
+                "ORDER BY curriculum.semmester, curriculum.subject_name;";
+    }
 
     if (query.exec(s)) {
         unsigned int temp_sum = 0;
@@ -169,7 +205,7 @@ QVariant SubjectinsemesterSqlModel::data(const QModelIndex &index, int role) con
     switch (role)
     {
     case Qt::DisplayRole:
-        if (index.row() == rowsCountDB)
+        if (index.row() == (int)rowsCountDB)
         {
             switch(index.column()){
             case 1:
@@ -185,12 +221,12 @@ QVariant SubjectinsemesterSqlModel::data(const QModelIndex &index, int role) con
         break;
     case Qt::BackgroundColorRole:
         {
-            if (index.row() == rowsCountDB) return qVariantFromValue(QColor(224, 255, 193));
+            if (index.row() == (int)rowsCountDB) return qVariantFromValue(QColor(224, 255, 193));
             else return value;
         }
         break;
     case Qt::FontRole:
-        if (index.row() == rowsCountDB)
+        if (index.row() == (int)rowsCountDB)
         {
             QFont fnt = QFont(qvariant_cast<QFont>(value));
             fnt.setBold(true);
@@ -209,15 +245,21 @@ QVariant SubjectinsemesterSqlModel::data(const QModelIndex &index, int role) con
 
 int SubjectinsemesterSqlModel::rowCountDB(){
     QSqlQuery query;
-    //QString s = "SELECT COUNT(*) FROM subjects_in_semmester WHERE students.speciality_id = " + speciality_id + ";";
-
-    QString s ="SELECT COUNT(*) "
-              "FROM subjects_in_semmester, curriculum, students, speciality "
-              "WHERE subjects_in_semmester.curriculum_id = curriculum.id AND "
-              "subjects_in_semmester.students_id = students.id AND "
-              "students.speciality_id = speciality.id AND "
-              "students.speciality_id = " + speciality_id + " "
-              "ORDER BY curriculum.semmester, curriculum.subject_name;";
+    QString s;
+    if (speciality_id == "all"){
+        s ="SELECT COUNT(*) "
+                  "FROM subjects_in_semmester, curriculum, students, speciality "
+                  "WHERE subjects_in_semmester.curriculum_id = curriculum.id AND "
+                  "subjects_in_semmester.students_id = students.id AND "
+                  "students.speciality_id = speciality.id ";
+    } else {
+        s ="SELECT COUNT(*) "
+                  "FROM subjects_in_semmester, curriculum, students, speciality "
+                  "WHERE subjects_in_semmester.curriculum_id = curriculum.id AND "
+                  "subjects_in_semmester.students_id = students.id AND "
+                  "students.speciality_id = speciality.id AND "
+                  "students.speciality_id = " + speciality_id + " ";
+    }
     if (query.exec(s)) {
         query.next();
         return query.value(0).toInt();

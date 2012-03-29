@@ -7,6 +7,7 @@
 
 #include <QComboBox>
 #include <QTableView>
+#include <QSqlQueryModel>
 
 class SaveIdComboBox : public QComboBox
 {
@@ -30,6 +31,20 @@ public:
     void update_ids();
 private:
     QStringList ids;
+
+};
+
+class SpecialityForComboBoxSqlModel : public QSqlQueryModel
+{
+    Q_OBJECT
+public:
+    SpecialityForComboBoxSqlModel(QObject *parent = 0);
+    int rowCount (const QModelIndex & parent) const;
+    QVariant data(const QModelIndex &index, int role) const;
+    void refresh();
+    int rowCountDB();
+private:
+    unsigned int rowsCountDB;
 
 };
 

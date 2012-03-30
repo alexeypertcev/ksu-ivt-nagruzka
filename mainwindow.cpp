@@ -293,9 +293,17 @@ void MainWindow::on_pushButton_del_curriculum_clicked()
     sqlmodel_curriculum->refresh();
 }
 
-void MainWindow::on_pushButton_add_subjects_in_semmestre_clicked(){}
+void MainWindow::on_pushButton_add_subjects_in_semmester_clicked(){
+    if (!sqlmodel_subinsem->add()){
+        QMessageBox::warning(this, tr("Error querry"),"");
+    }
+    sqlmodel_subinsem->refresh();
+}
 
-void MainWindow::on_pushButton_del_subjects_in_semmestre_clicked(){}
+void MainWindow::on_pushButton_del_subjects_in_semmester_clicked(){
+    sqlmodel_subinsem->del(sqlmodel_subinsem->data( sqlmodel_subinsem->index(ui->tableView_5->currentIndex().row(),0), Qt::DisplayRole ).toString());
+    sqlmodel_subinsem->refresh();
+}
 
 void MainWindow::on_pushButton_add_distribution_clicked()
 {
@@ -1054,3 +1062,4 @@ void MainWindow::on_pushButton_8_clicked(bool checked)
         teachers_list->close();
     }
 }
+

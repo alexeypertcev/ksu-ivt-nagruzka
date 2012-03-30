@@ -17,6 +17,7 @@ public:
     void setspeciality_id(QString id);
     void refresh();
     bool add();
+    bool del(QString id);
     int rowCount (const QModelIndex & parent) const;
     QVariant data(const QModelIndex &index, int role) const;
     int rowCountDB();

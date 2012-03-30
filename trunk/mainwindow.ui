@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>4</number>
     </property>
     <widget class="QWidget" name="tab_6">
      <attribute name="title">
@@ -290,9 +290,9 @@
        <number>25</number>
       </attribute>
      </widget>
-     <widget class="QPushButton" name="pushButton_del_subjects_in_semmestre">
+     <widget class="QPushButton" name="pushButton_del_subjects_in_semmester">
       <property name="enabled">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
       <property name="geometry">
        <rect>
@@ -306,7 +306,7 @@
        <string>удалить</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_add_subjects_in_semmestre">
+     <widget class="QPushButton" name="pushButton_add_subjects_in_semmester">
       <property name="enabled">
        <bool>false</bool>
       </property>

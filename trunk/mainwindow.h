@@ -90,8 +90,8 @@ private slots:
     void on_tabWidget_currentChanged(int index);
     void on_pushButton_del_distribution_clicked();
     void on_pushButton_add_distribution_clicked();
-    void on_pushButton_del_subjects_in_semmestre_clicked();
-    void on_pushButton_add_subjects_in_semmestre_clicked();
+    void on_pushButton_del_subjects_in_semmester_clicked();
+    void on_pushButton_add_subjects_in_semmester_clicked();
     void on_pushButton_del_curriculum_clicked();
     void on_pushButton_add_curriculum_clicked();
     void on_action_7_activated();

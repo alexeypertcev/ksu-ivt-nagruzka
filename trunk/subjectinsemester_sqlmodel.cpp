@@ -106,7 +106,7 @@ void SubjectinsemesterSqlModel::refresh()
                        "WHERE subjects_in_semmester.curriculum_id = curriculum.id AND "
                        "subjects_in_semmester.students_id = students.id AND "
                        "students.speciality_id = speciality.id "
-                       "ORDER BY speciality.special_name, speciality.form_training_name, curriculum.semmester, curriculum.subject_name;");
+                       "ORDER BY speciality.special_name, speciality.form_training_name, curriculum.semmester, curriculum.subject_name, subjects_in_semmester.id;");
     } else {
         this->setQuery("SELECT subjects_in_semmester.id, curriculum.subject_name, curriculum.semmester, "
                        "speciality.special_name, "
@@ -126,7 +126,7 @@ void SubjectinsemesterSqlModel::refresh()
                        "subjects_in_semmester.students_id = students.id AND "
                        "students.speciality_id = speciality.id AND "
                        "students.speciality_id = " + speciality_id + " "
-                       "ORDER BY curriculum.semmester, curriculum.subject_name;");
+                       "ORDER BY speciality.special_name, speciality.form_training_name, curriculum.semmester, curriculum.subject_name, subjects_in_semmester.id;");
     }
 }
 
@@ -134,8 +134,7 @@ unsigned int SubjectinsemesterSqlModel::get_sum_current_speciality(){
     QSqlQuery query;
     QString s;
     if (speciality_id == "all"){
-        s =
-                "SELECT "
+        s =     "SELECT "
                 "subjects_in_semmester.lection_hr+subjects_in_semmester.labs_hr+subjects_in_semmester.practice_hr+"
                 "individ_hr+kontr_rab_hr+consultation_hr+"
                 "offset_hr+examen_hr+coursework_hr+diplomwork_hr+praktika_hr+gak_hr+"
@@ -144,10 +143,9 @@ unsigned int SubjectinsemesterSqlModel::get_sum_current_speciality(){
                 "WHERE subjects_in_semmester.curriculum_id = curriculum.id AND "
                 "subjects_in_semmester.students_id = students.id AND "
                 "students.speciality_id = speciality.id "
-                "ORDER BY speciality.special_name, speciality.form_training_name, curriculum.semmester, curriculum.subject_name;";
+                "ORDER BY speciality.special_name, speciality.form_training_name, curriculum.semmester, curriculum.subject_name, subjects_in_semmester.id;";
     } else {
-        s =
-                "SELECT "
+        s =     "SELECT "
                 "subjects_in_semmester.lection_hr+subjects_in_semmester.labs_hr+subjects_in_semmester.practice_hr+"
                 "individ_hr+kontr_rab_hr+consultation_hr+"
                 "offset_hr+examen_hr+coursework_hr+diplomwork_hr+praktika_hr+gak_hr+"
@@ -157,7 +155,7 @@ unsigned int SubjectinsemesterSqlModel::get_sum_current_speciality(){
                 "subjects_in_semmester.students_id = students.id AND "
                 "students.speciality_id = speciality.id AND "
                 "students.speciality_id = " + speciality_id + " "
-                "ORDER BY curriculum.semmester, curriculum.subject_name;";
+                "ORDER BY speciality.special_name, speciality.form_training_name, curriculum.semmester, curriculum.subject_name, subjects_in_semmester.id;";
     }
 
     if (query.exec(s)) {
@@ -179,18 +177,104 @@ void SubjectinsemesterSqlModel::setspeciality_id(QString id)
 bool SubjectinsemesterSqlModel::add()
 {
     /*
-    QString s = "insert into curriculum values(NULL, '" + speciality_id + "', 'ПП', 1, 0, 0, 0, 0, 0, 0, 0);";
+    QSqlQuery query;
+    QString s, curriculum_id, students_id;
+    if (speciality_id == "all"){
+        s = "SELECT "
+            "subjects_in_semmester.curriculum_id, subjects_in_semmester.students_id "
+            "FROM subjects_in_semmester, curriculum, students, speciality "
+            "WHERE subjects_in_semmester.curriculum_id = curriculum.id AND "
+            "subjects_in_semmester.students_id = students.id AND "
+            "students.speciality_id = speciality.id "
+            "ORDER BY speciality.special_name DESC, speciality.form_training_name DESC, curriculum.semmester DESC, curriculum.subject_name DESC, subjects_in_semmester.id DESC;";
+
+    } else {
+        s = "SELECT "
+            "subjects_in_semmester.curriculum_id, subjects_in_semmester.students_id "
+            "FROM subjects_in_semmester, curriculum, students, speciality "
+            "WHERE subjects_in_semmester.curriculum_id = curriculum.id AND "
+            "subjects_in_semmester.students_id = students.id AND "
+            "students.speciality_id = speciality.id AND "
+            "students.speciality_id = " + speciality_id + " "
+            "ORDER BY speciality.special_name DESC, speciality.form_training_name DESC, curriculum.semmester DESC, curriculum.subject_name DESC, subjects_in_semmester.id DESC;";
+    }
+    if (!query.exec(s))
+    {
+        qDebug() << "error 0x001 ошибка в запросе выбора последней записи";
+        return false;
+    }
+    if(!query.next()){
+        qDebug() << "error 0x002";
+        //return false;
+    }
+    if (query.value(0).toString() == "" || query.value(1).toString() == ""){
+        if (speciality_id == "all"){
+            s = "SELECT id "
+                "FROM curriculum "
+                "ORDER BY speciality_id DESC, semmester DESC, subject_name DESC;";
+        } else {
+            s = "SELECT id "
+                "FROM curriculum "
+                "WHERE speciality_id = " + speciality_id + " "
+                "ORDER BY semmester DESC, subject_name DESC;";
+        }
+
+        if (!query.exec(s)){
+            qDebug() << "error 0x003";
+            return false;
+        }
+        if (!query.next()){
+            qDebug() << "error 0x004";
+            return false;
+        }
+        if (query.value(0).toString() == ""){
+            qDebug() << "error 0x005 попытка создать запись в 'предметы в семместре' но 'учебный план' не содержит не одной записи";
+            return false;
+        }
+        curriculum_id = query.value(0).toString();
+
+        s = "SELECT id FROM students ORDER BY id DESC;";
+        if (!query.exec(s)){
+            qDebug() << "error 0x006";
+            return false;
+        }
+        if (!query.next()){
+            qDebug() << "error 0x007";
+            return false;
+        }
+        if (query.value(0).toString() == ""){
+            qDebug() << "error 0x008 попытка создать запись в 'предметы в семместре' но 'студенты' не содержит не одной записи";
+            return false;
+        }
+        students_id = query.value(0).toString();
+
+    } else {
+        curriculum_id = query.value(0).toString();
+        students_id = query.value(1).toString();
+    }
+    qDebug() << curriculum_id;
+    qDebug() << students_id;
+
+    s = "insert into subjects_in_semmester values(NULL, '" + curriculum_id + "', '" + students_id + "', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);";
+    if (!query.exec(s)){
+        qDebug() << "error 0x009";
+        return false;
+    }
+    */
+    return false;
+}
+
+bool SubjectinsemesterSqlModel::del(QString id)
+{
+    QString s = "DELETE FROM subjects_in_semmester WHERE id = '" + id + "';";
     qDebug() << s;
 
     QSqlQuery query;
-    if (!query.exec(s))
-    {
-        return false;
-    }
-    return true;
-    */
-    return true;
+    return query.exec(s);
 }
+
+
+
 
 int SubjectinsemesterSqlModel::rowCount (const QModelIndex & parent) const
 {

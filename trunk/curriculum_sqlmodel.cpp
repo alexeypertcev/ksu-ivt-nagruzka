@@ -86,14 +86,14 @@ void CurriculumSqlModel::refresh()
                        "KCP_hr, is_examen, is_offset, is_coursework "
                        "FROM curriculum, speciality "
                        "WHERE curriculum.speciality_id = speciality.id "
-                       " ORDER BY spec_form, semmester, subject_name;");
+                       " ORDER BY spec_form, semmester, subject_name, curriculum.id;");
     } else {
         this->setQuery("SELECT curriculum.id, special_name || '(' || form_training_name || ')', "
                        "subject_name, semmester, lection_hr, labs_hr, practice_hr, controlwork, "
                        "KCP_hr, is_examen, is_offset, is_coursework "
                        "FROM curriculum, speciality "
                        "WHERE curriculum.speciality_id = speciality.id AND speciality_id = " + speciality_id +
-                       " ORDER BY semmester, subject_name;");
+                       " ORDER BY semmester, subject_name, curriculum.id;");
     }
 
 }
@@ -106,23 +106,45 @@ void CurriculumSqlModel::setspeciality_id(QString id)
 bool CurriculumSqlModel::add()
 {
     QSqlQuery query;
-    query.exec("SELECT name "
-               "FROM subject;");
-    query.next();
-
-    QString s;
+    QString s, temp_speciality_id, subject_name, semmester;
     if (speciality_id == "all"){
-        s = "insert into curriculum values(NULL, '1', '" + query.value(0).toString() + "', 1, 0, 0, 0, 0, 0, 0, 0, 0);";
+        s = "SELECT speciality_id, subject_name, semmester "
+                   "FROM curriculum "
+                   "ORDER BY speciality_id DESC, semmester DESC, subject_name DESC;";
     } else {
-        s = "insert into curriculum values(NULL, '" + speciality_id + "', '" + query.value(0).toString() + "', 1, 0, 0, 0, 0, 0, 0, 0, 0);";
+        s = "SELECT speciality_id, subject_name, semmester "
+                   "FROM curriculum "
+                   "WHERE speciality_id = " + speciality_id + " "
+                   "ORDER BY semmester DESC, subject_name DESC;";
     }
-    //qDebug() << s;
-
     if (!query.exec(s))
     {
         return false;
     }
-    return true;
+    query.next();
+    if (query.value(0).toString() == "" || query.value(1).toString() == "" || query.value(2).toString() == ""){
+        if (speciality_id == "all"){
+            query.exec("SELECT id FROM speciality ORDER BY id DESC;");
+            query.next();
+            temp_speciality_id = query.value(0).toString();
+        } else {
+            temp_speciality_id = speciality_id;
+        }
+
+        query.exec("SELECT name FROM subject ORDER BY name DESC;");
+        query.next();
+        subject_name = query.value(0).toString();
+
+        semmester = "1";
+
+    } else {
+        temp_speciality_id = query.value(0).toString();
+        subject_name = query.value(1).toString();
+        semmester = query.value(2).toString();
+    }
+
+    s = "insert into curriculum values(NULL, '" + temp_speciality_id + "', '" + subject_name + "', '"  + semmester +  "', 0, 0, 0, 0, 0, 0, 0, 0);";
+    return query.exec(s);
 }
 
 bool CurriculumSqlModel::del(QString id)

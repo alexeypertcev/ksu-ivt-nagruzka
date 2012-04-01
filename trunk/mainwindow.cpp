@@ -48,6 +48,7 @@ MainWindow::MainWindow(QString apppath, QWidget *parent) :
     sqlmodel_distribution = new DistributionSqlModel(this);
     sqlmodel_teachers_report = new TeachersReportSqlModel(this);
 
+    ui->lineEdit_3->setText(applicationDirPath + "/subject_in_semester.csv");
     if (createConnection(path_db)){
         load_db();
     }
@@ -1053,7 +1054,6 @@ void MainWindow::on_pushButton_9_clicked()
 
 void MainWindow::on_pushButton_8_clicked(bool checked)
 {
-
     if (checked){
     //открыть окно список преподователей
         teachers_list->show();
@@ -1063,3 +1063,74 @@ void MainWindow::on_pushButton_8_clicked(bool checked)
     }
 }
 
+
+void MainWindow::on_pushButton_5_clicked()
+{// создание отчета нагрузка на кафедре
+    QSqlQuery query;
+    QString s;
+    unsigned int sum;
+    query.exec("SELECT curriculum.subject_name, curriculum.semmester, "
+                           "speciality.special_name, "
+                           "speciality.form_training_name, students.course, "
+                           "students.num_group, students.num_undergroup, "
+                           "students.quantity_course, subjects_in_semmester.lection_hr, "
+                           "subjects_in_semmester.labs_hr, subjects_in_semmester.practice_hr,"
+                           "individ_hr, kontr_rab_hr, consultation_hr, "
+                           "offset_hr,  examen_hr, coursework_hr, diplomwork_hr, praktika_hr, gak_hr, "
+                           "other1,  other2, other3, "
+                           "subjects_in_semmester.lection_hr+subjects_in_semmester.labs_hr+subjects_in_semmester.practice_hr+"
+                           "individ_hr+kontr_rab_hr+consultation_hr+"
+                           "offset_hr+examen_hr+coursework_hr+diplomwork_hr+praktika_hr+gak_hr+"
+                           "other1+other2+other3 AS sum "
+                           "FROM subjects_in_semmester, curriculum, students, speciality "
+                           "WHERE subjects_in_semmester.curriculum_id = curriculum.id AND "
+                           "subjects_in_semmester.students_id = students.id AND "
+                           "students.speciality_id = speciality.id "
+                           "ORDER BY speciality.special_name, speciality.form_training_name, curriculum.semmester, curriculum.subject_name, subjects_in_semmester.id;");
+
+    QFile file(ui->lineEdit_3->text());
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text)){
+
+        QTextStream out(&file);
+
+        s =    "Название предмета;"
+               "Семместр;"
+               "Специальность;"
+               "Форма обучения;"
+               "Курс;"
+               "Количество групп;"
+               "Количество подгрупп;"
+               "Студентов на курсе;"
+               "Лекции;"
+               "Лабораторные;"
+               "Практические;"
+               "Индивидуальные;"
+               "Контрольные работы;"
+               "Консультации;"
+               "Зачет;"
+               "Экзамен;"
+               "Курсовая работа;"
+               "Дипломная работа;"
+               "Практика;"
+               "ГАК;"
+               "Прочее;"
+               "Прочее;"
+               "Прочее;"
+               "Всего;";  //24
+
+        out << s << "\n";
+        sum = 0;
+        while(query.next()){
+            s="";
+            for (int i=0; i<24; ++i){
+                s += query.value(i).toString() + ";";
+            }
+            sum += query.value(23).toUInt();
+            out << s << "\n";
+        }
+        out << QString("Общая сумма:;;;;;;;;;;;;;;;;;;;;;;;") << QString::number(sum) << QString(";\n");
+
+    } else {
+        QMessageBox::warning(this, tr("Error"), "Невозможно создать файл");
+    }
+}

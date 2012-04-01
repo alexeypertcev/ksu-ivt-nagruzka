@@ -121,6 +121,7 @@ private slots:
     void on_pushButton_9_clicked();
 
     void on_pushButton_8_clicked(bool checked);
+    void on_pushButton_5_clicked();
 };
 
 #endif // MAINWINDOW_H

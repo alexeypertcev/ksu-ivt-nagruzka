@@ -49,6 +49,8 @@ MainWindow::MainWindow(QString apppath, QWidget *parent) :
     sqlmodel_teachers_report = new TeachersReportSqlModel(this);
 
     ui->lineEdit_3->setText(applicationDirPath + "/subject_in_semester.csv");
+    ui->lineEdit->setText("/home/perec/Загрузки/ПОиАИС_utf8.txt");
+
     if (createConnection(path_db)){
         load_db();
     }
@@ -168,7 +170,7 @@ void MainWindow::load_db()
     ui->tableView_9->setModel(sqlmodel_teachers_report);
     ui->tableView_9->update();
 
-    ui->lineEdit->setText("/home/perec/Загрузки/ПОиАИС_utf8.txt");
+
     settings = new Settings(this, tablemodel_spec, tablemodel_stat);
     teachers_list = new Teachers_list();
     set_design_window();
@@ -664,7 +666,7 @@ void MainWindow::on_pushButton_2_clicked()
     // перерасчет таблицы "предметы в семместре"
 
     QSqlQuery query, query2, query3;
-    QString curriculum_id, speciality_id;
+    QString curriculum_id, speciality_id, subjects_in_semmester_id;
     int semmester, course,
     lection_hr, labs_hr,
     practice_hr, is_examen, KCR_hr,
@@ -673,8 +675,9 @@ void MainWindow::on_pushButton_2_clicked()
     controlwork, num_group, num_undergroup, quantity_course;
     QString students_id, squery = "";
 
-    query.exec("DELETE FROM distribution");
-    query.exec("DELETE FROM subjects_in_semmester");
+    //query.exec("DELETE FROM distribution");
+    //query.exec("DELETE FROM subjects_in_semmester");
+    // ищем запись (пока алгоритм будет добавлять и обновлять существующие)
 
     query.exec("SELECT curriculum.id, speciality_id, "
                "subject_name, semmester, lection_hr, labs_hr, practice_hr, "
@@ -707,28 +710,69 @@ void MainWindow::on_pushButton_2_clicked()
                 qDebug() << "num_undergroup: " << num_undergroup;
                 quantity_course = query2.value(5).toInt();
 
-                squery =    "insert into subjects_in_semmester values("
-                            "NULL, "+                                        // "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-                            curriculum_id + ", "+                            // "curriculum_id INTEGER NOT NULL, "
-                            students_id   + ", "+                            // "students_id INTEGER NOT NULL, "
-                            QString::number(lection_hr*1, 10) + ", "+        // "lection_hr INTEGER NOT NULL, "
-                            QString::number(labs_hr*num_undergroup, 10)+", "+// "labs_hr INTEGER NOT NULL, "
-                            QString::number(practice_hr*num_group, 10) +", "+// "practice_hr INTEGER NOT NULL, "
-                            QString::number(KCR_hr*1, 10) + ", "+            // "individ_hr REAL NOT NULL, "
-                            QString::number((int)ceil(controlwork*quantity_course/4), 10) + ", "+ // "kontr_rab_hr REAL NOT NULL, "
-                            consultation_get(lection_hr, speciality_id, num_group, is_examen) + ", "+ // "consultation_hr REAL NOT NULL, "
-  /* возможно косяк*/       offset_get((int)ceil(quantity_course/4), is_offset) + ", "+   // "offset_hr REAL NOT NULL, "
-                            examen_get((int)ceil(quantity_course/3), is_examen) + ", "+   // "examen_hr REAL NOT NULL, "
-                            QString::number(is_coursework*quantity_course*3, 10) + ", "+ // "coursework_hr REAL NOT NULL, "
-                            "0" + ", "+                                      // "diplomwork_hr REAL NOT NULL, "
-                            "0" + ", "+                                      // "praktika_hr REAL NOT NULL, "
-                            "0" + ", "+                                      // "gak_hr REAL NOT NULL, "
-                            "0" + ", "+                                      // "other1 REAL NOT NULL, "
-                            "0" + ", "+                                      // "other2 REAL NOT NULL, "
-                            "0" +                                            // "other3 REAL NOT NULL, "
-                            ");";              
+                QString new_lection_hr = QString::number(lection_hr*1, 10);              // "lection_hr INTEGER NOT NULL, "
+                QString new_labs_hr = QString::number(labs_hr*num_undergroup, 10);       // "labs_hr INTEGER NOT NULL, "
+                QString new_practice_hr = QString::number(practice_hr*num_group, 10);    // "practice_hr INTEGER NOT NULL, "
+                QString new_individ_hr = QString::number(KCR_hr*1, 10);                  // "individ_hr REAL NOT NULL, "
+                QString new_kontr_rab_hr = QString::number((int)ceil(controlwork*quantity_course/4), 10);         // "kontr_rab_hr REAL NOT NULL, "
+                QString new_consultation_hr = consultation_get(lection_hr, speciality_id, num_group, is_examen);  // "consultation_hr REAL NOT NULL, "
+                QString new_offset_hr = offset_get((int)ceil(quantity_course/4), is_offset);       // "offset_hr REAL NOT NULL, "
+                QString new_examen_hr = examen_get((int)ceil(quantity_course/3), is_examen);       // "examen_hr REAL NOT NULL, "
+                QString new_coursework_hr = QString::number(is_coursework*quantity_course*3, 10);  // "coursework_hr
 
-//                qDebug() << squery;
+
+
+                squery = "SELECT subjects_in_semmester.id FROM subjects_in_semmester "
+                         "WHERE subjects_in_semmester.curriculum_id = '" + curriculum_id + "' AND "
+                         "subjects_in_semmester.students_id = '" + students_id + "';";
+                if (!query2.exec(squery)){
+                    qDebug() << "error 0x001";
+                }
+
+                if (query2.next()){
+                    // есть первая запись, обновить
+                    subjects_in_semmester_id = query2.value(0).toString();
+
+                    if (query2.next()){
+                        qDebug() << "error 0x002 есть более одной записи";
+                    }
+
+                    squery = "UPDATE subjects_in_semmester SET "
+                             "lection_hr = '" + new_lection_hr +"', "
+                             "labs_hr = '" + new_labs_hr +"', "
+                             "practice_hr = '" + new_practice_hr +"', "
+                             "individ_hr = '" + new_individ_hr +"', "
+                             "kontr_rab_hr = '" + new_kontr_rab_hr +"', "
+                             "consultation_hr = '" + new_consultation_hr +"', "
+                             "offset_hr = '" + new_offset_hr +"', "
+                             "examen_hr = '" + new_examen_hr +"', "
+                             "coursework_hr = '" + new_coursework_hr +"' "
+                             "WHERE id = '"+ subjects_in_semmester_id + "';";
+                } else {
+                    // нет ни одной записи, добавляем новую
+                    squery =    "insert into subjects_in_semmester values("
+                                "NULL, "+                   // "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                                curriculum_id + ", "+       // "curriculum_id INTEGER NOT NULL, "
+                                students_id   + ", "+       // "students_id INTEGER NOT NULL, "
+                                new_lection_hr + ", "+      // "lection_hr INTEGER NOT NULL, "
+                                new_labs_hr+", "+           // "labs_hr INTEGER NOT NULL, "
+                                new_practice_hr +", "+      // "practice_hr INTEGER NOT NULL, "
+                                new_individ_hr + ", "+      // "individ_hr REAL NOT NULL, "
+                                new_kontr_rab_hr + ", "+    // "kontr_rab_hr REAL NOT NULL, "
+                                new_consultation_hr + ", "+ // "consultation_hr REAL NOT NULL, "
+                                new_offset_hr + ", "+       // "offset_hr REAL NOT NULL, "
+                                new_examen_hr + ", "+       // "examen_hr REAL NOT NULL, "
+                                new_coursework_hr + ", "+   // "coursework_hr REAL NOT NULL, "
+                                "0" + ", "+                 // "diplomwork_hr REAL NOT NULL, "
+                                "0" + ", "+                 // "praktika_hr REAL NOT NULL, "
+                                "0" + ", "+                 // "gak_hr REAL NOT NULL, "
+                                "0" + ", "+                 // "other1 REAL NOT NULL, "
+                                "0" + ", "+                 // "other2 REAL NOT NULL, "
+                                "0" +                       // "other3 REAL NOT NULL, "
+                                ");";
+                }
+
+                qDebug() << squery;
 
                 if (!query3.exec(squery)){QMessageBox::warning(this, tr("Error querry"), "");}
             }

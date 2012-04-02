@@ -266,11 +266,23 @@ bool SubjectinsemesterSqlModel::add()
 
 bool SubjectinsemesterSqlModel::del(QString id)
 {
-    QString s = "DELETE FROM subjects_in_semmester WHERE id = '" + id + "';";
-    qDebug() << s;
-
+    QString s;
     QSqlQuery query;
-    return query.exec(s);
+    s = "DELETE FROM distribution WHERE distribution.subjects_in_semmester_id = '" + id + "';";
+
+    if (!query.exec(s)){
+        qDebug() << "error 0x100";
+        return false;
+    }
+
+    s = "DELETE FROM subjects_in_semmester WHERE id = '" + id + "';";
+    //qDebug() << s;
+
+    if (!query.exec(s)){
+        qDebug() << "error 0x101";
+        return false;
+    }
+    return true;
 }
 
 

@@ -4,7 +4,9 @@
 #include <QDialog>
 #include <QSqlQueryModel>
 #include <QSqlQuery>
+#include <QStandardItemModel>
 #include "errors.h"
+#include "HierarchicalHeaderView.h"
 
 QT_BEGIN_NAMESPACE
 class Teachers_list_model;
@@ -39,7 +41,16 @@ public:
     Qt::ItemFlags flags(const QModelIndex &index) const;
     void refresh();
 private:
+    QStandardItemModel _horizontalHeaderModel;
     QStringList all_hours;
+
+    QStringList rate_list;
+    QStringList osen_hours;
+    QStringList osen_p_ayd;
+    QStringList vesna_hours;
+    QStringList vesna_p_ayd;
+    QStringList year_hours;
+    QStringList year_p_ayd;
 };
 
 

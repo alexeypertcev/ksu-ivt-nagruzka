@@ -30,7 +30,8 @@ SOURCES += main.cpp\
     tab_students.cpp \
     tab_reports.cpp \
     errors.cpp \
-    dialogs.cpp
+    dialogs.cpp \
+    HierarchicalHeaderView.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -57,7 +58,8 @@ HEADERS  += mainwindow.h \
     tab_distribution.h \
     tab_curriculum.h \
     errors.h \
-    dialogs.h
+    dialogs.h \
+    HierarchicalHeaderView.h
 
 
 FORMS    += mainwindow.ui \

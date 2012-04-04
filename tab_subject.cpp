@@ -1,7 +1,7 @@
-#include "subject.h"
+#include "tab_subject.h"
 
 #include <QtSql>
-#include "students.h"
+//#include "tab_students.h"
 
 SubjectSqlModel::SubjectSqlModel(QObject *parent) :
     QSqlQueryModel(parent)

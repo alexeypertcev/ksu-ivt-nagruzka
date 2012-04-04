@@ -13,31 +13,28 @@ TEMPLATE = app
 SOURCES += main.cpp\
     mainwindow.cpp \
     settings.cpp \
-    curriculum_sqlmodel.cpp \
     delegates.cpp \
-    subjectinsemester_sqlmodel.cpp \
-    distribution.cpp \
     components.cpp \
     workzip.cpp \
     workzip/zip.cpp \
     workzip/unzip.cpp \
     workzip/zipglobal.cpp \
-    students.cpp \
-    teachers.cpp \
     teachers_list.cpp \
-    reports_creater.cpp \
     report_writter_ods.cpp \
     report_tabledates.cpp \
-    subject.cpp
+    tab_curriculum.cpp \
+    tab_distribution.cpp \
+    tab_subject.cpp \
+    tab_subjectinsemester.cpp \
+    tab_teachers.cpp \
+    tab_students.cpp \
+    tab_reports.cpp
 
 
 HEADERS  += mainwindow.h \
     connection.h \
     settings.h \
-    curriculum_sqlmodel.h \
     delegates.h \
-    subjectinsemester_sqlmodel.h \
-    distribution.h \
     components.h \
     workzip/zip.h \
     workzip/zip_p.h \
@@ -47,13 +44,16 @@ HEADERS  += mainwindow.h \
     workzip/zipglobal.h \
     workzip/zlib/zlib.h \
     workzip/zlib/zconf.h \
-    students.h \
-    teachers.h \
     teachers_list.h \
-    reports_creater.h \
     report_writter_ods.h \
     report_tabledates.h \
-    subject.h
+    tab_reports.h \
+    tab_teachers.h \
+    tab_subjectinsemester.h \
+    tab_subject.h \
+    tab_students.h \
+    tab_distribution.h \
+    tab_curriculum.h
 
 
 FORMS    += mainwindow.ui \

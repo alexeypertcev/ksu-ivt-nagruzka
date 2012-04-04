@@ -4,7 +4,7 @@
 
 #include <QtSql>
 #include <QMessageBox>
-#include "curriculum_sqlmodel.h"
+#include "tab_curriculum.h"
 
 CurriculumSqlModel::CurriculumSqlModel(QObject *parent)
     : QSqlQueryModel(parent)

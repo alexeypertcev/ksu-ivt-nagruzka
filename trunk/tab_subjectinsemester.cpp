@@ -1,6 +1,6 @@
 #include <QtSql>
 #include <QMessageBox>
-#include "subjectinsemester_sqlmodel.h"
+#include "tab_subjectinsemester.h"
 
 SubjectinsemesterSqlModel::SubjectinsemesterSqlModel(QObject *parent) :
     QSqlQueryModel(parent)

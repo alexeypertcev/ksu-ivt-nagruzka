@@ -8,14 +8,14 @@
 #include "connection.h"
 #include "delegates.h"
 #include "settings.h"
-#include "curriculum_sqlmodel.h"
-#include "students.h"
-#include "teachers.h"
-#include "subjectinsemester_sqlmodel.h"
-#include "distribution.h"
-#include "reports_creater.h"
+#include "tab_subject.h"
+#include "tab_teachers.h"
+#include "tab_students.h"
+#include "tab_curriculum.h"
+#include "tab_subjectinsemester.h"
+#include "tab_distribution.h"
+#include "tab_reports.h"
 #include "teachers_list.h"
-#include "subject.h"
 
 #include <QtGui>
 #include <QtSql>

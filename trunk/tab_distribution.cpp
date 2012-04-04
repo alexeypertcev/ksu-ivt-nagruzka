@@ -1,4 +1,4 @@
-#include "distribution.h"
+#include "tab_distribution.h"
 #include <QDebug>
 #include <QMessageBox>
 #include <QtSql>

@@ -6,6 +6,7 @@
 
 #include <QMainWindow>
 #include <QSqlDatabase>
+#include "errors.h"
 
 QT_BEGIN_NAMESPACE
 class QSqlRelationalTableModel;
@@ -40,11 +41,28 @@ public:
     QString get_applicationDirPath();
 
 private:
-    unsigned short status; //0 - нет БД 1 - есть БД
-
     Ui::MainWindow *ui;
-    void set_design_window();
+    void set_design_all_tab();
+    void set_design_subject();
+    void set_design_teachers();
+    void set_design_students();
+    void set_design_curriculum();
+    void set_design_subjects_in_semmester();
+    void set_design_distribution();
+    void set_design_reports();
 
+    void load_db();
+    void update_subject();
+    void update_teachers();
+    void update_students();
+    void update_sins_to_distribution_preview();
+
+    QString translit(QString s);
+    QString offset_get(int hours, int is_exists);
+    QString examen_get(int hours, int is_exists);
+    QString consultation_get(int lection_hr, QString speciality_id, int num_group, int is_examen);
+
+    unsigned short status; //0 - нет БД 1 - есть БД
     Settings* settings;
     Teachers_list* teachers_list;
     QString path_db;
@@ -53,10 +71,8 @@ private:
     SubjectSqlModel* sqlmodel_subject;
     QSqlRelationalTableModel* tablemodel_teachers;
     QSqlRelationalTableModel* tablemodel_curriculum;
-
     QSqlRelationalTableModel* tablemodel_spec;
     QSqlRelationalTableModel* tablemodel_stat;
-
     SpecialityForComboBoxSqlModel* spec_for_combobox_sqlmodel;
     StudentsSqlModel* sqlmodel_students;
     TeachersSqlModel* sqlmodel_teachers;
@@ -67,24 +83,8 @@ private:
     QSqlQueryModel *select_subjects;
     DistributionSqlModel *sqlmodel_distribution;
     TeachersReportSqlModel* sqlmodel_teachers_report;
-
     QString version;
     QString report_path, report_format, report_name;
-
-    void load_db();
-    void update_subjectlist();
-    void update_subject();
-    void update_teachers();
-    void update_students();
-    void update_subject_in_semestre();
-    void update_sins_to_distribution_preview();
-
-    QString translit(QString s);
-
-    QString offset_get(int hours, int is_exists);
-    QString examen_get(int hours, int is_exists);
-    QString consultation_get(int lection_hr, QString speciality_id, int num_group, int is_examen);
-
 
 private slots:
     void on_tabWidget_currentChanged(int index);
@@ -122,6 +122,8 @@ private slots:
 
     void on_pushButton_8_clicked(bool checked);
     void on_pushButton_5_clicked();
+    void on_pushButton_clear_subinsemmester_clicked();
+    void on_pushButton_clear_distribution_clicked();
 };
 
 #endif // MAINWINDOW_H

@@ -28,7 +28,9 @@ SOURCES += main.cpp\
     tab_subjectinsemester.cpp \
     tab_teachers.cpp \
     tab_students.cpp \
-    tab_reports.cpp
+    tab_reports.cpp \
+    errors.cpp \
+    dialogs.cpp
 
 
 HEADERS  += mainwindow.h \
@@ -53,11 +55,14 @@ HEADERS  += mainwindow.h \
     tab_subject.h \
     tab_students.h \
     tab_distribution.h \
-    tab_curriculum.h
+    tab_curriculum.h \
+    errors.h \
+    dialogs.h
 
 
 FORMS    += mainwindow.ui \
     settings.ui \
-    teachers_list.ui
+    teachers_list.ui \
+    messagedialog.ui
 
 

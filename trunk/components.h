@@ -8,6 +8,7 @@
 #include <QComboBox>
 #include <QTableView>
 #include <QSqlQueryModel>
+#include "errors.h"
 
 class SaveIdComboBox : public QComboBox
 {

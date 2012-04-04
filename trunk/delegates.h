@@ -9,7 +9,7 @@
 #include <QObject>
 #include <QSize>
 #include <QSpinBox>
-
+#include "errors.h"
 
 class SpinBoxDelegate : public QItemDelegate
 {

@@ -1,10 +1,10 @@
 #ifndef TEACHERS_LIST_H
 #define TEACHERS_LIST_H
 
-#include <QWidget>
+#include <QDialog>
 #include <QSqlQueryModel>
 #include <QSqlQuery>
-//#include <QItemDelegate>
+#include "errors.h"
 
 QT_BEGIN_NAMESPACE
 class Teachers_list_model;
@@ -14,7 +14,7 @@ namespace Ui {
     class Teachers_list;
 }
 
-class Teachers_list : public QWidget
+class Teachers_list : public QDialog
 {
     Q_OBJECT
 

@@ -3,7 +3,7 @@
 //#include <QSqlQueryModel>
 
 Teachers_list::Teachers_list(QWidget *parent) :
-    QWidget(parent),
+    QDialog(parent),
     ui(new Ui::Teachers_list)
 {
     ui->setupUi(this);
@@ -25,6 +25,7 @@ Teachers_list::Teachers_list(QWidget *parent) :
 
 Teachers_list::~Teachers_list()
 {
+    sqlmodel_teachers_list->clear();
     delete ui;
 }
 
@@ -63,7 +64,7 @@ void Teachers_list_model::refresh()
     all_hours.clear();
 
     //**********************************************************
-    // error 0x01
+    // error
     // Ошибка после закрытия программы из-за этой конструкции
     this->setQuery("SELECT teachers.id, f || ', ' || i || ', ' || o, status_name "
                    "FROM teachers WHERE teachers.id != '0' "
@@ -72,7 +73,8 @@ void Teachers_list_model::refresh()
     //**********************************************************
 
     query.exec("SELECT teachers.id, status_name "
-               "FROM teachers WHERE teachers.id != '0'");
+               "FROM teachers WHERE teachers.id != '0'"
+               "ORDER BY f,i,o");
     while(query.next()){
 
         buf_all_hours = 0;

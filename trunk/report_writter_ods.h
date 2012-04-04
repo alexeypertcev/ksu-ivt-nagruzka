@@ -6,7 +6,7 @@
 #include <QStringList>
 #include <QtXml>
 #include "report_tabledates.h"
-
+#include "errors.h"
 
 class reports_writter_ods
 {

@@ -75,6 +75,27 @@ QString SaveIdComboBox::get_id()
 {
     // -1
     if (this->currentIndex() != -1){
+        return ids.at(this->currentIndex());
+    } else {
+        return ids.at(0);
+    }
+
+}
+
+//***************************************************************
+//  Class  SaveIdComboBoxIncudeAll
+//***************************************************************
+
+
+SaveIdComboBoxIncudeAll::SaveIdComboBoxIncudeAll(QWidget *parent) :
+    SaveIdComboBox(parent)
+{
+}
+
+QString SaveIdComboBoxIncudeAll::get_id()
+{
+    // -1
+    if (this->currentIndex() != -1){
         if (this->currentIndex() == (this->model()->rowCount() - 1)){
             return QString("all");
         }

@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>4</number>
+     <number>5</number>
     </property>
     <widget class="QWidget" name="tab_6">
      <attribute name="title">
@@ -262,7 +262,7 @@
        <string>добавить</string>
       </property>
      </widget>
-     <widget class="SaveIdComboBox" name="comboBox">
+     <widget class="SaveIdComboBoxIncudeAll" name="comboBox">
       <property name="geometry">
        <rect>
         <x>1100</x>
@@ -322,7 +322,7 @@
        <string>добавить</string>
       </property>
      </widget>
-     <widget class="SaveIdComboBox" name="comboBox_2">
+     <widget class="SaveIdComboBoxIncudeAll" name="comboBox_2">
       <property name="geometry">
        <rect>
         <x>1110</x>
@@ -457,7 +457,7 @@
        <bool>true</bool>
       </property>
      </widget>
-     <widget class="SaveIdComboBox" name="comboBox_3">
+     <widget class="SaveIdComboBoxIncudeAll" name="comboBox_3">
       <property name="geometry">
        <rect>
         <x>1060</x>
@@ -783,14 +783,14 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>SaveIdComboBox</class>
-   <extends>QComboBox</extends>
-   <header>components.h</header>
-  </customwidget>
-  <customwidget>
    <class>SaveIdTableView</class>
    <extends>QTableView</extends>
    <header location="global">components.h</header>
+  </customwidget>
+  <customwidget>
+   <class>SaveIdComboBoxIncudeAll</class>
+   <extends>QComboBox</extends>
+   <header>components.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

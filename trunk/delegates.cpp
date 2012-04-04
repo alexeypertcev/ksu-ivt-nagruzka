@@ -374,7 +374,7 @@ void StaffDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
 
     SaveIdComboBox *comboBox = static_cast<SaveIdComboBox*>(editor);
     QString value = comboBox->get_id();
-
+    qDebug() << "value: " << value;
     model->setData(index, value, Qt::EditRole);
 }
 

@@ -85,19 +85,10 @@ void MainWindow::load_db()
     tablemodel_stat->select();
 
     // subject table
-    /*
-    tablemodel_subject = new QSqlRelationalTableModel(this);
-    tablemodel_subject->setTable("subject");
-    tablemodel_subject->setEditStrategy(QSqlTableModel::OnFieldChange);
-    tablemodel_subject->select();
-    ui->tableView->setModel(tablemodel_subject);
-    ui->tableView->update();
-    */
     sqlmodel_subject->refresh();
     ui->tableView->setModel(sqlmodel_subject);
 
     // teachers table
-    //sqlmodel_teachers = new TeachersSqlModel(this);
     sqlmodel_teachers->refresh();
     ui->tableView_2->setModel(sqlmodel_teachers);
 

@@ -16,9 +16,17 @@ public:
     SaveIdComboBox(QWidget *parent = 0);
     QString get_id();
     void setModel( QAbstractItemModel * model );
-private:
+protected:
     QStringList ids;
 
+};
+
+class SaveIdComboBoxIncudeAll : public SaveIdComboBox
+{
+    Q_OBJECT
+public:
+    SaveIdComboBoxIncudeAll(QWidget *parent = 0);
+    QString get_id();
 };
 
 class SaveIdTableView : public QTableView

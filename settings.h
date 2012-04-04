@@ -5,6 +5,7 @@
 #define SETTINGS_H
 
 #include <QDialog>
+#include "errors.h"
 
 QT_BEGIN_NAMESPACE
 class QSqlRelationalTableModel;

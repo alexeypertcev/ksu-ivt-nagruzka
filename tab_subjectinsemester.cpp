@@ -74,10 +74,11 @@ bool SubjectinsemesterSqlModel::setData(const QModelIndex &index, const QVariant
         }
 
     QString s = "update subjects_in_semmester set "+ field +" = '"+ value.toString() +"' where id = "+ data(primaryKeyIndex, Qt::DisplayRole).toString();
-    qDebug() << s;
+    //qDebug() << s;
 
     QSqlQuery query;
     if (!query.exec(s)){
+        ERROR_REPORT("0x500");
         return false;
     }
     this->refresh();
@@ -165,6 +166,7 @@ unsigned int SubjectinsemesterSqlModel::get_sum_current_speciality(){
         }
         return temp_sum;
     } else {
+        ERROR_REPORT("0x501");
         return 0;
     }
 }
@@ -271,7 +273,7 @@ bool SubjectinsemesterSqlModel::del(QString id)
     s = "DELETE FROM distribution WHERE distribution.subjects_in_semmester_id = '" + id + "';";
 
     if (!query.exec(s)){
-        qDebug() << "error 0x100";
+        ERROR_REPORT("0x502");
         return false;
     }
 
@@ -279,7 +281,7 @@ bool SubjectinsemesterSqlModel::del(QString id)
     //qDebug() << s;
 
     if (!query.exec(s)){
-        qDebug() << "error 0x101";
+        ERROR_REPORT("0x503");
         return false;
     }
     return true;
@@ -360,6 +362,25 @@ int SubjectinsemesterSqlModel::rowCountDB(){
         query.next();
         return query.value(0).toInt();
     } else {
+        ERROR_REPORT("0x504");
         return 0;
     }
+}
+
+bool SubjectinsemesterSqlModel::clearTable(){
+    QString s;
+    QSqlQuery query;
+    s = "DELETE FROM distribution;";
+
+    if (!query.exec(s)){
+        ERROR_REPORT("0x505");
+        return false;
+    }
+
+    s = "DELETE FROM subjects_in_semmester;";
+    if (!query.exec(s)){
+        ERROR_REPORT("0x506");
+        return false;
+    }
+    return true;
 }

@@ -5,6 +5,7 @@
 #define SUBJECTINSEMESTER_SQLMODEL_H
 
 #include <QSqlQueryModel>
+#include "errors.h"
 
 class SubjectinsemesterSqlModel : public QSqlQueryModel
 {
@@ -21,6 +22,7 @@ public:
     int rowCount (const QModelIndex & parent) const;
     QVariant data(const QModelIndex &index, int role) const;
     int rowCountDB();
+    bool clearTable();
 private:
     unsigned int get_sum_current_speciality();
     QString speciality_id;

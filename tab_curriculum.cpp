@@ -149,11 +149,48 @@ bool CurriculumSqlModel::add()
 
 bool CurriculumSqlModel::del(QString id)
 {
-    QString s = "DELETE FROM curriculum WHERE id = '" + id + "';";
-    qDebug() << s;
-
+    QString s;
+    QString subjects_in_semmester_id;
     QSqlQuery query;
-    query.exec(s);
 
-    return TRUE;
+    s = "SELECT subjects_in_semmester.id FROM subjects_in_semmester WHERE subjects_in_semmester.curriculum_id = '" + id + "';";
+    if (!query.exec(s)){
+        ERROR_REPORT("0x400");
+        return false;
+    }
+    if (!query.next()){
+        ERROR_REPORT("0x401");
+        return false;
+    }
+
+    subjects_in_semmester_id = query.value(0).toString();
+
+    if (query.next()){
+        ERROR_REPORT("0x402");
+        return false;
+    }
+
+    s = "DELETE FROM distribution WHERE distribution.subjects_in_semmester_id = '" + subjects_in_semmester_id + "';";
+
+    if (!query.exec(s)){
+        ERROR_REPORT("0x403");
+        return false;
+    }
+
+    s = "DELETE FROM subjects_in_semmester WHERE id = '" + subjects_in_semmester_id + "';";
+    //qDebug() << s;
+
+    if (!query.exec(s)){
+        ERROR_REPORT("0x404");
+        return false;
+    }
+
+     s = "DELETE FROM curriculum WHERE id = '" + id + "';";
+
+     if (!query.exec(s)){
+         ERROR_REPORT("0x405");
+         return false;
+     }
+
+    return true;
 }

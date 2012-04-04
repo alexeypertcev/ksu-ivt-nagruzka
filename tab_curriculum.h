@@ -8,6 +8,7 @@
 #include <QSqlQueryModel>
 #include <QItemDelegate>
 #include <QSpinBox>
+#include "errors.h"
 
 class CurriculumSqlModel : public QSqlQueryModel
 {

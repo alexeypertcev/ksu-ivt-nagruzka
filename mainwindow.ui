@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>5</number>
+     <number>4</number>
     </property>
     <widget class="QWidget" name="tab_6">
      <attribute name="title">
@@ -345,6 +345,19 @@
        <string>обновить</string>
       </property>
      </widget>
+     <widget class="QPushButton" name="pushButton_clear_subinsemmester">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>590</y>
+        <width>131</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Очистить</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="tab_5">
      <attribute name="title">
@@ -484,6 +497,19 @@
       </property>
       <property name="flat">
        <bool>false</bool>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButton_clear_distribution">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>590</y>
+        <width>131</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Очистить</string>
       </property>
      </widget>
     </widget>

@@ -2,6 +2,7 @@
 #define DISTRIBUTION_H
 
 #include <QSqlQueryModel>
+#include "errors.h"
 
 class DistributionSqlModel : public QSqlQueryModel
 {
@@ -18,6 +19,7 @@ public:
     int rowCount (const QModelIndex & parent) const;
     QVariant data(const QModelIndex &index, int role) const;
     int rowCountDB();
+    bool clearTable();
 private:
     int sum_field(QString field);
     QString subjects_in_semmestre_id;

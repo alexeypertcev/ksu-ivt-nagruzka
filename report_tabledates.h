@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QStringList>
+#include "errors.h"
 
 class Tabledata
 {

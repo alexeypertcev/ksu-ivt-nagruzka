@@ -9,10 +9,9 @@
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
-
-
 #include <QtGui>
 #include <QtSql>
+#include "errors.h"
 
 QSqlDatabase db;
 

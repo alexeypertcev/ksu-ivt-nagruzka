@@ -359,6 +359,18 @@ int DistributionSqlModel::sum_field(QString field){
     return query.value(0).toInt();
 }
 
+bool DistributionSqlModel::clearTable(){
+    QString s;
+    QSqlQuery query;
+    s = "DELETE FROM distribution;";
+
+    if (!query.exec(s)){
+        ERROR_REPORT("0x600");
+        return false;
+    }
+    return true;
+}
+
 //********************************************************************************
 //  class Sins_to_distrib_preview_SqlModel
 //********************************************************************************

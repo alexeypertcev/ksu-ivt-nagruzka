@@ -6,6 +6,7 @@
 
 #include <QSqlQueryModel>
 #include <QItemDelegate>
+#include "errors.h"
 
 class TeachersSqlModel : public QSqlQueryModel
 {

@@ -29,6 +29,7 @@ Teachers_list::Teachers_list(QWidget *parent) :
     ui->tableView->setColumnWidth(6,55);
     ui->tableView->setColumnWidth(7,55);
     ui->tableView->setColumnWidth(8,55);
+    ui->tableView->setColumnWidth(9,55);
     //headerview.
 }
 
@@ -107,7 +108,8 @@ Teachers_list_model::Teachers_list_model(QObject *parent) :
 
     _horizontalHeaderModel.setItem(0, 5, rootItem);
 //--------------------------------------------
-
+    rootItem = new QStandardItem("Доля \nставки");
+    _horizontalHeaderModel.setItem(0, 6, rootItem);
 
 }
 
@@ -131,7 +133,7 @@ void Teachers_list_model::refresh()
 
     QString staff_hour;
     QString rate;
-    QString rate_staff_hour;
+    unsigned int rate_staff_hour;
 
     rate_list.clear();
     osen_hours.clear();
@@ -140,11 +142,12 @@ void Teachers_list_model::refresh()
     vesna_p_ayd.clear();
     year_hours.clear();
     year_p_ayd.clear();
+    rate_dole.clear();
 
     //**********************************************************
     // error
     // Ошибка после закрытия программы из-за этой конструкции
-    this->setQuery("SELECT teachers.id, f || ', ' || i || ', ' || o, status_name, status_name, status_name, status_name, status_name, status_name, status_name "
+    this->setQuery("SELECT teachers.id, f || ', ' || i || ', ' || o, status_name, status_name, status_name, status_name, status_name, status_name, status_name, status_name "
                    "FROM teachers WHERE teachers.id != '0' "
                    "ORDER BY f,i,o");
     //
@@ -159,9 +162,9 @@ void Teachers_list_model::refresh()
         query2.next();
         rate = query.value(2).toString();
         staff_hour = query2.value(0).toString();
-        rate_staff_hour = QString::number( query.value(2).toDouble() * query2.value(0).toDouble() );
+        rate_staff_hour =  query.value(2).toDouble() * query2.value(0).toDouble();
 
-        rate_list << rate + "/" + rate_staff_hour;
+        rate_list << rate + "/" + QString::number(rate_staff_hour);
 
     //--- для нечетных семместров(весны)-------------------------------------------
         buf_all_hours = 0;
@@ -203,8 +206,12 @@ void Teachers_list_model::refresh()
         }
 
         vesna_hours << QString::number(buf_all_hours);
-        vesna_p_ayd << (QString::number(buf_aud_hours) + "/" + rate_staff_hour);
-
+        //vesna_p_ayd << (QString::number(buf_aud_hours) + "/" + QString::number(buf_all_hours));
+        if (buf_all_hours != 0){
+            vesna_p_ayd << QString::number((double)buf_aud_hours / (double)buf_all_hours,'f',2);
+        } else {
+            vesna_p_ayd << " ";
+        }
 
         //--- для четных семместров(осени)-------------------------------------------
             buf_all_hours = 0;
@@ -246,7 +253,12 @@ void Teachers_list_model::refresh()
             }
 
             osen_hours << QString::number(buf_all_hours);
-            osen_p_ayd << (QString::number(buf_aud_hours) + "/" + rate_staff_hour);
+            //osen_p_ayd << (QString::number(buf_aud_hours) + "/" + QString::number(buf_all_hours));
+            if (buf_all_hours != 0){
+                osen_p_ayd << QString::number((double)buf_aud_hours / (double)buf_all_hours,'f',2);
+            } else {
+                osen_p_ayd << " ";
+            }
 
             //--- для всех семместров(года)-------------------------------------------
                 buf_all_hours = 0;
@@ -268,7 +280,20 @@ void Teachers_list_model::refresh()
                 }
 
                 year_hours << QString::number(buf_all_hours);
-                year_p_ayd << (QString::number(buf_aud_hours) + "/" + rate_staff_hour);
+                //year_p_ayd << (QString::number(buf_aud_hours) + "/" + QString::number(buf_all_hours));
+                if (buf_all_hours != 0){
+                    year_p_ayd << QString::number((double)buf_aud_hours / (double)buf_all_hours,'f',2);
+                } else {
+                    year_p_ayd << " ";
+                }
+
+                if (rate_staff_hour != 0){
+                    rate_dole << QString::number(((double)buf_all_hours / (double)rate_staff_hour), 'f', 2);
+                } else {
+                    rate_dole << " ";
+                }
+
+
         }
 }
 
@@ -322,6 +347,11 @@ QVariant Teachers_list_model::data(const QModelIndex &index, int role) const
             }
             break;
 
+            case 9:
+            if (index.row() < rate_dole.size()){
+                return rate_dole.at(index.row());
+            }
+            break;
 
         }
         break;

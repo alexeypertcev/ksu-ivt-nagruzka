@@ -51,6 +51,7 @@ private:
     QStringList vesna_p_ayd;
     QStringList year_hours;
     QStringList year_p_ayd;
+    QStringList rate_dole;
 };
 
 

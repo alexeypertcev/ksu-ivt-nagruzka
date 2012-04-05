@@ -185,12 +185,12 @@ void Teachers_list_model::refresh()
                     "WHERE teachers_id = '" + query.value(0).toString() + "' AND "
                     "distribution.subjects_in_semmester_id = subjects_in_semmester.id AND "
                     "subjects_in_semmester.curriculum_id = curriculum.id AND "
-                    "( curriculum.semmester = '1' "
-                    "OR curriculum.semmester = '3' "
-                    "OR curriculum.semmester = '5' "
-                    "OR curriculum.semmester = '7' "
-                    "OR curriculum.semmester = '9' "
-                    "OR curriculum.semmester = '11' )");
+                    "( curriculum.semmester = '2' "
+                    "OR curriculum.semmester = '4' "
+                    "OR curriculum.semmester = '6' "
+                    "OR curriculum.semmester = '8' "
+                    "OR curriculum.semmester = '10' "
+                    "OR curriculum.semmester = '12' )");
 
         while(query2.next()){
 
@@ -202,12 +202,9 @@ void Teachers_list_model::refresh()
             }
         }
 
-        //query2.exec("SELECT hours FROM status WHERE name = '"+ query.value(1).toString() +"';");
+        vesna_hours << QString::number(buf_all_hours);
+        vesna_p_ayd << (QString::number(buf_aud_hours) + "/" + rate_staff_hour);
 
-        //if (query2.next()){
-            vesna_hours << QString::number(buf_all_hours);
-            vesna_p_ayd << (QString::number(buf_aud_hours) + "/" + rate_staff_hour);
-        //}
 
         //--- для четных семместров(осени)-------------------------------------------
             buf_all_hours = 0;
@@ -231,12 +228,12 @@ void Teachers_list_model::refresh()
                         "WHERE teachers_id = '" + query.value(0).toString() + "' AND "
                         "distribution.subjects_in_semmester_id = subjects_in_semmester.id AND "
                         "subjects_in_semmester.curriculum_id = curriculum.id AND "
-                        "( curriculum.semmester = '2' "
-                        "OR curriculum.semmester = '4' "
-                        "OR curriculum.semmester = '6' "
-                        "OR curriculum.semmester = '8' "
-                        "OR curriculum.semmester = '10' "
-                        "OR curriculum.semmester = '12' )");
+                        "( curriculum.semmester = '1' "
+                        "OR curriculum.semmester = '3' "
+                        "OR curriculum.semmester = '5' "
+                        "OR curriculum.semmester = '7' "
+                        "OR curriculum.semmester = '9' "
+                        "OR curriculum.semmester = '11' )");
 
             while(query2.next()){
 
@@ -248,11 +245,8 @@ void Teachers_list_model::refresh()
                 }
             }
 
-            //query2.exec("SELECT hours FROM status WHERE name = '"+ query.value(1).toString() +"';");
-            //if (query2.next()){
-                osen_hours << QString::number(buf_all_hours);
-                osen_p_ayd << (QString::number(buf_aud_hours) + "/" + rate_staff_hour);
-            //}
+            osen_hours << QString::number(buf_all_hours);
+            osen_p_ayd << (QString::number(buf_aud_hours) + "/" + rate_staff_hour);
 
             //--- для всех семместров(года)-------------------------------------------
                 buf_all_hours = 0;
@@ -273,15 +267,9 @@ void Teachers_list_model::refresh()
                     }
                 }
 
-                //query2.exec("SELECT hours FROM status WHERE name = '"+ query.value(1).toString() +"';");
-                //if (query2.next()){
-                    year_hours << QString::number(buf_all_hours);
-                    year_p_ayd << (QString::number(buf_aud_hours) + "/" + rate_staff_hour);
-                //}
+                year_hours << QString::number(buf_all_hours);
+                year_p_ayd << (QString::number(buf_aud_hours) + "/" + rate_staff_hour);
         }
-
-
-
 }
 
 QVariant Teachers_list_model::data(const QModelIndex &index, int role) const

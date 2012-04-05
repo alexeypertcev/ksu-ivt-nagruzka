@@ -34,6 +34,7 @@ void TeachersSqlModel::refresh()
     this->setQuery("SELECT teachers.id, f, i, o, status_name, rate , staff.name "
                    "FROM teachers, staff WHERE teachers.id != '0' AND teachers.staff_id = staff.id "
                    "ORDER BY teachers.f, teachers.i, teachers.o");
+    table_changed();
 }
 
 bool TeachersSqlModel::setData(const QModelIndex &index, const QVariant &value, int /* role */)

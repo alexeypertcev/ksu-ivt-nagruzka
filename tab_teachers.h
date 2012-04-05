@@ -31,6 +31,8 @@ private:
     QString rate;
     QString staff_id;
     bool bool_save_removed;
+signals:
+    void table_changed();
 };
 
 

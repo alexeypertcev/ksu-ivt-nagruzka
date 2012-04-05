@@ -63,6 +63,8 @@ MainWindow::MainWindow(QString apppath, QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    teachers_list->close();
+    teachers_list->~Teachers_list();
     delete ui;
 }
 
@@ -188,7 +190,7 @@ void MainWindow::load_db()
     QObject::connect(ui->radioButton_7, SIGNAL(clicked()), this, SLOT(update_report_name()));
 
     QObject::connect(sqlmodel_distribution, SIGNAL(table_changed()), teachers_list, SLOT(update()));
-
+    QObject::connect(sqlmodel_teachers, SIGNAL(table_changed()), teachers_list, SLOT(update()));
 }
 
 void MainWindow::set_applicationDirPath(QString app_path){
@@ -359,6 +361,9 @@ void MainWindow::update_teachers()
 {
     sqlmodel_teachers->refresh();
     set_design_teachers();
+    if (ui->pushButton_8->isChecked()){
+        teachers_list->update();
+    }
 }
 
 void MainWindow::update_students()

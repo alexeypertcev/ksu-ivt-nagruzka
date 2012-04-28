@@ -15,12 +15,7 @@ SOURCES += main.cpp\
     settings.cpp \
     delegates.cpp \
     components.cpp \
-    workzip.cpp \
-    workzip/zip.cpp \
-    workzip/unzip.cpp \
-    workzip/zipglobal.cpp \
     teachers_list.cpp \
-    report_writter_ods.cpp \
     report_tabledates.cpp \
     tab_curriculum.cpp \
     tab_distribution.cpp \
@@ -31,24 +26,117 @@ SOURCES += main.cpp\
     tab_reports.cpp \
     errors.cpp \
     dialogs.cpp \
-    HierarchicalHeaderView.cpp
-
+    HierarchicalHeaderView.cpp \
+        libmsdoc/calignment.cpp \
+        libmsdoc/cbaserelationshipobject.cpp \
+        libmsdoc/cborder.cpp \
+        libmsdoc/cborderline.cpp \
+        libmsdoc/cborderobject.cpp \
+        libmsdoc/cborders.cpp \
+        libmsdoc/ccell.cpp \
+        libmsdoc/ccellobject.cpp \
+        libmsdoc/ccelltype.cpp \
+        libmsdoc/ccellvalue.cpp \
+        libmsdoc/ccellxf.cpp \
+        libmsdoc/ccellxfobject.cpp \
+        libmsdoc/ccellxfs.cpp \
+        libmsdoc/ccolor.cpp \
+        libmsdoc/ccontent.cpp \
+        libmsdoc/cdate.cpp \
+        libmsdoc/cdoc.cpp \
+        libmsdoc/cdocxlsx.cpp \
+        libmsdoc/cfill.cpp \
+        libmsdoc/cfillobject.cpp \
+        libmsdoc/cfills.cpp \
+        libmsdoc/cfont.cpp \
+        libmsdoc/cfontflags.cpp \
+        libmsdoc/cfontobject.cpp \
+        libmsdoc/cfonts.cpp \
+        libmsdoc/cformula.cpp \
+        libmsdoc/cgradientfill.cpp \
+        libmsdoc/cnumfmt.cpp \
+        libmsdoc/cnumfmtobject.cpp \
+        libmsdoc/cnumfmts.cpp \
+        libmsdoc/cpatternfill.cpp \
+        libmsdoc/crelationship.cpp \
+        libmsdoc/crelationshipobject.cpp \
+        libmsdoc/crelationships.cpp \
+        libmsdoc/crow.cpp \
+        libmsdoc/crowobject.cpp \
+        libmsdoc/csharedstring.cpp \
+        libmsdoc/csharedstringobject.cpp \
+        libmsdoc/csharedstrings.cpp \
+        libmsdoc/cspreadsheet.cpp \
+        libmsdoc/cspreadsheetobject.cpp \
+        libmsdoc/cspreadsheets.cpp \
+        libmsdoc/cstylesheet.cpp \
+        libmsdoc/cworkbook.cpp \
+        libmsdoc/cworkbooklist.cpp \
+        libmsdoc/cworkbooklistobject.cpp \
+        libmsdoc/cxf.cpp \
+        libmsdoc/czip.cpp \
+        zip/mkstemp.c \
+        zip/zip_add.c \
+        zip/zip_add_dir.c \
+        zip/zip_close.c \
+        zip/zip_delete.c \
+        zip/zip_dirent.c \
+        zip/zip_entry_free.c \
+        zip/zip_entry_new.c \
+        zip/zip_error.c \
+        zip/zip_error_clear.c \
+        zip/zip_error_get.c \
+        zip/zip_error_get_sys_type.c \
+        zip/zip_error_strerror.c \
+        zip/zip_error_to_str.c \
+        zip/zip_err_str.c \
+        zip/zip_fclose.c \
+        zip/zip_filerange_crc.c \
+        zip/zip_file_error_clear.c \
+        zip/zip_file_error_get.c \
+        zip/zip_file_get_offset.c \
+        zip/zip_file_strerror.c \
+        zip/zip_fopen.c \
+        zip/zip_fopen_index.c \
+        zip/zip_fread.c \
+        zip/zip_free.c \
+        zip/zip_get_archive_comment.c \
+        zip/zip_get_archive_flag.c \
+        zip/zip_get_file_comment.c \
+        zip/zip_get_name.c \
+        zip/zip_get_num_files.c \
+        zip/zip_memdup.c \
+        zip/zip_name_locate.c \
+        zip/zip_new.c \
+        zip/zip_open.c \
+        zip/zip_rename.c \
+        zip/zip_replace.c \
+        zip/zip_set_archive_comment.c \
+        zip/zip_set_archive_flag.c \
+        zip/zip_set_file_comment.c \
+        zip/zip_set_name.c \
+        zip/zip_source_buffer.c \
+        zip/zip_source_file.c \
+        zip/zip_source_filep.c \
+        zip/zip_source_free.c \
+        zip/zip_source_function.c \
+        zip/zip_source_zip.c \
+        zip/zip_stat.c \
+        zip/zip_stat_index.c \
+        zip/zip_stat_init.c \
+        zip/zip_strerror.c \
+        zip/zip_unchange.c \
+        zip/zip_unchange_all.c \
+        zip/zip_unchange_archive.c \
+        zip/zip_unchange_data.c \
+    report_writter_xlsx.cpp
 
 HEADERS  += mainwindow.h \
     connection.h \
     settings.h \
     delegates.h \
     components.h \
-    workzip/zip.h \
-    workzip/zip_p.h \
-    workzip/unzip.h \
-    workzip/unzip_p.h \
-    workzip/zipentry_p.h \
-    workzip/zipglobal.h \
-    workzip/zlib/zlib.h \
-    workzip/zlib/zconf.h \
     teachers_list.h \
-    report_writter_ods.h \
     report_tabledates.h \
     tab_reports.h \
     tab_teachers.h \
@@ -59,12 +147,68 @@ HEADERS  += mainwindow.h \
     tab_curriculum.h \
     errors.h \
     dialogs.h \
-    HierarchicalHeaderView.h
-
+    HierarchicalHeaderView.h \
+        libmsdoc/cbaserelationshipobject.h \
+        libmsdoc/cborder.h \
+        libmsdoc/cborderline.h \
+        libmsdoc/cborderobject.h \
+        libmsdoc/cborders.h \
+        libmsdoc/cborderstyle.h \
+        libmsdoc/ccell.h \
+        libmsdoc/ccellobject.h \
+        libmsdoc/ccellstylexfs.h \
+        libmsdoc/ccelltype.h \
+        libmsdoc/ccellvalue.h \
+        libmsdoc/ccellxf.h \
+        libmsdoc/ccellxfobject.h \
+        libmsdoc/ccellxfs.h \
+        libmsdoc/ccolor.h \
+        libmsdoc/ccontent.h \
+        libmsdoc/cdate.h \
+        libmsdoc/cdoc.h \
+        libmsdoc/cdocxlsx.h \
+        libmsdoc/cfill.h \
+        libmsdoc/cfillobject.h \
+        libmsdoc/cfills.h \
+        libmsdoc/cfont.h \
+        libmsdoc/cfontflags.h \
+        libmsdoc/cfontobject.h \
+        libmsdoc/cfonts.h \
+        libmsdoc/cformula.h \
+        libmsdoc/cgradientfill.h \
+        libmsdoc/cinitializer.h \
+        libmsdoc/cnumfmt.h \
+        libmsdoc/cnumfmtobject.h \
+        libmsdoc/cnumfmts.h \
+        libmsdoc/cpatternfill.h \
+        libmsdoc/cref.h \
+        libmsdoc/crefset.h \
+        libmsdoc/crelationship.h \
+        libmsdoc/crelationshipobject.h \
+        libmsdoc/crelationships.h \
+        libmsdoc/crow.h \
+        libmsdoc/crowobject.h \
+        libmsdoc/csharedstring.h \
+        libmsdoc/csharedstringobject.h \
+        libmsdoc/csharedstrings.h \
+        libmsdoc/cspreadsheet.h \
+        libmsdoc/cspreadsheetobject.h \
+        libmsdoc/cspreadsheets.h \
+        libmsdoc/cstring.h \
+        libmsdoc/cstylesheet.h \
+        libmsdoc/cworkbook.h \
+        libmsdoc/cworkbooklist.h \
+        libmsdoc/cworkbooklistobject.h \
+        libmsdoc/cxf.h \
+        libmsdoc/czip.h \
+        libmsdoc/irelationshipobject.h \
+        zip/zip.h \
+        zip/zipint.h \
+        zip/zconf.h \
+        zip/zlib.h \
+    report_writter_xlsx.h
 
 FORMS    += mainwindow.ui \
     settings.ui \
     teachers_list.ui \
     messagedialog.ui
-
-

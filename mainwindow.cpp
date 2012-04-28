@@ -38,7 +38,7 @@ MainWindow::MainWindow(QString apppath, QWidget *parent) :
     applicationDirPath = apppath;
     path_db = applicationDirPath + "/nagruzka.db";
     report_path = applicationDirPath;
-    report_format = "ods";
+    report_format = "xlsx";
 
     sqlmodel_subject = new SubjectSqlModel(this);
     tablemodel_spec = new QSqlRelationalTableModel(this);
@@ -1050,7 +1050,7 @@ void MainWindow::on_action_6_triggered()
 void MainWindow::update_report_name()
 {
     if (ui->radioButton_4->isChecked()){
-        report_format = "xls";
+        report_format = "xlsx";
     } else{
         report_format = "ods";
     }
@@ -1138,8 +1138,11 @@ void MainWindow::on_pushButton_9_clicked()
     }
 
 // create report (QList(teachers.id), path_report+name_report, ods,)
-    create_report(teachers_id_list, applicationDirPath + "/template.ods", ui->lineEdit_2->text(),report_format);
-
+    if (report_format == "xlsx"){
+        create_report(teachers_id_list, "", ui->lineEdit_2->text(),report_format);
+    } else if(report_format == "ods"){
+        create_report(teachers_id_list, applicationDirPath + "/template.ods", ui->lineEdit_2->text(),report_format);
+    }
 }
 
 

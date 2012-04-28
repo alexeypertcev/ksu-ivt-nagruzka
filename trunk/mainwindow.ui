@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>5</number>
+     <number>6</number>
     </property>
     <widget class="QWidget" name="tab_6">
      <attribute name="title">
@@ -527,7 +527,7 @@
        </rect>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab_8">
        <attribute name="title">
@@ -620,7 +620,7 @@
         </property>
         <widget class="QRadioButton" name="radioButton_4">
          <property name="enabled">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
          <property name="geometry">
           <rect>
@@ -631,18 +631,18 @@
           </rect>
          </property>
          <property name="text">
-          <string>.xls</string>
+          <string>.xlsx</string>
          </property>
          <property name="checkable">
           <bool>true</bool>
          </property>
          <property name="checked">
-          <bool>false</bool>
+          <bool>true</bool>
          </property>
         </widget>
         <widget class="QRadioButton" name="radioButton_5">
          <property name="enabled">
-          <bool>true</bool>
+          <bool>false</bool>
          </property>
          <property name="geometry">
           <rect>
@@ -656,7 +656,7 @@
           <string>.ods</string>
          </property>
          <property name="checked">
-          <bool>true</bool>
+          <bool>false</bool>
          </property>
         </widget>
        </widget>

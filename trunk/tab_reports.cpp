@@ -171,8 +171,8 @@ bool create_report(QStringList teachers_id_list, QString template_patch, QString
         list_tabledata << temp_tabledata;
     }
 
-    if(type_report == "xls"){
-//        return create_report_xls(teachers_id_list,template_patch, report_patch);
+    if(type_report == "xlsx"){
+        return create_report_xlsx(list_tabledata,template_patch, report_patch);
     } else if (type_report == "ods"){
         return create_report_ods(list_tabledata,template_patch, report_patch);
     } else {
@@ -183,24 +183,8 @@ bool create_report(QStringList teachers_id_list, QString template_patch, QString
 
 bool create_report_ods(QList<Tabledata> list_tabledata, QString template_patch, QString report_patch)
 {
-    Tabledata temp_tabledata;
-/*
-    for (int i=0; i<list_tabledata.length(); ++i){
-        temp_tabledata = list_tabledata.at(i);
-        qDebug() << temp_tabledata.get_header_sheet();
-        qDebug() << "table_data:";
-        qDebug() << "--- osen:";
-        qDebug() << temp_tabledata.get_list_one();
-        qDebug() << "- sum:";
-        qDebug() << temp_tabledata.get_list_one_sum();
-        qDebug() << "--- vesna:";
-        qDebug() << temp_tabledata.get_list_two();
-        qDebug() << "- sum:";
-        qDebug() << temp_tabledata.get_list_two_sum();
-        qDebug() << "- all sum:";
-        qDebug() << temp_tabledata.get_list_all_sum();
-    }
-*/
+/*  Tabledata temp_tabledata;
+
     CardOdsWriter cardOdsWriter;
     // пакует - распаковывает нормально
 
@@ -212,73 +196,13 @@ bool create_report_ods(QList<Tabledata> list_tabledata, QString template_patch, 
     }
 
     cardOdsWriter.save(report_patch);
-
-    return true;
+*/
+    return false;
 }
 
-bool create_report_xls(QStringList teachers_id_list, QString template_patch, QString report_patch)
+bool create_report_xlsx(QList<Tabledata> list_tabledata, QString template_patch, QString report_patch)
 {
-    QSqlQuery query;
-    QStringList head;
-    head << "Министерство образования и науки Российской Федерации" <<         /* 0 */
-            "Государственное образовательное учреждение" <<
-            "высшего профессионального образования" <<
-            "Курский государственный университет" <<
 
-            "УТВЕРЖДАЮ" <<                                                      /* 4*/
-            "Проректор по научной работе" <<
-            "____________________/Худин А.Н." <<
-
-            "                                                              КАРТОЧКА УЧЕБНЫХ ПОРУЧЕНИЙ НА 2010/2011 УЧЕБНЫЙ ГОД (бюджет)" <<
-
-            "Фамилия, имя, отчество преподавателя" <<                           /* 8 */
-            "Ученая степень, звание, должность" <<
-            "Кафедра, факультет" <<
-            "Объем и вид нагрузки" <<
-
-            "Наименование учебной дисциплины или учебных поручений" <<          /* 12 */
-            "Факультет" <<
-            "Специальность" <<
-            "Форма обучения" <<
-            "Курс" <<
-            "Количество групп" <<
-            "Количество подгрупп" <<
-            "Количество студентов" <<
-            "По учебному плану" <<                   /* 20 */
-            "Лекции" <<
-            "Семинары и практич. работы" <<
-            "Лабораторные работы" <<
-            "Рук-во сам. раб" <<                    /* 24 */
-            "индивидуальная" <<
-            "аудиторная" <<
-            "Контрольные работы" <<
-            "Консультации" <<
-            "Зачеты" <<
-            "Экзамены" <<                            /* 30 */
-            "Курсовые работы" <<
-            "Дипломные работы" <<
-            "Практика" <<
-            "ГАК" <<
-            "Прочие виды работ" <<
-            "Итого" <<
-            "Примечания" <<
-
-            "Итого за 1-ое полугодие" <<             /* 38 */
-            "Итого за 2-ое полугодие" <<
-            "Итого за год" <<
-            "Декан" <<
-            "Зав. кафедрой" <<
-            "Преподаватель";                         /* 43 */
-
-
-
-    for (int i=0; i<teachers_id_list.size(); ++i){
-        query.exec("SELECT f FROM teachers WHERE id = " + teachers_id_list.at(i) + ";");
-        query.next();
-
-
-    }
-    //wb.Dump(report_patch.toStdString());
     return true;
 }
 

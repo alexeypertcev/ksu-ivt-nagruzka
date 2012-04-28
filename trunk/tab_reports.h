@@ -4,16 +4,14 @@
 #include <QtXml>
 #include <QtCore/QFile>
 #include <QSqlQuery>
-#include "report_writter_ods.h"
 #include "report_tabledates.h"
 #include "errors.h"
 
-bool create_report(QStringList teachers_id_list, QString template_patch, QString report_patch, QString type_report);
-bool xml_work(QString path);
-int removeFolder(QDir & dir);
-bool create_report_xls(QList<Tabledata> list_tabledata, QString template_patch, QString report_patch);
-bool create_report_ods(QList<Tabledata> list_tabledata, QString template_patch, QString report_patch);
+#include "libmsdoc/cdocxlsx.h"
 
+bool create_report(QStringList teachers_id_list, QString template_patch, QString report_patch, QString type_report);
+bool create_report_ods( QList<Tabledata> list_tabledata, QString template_patch, QString report_patch);
+bool create_report_xlsx(QList<Tabledata> list_tabledata, QString template_patch, QString report_patch);
 
 class reports_creater
 {

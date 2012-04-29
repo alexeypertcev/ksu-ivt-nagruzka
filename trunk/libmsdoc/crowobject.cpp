@@ -28,9 +28,9 @@ return operator [] ( FromStrId( name ) );
 
 int CRowObject::save(std::stringstream& sheet) const
 {
-    if (row() == 12) {
+    if (row() == 11) {
         sheet << "<row r=\"" << row() << "\" ht='23' customHeight='1'>";
-    } else if (row() == 13){
+    } else if (row() == 12){
         sheet << "<row r=\"" << row() << "\" ht=\"64\" customHeight=\"1\">";
     } else {
         sheet << "<row r=\"" << row() << "\">";

@@ -28,7 +28,13 @@ return operator [] ( FromStrId( name ) );
 
 int CRowObject::save(std::stringstream& sheet) const
 {
-sheet << "<row r=\"" << row() << "\">";
+    if (row() == 12) {
+        sheet << "<row r=\"" << row() << "\" ht='23' customHeight='1'>";
+    } else if (row() == 13){
+        sheet << "<row r=\"" << row() << "\" ht=\"64\" customHeight=\"1\">";
+    } else {
+        sheet << "<row r=\"" << row() << "\">";
+    }
 //cells
 TCells::const_iterator it = m_cells.begin();
 TCells::const_iterator end = m_cells.end();

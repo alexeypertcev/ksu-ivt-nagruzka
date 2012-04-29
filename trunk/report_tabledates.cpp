@@ -41,3 +41,32 @@ QStringList Tabledata::get_list_two_sum(){
 QStringList Tabledata::get_list_all_sum(){
     return list_all_sum;
 }
+
+QString Tabledata::get_FIO(){
+    QString temp;
+    if (header_sheet.length() < 3){
+        return "";
+    }
+    temp = header_sheet.at(0) + ", " + header_sheet.at(1) + " " + header_sheet.at(2);
+    return temp;
+}
+
+QString Tabledata::get_degre_and_status(){
+    if (header_sheet.length() < 4){
+        return "";
+    }
+    return header_sheet.at(3);
+}
+
+QString Tabledata::get_kaf_faculty(){
+    if (header_sheet.length() < 5){
+        return "";
+    }
+    return header_sheet.at(4);
+}
+QString Tabledata::get_obiem(){
+    if (header_sheet.length() < 6){
+        return "";
+    }
+    return header_sheet.at(5);
+}

@@ -32,7 +32,7 @@ int CSpreadSheetObject::save(TZip& archive, TContent& content) const
     //TODO default settings
 
     sheet << "<cols>\n";
-    sheet << "<col min='1' max='1' width='40' customWidth='1'/>\n";
+    sheet << "<col min='1' max='1' width='45' customWidth='1'/>\n";
     sheet << "<col min='2' max='24' width='5' customWidth='1'/>\n";
     sheet << "<col min='25' max='25' width='7' customWidth='1'/>\n";
     sheet << "<col min='26' max='26' width='5' customWidth='1'/>\n";
@@ -48,9 +48,28 @@ int CSpreadSheetObject::save(TZip& archive, TContent& content) const
     }
 
     sheet << "</sheetData>\n";
-
-    sheet << "<mergeCells count=\"1\">";
-    sheet << "<mergeCell ref=\"A12:A13\"/>";
+    sheet << "<mergeCells count=\"21\">";
+    sheet << "<mergeCell ref=\"A11:A12\"/>";
+    sheet << "<mergeCell ref=\"B11:B12\"/>";
+    sheet << "<mergeCell ref=\"C11:C12\"/>";
+    sheet << "<mergeCell ref=\"D11:D12\"/>";
+    sheet << "<mergeCell ref=\"E11:E12\"/>";
+    sheet << "<mergeCell ref=\"F11:F12\"/>";
+    sheet << "<mergeCell ref=\"G11:G12\"/>";
+    sheet << "<mergeCell ref=\"H11:H12\"/>";
+    sheet << "<mergeCell ref=\"I11:K11\"/>";
+    sheet << "<mergeCell ref=\"L11:M11\"/>";
+    sheet << "<mergeCell ref=\"N11:N12\"/>";
+    sheet << "<mergeCell ref=\"O11:O12\"/>";
+    sheet << "<mergeCell ref=\"P11:P12\"/>";
+    sheet << "<mergeCell ref=\"Q11:Q12\"/>";
+    sheet << "<mergeCell ref=\"R11:R12\"/>";
+    sheet << "<mergeCell ref=\"S11:S12\"/>";
+    sheet << "<mergeCell ref=\"T11:T12\"/>";
+    sheet << "<mergeCell ref=\"U11:U12\"/>";
+    sheet << "<mergeCell ref=\"V11:X11\"/>";
+    sheet << "<mergeCell ref=\"Y11:Y12\"/>";
+    sheet << "<mergeCell ref=\"Z11:Z12\"/>";
     sheet << "</mergeCells>";
 
     sheet << "</worksheet>\n";

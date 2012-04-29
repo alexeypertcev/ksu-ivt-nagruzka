@@ -27,9 +27,16 @@ int CSpreadSheetObject::save(TZip& archive, TContent& content) const
     std::stringstream sheet;
     sheet << "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n";
     sheet << "<worksheet ";
-    sheet << "xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\">";
+    sheet << "xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\">\n";
     //sheet << "xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\">\n";
     //TODO default settings
+
+    sheet << "<cols>\n";
+    sheet << "<col min='1' max='1' width='40' customWidth='1'/>\n";
+    sheet << "<col min='2' max='24' width='5' customWidth='1'/>\n";
+    sheet << "<col min='25' max='25' width='7' customWidth='1'/>\n";
+    sheet << "<col min='26' max='26' width='5' customWidth='1'/>\n";
+    sheet << "</cols>\n";
 
     sheet << "<sheetData>\n";
     //rows
@@ -41,6 +48,11 @@ int CSpreadSheetObject::save(TZip& archive, TContent& content) const
     }
 
     sheet << "</sheetData>\n";
+
+    sheet << "<mergeCells count=\"1\">";
+    sheet << "<mergeCell ref=\"A12:A13\"/>";
+    sheet << "</mergeCells>";
+
     sheet << "</worksheet>\n";
     archive.add_file( filename(), sheet.str() );
 

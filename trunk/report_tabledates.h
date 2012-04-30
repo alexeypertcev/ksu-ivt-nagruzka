@@ -17,10 +17,10 @@ public:
     void set_list_two_sum(QStringList lts);
     void set_list_all_sum(QStringList las);
 
-    QString get_FIO();
-    QString get_degre_and_status();
-    QString get_kaf_faculty();
-    QString get_obiem();
+    QString get_header_FIO();
+    QString get_header_degre_and_status();
+    QString get_header_kaf_faculty();
+    QString get_header_obiem();
 
     QStringList get_header_sheet();
     QList<QStringList> get_list_one();

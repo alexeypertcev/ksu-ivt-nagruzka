@@ -42,7 +42,7 @@ QStringList Tabledata::get_list_all_sum(){
     return list_all_sum;
 }
 
-QString Tabledata::get_FIO(){
+QString Tabledata::get_header_FIO(){
     QString temp;
     if (header_sheet.length() < 3){
         return "";
@@ -51,20 +51,21 @@ QString Tabledata::get_FIO(){
     return temp;
 }
 
-QString Tabledata::get_degre_and_status(){
+QString Tabledata::get_header_degre_and_status(){
     if (header_sheet.length() < 4){
         return "";
     }
     return header_sheet.at(3);
 }
 
-QString Tabledata::get_kaf_faculty(){
+QString Tabledata::get_header_kaf_faculty(){
     if (header_sheet.length() < 5){
         return "";
     }
     return header_sheet.at(4);
 }
-QString Tabledata::get_obiem(){
+
+QString Tabledata::get_header_obiem(){
     if (header_sheet.length() < 6){
         return "";
     }

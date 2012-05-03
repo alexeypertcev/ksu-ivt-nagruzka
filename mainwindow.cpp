@@ -4,7 +4,6 @@
 //---------------------------------------------
 
 
-
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "connection.h"
@@ -31,10 +30,9 @@ MainWindow::MainWindow(QString apppath, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-
     ui->setupUi(this);
 
-    version = "v0.141";
+    version = "v0.184";
     applicationDirPath = apppath;
     path_db = applicationDirPath + "/nagruzka.db";
     report_path = applicationDirPath;

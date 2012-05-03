@@ -131,8 +131,8 @@ void Teachers_list_model::refresh()
     unsigned int buf_all_hours;
     unsigned int buf_aud_hours;
 
-    QString staff_hour;
     QString rate;
+    unsigned int staff_hour;
     unsigned int rate_staff_hour;
 
     rate_list.clear();
@@ -161,7 +161,7 @@ void Teachers_list_model::refresh()
         query2.exec("SELECT hours FROM status WHERE name = '"+ query.value(1).toString() +"';");
         query2.next();
         rate = query.value(2).toString();
-        staff_hour = query2.value(0).toString();
+        staff_hour = query2.value(0).toUInt();
         rate_staff_hour =  query.value(2).toDouble() * query2.value(0).toDouble();
 
         rate_list << rate + "/" + QString::number(rate_staff_hour);
@@ -288,7 +288,7 @@ void Teachers_list_model::refresh()
                 }
 
                 if (rate_staff_hour != 0){
-                    rate_dole << QString::number(((double)buf_all_hours / (double)rate_staff_hour), 'f', 2);
+                    rate_dole << QString::number(((double)buf_all_hours / (double)staff_hour), 'f', 2);
                 } else {
                     rate_dole << " ";
                 }

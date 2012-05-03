@@ -3,7 +3,6 @@
 # Project created by QtCreator 2011-02-16T00:15:31
 #
 #-------------------------------------------------
-
 QT       += static core gui sql zlib xml
 
 TARGET = nagruzka

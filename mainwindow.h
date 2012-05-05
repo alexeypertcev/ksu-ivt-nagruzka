@@ -86,6 +86,19 @@ private:
     QString version;
     QString report_path, report_format, report_name;
 
+    unsigned int coefficient_lection_hr;
+    unsigned int coefficient_labs_for_undergroup_hr;
+    unsigned int coefficient_practice_for_group_hr;
+    unsigned int coefficient_individ_for_KCR_hr;
+    unsigned int coefficient_kontr_rab_for_quantitycourse_min;
+    unsigned int coefficient_offset_for_quantitycourse_min;
+    unsigned int coefficient_examen_for_quantitycourse_min;
+    unsigned int coefficient_consultation_ochnui_percent;
+    unsigned int coefficient_consultation_zaochnui_percent;
+    unsigned int coefficient_consultation_och_zaoch_percent;
+    unsigned int coefficient_consultation_add_is_examen_for_group;
+    unsigned int coefficient_coursework_for_quantitycourse_hr;
+
 private slots:
     void on_tabWidget_currentChanged(int index);
     void on_pushButton_del_distribution_clicked();
@@ -124,6 +137,8 @@ private slots:
     void on_pushButton_5_clicked();
     void on_pushButton_clear_subinsemmester_clicked();
     void on_pushButton_clear_distribution_clicked();
+
+    void update_coefficients();
 };
 
 #endif // MAINWINDOW_H

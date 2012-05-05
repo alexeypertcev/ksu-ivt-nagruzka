@@ -139,6 +139,8 @@ private slots:
     void on_pushButton_clear_distribution_clicked();
 
     void update_coefficients();
+    void on_action_9_activated();
+    void on_action_10_activated();
 };
 
 #endif // MAINWINDOW_H

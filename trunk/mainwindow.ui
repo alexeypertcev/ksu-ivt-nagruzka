@@ -735,6 +735,8 @@
     </property>
     <addaction name="action_4"/>
     <addaction name="action_5"/>
+    <addaction name="action_9"/>
+    <addaction name="action_10"/>
    </widget>
    <widget class="QMenu" name="menu_3">
     <property name="title">
@@ -803,6 +805,16 @@
   <action name="action_txt_2">
    <property name="text">
     <string>создать из txt</string>
+   </property>
+  </action>
+  <action name="action_9">
+   <property name="text">
+    <string>Нормы часов</string>
+   </property>
+  </action>
+  <action name="action_10">
+   <property name="text">
+    <string>Прочее</string>
    </property>
   </action>
  </widget>

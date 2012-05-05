@@ -251,6 +251,18 @@ void MainWindow::on_action_5_activated()
     settings->exec();
 }
 
+void MainWindow::on_action_9_activated()
+{
+    settings->set_tab(2);
+    settings->exec();
+}
+
+void MainWindow::on_action_10_activated()
+{
+    settings->set_tab(3);
+    settings->exec();
+}
+
 void MainWindow::on_pushButton_clicked(){
 // отмена удаления преподавателя
     if (sqlmodel_teachers->save_removed()){
@@ -421,9 +433,6 @@ void MainWindow::update_sqlmodel_distribution()
     sqlmodel_distribution->check_entry();
     sqlmodel_distribution->refresh();
 }
-
-
-
 
 void MainWindow::set_design_all_tab()
 {
@@ -872,7 +881,7 @@ QString MainWindow::consultation_get(int lection_hr, QString speciality_id, int 
             {
                 percent = coefficient_consultation_zaochnui_percent;
             }
-     res = (int)ceil((lection_hr*percent)/100);
+     res = ceil(((double)lection_hr*(double)percent)/100);
 
      if (is_examen == 1)
      {
@@ -1294,3 +1303,5 @@ void MainWindow::update_coefficients(){
         }
     }
 }
+
+

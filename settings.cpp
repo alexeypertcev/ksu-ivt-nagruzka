@@ -35,6 +35,18 @@ Settings::Settings(QWidget *parent, QSqlRelationalTableModel* tm_spec, QSqlRelat
     ui->tableView->setColumnWidth(3,105);
 
     ui->tableView_2->setColumnWidth(0,120);
+
+    coefficients_model = new Coefficients_model();
+    coefficients_model->refresh();
+    ui->tableView_3->setModel(coefficients_model);
+
+    coefficients_model->setHeaderData(1, Qt::Horizontal, QObject::tr("Название"));
+    coefficients_model->setHeaderData(2, Qt::Horizontal, QObject::tr("Норма"));
+    ui->tableView_3->setColumnWidth(0,0);
+    ui->tableView_3->setColumnWidth(1,360);
+    ui->tableView_3->setColumnWidth(2,50);
+
+    update_other_data();
 }
 
 Settings::~Settings()
@@ -99,4 +111,155 @@ void Settings::on_pushButton_del_dolj_clicked()
 
 void Settings::set_tab(int index){
     ui->tabWidget->setCurrentIndex(index);
+}
+
+void Settings::on_lineEdit_editingFinished()
+{
+    QString s = "update other_data set 'value' = '"+ ui->lineEdit->text() +"' where name = 'academic_year'";
+    QSqlQuery query;
+    query.exec(s);
+    update_other_data();
+}
+
+void Settings::on_lineEdit_2_editingFinished()
+{
+    QString s = "update other_data set 'value' = '"+ ui->lineEdit_2->text() +"' where name = 'name_kafedry_faculty'";
+    QSqlQuery query;
+    query.exec(s);
+    update_other_data();
+}
+
+void Settings::on_lineEdit_3_editingFinished()
+{
+    QString s = "update other_data set 'value' = '"+ ui->lineEdit_3->text() +"' where name = 'business_base_of_training'";
+    QSqlQuery query;
+    query.exec(s);
+    update_other_data();
+}
+
+void Settings::on_lineEdit_4_editingFinished()
+{
+    QString s = "update other_data set 'value' = '"+ ui->lineEdit_4->text() +"' where name = 'vice_rector_on_education_work'";
+    QSqlQuery query;
+    query.exec(s);
+    update_other_data();
+}
+
+void Settings::update_other_data()
+{
+    QSqlQuery query;
+    query.exec("SELECT name, value FROM other_data");
+
+    while(query.next()){
+        if (query.value(0).toString() == "academic_year"){
+            ui->lineEdit->setText(query.value(1).toString());
+        } else if (query.value(0).toString() == "name_kafedry_faculty"){
+            ui->lineEdit_2->setText(query.value(1).toString());
+        } else if (query.value(0).toString() == "business_base_of_training"){
+            ui->lineEdit_3->setText(query.value(1).toString());
+        } else if (query.value(0).toString() == "vice_rector_on_education_work"){
+            ui->lineEdit_4->setText(query.value(1).toString());
+        } else {
+            ERROR_REPORT("0x");
+        }
+    }
+}
+
+/***********************************************************
+*   Coefficients_model
+************************************************************/
+
+
+Coefficients_model::Coefficients_model(QObject *parent) :
+    QSqlQueryModel(parent)
+{
+
+
+}
+
+Qt::ItemFlags Coefficients_model::flags(
+        const QModelIndex &index) const
+{
+    Qt::ItemFlags flags = QSqlQueryModel::flags(index);
+    if (index.column() == 2 )
+    {
+        flags |= Qt::ItemIsEditable;
+    }
+    return flags;
+}
+
+void Coefficients_model::refresh()
+{
+    this->setQuery("SELECT name, name, value  "
+                   "FROM coefficients");
+
+}
+
+QVariant Coefficients_model::data(const QModelIndex &index, int role) const
+{
+    QVariant value = QSqlQueryModel::data(index, role);
+    QString buf;
+    switch (role)
+    {
+    case Qt::DisplayRole:
+        if (index.column() == 1)
+        {
+            if (value.toString() == "coefficient_lection_hr"){
+                return "Для лекций, часов на лекцию";
+            }
+            if (value.toString() == "coefficient_labs_for_undergroup_hr"){
+                return "Для лабораторных работ, часов на подгруппу";
+            }
+            if (value.toString() == "coefficient_practice_for_group_hr"){
+                return "Для практических занятий, часов на группу";
+            }
+            if (value.toString() == "coefficient_individ_for_KCR_hr"){
+                return "Для индивидуальных занятий, часов на КСР";
+            }
+            if (value.toString() == "coefficient_kontr_rab_for_quantitycourse_min"){
+                return "Для контрольных работ, минут на количество человек на курсе";
+            }
+            if (value.toString() == "coefficient_offset_for_quantitycourse_min"){
+                return "Для зачетов, минут на количество человек на курсе";
+            }
+            if (value.toString() == "coefficient_examen_for_quantitycourse_min"){
+                return "Для экзаменов, минут на количество человек на курсе";
+            }
+            if (value.toString() == "coefficient_coursework_for_quantitycourse_hr"){
+                return "Для курсовых работ, минут на количество человек на курсе";
+            }
+            if (value.toString() == "coefficient_consultation_ochnui_percent"){
+                return "Для консультаций очной формы, процент от лекций";
+            }
+            if (value.toString() == "coefficient_consultation_zaochnui_percent"){
+                return "Для консультаций заочной формы, процент от лекций";
+            }
+            if (value.toString() == "coefficient_consultation_och_zaoch_percent"){
+                return "Для консультаций очно-заочной формы, процент от лекций";
+            }
+            if (value.toString() == "coefficient_consultation_add_is_examen_for_group"){
+                return "Дополнительно для консультаций (если экзамен), часов на группу ";
+            }
+        }
+        break;
+    }
+    return value;
+}
+
+bool Coefficients_model::setData(const QModelIndex &index, const QVariant &value, int /* role */)
+{
+    if (index.column() != 2)
+        return false;
+
+    QModelIndex primaryKeyIndex = QSqlQueryModel::index(index.row(), 0);
+
+    QString s = "update coefficients set value = '"+ value.toString() +"' where name = '"+ data(primaryKeyIndex, Qt::DisplayRole).toString() + "';";
+    qDebug() << s;
+
+    QSqlQuery query;
+    if (!query.exec(s)){
+        return false;
+    }
+    refresh();
+    return true;
 }

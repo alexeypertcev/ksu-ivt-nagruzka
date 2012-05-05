@@ -724,9 +724,17 @@ void MainWindow::on_pushButton_2_clicked()
     controlwork, num_group, num_undergroup, quantity_course;
     QString students_id, squery = "";
 
-    //query.exec("DELETE FROM distribution");
-    //query.exec("DELETE FROM subjects_in_semmester");
-    // ищем запись (пока алгоритм будет добавлять и обновлять существующие)
+    QString new_lection_hr;
+    QString new_labs_hr;
+    QString new_practice_hr;
+    QString new_individ_hr;
+    QString new_kontr_rab_hr;
+    QString new_consultation_hr;
+    QString new_offset_hr;
+    QString new_examen_hr;
+    QString new_coursework_hr;
+
+    update_coefficients();
 
     query.exec("SELECT curriculum.id, speciality_id, "
                "subject_name, semmester, lection_hr, labs_hr, practice_hr, "
@@ -757,15 +765,15 @@ void MainWindow::on_pushButton_2_clicked()
                 num_undergroup = query2.value(4).toInt();
                 quantity_course = query2.value(5).toInt();
 
-                QString new_lection_hr = QString::number(lection_hr*1, 10);              // "lection_hr INTEGER NOT NULL, "
-                QString new_labs_hr = QString::number(labs_hr*num_undergroup, 10);       // "labs_hr INTEGER NOT NULL, "
-                QString new_practice_hr = QString::number(practice_hr*num_group, 10);    // "practice_hr INTEGER NOT NULL, "
-                QString new_individ_hr = QString::number(KCR_hr*1, 10);                  // "individ_hr REAL NOT NULL, "
-                QString new_kontr_rab_hr = QString::number((int)ceil(controlwork*quantity_course/4), 10);         // "kontr_rab_hr REAL NOT NULL, "
-                QString new_consultation_hr = consultation_get(lection_hr, speciality_id, num_group, is_examen);  // "consultation_hr REAL NOT NULL, "
-                QString new_offset_hr = offset_get((int)ceil(quantity_course/4), is_offset);       // "offset_hr REAL NOT NULL, "
-                QString new_examen_hr = examen_get((int)ceil(quantity_course/3), is_examen);       // "examen_hr REAL NOT NULL, "
-                QString new_coursework_hr = QString::number(is_coursework*quantity_course*3, 10);  // "coursework_hr
+                new_lection_hr = QString::number(lection_hr*coefficient_lection_hr, 10);              // "lection_hr INTEGER NOT NULL, "
+                new_labs_hr = QString::number(labs_hr*num_undergroup*coefficient_labs_for_undergroup_hr, 10);       // "labs_hr INTEGER NOT NULL, "
+                new_practice_hr = QString::number(practice_hr*num_group*coefficient_practice_for_group_hr, 10);    // "practice_hr INTEGER NOT NULL, "
+                new_individ_hr = QString::number(KCR_hr*coefficient_individ_for_KCR_hr, 10);                  // "individ_hr REAL NOT NULL, "
+                new_kontr_rab_hr = QString::number((int)ceil(controlwork*quantity_course*(((double)coefficient_kontr_rab_for_quantitycourse_min)/60)), 10);    // "kontr_rab_hr REAL NOT NULL, "
+                new_consultation_hr = consultation_get(lection_hr, speciality_id, num_group, is_examen);  // "consultation_hr REAL NOT NULL, "
+                new_offset_hr = offset_get((int)ceil(quantity_course*(((double)coefficient_offset_for_quantitycourse_min)/60)), is_offset);       // "offset_hr REAL NOT NULL, "
+                new_examen_hr = examen_get((int)ceil(quantity_course*(((double)coefficient_examen_for_quantitycourse_min)/60)), is_examen);       // "examen_hr REAL NOT NULL, "
+                new_coursework_hr = QString::number(is_coursework*quantity_course*coefficient_coursework_for_quantitycourse_hr, 10);  // "coursework_hr
 
 
 
@@ -856,19 +864,19 @@ QString MainWindow::consultation_get(int lection_hr, QString speciality_id, int 
     query.next();
     if (query.value(0).toString() == "оч")
     {
-        percent = 5;
+        percent = coefficient_consultation_ochnui_percent;
     } else if (query.value(0).toString() == "оч-заоч")
         {
-            percent = 10;
+            percent = coefficient_consultation_och_zaoch_percent;
         } else if (query.value(0).toString() == "заоч")
             {
-                percent = 15;
+                percent = coefficient_consultation_zaochnui_percent;
             }
      res = (int)ceil((lection_hr*percent)/100);
 
      if (is_examen == 1)
      {
-        res+= 2*num_group;
+        res+= coefficient_consultation_add_is_examen_for_group*num_group;
      }
 
      return QString::number(res, 'g', 6);
@@ -1250,4 +1258,39 @@ void MainWindow::on_pushButton_clear_distribution_clicked()
         update_distribution();
     }
 
+}
+
+void MainWindow::update_coefficients(){
+    QSqlQuery query;
+    query.exec("SELECT name, value FROM coefficients");
+
+    while(query.next()){
+        if (query.value(0).toString() == "coefficient_lection_hr"){
+            coefficient_lection_hr = query.value(1).toUInt();
+        } else if (query.value(0).toString() == "coefficient_labs_for_undergroup_hr"){
+            coefficient_labs_for_undergroup_hr = query.value(1).toUInt();
+        } else if (query.value(0).toString() == "coefficient_practice_for_group_hr"){
+            coefficient_practice_for_group_hr = query.value(1).toUInt();
+        } else if (query.value(0).toString() == "coefficient_individ_for_KCR_hr"){
+            coefficient_individ_for_KCR_hr = query.value(1).toUInt();
+        } else if (query.value(0).toString() == "coefficient_kontr_rab_for_quantitycourse_min"){
+            coefficient_kontr_rab_for_quantitycourse_min = query.value(1).toUInt();
+        } else if (query.value(0).toString() == "coefficient_offset_for_quantitycourse_min"){
+            coefficient_offset_for_quantitycourse_min = query.value(1).toUInt();
+        } else if (query.value(0).toString() == "coefficient_examen_for_quantitycourse_min"){
+            coefficient_examen_for_quantitycourse_min = query.value(1).toUInt();
+        } else if (query.value(0).toString() == "coefficient_consultation_ochnui_percent"){
+            coefficient_consultation_ochnui_percent = query.value(1).toUInt();
+        } else if (query.value(0).toString() == "coefficient_consultation_zaochnui_percent"){
+            coefficient_consultation_zaochnui_percent = query.value(1).toUInt();
+        } else if (query.value(0).toString() == "coefficient_consultation_och_zaoch_percent"){
+            coefficient_consultation_och_zaoch_percent = query.value(1).toUInt();
+        } else if (query.value(0).toString() == "coefficient_consultation_add_is_examen_for_group"){
+            coefficient_consultation_add_is_examen_for_group = query.value(1).toUInt();
+        } else if (query.value(0).toString() == "coefficient_coursework_for_quantitycourse_hr"){
+            coefficient_coursework_for_quantitycourse_hr = query.value(1).toUInt();
+        } else {
+            ERROR_REPORT("0x");
+        }
+    }
 }

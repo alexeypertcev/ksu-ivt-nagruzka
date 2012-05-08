@@ -18,6 +18,7 @@
 #include "tab_reports.h"
 #include "teachers_list.h"
 #include "dialogs.h"
+#include "constants.h"
 
 
 #include <QtGui>
@@ -449,11 +450,16 @@ void MainWindow::set_design_subject()
 {
     // Subjects
     int i = 0;
-    ui->tableView->setColumnWidth(0,400);
+    ui->tableView->setColumnWidth(0, ui->tableView->width() - 25);
+
     ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    sqlmodel_subject->setHeaderData(0, Qt::Horizontal, QObject::tr("Название"));
-    do{ ui->tableView->setRowHeight(i++,25); }while(i<=10);
+
+    sqlmodel_subject->setHeaderData(0, Qt::Horizontal, QObject::tr(NAME_SUBJECT_FULL));
+
+    do {
+        ui->tableView->setRowHeight(i++,25);
+    } while ( i<=10 );
 
 }
 
@@ -461,123 +467,105 @@ void MainWindow::set_design_teachers()
 {
     // Teachers
     ui->tableView_2->setColumnWidth(0,0);   //id
-    ui->tableView_2->setColumnWidth(1,180);
-    ui->tableView_2->setColumnWidth(2,180);
-    ui->tableView_2->setColumnWidth(3,180);
-    ui->tableView_2->setColumnWidth(4,120);
-    ui->tableView_2->setColumnWidth(5,60);
+    ui->tableView_2->setColumnWidth(1,ui->tableView_2->width()*0.2);
+    ui->tableView_2->setColumnWidth(2,ui->tableView_2->width()*0.2);
+    ui->tableView_2->setColumnWidth(3,ui->tableView_2->width()*0.2);
+    ui->tableView_2->setColumnWidth(4,ui->tableView_2->width()*0.15);
+    ui->tableView_2->setColumnWidth(5,ui->tableView_2->width()*0.05);
+    ui->tableView_2->setColumnWidth(6,ui->tableView_2->width()*0.15);
+
     ui->tableView_2->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->tableView_2->setSelectionBehavior(QAbstractItemView::SelectRows);
 
-    sqlmodel_teachers->setHeaderData(0, Qt::Horizontal, QObject::tr("ID"));
-    sqlmodel_teachers->setHeaderData(1, Qt::Horizontal, QObject::tr("Фамилия"));
-    sqlmodel_teachers->setHeaderData(2, Qt::Horizontal, QObject::tr("Имя"));
-    sqlmodel_teachers->setHeaderData(3, Qt::Horizontal, QObject::tr("Отчество"));
-    sqlmodel_teachers->setHeaderData(4, Qt::Horizontal, QObject::tr("Должность"));
-    sqlmodel_teachers->setHeaderData(5, Qt::Horizontal, QObject::tr("Ставка"));
-    sqlmodel_teachers->setHeaderData(6, Qt::Horizontal, QObject::tr("Штат"));
-
-
+    sqlmodel_teachers->setHeaderData(1, Qt::Horizontal, QObject::tr(NAME_FAMILY_FULL));
+    sqlmodel_teachers->setHeaderData(2, Qt::Horizontal, QObject::tr(NAME_NAME_FULL));
+    sqlmodel_teachers->setHeaderData(3, Qt::Horizontal, QObject::tr(NAME_MIDDLE_NAME_FULL));
+    sqlmodel_teachers->setHeaderData(4, Qt::Horizontal, QObject::tr(NAME_STATUS_FULL));
+    sqlmodel_teachers->setHeaderData(5, Qt::Horizontal, QObject::tr(NAME_RATE_FULL));
+    sqlmodel_teachers->setHeaderData(6, Qt::Horizontal, QObject::tr(NAME_STAFF_FULL));
 }
 
 void MainWindow::set_design_students()
 {
     // Students
     ui->tableView_3->setColumnWidth(0,0);  //id
-    ui->tableView_3->setColumnWidth(1,150);
-    ui->tableView_3->setColumnWidth(2,145);
-    ui->tableView_3->setColumnWidth(3,145);
-    ui->tableView_3->setColumnWidth(4,145);
-    ui->tableView_3->setColumnWidth(5,145);
+    ui->tableView_3->setColumnWidth(1,ui->tableView_3->width()*0.3);
+    ui->tableView_3->setColumnWidth(2,ui->tableView_3->width()*0.1);
+    ui->tableView_3->setColumnWidth(3,ui->tableView_3->width()*0.1);
+    ui->tableView_3->setColumnWidth(4,ui->tableView_3->width()*0.1);
+    ui->tableView_3->setColumnWidth(5,ui->tableView_3->width()*0.1);
+
     ui->tableView_3->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->tableView_3->setSelectionBehavior(QAbstractItemView::SelectRows);
 
-    sqlmodel_students->setHeaderData(0, Qt::Horizontal, QObject::tr("ID"));
-    sqlmodel_students->setHeaderData(1, Qt::Horizontal, QObject::tr("Специальность"));
-    sqlmodel_students->setHeaderData(2, Qt::Horizontal, QObject::tr("Курс"));
-    sqlmodel_students->setHeaderData(3, Qt::Horizontal, QObject::tr("Кол-во групп"));
-    sqlmodel_students->setHeaderData(4, Qt::Horizontal, QObject::tr("Кол-во подгрупп"));
-    sqlmodel_students->setHeaderData(5, Qt::Horizontal, QObject::tr("Кол-во человек"));
-
-
+    sqlmodel_students->setHeaderData(1, Qt::Horizontal, QObject::tr(NAME_SPECIALITY_FULL));
+    sqlmodel_students->setHeaderData(2, Qt::Horizontal, QObject::tr(NAME_COURSE_FULL));
+    sqlmodel_students->setHeaderData(3, Qt::Horizontal, QObject::tr(NAME_NUM_GROUP_FULL));
+    sqlmodel_students->setHeaderData(4, Qt::Horizontal, QObject::tr(NAME_NUM_UNDERGROUP_FULL));
+    sqlmodel_students->setHeaderData(5, Qt::Horizontal, QObject::tr(NAME_QUANTITY_COURSE_FULL));
 }
 
 void MainWindow::set_design_curriculum()
 {
-    // Curriculum
-    int h = 85;
+    // Curriculum  1230
+    int i;
     ui->tableView_4->setColumnWidth(0,0);  //id
-    ui->tableView_4->setColumnWidth(1,130);
-    ui->tableView_4->setColumnWidth(2,330);
-    ui->tableView_4->setColumnWidth(3,h);
-    ui->tableView_4->setColumnWidth(4,h);
-    ui->tableView_4->setColumnWidth(5,h);
-    ui->tableView_4->setColumnWidth(6,h);
-    ui->tableView_4->setColumnWidth(7,h);
-    ui->tableView_4->setColumnWidth(8,60);
-    ui->tableView_4->setColumnWidth(9,60);
-    ui->tableView_4->setColumnWidth(10,60);
-    ui->tableView_4->setColumnWidth(11,60);
+    ui->tableView_4->setColumnWidth(1,(ui->tableView_4->width()-25)*0.2);
+    ui->tableView_4->setColumnWidth(2,(ui->tableView_4->width()-25)*0.26);
+
+    for (i = 3; i<=11; ++i){
+        ui->tableView_4->setColumnWidth(i,(ui->tableView_4->width()-25)*0.06);
+    }
+
     ui->tableView_4->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->tableView_4->setSelectionBehavior(QAbstractItemView::SelectRows);
 
-    int i = 0;
-    sqlmodel_curriculum->setHeaderData(i++, Qt::Horizontal, QObject::tr("ID"));
-    sqlmodel_curriculum->setHeaderData(i++, Qt::Horizontal, QObject::tr("Специальность"));
-    sqlmodel_curriculum->setHeaderData(i++, Qt::Horizontal, QObject::tr("Предмет"));
-    sqlmodel_curriculum->setHeaderData(i++, Qt::Horizontal, QObject::tr("Семестр"));
-    sqlmodel_curriculum->setHeaderData(i++, Qt::Horizontal, QObject::tr("Лекции"));
-    sqlmodel_curriculum->setHeaderData(i++, Qt::Horizontal, QObject::tr("Лаборат."));
-    sqlmodel_curriculum->setHeaderData(i++, Qt::Horizontal, QObject::tr("Практич."));
-    sqlmodel_curriculum->setHeaderData(i++, Qt::Horizontal, QObject::tr("Контр. раб."));
-    sqlmodel_curriculum->setHeaderData(i++, Qt::Horizontal, QObject::tr("КСР"));
-    sqlmodel_curriculum->setHeaderData(i++, Qt::Horizontal, QObject::tr("Экз."));
-    sqlmodel_curriculum->setHeaderData(i++, Qt::Horizontal, QObject::tr("Зач."));
-    sqlmodel_curriculum->setHeaderData(i++, Qt::Horizontal, QObject::tr("Курс."));
-
-
+    i = 1;
+    sqlmodel_curriculum->setHeaderData(i++, Qt::Horizontal, QObject::tr(NAME_SPECIALITY_FULL));
+    sqlmodel_curriculum->setHeaderData(i++, Qt::Horizontal, QObject::tr(NAME_SUBJECT_FULL));
+    sqlmodel_curriculum->setHeaderData(i++, Qt::Horizontal, QObject::tr(NAME_SEMMESTER_FULL));
+    sqlmodel_curriculum->setHeaderData(i++, Qt::Horizontal, QObject::tr(NAME_LECTION_FULL));
+    sqlmodel_curriculum->setHeaderData(i++, Qt::Horizontal, QObject::tr(NAME_LABS_MEDIUM));
+    sqlmodel_curriculum->setHeaderData(i++, Qt::Horizontal, QObject::tr(NAME_PRACTICE_MEDIUM));
+    sqlmodel_curriculum->setHeaderData(i++, Qt::Horizontal, QObject::tr(NAME_CONTROLWORK_MEDIUM));
+    sqlmodel_curriculum->setHeaderData(i++, Qt::Horizontal, QObject::tr(NAME_KCP_FULL));
+    sqlmodel_curriculum->setHeaderData(i++, Qt::Horizontal, QObject::tr(NAME_EXAMEN_FULL));
+    sqlmodel_curriculum->setHeaderData(i++, Qt::Horizontal, QObject::tr(NAME_OFFSET_FULL));
+    sqlmodel_curriculum->setHeaderData(i++, Qt::Horizontal, QObject::tr(NAME_COURSEWORK_MEDIUM));
 }
 
 void MainWindow::set_design_subjects_in_semmester()
 {
     // Subjects_in_semmester
+    int i;
     ui->tableView_5->setColumnWidth(0,0); //id
-    ui->tableView_5->setColumnWidth(1,330);
-    ui->tableView_5->setColumnWidth(2,60);
+    ui->tableView_5->setColumnWidth(1,(ui->tableView_5->width() - 25)*0.18);
+    ui->tableView_5->setColumnWidth(2,(ui->tableView_5->width() - 25)*0.03);
+    ui->tableView_5->setColumnWidth(3,(ui->tableView_5->width() - 25)*0.12);
+    ui->tableView_5->setColumnWidth(4,(ui->tableView_5->width() - 25)*0.03);
+    ui->tableView_5->setColumnWidth(5,(ui->tableView_5->width() - 25)*0.04);
+    ui->tableView_5->setColumnWidth(6,(ui->tableView_5->width() - 25)*0.05);
+    ui->tableView_5->setColumnWidth(7,(ui->tableView_5->width() - 25)*0.05);
+    ui->tableView_5->setColumnWidth(8,(ui->tableView_5->width() - 25)*0.04);
 
-    int i = 9;
-    ui->tableView_5->setColumnWidth(i++,70);
-    ui->tableView_5->setColumnWidth(i++,70);
-    ui->tableView_5->setColumnWidth(i++,70);
-    ui->tableView_5->setColumnWidth(i++,70);
-    ui->tableView_5->setColumnWidth(i++,70);
-    ui->tableView_5->setColumnWidth(i++,70);
-    ui->tableView_5->setColumnWidth(i++,70);
-    ui->tableView_5->setColumnWidth(i++,70);
-    ui->tableView_5->setColumnWidth(i++,70);
-    ui->tableView_5->setColumnWidth(i++,70);
-    ui->tableView_5->setColumnWidth(i++,70);
-    ui->tableView_5->setColumnWidth(i++,70);
-    ui->tableView_5->setColumnWidth(i++,70);
-    ui->tableView_5->setColumnWidth(i++,70);
-    ui->tableView_5->setColumnWidth(i++,70);
-    ui->tableView_5->setColumnWidth(i++,70);
+    for (i = 9; i <= 24; ++i){
+        ui->tableView_5->setColumnWidth(i,(ui->tableView_5->width() - 25)*0.035);
+    }
+
     ui->tableView_5->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->tableView_5->setSelectionBehavior(QAbstractItemView::SelectRows);
 
-    i=0;
-    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("ID"));
-    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Предмет"));
-    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Семестр"));
-    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Специальность"));
-    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Форма обучения"));
-    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Курс"));
-    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Кол-во групп"));
-    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Кол-во подгрупп"));
-    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Кол-во студентов"));
-    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Лекции"));
-    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Лаборат."));
-    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Практич."));
+    i=1;
+    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr(NAME_SUBJECT_FULL));
+    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr(NAME_SEMMESTER_SMAIL));
+    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr(NAME_SPECIALITY_FULL));
+    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr(NAME_COURSE_FULL));
+    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr(NAME_NUM_GROUP_SMAIL));
+    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr(NAME_NUM_UNDERGROUP_SMAIL));
+    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr(NAME_QUANTITY_COURSE_SMAIL));
+    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr(NAME_LECTION_SMAIL));
+    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr(NAME_LABS_SMAIL));
+    sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr(NAME_PRACTICE_SMAIL));
     sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Индивид."));
     sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Контр. раб"));
     sqlmodel_subinsem->setHeaderData(i++, Qt::Horizontal, QObject::tr("Консульт."));
@@ -604,7 +592,7 @@ void MainWindow::set_design_distribution()
     ui->tableView_6->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->tableView_6->setSelectionBehavior(QAbstractItemView::SelectRows);
 
-    sinstodistrib_preview->setHeaderData(0, Qt::Horizontal, QObject::tr("Предмет"));
+    sinstodistrib_preview->setHeaderData(0, Qt::Horizontal, QObject::tr(NAME_SUBJECT_FULL));
     sinstodistrib_preview->setHeaderData(1, Qt::Horizontal, QObject::tr("Сем."));
 
     int i=0;
@@ -620,14 +608,14 @@ void MainWindow::set_design_distribution()
 
 
     i=1;
-    sinstodistrib_detail->setHeaderData(i++, Qt::Horizontal, QObject::tr("Предмет"));
+    sinstodistrib_detail->setHeaderData(i++, Qt::Horizontal, QObject::tr(NAME_SUBJECT_FULL));
     sinstodistrib_detail->setHeaderData(i++, Qt::Horizontal, QObject::tr("Семестр"));
-    sinstodistrib_detail->setHeaderData(i++, Qt::Horizontal, QObject::tr("Специальность"));
+    sinstodistrib_detail->setHeaderData(i++, Qt::Horizontal, QObject::tr(NAME_SPECIALITY_FULL));
     sinstodistrib_detail->setHeaderData(i++, Qt::Horizontal, QObject::tr("Форма обучения"));
-    sinstodistrib_detail->setHeaderData(i++, Qt::Horizontal, QObject::tr("Курс"));
-    sinstodistrib_detail->setHeaderData(i++, Qt::Horizontal, QObject::tr("Кол-во групп"));
-    sinstodistrib_detail->setHeaderData(i++, Qt::Horizontal, QObject::tr("Кол-во подгрупп"));
-    sinstodistrib_detail->setHeaderData(i++, Qt::Horizontal, QObject::tr("Кол-во студентов"));
+    sinstodistrib_detail->setHeaderData(i++, Qt::Horizontal, QObject::tr(NAME_COURSE_FULL));
+    sinstodistrib_detail->setHeaderData(i++, Qt::Horizontal, QObject::tr(NAME_NUM_GROUP_FULL));
+    sinstodistrib_detail->setHeaderData(i++, Qt::Horizontal, QObject::tr(NAME_NUM_UNDERGROUP_FULL));
+    sinstodistrib_detail->setHeaderData(i++, Qt::Horizontal, QObject::tr(NAME_QUANTITY_COURSE_FULL));
     sinstodistrib_detail->setHeaderData(i++, Qt::Horizontal, QObject::tr("Лекции"));
     sinstodistrib_detail->setHeaderData(i++, Qt::Horizontal, QObject::tr("Лаборат."));
     sinstodistrib_detail->setHeaderData(i++, Qt::Horizontal, QObject::tr("Практич."));
@@ -658,7 +646,7 @@ void MainWindow::set_design_distribution()
     ui->tableView_8->setSelectionMode(QAbstractItemView::SingleSelection);
 
     i=0;
-    sqlmodel_distribution->setHeaderData(++i, Qt::Horizontal, QObject::tr("Предмет"));
+    sqlmodel_distribution->setHeaderData(++i, Qt::Horizontal, QObject::tr(NAME_SUBJECT_FULL));
     sqlmodel_distribution->setHeaderData(++i, Qt::Horizontal, QObject::tr("Сем."));
     sqlmodel_distribution->setHeaderData(++i, Qt::Horizontal, QObject::tr("ФИО"));
     sqlmodel_distribution->setHeaderData(++i, Qt::Horizontal, QObject::tr("Лек."));
@@ -685,6 +673,7 @@ void MainWindow::set_design_reports()
     ui->tableView_9->setColumnWidth(0,0);
     ui->tableView_9->setColumnWidth(1,300);
     ui->tableView_9->setColumnWidth(2,100);
+
     ui->tableView_9->setSelectionMode(QAbstractItemView::ExtendedSelection);
     ui->tableView_9->setSelectionBehavior(QAbstractItemView::SelectRows);
 
@@ -694,8 +683,7 @@ void MainWindow::set_design_reports()
 
 void MainWindow::on_pushButton_4_clicked()
 {
-    QString directory = QFileDialog::getOpenFileName(this,
-                               tr("Find Files"), QDir::currentPath());
+    QString directory = QFileDialog::getOpenFileName(this, tr("Find Files"), QDir::currentPath());
 
     if (!directory.isEmpty()) {
         ui->lineEdit->setText(directory);
@@ -784,15 +772,12 @@ void MainWindow::on_pushButton_2_clicked()
                 new_examen_hr = examen_get((int)ceil(quantity_course*(((double)coefficient_examen_for_quantitycourse_min)/60)), is_examen);       // "examen_hr REAL NOT NULL, "
                 new_coursework_hr = QString::number(is_coursework*quantity_course*coefficient_coursework_for_quantitycourse_hr, 10);  // "coursework_hr
 
-
-
                 squery = "SELECT subjects_in_semmester.id FROM subjects_in_semmester "
                          "WHERE subjects_in_semmester.curriculum_id = '" + curriculum_id + "' AND "
                          "subjects_in_semmester.students_id = '" + students_id + "';";
                 if (!query2.exec(squery)){
                     qDebug() << "error 0x001";
                 }
-
                 if (query2.next()){
                     // есть первая запись, обновить
                     subjects_in_semmester_id = query2.value(0).toString();
@@ -835,9 +820,6 @@ void MainWindow::on_pushButton_2_clicked()
                                 "0" +                       // "other3 REAL NOT NULL, "
                                 ");";
                 }
-
-                //qDebug() << squery;
-
                 if (!query3.exec(squery)){QMessageBox::warning(this, tr("Error querry"), "");}
             }
     }

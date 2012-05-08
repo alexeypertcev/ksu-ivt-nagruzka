@@ -12,7 +12,7 @@ Qt::ItemFlags SubjectinsemesterSqlModel::flags(
         const QModelIndex &index) const
 {
     Qt::ItemFlags flags = QSqlQueryModel::flags(index);
-    if (index.column() > 8 && index.column() < 24 )
+    if (index.column() >= 8 && index.column() <= 22 )
     {
         flags |= Qt::ItemIsEditable;
     }
@@ -21,60 +21,60 @@ Qt::ItemFlags SubjectinsemesterSqlModel::flags(
 
 bool SubjectinsemesterSqlModel::setData(const QModelIndex &index, const QVariant &value, int /* role */)
 {
-    if (index.column() < 9 || index.column() > 23)
+    if (index.column() < 8 || index.column() > 22)
         return false;
 
     QModelIndex primaryKeyIndex = QSqlQueryModel::index(index.row(), 0);
     QString field = ";";
     switch (index.column()){
-        case 9:
+        case 8:
             field = "lection_hr";
             break;
-        case 10:
+        case 9:
             field = "labs_hr";
             break;
-        case 11:
+        case 10:
             field = "practice_hr";
             break;
-        case 12:
+        case 11:
             field = "individ_hr";
             break;
-        case 13:
+        case 12:
             field = "kontr_rab_hr";
             break;
-        case 14:
+        case 13:
             field = "consultation_hr";
             break;
-        case 15:
+        case 14:
             field = "offset_hr";
             break;
-        case 16:
+        case 15:
             field = "examen_hr";
             break;
-        case 17:
+        case 16:
             field = "coursework_hr";
             break;
-        case 18:
+        case 17:
             field = "diplomwork_hr";
             break;
-        case 19:
+        case 18:
             field = "praktika_hr";
             break;
-        case 20:
+        case 19:
             field = "gak_hr";
             break;
-        case 21:
+        case 20:
             field = "other1";
             break;
-        case 22:
+        case 21:
             field = "other2";
             break;
-        case 23:
+        case 22:
             field = "other3";
         }
 
     QString s = "update subjects_in_semmester set "+ field +" = '"+ value.toString() +"' where id = "+ data(primaryKeyIndex, Qt::DisplayRole).toString();
-    //qDebug() << s;
+    qDebug() << s;
 
     QSqlQuery query;
     if (!query.exec(s)){
@@ -91,8 +91,8 @@ void SubjectinsemesterSqlModel::refresh()
     sum = get_sum_current_speciality();
     if (speciality_id == "all"){
         this->setQuery("SELECT subjects_in_semmester.id, curriculum.subject_name, curriculum.semmester, "
-                       "speciality.special_name, "
-                       "speciality.form_training_name, students.course, "
+                       "speciality.special_name || '(' || speciality.form_training_name || ')', "
+                       "students.course, "
                        "students.num_group, students.num_undergroup, "
                        "students.quantity_course, subjects_in_semmester.lection_hr, "
                        "subjects_in_semmester.labs_hr, subjects_in_semmester.practice_hr,"
@@ -110,8 +110,8 @@ void SubjectinsemesterSqlModel::refresh()
                        "ORDER BY speciality.special_name, speciality.form_training_name, curriculum.semmester, curriculum.subject_name, subjects_in_semmester.id;");
     } else {
         this->setQuery("SELECT subjects_in_semmester.id, curriculum.subject_name, curriculum.semmester, "
-                       "speciality.special_name, "
-                       "speciality.form_training_name, students.course, "
+                       "speciality.special_name || '(' || speciality.form_training_name || ')', "
+                       "students.course, "
                        "students.num_group, students.num_undergroup, "
                        "students.quantity_course, subjects_in_semmester.lection_hr, "
                        "subjects_in_semmester.labs_hr, subjects_in_semmester.practice_hr,"
@@ -309,7 +309,7 @@ QVariant SubjectinsemesterSqlModel::data(const QModelIndex &index, int role) con
             case 1:
                return "Всего: ";
 
-            case 24:
+            case 23:
                 return sum;
 
             default:
@@ -319,8 +319,13 @@ QVariant SubjectinsemesterSqlModel::data(const QModelIndex &index, int role) con
         break;
     case Qt::BackgroundColorRole:
         {
-            if (index.row() == (int)rowsCountDB) return qVariantFromValue(QColor(224, 255, 193));
-            else return value;
+            if (index.row() == (int)rowsCountDB) {
+                return qVariantFromValue(QColor(224, 255, 193));
+            } else if (index.column() <= 7 || index.column() == 23) {
+                    return qVariantFromValue(QColor(235, 235, 235));
+                } else {
+                    return value;
+                }
         }
         break;
     case Qt::FontRole:

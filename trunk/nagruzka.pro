@@ -205,7 +205,8 @@ HEADERS  += mainwindow.h \
         zip/zipint.h \
         zip/zconf.h \
         zip/zlib.h \
-    report_writter_xlsx.h
+    report_writter_xlsx.h \
+    constants.h
 
 FORMS    += mainwindow.ui \
     settings.ui \

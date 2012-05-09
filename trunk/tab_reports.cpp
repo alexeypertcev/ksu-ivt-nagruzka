@@ -78,12 +78,7 @@ bool create_report(QStringList teachers_id_list, QString template_patch, QString
 
         query2.exec(select_list_data + teachers_id_list.at(i) +
                     " AND ( "
-                    " curriculum.semmester = '1' "
-                    "OR curriculum.semmester = '3' "
-                    "OR curriculum.semmester = '5' "
-                    "OR curriculum.semmester = '7' "
-                    "OR curriculum.semmester = '9' "
-                    "OR curriculum.semmester = '11' "
+                    " curriculum.semmester % 2 = 1 "
                     " )");
 
         temp_list_of_stringlist.clear();
@@ -125,12 +120,7 @@ bool create_report(QStringList teachers_id_list, QString template_patch, QString
         // temp_tabledata.list_two
         query2.exec(select_list_data + teachers_id_list.at(i) +
                     " AND ( "
-                    " curriculum.semmester = '2' "
-                    "OR curriculum.semmester = '4' "
-                    "OR curriculum.semmester = '6' "
-                    "OR curriculum.semmester = '8' "
-                    "OR curriculum.semmester = '10' "
-                    "OR curriculum.semmester = '12' "
+                    " curriculum.semmester % 2 = 0 "
                     " )");
 
         temp_list_of_stringlist.clear();

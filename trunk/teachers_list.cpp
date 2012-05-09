@@ -147,7 +147,7 @@ void Teachers_list_model::refresh()
     //**********************************************************
     // error
     // Ошибка после закрытия программы из-за этой конструкции
-    this->setQuery("SELECT teachers.id, f || ', ' || i || ', ' || o, status_name, status_name, status_name, status_name, status_name, status_name, status_name, status_name "
+    this->setQuery("SELECT teachers.id, f || ', ' || i || ' ' || o, status_name, status_name, status_name, status_name, status_name, status_name, status_name, status_name "
                    "FROM teachers WHERE teachers.id != '0' "
                    "ORDER BY f,i,o");
     //
@@ -188,12 +188,7 @@ void Teachers_list_model::refresh()
                     "WHERE teachers_id = '" + query.value(0).toString() + "' AND "
                     "distribution.subjects_in_semmester_id = subjects_in_semmester.id AND "
                     "subjects_in_semmester.curriculum_id = curriculum.id AND "
-                    "( curriculum.semmester = '2' "
-                    "OR curriculum.semmester = '4' "
-                    "OR curriculum.semmester = '6' "
-                    "OR curriculum.semmester = '8' "
-                    "OR curriculum.semmester = '10' "
-                    "OR curriculum.semmester = '12' )");
+                    "( curriculum.semmester % 2 = 0 )");
 
         while(query2.next()){
 
@@ -235,12 +230,7 @@ void Teachers_list_model::refresh()
                         "WHERE teachers_id = '" + query.value(0).toString() + "' AND "
                         "distribution.subjects_in_semmester_id = subjects_in_semmester.id AND "
                         "subjects_in_semmester.curriculum_id = curriculum.id AND "
-                        "( curriculum.semmester = '1' "
-                        "OR curriculum.semmester = '3' "
-                        "OR curriculum.semmester = '5' "
-                        "OR curriculum.semmester = '7' "
-                        "OR curriculum.semmester = '9' "
-                        "OR curriculum.semmester = '11' )");
+                        "( curriculum.semmester % 2 = 1 )");
 
             while(query2.next()){
 

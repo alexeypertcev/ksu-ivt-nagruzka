@@ -137,9 +137,13 @@ void DistributionSqlModel::refresh()
     rowsCountDB = rowCountDB();
     QString s;
     QSqlQuery query;
-    s = "SELECT id,lection_hr,labs_hr,practice_hr,individ_hr,kontr_rab_hr,consultation_hr, "
-        " offset_hr,examen_hr,coursework_hr,diplomwork_hr,praktika_hr,gak_hr, "
-        " other1,other2,other3 FROM subjects_in_semmester WHERE subjects_in_semmester.id = " + subjects_in_semmestre_id + ";";
+    s = "SELECT id, lection_hr, labs_hr, practice_hr, individ_hr, kontr_rab_hr, consultation_hr, "
+        " offset_hr, examen_hr, coursework_hr, diplomwork_hr, praktika_hr, gak_hr, "
+        " other1, other2, other3, "
+        " lection_hr + labs_hr + practice_hr + individ_hr + kontr_rab_hr + consultation_hr + "
+        " offset_hr + examen_hr + coursework_hr + diplomwork_hr + praktika_hr + gak_hr + "
+        " other1 + other2 + other3 AS sum "
+        "FROM subjects_in_semmester WHERE subjects_in_semmester.id = " + subjects_in_semmestre_id + ";";
     query.exec(s);
     query.next();
 
@@ -158,7 +162,10 @@ void DistributionSqlModel::refresh()
     not_used_other1 = query.value(13).toInt() - sum_field("other1");
     not_used_other2 = query.value(14).toInt() - sum_field("other2");
     not_used_other3 = query.value(15).toInt() - sum_field("other3");
-
+    not_used_all =  not_used_lection_hr + not_used_labs_hr + not_used_practice_hr + not_used_individ_hr +
+                    not_used_kontr_rab_hr + not_used_consultation_hr + not_used_offset_hr + not_used_examen_hr +
+                    not_used_coursework_hr + not_used_diplomwork_hr + not_used_praktika_hr + not_used_gak_hr +
+                    not_used_other1 + not_used_other2 + not_used_other3;
 
     query.exec("SELECT teachers_id FROM distribution WHERE distribution.subjects_in_semmester_id = " + subjects_in_semmestre_id + ";");
     query.next();
@@ -184,7 +191,23 @@ void DistributionSqlModel::refresh()
                    "distribution.gak_hr, "
                    "distribution.other1, "
                    "distribution.other2, "
+                   "distribution.other3, "
+                   "distribution.lection_hr + "
+                   "distribution.labs_hr + "
+                   "distribution.practice_hr + "
+                   "distribution.individ_hr + "
+                   "distribution.kontr_rab_hr + "
+                   "distribution.consultation_hr + "
+                   "distribution.offset_hr + "
+                   "distribution.examen_hr + "
+                   "distribution.coursework_hr + "
+                   "distribution.diplomwork_hr + "
+                   "distribution.praktika_hr + "
+                   "distribution.gak_hr + "
+                   "distribution.other1 + "
+                   "distribution.other2 + "
                    "distribution.other3 "
+                   "AS sum "
                    "FROM distribution,teachers,subjects_in_semmester,curriculum "
                    "WHERE "
                    "distribution.teachers_id = teachers.id AND "
@@ -192,7 +215,7 @@ void DistributionSqlModel::refresh()
                    "subjects_in_semmester.curriculum_id = curriculum.id AND "
                    "distribution.subjects_in_semmester_id = " + subjects_in_semmestre_id + "; ");
     }
-    // испустить сигнал для списка преподавателей
+    // послать сигнал для списка преподавателей
     table_changed();
 }
 
@@ -244,6 +267,8 @@ QVariant DistributionSqlModel::data(const QModelIndex &index, int role) const
                return QString::number( not_used_other2 );
             case 18:
                return QString::number( not_used_other3 );
+            case 19:
+               return QString::number( not_used_all );
             default:
                return "";
             }
@@ -251,8 +276,13 @@ QVariant DistributionSqlModel::data(const QModelIndex &index, int role) const
         break;
     case Qt::BackgroundColorRole:
         {
-            if (index.row() == rowsCountDB) return qVariantFromValue(QColor(224, 255, 193));
-            else return value;
+            if (index.row() == rowsCountDB) {
+                return qVariantFromValue(QColor(224, 255, 193));
+            } else if (index.column() <= 2 || index.column() == 19) {
+                return qVariantFromValue(QColor(235, 235, 235));
+            } else {
+                return value;
+            }
         }
         break;
     case Qt::FontRole:
@@ -353,7 +383,7 @@ int DistributionSqlModel::rowCountDB(){
 
 int DistributionSqlModel::sum_field(QString field){
     QSqlQuery query;
-    QString s = "SELECT SUM(distribution."+ field +") FROM distribution WHERE distribution.subjects_in_semmester_id = " + subjects_in_semmestre_id + ";";
+    QString s = "SELECT SUM("+ field +") FROM distribution WHERE distribution.subjects_in_semmester_id = " + subjects_in_semmestre_id + ";";
     query.exec(s);
     query.next();
     return query.value(0).toInt();
@@ -427,22 +457,22 @@ void Sins_to_distrib_preview_SqlModel::setsemester_2()
     setsemester(2);
 }
 
+QVariant Sins_to_distrib_preview_SqlModel::data(const QModelIndex &index, int role) const
+{
+    if (role == Qt::BackgroundColorRole)
+    {
+        return qVariantFromValue(QColor(235, 235, 235));
+    }
+
+    QVariant value = QSqlQueryModel::data(index, role);
+    return value;
+}
 void Sins_to_distrib_preview_SqlModel::setsemester(int sem)
 {
     if (sem == 1){
-        semester = " curriculum.semmester = '1' "
-                "OR curriculum.semmester = '3' "
-                "OR curriculum.semmester = '5' "
-                "OR curriculum.semmester = '7' "
-                "OR curriculum.semmester = '9' "
-                "OR curriculum.semmester = '11' ";
+        semester = " curriculum.semmester % 2 = 1 ";
     } else if (sem == 2){
-        semester = " curriculum.semmester = '2' "
-                "OR curriculum.semmester = '4' "
-                "OR curriculum.semmester = '6' "
-                "OR curriculum.semmester = '8' "
-                "OR curriculum.semmester = '10' "
-                "OR curriculum.semmester = '12' ";
+        semester = " curriculum.semmester % 2 = 0 ";
     } else if (sem == 0){
         semester = " 1 ";
     }
@@ -472,11 +502,23 @@ void Sins_to_distrib_detail_SqlModel::setsins(QString id)
 {
     subjects_in_semmestre_id = id;
 }
+
+QVariant Sins_to_distrib_detail_SqlModel::data(const QModelIndex &index, int role) const
+{
+    if (role == Qt::BackgroundColorRole)
+    {
+        return qVariantFromValue(QColor(235, 235, 235));
+    }
+
+    QVariant value = QSqlQueryModel::data(index, role);
+    return value;
+}
+
 void Sins_to_distrib_detail_SqlModel::refresh()
 {
     this->setQuery("SELECT subjects_in_semmester.id, curriculum.subject_name, curriculum.semmester, "
-                   "speciality.special_name, "
-                   "speciality.form_training_name, students.course, "
+                   "speciality.special_name || '(' || speciality.form_training_name || ')', "
+                   "students.course, "
                    "students.num_group, students.num_undergroup, "
                    "students.quantity_course, subjects_in_semmester.lection_hr, "
                    "subjects_in_semmester.labs_hr, subjects_in_semmester.practice_hr,"

@@ -63,6 +63,7 @@ private:
     QString consultation_get(int lection_hr, QString speciality_id, int num_group, int is_examen);
 
     unsigned short status; //0 - нет БД 1 - есть БД
+    unsigned short size_vertical_scroll;
     Settings* settings;
     Teachers_list* teachers_list;
     QString path_db;

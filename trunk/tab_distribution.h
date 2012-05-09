@@ -38,7 +38,8 @@ private:
     not_used_gak_hr,
     not_used_other1,
     not_used_other2,
-    not_used_other3;
+    not_used_other3,
+    not_used_all;
 signals:
     void table_changed();
 
@@ -57,6 +58,7 @@ public:
     void setsemester_0();
     void setsemester_1();
     void setsemester_2();
+    QVariant data(const QModelIndex &index, int role) const;
 private:
     QString speciality_id;
     QString semester;
@@ -70,6 +72,7 @@ public:
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
     void setsins(QString id);
+    QVariant data(const QModelIndex &index, int role) const;
     void refresh();
 private:
     QString subjects_in_semmestre_id;

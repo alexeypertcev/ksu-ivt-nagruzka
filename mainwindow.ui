@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>4</number>
+     <number>6</number>
     </property>
     <widget class="QWidget" name="tab_6">
      <attribute name="title">
@@ -46,9 +46,9 @@
      <widget class="QTableView" name="tableView">
       <property name="geometry">
        <rect>
-        <x>10</x>
+        <x>5</x>
         <y>10</y>
-        <width>551</width>
+        <width>556</width>
         <height>601</height>
        </rect>
       </property>
@@ -132,9 +132,9 @@
      <widget class="QTableView" name="tableView_2">
       <property name="geometry">
        <rect>
-        <x>10</x>
+        <x>5</x>
         <y>10</y>
-        <width>1231</width>
+        <width>1241</width>
         <height>571</height>
        </rect>
       </property>
@@ -182,9 +182,9 @@
      <widget class="QTableView" name="tableView_3">
       <property name="geometry">
        <rect>
-        <x>10</x>
+        <x>5</x>
         <y>10</y>
-        <width>1231</width>
+        <width>1241</width>
         <height>571</height>
        </rect>
       </property>
@@ -229,9 +229,9 @@
      <widget class="QTableView" name="tableView_4">
       <property name="geometry">
        <rect>
-        <x>10</x>
+        <x>5</x>
         <y>40</y>
-        <width>1231</width>
+        <width>1241</width>
         <height>541</height>
        </rect>
       </property>
@@ -286,9 +286,9 @@
      <widget class="QTableView" name="tableView_5">
       <property name="geometry">
        <rect>
-        <x>10</x>
+        <x>5</x>
         <y>40</y>
-        <width>1231</width>
+        <width>1241</width>
         <height>541</height>
        </rect>
       </property>
@@ -375,11 +375,14 @@
      <widget class="SaveIdTableView" name="tableView_6">
       <property name="geometry">
        <rect>
-        <x>1000</x>
+        <x>5</x>
         <y>110</y>
         <width>250</width>
-        <height>511</height>
+        <height>501</height>
        </rect>
+      </property>
+      <property name="gridStyle">
+       <enum>Qt::SolidLine</enum>
       </property>
       <attribute name="verticalHeaderVisible">
        <bool>false</bool>
@@ -391,8 +394,8 @@
      <widget class="QPushButton" name="pushButton_add_distribution">
       <property name="geometry">
        <rect>
-        <x>780</x>
-        <y>350</y>
+        <x>1030</x>
+        <y>590</y>
         <width>101</width>
         <height>24</height>
        </rect>
@@ -404,8 +407,8 @@
      <widget class="QPushButton" name="pushButton_del_distribution">
       <property name="geometry">
        <rect>
-        <x>890</x>
-        <y>350</y>
+        <x>1140</x>
+        <y>590</y>
         <width>101</width>
         <height>24</height>
        </rect>
@@ -417,7 +420,7 @@
      <widget class="QTableView" name="tableView_7">
       <property name="geometry">
        <rect>
-        <x>10</x>
+        <x>5</x>
         <y>40</y>
         <width>1241</width>
         <height>61</height>
@@ -436,10 +439,10 @@
      <widget class="QTableView" name="tableView_8">
       <property name="geometry">
        <rect>
-        <x>10</x>
+        <x>265</x>
         <y>110</y>
         <width>981</width>
-        <height>201</height>
+        <height>471</height>
        </rect>
       </property>
       <attribute name="verticalHeaderVisible">
@@ -520,7 +523,7 @@
      <widget class="QPushButton" name="pushButton_clear_distribution">
       <property name="geometry">
        <rect>
-        <x>10</x>
+        <x>270</x>
         <y>590</y>
         <width>131</width>
         <height>23</height>

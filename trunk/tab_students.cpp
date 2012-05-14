@@ -54,7 +54,7 @@ bool StudentsSqlModel::setData(const QModelIndex &index, const QVariant &value, 
             break;
         }
 
-    QString s = "update students set "+ field +" = '"+ value.toString() +"' where id = "+ data(primaryKeyIndex).toString();
+    QString s = "update students set "+ field +" = '"+ functions::toDataString(value.toString()) +"' where id = "+ data(primaryKeyIndex).toString();
     qDebug() << s;
 
     QSqlQuery query;

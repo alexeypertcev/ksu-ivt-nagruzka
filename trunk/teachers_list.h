@@ -52,6 +52,7 @@ private:
     QStringList year_hours;
     QStringList year_p_ayd;
     QStringList rate_dole;
+    QStringList year_lection;
 };
 
 

@@ -142,5 +142,6 @@ Qt::ItemFlags TeachersReportSqlModel::flags(
 void TeachersReportSqlModel::refresh()
 {
     this->setQuery("SELECT teachers.id, f || ', ' || i || ' ' || o, status_name "
-                   "FROM teachers WHERE teachers.id != '0'");
+                   "FROM teachers WHERE teachers.id != '0' "
+                   "ORDER BY teachers.f, teachers.i, teachers.o");
 }

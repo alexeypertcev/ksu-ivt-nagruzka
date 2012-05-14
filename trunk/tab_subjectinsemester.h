@@ -6,6 +6,7 @@
 
 #include <QSqlQueryModel>
 #include "errors.h"
+#include "functions.h"
 
 class SubjectinsemesterSqlModel : public QSqlQueryModel
 {

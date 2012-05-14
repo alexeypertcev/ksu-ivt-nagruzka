@@ -73,7 +73,7 @@ bool SubjectinsemesterSqlModel::setData(const QModelIndex &index, const QVariant
             field = "other3";
         }
 
-    QString s = "update subjects_in_semmester set "+ field +" = '"+ value.toString() +"' where id = "+ data(primaryKeyIndex, Qt::DisplayRole).toString();
+    QString s = "update subjects_in_semmester set "+ field +" = '"+ functions::toDataString(value.toString()) +"' where id = "+ data(primaryKeyIndex, Qt::DisplayRole).toString();
     qDebug() << s;
 
     QSqlQuery query;

@@ -1061,11 +1061,14 @@ void MainWindow::update_report_name()
     }
 
     if (ui->radioButton_6->isChecked()){
-        QSqlQuery query;
-        query.exec("SELECT f FROM teachers WHERE id = " + ui->tableView_9->get_id() + ";");
-        query.next();
-        ui->lineEdit_2->setText(report_path + "/" + translit(query.value(0).toString()) + "." + report_format);
-        //   qDebug() << "get_id: " << ui->tableView_9->get_id() ;
+        if (ui->tableView_9->get_id() == "0"){
+            ui->lineEdit_2->setText(report_path + "/vacation." + report_format);
+        } else {
+            QSqlQuery query;
+            query.exec("SELECT f FROM teachers WHERE id = " + ui->tableView_9->get_id() + ";");
+            query.next();
+            ui->lineEdit_2->setText(report_path + "/" + translit(query.value(0).toString()) + "." + report_format);
+        }
     }else{
         //report_format;
         ui->lineEdit_2->setText(report_path + "/all_teachers." + report_format);
@@ -1142,7 +1145,7 @@ void MainWindow::on_pushButton_9_clicked()
         }
     }
 
-// create report (QList(teachers.id), path_report+name_report, ods,)
+    // create report (QList(teachers.id), path_report+name_report, ods,)
     if (report_format == "xlsx"){
         create_report(teachers_id_list, "", ui->lineEdit_2->text(),report_format);
     } else if(report_format == "ods"){

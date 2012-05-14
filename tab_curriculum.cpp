@@ -66,8 +66,8 @@ bool CurriculumSqlModel::setData(const QModelIndex &index, const QVariant &value
             field = "is_coursework";
             break;
         }
-
-    QString s = "update curriculum set "+ field +" = '"+ value.toString() +"' where id = "+ data(primaryKeyIndex).toString();
+//QDir::currentPath();
+    QString s = "update curriculum set "+ field +" = '"+ functions::toDataString(value.toString()) +"' where id = "+ data(primaryKeyIndex).toString();
     qDebug() << s;
 
     QSqlQuery query;

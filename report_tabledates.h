@@ -19,8 +19,18 @@ public:
 
     QString get_header_FIO();
     QString get_header_degre_and_status();
-    QString get_header_kaf_faculty();
+    QString get_header_academic_year();
+    QString get_header_name_kafedry_faculty();
+    QString get_header_business_base_of_training();
+    QString get_header_vice_rector_on_education_work();
     QString get_header_obiem();
+
+    /*
+    query.exec("insert into other_data values('academic_year', '2011/2012')");
+    query.exec("insert into other_data values('name_kafedry_faculty', 'Программного обеспечения и администрирования информационных систем')");
+    query.exec("insert into other_data values('business_base_of_training', 'бюджет')");
+    query.exec("insert into other_data values('vice_rector_on_education_work', 'Захаров В.В.')");
+    */
 
     QStringList get_header_sheet();
     QList<QStringList> get_list_one();

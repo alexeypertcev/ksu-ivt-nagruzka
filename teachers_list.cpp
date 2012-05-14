@@ -1,6 +1,7 @@
 #include "teachers_list.h"
 #include "ui_teachers_list.h"
 #include <QDebug>
+#include <QHBoxLayout>
 
 Teachers_list::Teachers_list(QWidget *parent) :
     QDialog(parent),
@@ -20,17 +21,18 @@ Teachers_list::Teachers_list(QWidget *parent) :
 
     ui->tableView->setHorizontalHeader(hv);
 
-    ui->tableView->setColumnWidth(0,0);
-    ui->tableView->setColumnWidth(1,200);
-    ui->tableView->setColumnWidth(2,70);
-    ui->tableView->setColumnWidth(3,55);
-    ui->tableView->setColumnWidth(4,55);
-    ui->tableView->setColumnWidth(5,55);
-    ui->tableView->setColumnWidth(6,55);
-    ui->tableView->setColumnWidth(7,55);
-    ui->tableView->setColumnWidth(8,55);
-    ui->tableView->setColumnWidth(9,55);
+    int i = 0;
+    ui->tableView->setColumnWidth(i,0);
+    ui->tableView->setColumnWidth(++i,200);
+    ui->tableView->setColumnWidth(++i,70);
+
+    while (i < 11){
+        ui->tableView->setColumnWidth(++i,55);
+    }
     //headerview.
+    QHBoxLayout *layout = new QHBoxLayout();
+    layout->addWidget(ui->tableView);
+    setLayout(layout);
 }
 
 Teachers_list::~Teachers_list()
@@ -41,6 +43,7 @@ Teachers_list::~Teachers_list()
 
 void Teachers_list::update()
 {
+
     sqlmodel_teachers_list->refresh();
 }
 
@@ -57,6 +60,7 @@ Teachers_list_model::Teachers_list_model(QObject *parent) :
     QList<QStandardItem*> l;
     QStandardItem* cell_1;
     QStandardItem* cell_2;
+    QStandardItem* cell_3;
 
     rootItem = new QStandardItem("id");
     _horizontalHeaderModel.setItem(0, 0, rootItem);
@@ -97,13 +101,18 @@ Teachers_list_model::Teachers_list_model(QObject *parent) :
     rootItem = new QStandardItem("Год");
 
     l.clear();
-    cell_1 = new QStandardItem("Часы");
+    cell_1 = new QStandardItem("Лекции");
     l.push_back(cell_1);
     rootItem->appendColumn(l);
     l.clear();
 
-    cell_2 = new QStandardItem("% ауд");
+    cell_2 = new QStandardItem("Часы");
     l.push_back(cell_2);
+    rootItem->appendColumn(l);
+    l.clear();
+
+    cell_3 = new QStandardItem("% ауд");
+    l.push_back(cell_3);
     rootItem->appendColumn(l);
 
     _horizontalHeaderModel.setItem(0, 5, rootItem);
@@ -127,9 +136,12 @@ Qt::ItemFlags Teachers_list_model::flags(
 
 void Teachers_list_model::refresh()
 {
+
+
     QSqlQuery query, query2;
     unsigned int buf_all_hours;
     unsigned int buf_aud_hours;
+    unsigned int buf_lection_hours;
 
     QString rate;
     unsigned int staff_hour;
@@ -143,11 +155,12 @@ void Teachers_list_model::refresh()
     year_hours.clear();
     year_p_ayd.clear();
     rate_dole.clear();
+    year_lection.clear();
 
     //**********************************************************
     // error
     // Ошибка после закрытия программы из-за этой конструкции
-    this->setQuery("SELECT teachers.id, f || ', ' || i || ' ' || o, status_name, status_name, status_name, status_name, status_name, status_name, status_name, status_name "
+    this->setQuery("SELECT teachers.id, f || ', ' || i || ' ' || o, status_name, status_name, status_name, status_name, status_name, status_name, status_name, status_name, status_name "
                    "FROM teachers WHERE teachers.id != '0' "
                    "ORDER BY f,i,o");
     //
@@ -253,6 +266,7 @@ void Teachers_list_model::refresh()
             //--- для всех семместров(года)-------------------------------------------
                 buf_all_hours = 0;
                 buf_aud_hours = 0;
+                buf_lection_hours = 0;
                 query2.exec("SELECT lection_hr, labs_hr, practice_hr, individ_hr, "
                             "kontr_rab_hr, consultation_hr, offset_hr, examen_hr, "
                             "coursework_hr, diplomwork_hr, praktika_hr, gak_hr, "
@@ -260,15 +274,15 @@ void Teachers_list_model::refresh()
                             "FROM distribution WHERE teachers_id = "+ query.value(0).toString() +";");
 
                 while(query2.next()){
-
+                    buf_lection_hours += query2.value(0).toUInt();
                     for (int i = 0; i<15; ++i){
                         if (i<4){
                             buf_aud_hours += query2.value(i).toUInt();
                         }
-                            buf_all_hours += query2.value(i).toUInt();
+                        buf_all_hours += query2.value(i).toUInt();
                     }
                 }
-
+                year_lection << QString::number(buf_lection_hours);
                 year_hours << QString::number(buf_all_hours);
                 //year_p_ayd << (QString::number(buf_aud_hours) + "/" + QString::number(buf_all_hours));
                 if (buf_all_hours != 0){
@@ -282,8 +296,6 @@ void Teachers_list_model::refresh()
                 } else {
                     rate_dole << " ";
                 }
-
-
         }
 }
 
@@ -326,18 +338,24 @@ QVariant Teachers_list_model::data(const QModelIndex &index, int role) const
             break;
 
             case 7:
+            if (index.row() < year_lection.size()){
+                return year_lection.at(index.row());
+            }
+            break;
+
+            case 8:
             if (index.row() < year_hours.size()){
                 return year_hours.at(index.row());
             }
             break;
 
-            case 8:
+            case 9:
             if (index.row() < year_p_ayd.size()){
                 return year_p_ayd.at(index.row());
             }
             break;
 
-            case 9:
+            case 10:
             if (index.row() < rate_dole.size()){
                 return rate_dole.at(index.row());
             }

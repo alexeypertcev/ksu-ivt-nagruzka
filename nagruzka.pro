@@ -128,7 +128,8 @@ SOURCES += main.cpp\
         zip/zip_unchange_all.c \
         zip/zip_unchange_archive.c \
         zip/zip_unchange_data.c \
-    report_writter_xlsx.cpp
+    report_writter_xlsx.cpp \
+    functions.cpp
 
 HEADERS  += mainwindow.h \
     connection.h \
@@ -206,7 +207,8 @@ HEADERS  += mainwindow.h \
         zip/zconf.h \
         zip/zlib.h \
     report_writter_xlsx.h \
-    constants.h
+    constants.h \
+    functions.h
 
 FORMS    += mainwindow.ui \
     settings.ui \

@@ -71,7 +71,20 @@ bool create_report(QStringList teachers_id_list, QString template_patch, QString
             temp << query.value(1).toString();
             temp << query.value(2).toString();
             temp << query.value(3).toString();
-            temp << "  Кафедра Факультет";
+
+            query.exec("SELECT name, value FROM other_data;");
+            while(query.next()){
+                if (query.value(0).toString() == "academic_year"){
+                    temp <<  query.value(1).toString();
+                } else if (query.value(0).toString() == "name_kafedry_faculty"){
+                    temp <<  query.value(1).toString();
+                } else if (query.value(0).toString() == "business_base_of_training"){
+                    temp <<  query.value(1).toString();
+                } else if (query.value(0).toString() == "vice_rector_on_education_work"){
+                    temp <<  query.value(1).toString();
+                }
+            }
+
             temp << "  Объем";
             temp_tabledata.set_header_sheet(temp);
 
@@ -269,10 +282,10 @@ bool create_report_xlsx(QList<Tabledata> list_tabledata, QString template_patch,
         sheet1[ 0 ][ 24 ] = cellformat_header2;
         sheet1[ 1 ][ 24 ] = "Проректор по учебной работе";
         sheet1[ 1 ][ 24 ] = cellformat_header2;
-        sheet1[ 3 ][ 24 ] = "____________________/Худин А.Н.";
+        sheet1[ 3 ][ 24 ] = "____________________/" + temp_tabledata.get_header_vice_rector_on_education_work().toStdString();
         sheet1[ 3 ][ 24 ] = cellformat_header2;
 
-        sheet1[ 4 ][ 16 ] = "КАРТОЧКА УЧЕБНЫХ ПОРУЧЕНИЙ НА 2011/2012 УЧЕБНЫЙ ГОД (бюджет)";
+        sheet1[ 4 ][ 16 ] = "КАРТОЧКА УЧЕБНЫХ ПОРУЧЕНИЙ НА " + temp_tabledata.get_header_academic_year().toStdString() + " УЧЕБНЫЙ ГОД (" + temp_tabledata.get_header_business_base_of_training().toStdString() + ")";
         sheet1[ 4 ][ 16 ] = cellformat_header3;
 
         sheet1[ 5 ][ 0 ] = "Фамилия, имя, отчество преподавателя:  ";
@@ -288,7 +301,7 @@ bool create_report_xlsx(QList<Tabledata> list_tabledata, QString template_patch,
         sheet1[ 5 ][ 1 ] = cellformat_header4;
         sheet1[ 6 ][ 1 ] = temp_tabledata.get_header_degre_and_status().toStdString();
         sheet1[ 6 ][ 1 ] = cellformat_header4;
-        sheet1[ 7 ][ 1 ] = temp_tabledata.get_header_kaf_faculty().toStdString();
+        sheet1[ 7 ][ 1 ] = temp_tabledata.get_header_name_kafedry_faculty().toStdString();
         sheet1[ 7 ][ 1 ] = cellformat_header4;
         sheet1[ 8 ][ 6 ] = temp_tabledata.get_header_obiem().toStdString();
         sheet1[ 8 ][ 6 ] = cellformat_header4;

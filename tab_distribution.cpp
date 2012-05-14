@@ -362,7 +362,7 @@ bool DistributionSqlModel::setData(const QModelIndex &index, const QVariant &val
             break;
         }
 
-    QString s = "update distribution set "+ field +" = "+ value.toString() +" where id = "+ data(primaryKeyIndex, Qt::DisplayRole).toString();
+    QString s = "update distribution set "+ field +" = "+ functions::toDataString(value.toString()) +" where id = "+ data(primaryKeyIndex, Qt::DisplayRole).toString();
     qDebug() << s;
 
     QSqlQuery query;

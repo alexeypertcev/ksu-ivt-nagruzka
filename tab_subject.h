@@ -4,6 +4,7 @@
 #include <QSqlQueryModel>
 #include <QItemDelegate>
 #include "errors.h"
+#include "functions.h"
 
 class SubjectSqlModel : public QSqlQueryModel
 {

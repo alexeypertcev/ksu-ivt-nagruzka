@@ -52,22 +52,52 @@ QString Tabledata::get_header_FIO(){
 }
 
 QString Tabledata::get_header_degre_and_status(){
-    if (header_sheet.length() < 4){
+    int i = 3;
+    if (header_sheet.length() < (i+1)){
         return "";
     }
-    return header_sheet.at(3);
+    return header_sheet.at(i);
 }
 
-QString Tabledata::get_header_kaf_faculty(){
-    if (header_sheet.length() < 5){
+QString Tabledata::get_header_academic_year()
+{
+    int i = 4;
+    if (header_sheet.length() < (i+1)){
         return "";
     }
-    return header_sheet.at(4);
+    return header_sheet.at(i);
+}
+
+QString Tabledata::get_header_name_kafedry_faculty(){
+    int i = 5;
+    if (header_sheet.length() < (i+1)){
+        return "";
+    }
+    return header_sheet.at(i);
+}
+
+QString Tabledata::get_header_business_base_of_training()
+{
+    int i = 6;
+    if (header_sheet.length() < (i+1)){
+        return "";
+    }
+    return header_sheet.at(i);
+}
+
+QString Tabledata::get_header_vice_rector_on_education_work()
+{
+    int i = 7;
+    if (header_sheet.length() < (i+1)){
+        return "";
+    }
+    return header_sheet.at(i);
 }
 
 QString Tabledata::get_header_obiem(){
-    if (header_sheet.length() < 6){
+    int i = 8;
+    if (header_sheet.length() < (i+1)){
         return "";
     }
-    return header_sheet.at(5);
+    return header_sheet.at(i);
 }

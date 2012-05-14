@@ -211,6 +211,9 @@ static bool insert_main_data()
         query.exec("insert into coefficients values('coefficient_consultation_add_is_examen_for_group', 2)");
 
 
+
+
+
         query.exec("insert into other_data values('academic_year', '2011/2012')");
         query.exec("insert into other_data values('name_kafedry_faculty', 'Программного обеспечения и администрирования информационных систем')");
         query.exec("insert into other_data values('business_base_of_training', 'бюджет')");

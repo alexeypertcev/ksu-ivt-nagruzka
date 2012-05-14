@@ -58,115 +58,120 @@ bool create_report(QStringList teachers_id_list, QString template_patch, QString
             "students.speciality_id = speciality.id AND "
             "distribution.teachers_id = ";
 
-
     for (int i=0; i<teachers_id_list.length(); ++i){
 
-        // temp_tabledata.header_sheet
-        query.exec("SELECT teachers.f, teachers.i, teachers.o, teachers.status_name "
-                   "FROM teachers WHERE teachers.id = " + teachers_id_list.at(i));
-        query.next();
-        temp.clear();
-        temp << query.value(0).toString();
-        temp << query.value(1).toString();
-        temp << query.value(2).toString();
-        temp << query.value(3).toString();
-        temp << "  Кафедра Факультет";
-        temp << "  Объем";
-        temp_tabledata.set_header_sheet(temp);
+        if (teachers_id_list.at(i) != "0") {
 
-        // temp_tabledata.list_one
+            // temp_tabledata.header_sheet
+            query.exec("SELECT teachers.f, teachers.i, teachers.o, teachers.status_name "
+                       "FROM teachers WHERE teachers.id = " + teachers_id_list.at(i));
+            query.next();
+            temp.clear();
+            temp << query.value(0).toString();
+            temp << query.value(1).toString();
+            temp << query.value(2).toString();
+            temp << query.value(3).toString();
+            temp << "  Кафедра Факультет";
+            temp << "  Объем";
+            temp_tabledata.set_header_sheet(temp);
 
-        query2.exec(select_list_data + teachers_id_list.at(i) +
-                    " AND ( "
-                    " curriculum.semmester % 2 = 1 "
-                    " )");
+            // temp_tabledata.list_one
 
-        temp_list_of_stringlist.clear();
-        for(int j=0; j<24; ++j){
-            temp_of_int1[j] =  0;
-        }
+            query2.exec(select_list_data + teachers_id_list.at(i) +
+                        " AND ( "
+                        " curriculum.semmester % 2 = 1 "
+                        " )");
 
-        while (query2.next()){
+            temp_list_of_stringlist.clear();
+            for(int j=0; j<24; ++j){
+                temp_of_int1[j] =  0;
+            }
+
+            while (query2.next()){
+                temp.clear();
+                for(int j=0; j<24; ++j){
+                    if (j < 9){
+                        temp << query2.value(j).toString();
+                    } else {
+                        if (query2.value(j).toInt() == 0){
+                            temp << "";
+                        } else {
+                            temp << query2.value(j).toString();
+                        }
+                    }
+                    temp_of_int1[j] += query2.value(j).toInt();
+
+                }
+                temp_list_of_stringlist << temp;
+            }
+            temp_tabledata.set_list_one(temp_list_of_stringlist);
             temp.clear();
             for(int j=0; j<24; ++j){
-                if (j < 9){
-                    temp << query2.value(j).toString();
-                } else {
-                    if (query2.value(j).toInt() == 0){
-                        temp << "";
-                    } else {
-                        temp << query2.value(j).toString();
-                    }
+                QString s="";
+                if (temp_of_int1[j] != 0){
+                    s.setNum(temp_of_int1[j]);
                 }
-//                query2.value(j).toInt()
-                temp_of_int1[j] += query2.value(j).toInt();
-
-
+                temp << s;
             }
-            temp_list_of_stringlist << temp;
-        }
-        temp_tabledata.set_list_one(temp_list_of_stringlist);
-        temp.clear();
-        for(int j=0; j<24; ++j){
-            QString s="";
-            if (temp_of_int1[j] != 0){
-                s.setNum(temp_of_int1[j]);
+            temp_tabledata.set_list_one_sum(temp);
+
+            // temp_tabledata.list_two
+            query2.exec(select_list_data + teachers_id_list.at(i) +
+                        " AND ( "
+                        " curriculum.semmester % 2 = 0 "
+                        " )");
+
+            temp_list_of_stringlist.clear();
+            for(int j=0; j<24; ++j){
+                temp_of_int2[j] =  0;
             }
-            temp << s;
-        }
-        temp_tabledata.set_list_one_sum(temp);
-
-
-        // temp_tabledata.list_two
-        query2.exec(select_list_data + teachers_id_list.at(i) +
-                    " AND ( "
-                    " curriculum.semmester % 2 = 0 "
-                    " )");
-
-        temp_list_of_stringlist.clear();
-        for(int j=0; j<24; ++j){
-            temp_of_int2[j] =  0;
-        }
-        while (query2.next()){
+            while (query2.next()){
+                temp.clear();
+                for(int j=0; j<24; ++j){
+                    if (j < 9){
+                        temp << query2.value(j).toString();
+                    } else {
+                        if (query2.value(j).toInt() == 0){
+                            temp << "";
+                        } else {
+                            temp << query2.value(j).toString();
+                        }
+                    }
+                    temp_of_int2[j] += query2.value(j).toInt();
+                }
+                temp_list_of_stringlist << temp;
+            }
+            temp_tabledata.set_list_two(temp_list_of_stringlist);
             temp.clear();
             for(int j=0; j<24; ++j){
-                if (j < 9){
-                    temp << query2.value(j).toString();
-                } else {
-                    if (query2.value(j).toInt() == 0){
-                        temp << "";
-                    } else {
-                        temp << query2.value(j).toString();
-                    }
+                QString s = "";
+                if (temp_of_int2[j] != 0){
+                    s.setNum(temp_of_int2[j]);
                 }
-                temp_of_int2[j] += query2.value(j).toInt();
+                temp << s;
             }
-            temp_list_of_stringlist << temp;
-        }
-        temp_tabledata.set_list_two(temp_list_of_stringlist);
-        temp.clear();
-        for(int j=0; j<24; ++j){
-            QString s = "";
-            if (temp_of_int2[j] != 0){
-                s.setNum(temp_of_int2[j]);
+            temp_tabledata.set_list_two_sum(temp);
+
+            //   set  temp_tabledata.set_list_all_sum
+            temp.clear();
+            for(int j=0; j<24; ++j){
+                QString s = "";
+                if (temp_of_int1[j] + temp_of_int2[j] != 0){
+                    s.setNum(temp_of_int1[j] + temp_of_int2[j]);
+                }
+                temp << s;
             }
-            temp << s;
-        }
-        temp_tabledata.set_list_two_sum(temp);
 
-        //   set  temp_tabledata.set_list_all_sum
-        temp.clear();
-        for(int j=0; j<24; ++j){
-            QString s = "";
-            if (temp_of_int1[j] + temp_of_int2[j] != 0){
-                s.setNum(temp_of_int1[j] + temp_of_int2[j]);
-            }
-            temp << s;
+            temp_tabledata.set_list_all_sum(temp);
+
+            list_tabledata << temp_tabledata;
+
+        } else {
+            //teachers_id_list.at(i) = "0"
+
+
         }
 
-        temp_tabledata.set_list_all_sum(temp);
-
-        list_tabledata << temp_tabledata;
     }
 /*
     for (int i=0; i<list_tabledata.length(); ++i){
@@ -197,20 +202,6 @@ bool create_report(QStringList teachers_id_list, QString template_patch, QString
 
 bool create_report_ods(QList<Tabledata> list_tabledata, QString template_patch, QString report_patch)
 {
-/*  Tabledata temp_tabledata;
-
-    CardOdsWriter cardOdsWriter;
-    // пакует - распаковывает нормально
-
-    cardOdsWriter.open(template_patch);
-
-    for (int i=0; i<list_tabledata.length(); ++i){
-        temp_tabledata = list_tabledata.at(i);
-        cardOdsWriter.writeSheet(temp_tabledata, i);
-    }
-
-    cardOdsWriter.save(report_patch);
-*/
     return false;
 }
 

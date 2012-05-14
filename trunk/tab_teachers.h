@@ -45,9 +45,11 @@ public:
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
     void refresh();
-
+    int rowCount (const QModelIndex & parent) const;
+    int rowCountDB();
+    QVariant data(const QModelIndex &index, int role) const;
 private:
-
+    int rowsCountDB;
 };
 
 

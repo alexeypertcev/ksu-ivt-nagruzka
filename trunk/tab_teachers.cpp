@@ -141,7 +141,47 @@ Qt::ItemFlags TeachersReportSqlModel::flags(
 
 void TeachersReportSqlModel::refresh()
 {
+    rowsCountDB = rowCountDB();
     this->setQuery("SELECT teachers.id, f || ', ' || i || ' ' || o, status_name "
                    "FROM teachers WHERE teachers.id != '0' "
                    "ORDER BY teachers.f, teachers.i, teachers.o");
+}
+
+int TeachersReportSqlModel::rowCount(const QModelIndex &parent) const
+{
+    if (parent.isValid()) return 0;
+    return QSqlQueryModel::rowCount(parent) + 1;
+}
+
+int TeachersReportSqlModel::rowCountDB(){
+    QSqlQuery query;
+    QString s = "SELECT COUNT(*) FROM teachers ;";
+    query.exec(s);
+    query.next();
+    return query.value(0).toInt();
+}
+
+QVariant TeachersReportSqlModel::data(const QModelIndex &index, int role) const
+{
+    QVariant value = QSqlQueryModel::data(index, role);
+
+    switch (role)
+    {
+    case Qt::DisplayRole:
+        if (index.row() == (rowsCountDB-1))
+        {
+            if (index.column() == 0){
+               return 0;
+            }
+            if (index.column() == 1){
+               return "Вакансии";
+            }
+        }
+        break;
+    case Qt::BackgroundColorRole:
+        if (index.row() == (rowsCountDB-1)) {
+            return qVariantFromValue(QColor(235, 235, 235));
+        }
+    }
+    return value;
 }

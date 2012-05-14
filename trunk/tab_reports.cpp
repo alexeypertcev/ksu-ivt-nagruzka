@@ -176,15 +176,38 @@ bool create_report(QStringList teachers_id_list, QString template_patch, QString
             }
 
             temp_tabledata.set_list_all_sum(temp);
-
             list_tabledata << temp_tabledata;
 
         } else {
+            query.exec("DELETE FROM distribution WHERE distribution.teachers_id = '0';");
             //teachers_id_list.at(i) = "0"
+            qDebug() << "Вакании подсчет";
+
+            // temp_tabledata.header_sheet
+
+            temp << "Вакансии";
+            temp << "";
+            temp << "";
+            temp << "";
+
+            query.exec("SELECT name, value FROM other_data;");
+            while(query.next()){
+                if (query.value(0).toString() == "academic_year"){
+                    temp <<  query.value(1).toString();
+                } else if (query.value(0).toString() == "name_kafedry_faculty"){
+                    temp <<  query.value(1).toString();
+                } else if (query.value(0).toString() == "business_base_of_training"){
+                    temp <<  query.value(1).toString();
+                } else if (query.value(0).toString() == "vice_rector_on_education_work"){
+                    temp <<  query.value(1).toString();
+                }
+            }
+
+            temp << "";
+            temp_tabledata.set_header_sheet(temp);
 
 
         }
-
     }
 /*
     for (int i=0; i<list_tabledata.length(); ++i){

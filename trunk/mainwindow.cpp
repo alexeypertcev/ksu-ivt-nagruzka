@@ -71,6 +71,9 @@ MainWindow::~MainWindow()
 
 void MainWindow::load_db()
 {
+    remove_more_backups();
+    create_backup();
+
     QSqlQuery query;
 
     query.exec("PRAGMA foreign_keys = ON;");
@@ -422,6 +425,155 @@ void MainWindow::update_sins_to_distribution_preview()
     sinstodistrib_preview->setspeciality_id(ui->comboBox_3->get_id());
     sinstodistrib_preview->refresh();
     ui->tableView_6->update_ids();
+}
+
+void MainWindow::create_backup()
+{
+//    qDebug() << "backup";
+    QDateTime datetime;
+    datetime = datetime.currentDateTime();
+
+    QFile file(applicationDirPath + "/nagruzka_" + datetime.toString("dd-MM-yyyy_hh-mm-ss") + ".dbackup");
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text)){
+
+        QTextStream out(&file);
+//        out << "Backup database ksu-ivt-nagruzka " << version << ",  " << QDate::currentDate().toString() << " " << QTime::currentTime().toString() << "\n";
+        QSqlQuery query, query2;
+        QString s;
+        int i;
+
+        query.exec("SELECT name FROM form_training");
+//        out << "\n" << "Table name : form_training" << "\n";
+        while(query.next()){
+            out << "form_training values( "<< query.value(0).toString() << " )\n";
+        }
+
+        query.exec("SELECT name FROM subject");
+//        out << "\n" << "Table name : subject" << "\n";
+        while(query.next()){
+            out << "subject values( "<< query.value(0).toString() << " )\n";
+        }
+
+        query.exec("SELECT id, faculty_name, special_name, form_training_name FROM speciality");
+//        out << "\n" << "Table name : speciality" << "\n";
+        while(query.next()){
+            i = 0;
+            s = query.value(i).toString();
+            while (i<3){
+                s += ", " + query.value(++i).toString();
+            }
+
+            out << "speciality values( "<< s << " )\n";
+        }
+
+        query.exec("SELECT id, speciality_id, course, num_group, num_undergroup, quantity_course FROM students");
+//        out << "\n" << "Table name : students" << "\n";
+        while(query.next()){
+            i = 0;
+            s = query.value(i).toString();
+            while (i<5){
+                s += ", " + query.value(++i).toString();
+            }
+
+            out << "students values( " << s << " )\n";
+        }
+
+        query.exec("SELECT name,hours FROM status");
+//        out << "\n" << "Table name : status" << "\n";
+        while(query.next()){
+            i = 0;
+            s = query.value(i).toString();
+            while (i<1){
+                s += ", " + query.value(++i).toString();
+            }
+
+            out << "status values ( " << s << " )\n";
+        }
+
+        query.exec("SELECT id,name FROM staff");
+//        out << "\n" << "Table name : staff" << "\n";
+        while(query.next()){
+            i = 0;
+            s = query.value(i).toString();
+            while (i<1){
+                s += ", " + query.value(++i).toString();
+            }
+
+            out << "staff values ( " << s << " )\n";
+        }
+
+        query.exec("SELECT id, f, i, o, status_name, rate, staff_id FROM teachers");
+//        out << "\n" << "Table name : teachers" << "\n";
+        while(query.next()){
+            i = 0;
+            s = query.value(i).toString();
+            while (i<6){
+                s += ", " + query.value(++i).toString();
+            }
+
+            out << "teachers values ( " << s << " )\n";
+        }
+
+
+        query.exec("SELECT id, speciality_id, subject_name, semmester, lection_hr, labs_hr, practice_hr, controlwork, KCP_hr, is_examen, is_offset, is_coursework FROM curriculum");
+//        out << "\n" << "Table name : curriculum" << "\n";
+        while(query.next()){
+            i = 0;
+            s = query.value(i).toString();
+            while (i<11){
+                s += ", " + query.value(++i).toString();
+            }
+
+            out << "curriculum values ( " << s << " )\n";
+        }
+
+        query.exec("SELECT id, curriculum_id, students_id, lection_hr, labs_hr, practice_hr, individ_hr, kontr_rab_hr, consultation_hr, offset_hr, "
+                   "examen_hr, coursework_hr, diplomwork_hr, praktika_hr, gak_hr, other1, other2, other3 FROM subjects_in_semmester");
+//        out << "\n" << "Table name : subjects_in_semmester" << "\n";
+        while(query.next()){
+            i = 0;
+            s = query.value(i).toString();
+            while (i<17){
+                s += ", " + query.value(++i).toString();
+            }
+
+            out << "subjects_in_semmester values ( " << s << " )\n";
+        }
+
+        query.exec("SELECT id, teachers_id, subjects_in_semmester_id, lection_hr, labs_hr, practice_hr, individ_hr, kontr_rab_hr, consultation_hr, "
+                   "offset_hr, examen_hr, coursework_hr, diplomwork_hr, praktika_hr, gak_hr, other1, other2, other3 FROM distribution");
+//        out << "\n" << "Table name : distribution" << "\n";
+        while(query.next()){
+            i = 0;
+            s = query.value(i).toString();
+            while (i<17){
+                s += ", " + query.value(++i).toString();
+            }
+
+            out << "distribution values ( " << s << " )\n";
+        }
+        file.close();
+    }
+
+//    qDebug() << "ok";
+
+}
+
+void MainWindow::remove_more_backups()
+{
+    QDir current(applicationDirPath);
+    QStringList stringlist;
+    QStringList filterslist;
+    filterslist.clear();
+    filterslist << "*.dbackup";
+
+    stringlist.clear();
+    stringlist = current.entryList(filterslist,QDir::Files,QDir::Name);
+
+    for (int i=0; i<(stringlist.length()-2); ++i){
+        qDebug() << stringlist.at(i);
+        QFile::remove(applicationDirPath + "/" + stringlist.at(i));
+    }
 }
 
 void MainWindow::update_sins_to_distribution_detail()
@@ -887,131 +1039,7 @@ QString MainWindow::consultation_get(int lection_hr, QString speciality_id, int 
 
 void MainWindow::on_action_txt_triggered()
 {
-    qDebug() << "backup";
-
-    QFile file(applicationDirPath + "/nagruzka_backup.txt");
-    if (file.open(QIODevice::WriteOnly | QIODevice::Text)){
-
-        QTextStream out(&file);
-//        out << "Backup database ksu-ivt-nagruzka " << version << ",  " << QDate::currentDate().toString() << " " << QTime::currentTime().toString() << "\n";
-        QSqlQuery query, query2;
-        QString s;
-        int i;
-
-        query.exec("SELECT name FROM form_training");
-//        out << "\n" << "Table name : form_training" << "\n";
-        while(query.next()){
-            out << "form_training values( "<< query.value(0).toString() << " )\n";
-        }
-
-        query.exec("SELECT name FROM subject");
-//        out << "\n" << "Table name : subject" << "\n";
-        while(query.next()){
-            out << "subject values( "<< query.value(0).toString() << " )\n";
-        }
-
-        query.exec("SELECT id, faculty_name, special_name, form_training_name FROM speciality");
-//        out << "\n" << "Table name : speciality" << "\n";
-        while(query.next()){
-            i = 0;
-            s = query.value(i).toString();
-            while (i<3){
-                s += ", " + query.value(++i).toString();
-            }
-
-            out << "speciality values( "<< s << " )\n";
-        }
-
-        query.exec("SELECT id, speciality_id, course, num_group, num_undergroup, quantity_course FROM students");
-//        out << "\n" << "Table name : students" << "\n";
-        while(query.next()){
-            i = 0;
-            s = query.value(i).toString();
-            while (i<5){
-                s += ", " + query.value(++i).toString();
-            }
-
-            out << "students values( " << s << " )\n";
-        }
-
-        query.exec("SELECT name,hours FROM status");
-//        out << "\n" << "Table name : status" << "\n";
-        while(query.next()){
-            i = 0;
-            s = query.value(i).toString();
-            while (i<1){
-                s += ", " + query.value(++i).toString();
-            }
-
-            out << "status values ( " << s << " )\n";
-        }
-
-        query.exec("SELECT id,name FROM staff");
-//        out << "\n" << "Table name : staff" << "\n";
-        while(query.next()){
-            i = 0;
-            s = query.value(i).toString();
-            while (i<1){
-                s += ", " + query.value(++i).toString();
-            }
-
-            out << "staff values ( " << s << " )\n";
-        }
-
-        query.exec("SELECT id, f, i, o, status_name, rate, staff_id FROM teachers");
-//        out << "\n" << "Table name : teachers" << "\n";
-        while(query.next()){
-            i = 0;
-            s = query.value(i).toString();
-            while (i<6){
-                s += ", " + query.value(++i).toString();
-            }
-
-            out << "teachers values ( " << s << " )\n";
-        }
-
-
-        query.exec("SELECT id, speciality_id, subject_name, semmester, lection_hr, labs_hr, practice_hr, controlwork, KCP_hr, is_examen, is_offset, is_coursework FROM curriculum");
-//        out << "\n" << "Table name : curriculum" << "\n";
-        while(query.next()){
-            i = 0;
-            s = query.value(i).toString();
-            while (i<11){
-                s += ", " + query.value(++i).toString();
-            }
-
-            out << "curriculum values ( " << s << " )\n";
-        }
-
-        query.exec("SELECT id, curriculum_id, students_id, lection_hr, labs_hr, practice_hr, individ_hr, kontr_rab_hr, consultation_hr, offset_hr, "
-                   "examen_hr, coursework_hr, diplomwork_hr, praktika_hr, gak_hr, other1, other2, other3 FROM subjects_in_semmester");
-//        out << "\n" << "Table name : subjects_in_semmester" << "\n";
-        while(query.next()){
-            i = 0;
-            s = query.value(i).toString();
-            while (i<17){
-                s += ", " + query.value(++i).toString();
-            }
-
-            out << "subjects_in_semmester values ( " << s << " )\n";
-        }
-
-        query.exec("SELECT id, teachers_id, subjects_in_semmester_id, lection_hr, labs_hr, practice_hr, individ_hr, kontr_rab_hr, consultation_hr, "
-                   "offset_hr, examen_hr, coursework_hr, diplomwork_hr, praktika_hr, gak_hr, other1, other2, other3 FROM distribution");
-//        out << "\n" << "Table name : distribution" << "\n";
-        while(query.next()){
-            i = 0;
-            s = query.value(i).toString();
-            while (i<17){
-                s += ", " + query.value(++i).toString();
-            }
-
-            out << "distribution values ( " << s << " )\n";
-        }
-        file.close();
-    }
-
-    qDebug() << "ok";
+    create_backup();
 }
 
 void MainWindow::on_action_txt_2_triggered()
@@ -1139,10 +1167,12 @@ void MainWindow::on_pushButton_9_clicked()
         }
     } else {
         query.exec("SELECT teachers.id "
-                   "FROM teachers WHERE teachers.id != '0'");
+                   "FROM teachers WHERE teachers.id != '0' "
+                   "ORDER BY teachers.f, teachers.i, teachers.o");
         while(query.next()){
             teachers_id_list << query.value(0).toString();
         }
+        teachers_id_list << "0"; //для неиспользованных часов
     }
 
     // create report (QList(teachers.id), path_report+name_report, ods,)

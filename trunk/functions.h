@@ -7,6 +7,7 @@ class functions
 public:
     functions();
     static QString toDataString(QString s);
+    static QString toReportString(QString s);
 };
 
 #endif // FUNCTIONS_H

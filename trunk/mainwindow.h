@@ -57,6 +57,9 @@ private:
     void update_students();
     void update_sins_to_distribution_preview();
 
+    void create_backup();
+    void remove_more_backups();
+
     QString translit(QString s);
     QString offset_get(int hours, int is_exists);
     QString examen_get(int hours, int is_exists);

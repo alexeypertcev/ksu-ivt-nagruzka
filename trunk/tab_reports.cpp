@@ -5,16 +5,19 @@
 bool create_report(QStringList teachers_id_list, QString template_patch, QString report_patch, QString type_report){
 
     // тут запрос к БД на все данные, подсчет суммарных данных
-    QSqlQuery query, query2, query3;
+    QSqlQuery query, query2, query3, query4;
     Tabledata temp_tabledata;
     QList<Tabledata> list_tabledata;
     QStringList temp;
     QList<QStringList> temp_list_of_stringlist;
     int temp_of_int1[24];
-    int temp_of_int2[24];
 
-    int temp_of_int_sins[24];
-    int temp_of_int_dist[24];
+
+    int temp_of_int_sins[16];
+    int temp_of_int_dist[16];
+    int temp_of_int_vacansion[16];
+    int temp_of_int_vacansion_sum[16];
+    bool flag;
 
     QString select_list_data = "SELECT curriculum.subject_name, "
             "speciality.faculty_name, "
@@ -61,6 +64,94 @@ bool create_report(QStringList teachers_id_list, QString template_patch, QString
             "students.speciality_id = speciality.id AND "
             "distribution.teachers_id = ";
 
+    QString order_by = " ORDER BY speciality.faculty_name, speciality.special_name, speciality.form_training_name, curriculum.semmester, curriculum.subject_name";
+
+    QString select_sins_hours = "SELECT "
+                            "subjects_in_semmester.id, "
+                            "subjects_in_semmester.lection_hr, "
+                            "subjects_in_semmester.practice_hr, "
+                            "subjects_in_semmester.labs_hr, "
+                            "subjects_in_semmester.individ_hr, "
+                            "subjects_in_semmester.kontr_rab_hr, "
+                            "subjects_in_semmester.consultation_hr, "
+                            "subjects_in_semmester.offset_hr, "
+                            "subjects_in_semmester.examen_hr, "
+                            "subjects_in_semmester.coursework_hr, "
+                            "subjects_in_semmester.diplomwork_hr, "
+                            "subjects_in_semmester.praktika_hr, "
+                            "subjects_in_semmester.gak_hr, "
+                            "subjects_in_semmester.other1, "
+                            "subjects_in_semmester.other2, "
+                            "subjects_in_semmester.other3, "
+                            "subjects_in_semmester.lection_hr + "
+                            "subjects_in_semmester.practice_hr + "
+                            "subjects_in_semmester.labs_hr + "
+                            "subjects_in_semmester.individ_hr + "
+                            "subjects_in_semmester.kontr_rab_hr + "
+                            "subjects_in_semmester.consultation_hr + "
+                            "subjects_in_semmester.offset_hr + "
+                            "subjects_in_semmester.examen_hr + "
+                            "subjects_in_semmester.coursework_hr + "
+                            "subjects_in_semmester.diplomwork_hr + "
+                            "subjects_in_semmester.praktika_hr + "
+                            "subjects_in_semmester.gak_hr + "
+                            "subjects_in_semmester.other1 + "
+                            "subjects_in_semmester.other2 + "
+                            "subjects_in_semmester.other3 AS sum  "
+                            "FROM subjects_in_semmester, curriculum, students, speciality "
+                            "WHERE subjects_in_semmester.curriculum_id = curriculum.id AND "
+                            "subjects_in_semmester.students_id = students.id AND "
+                            "students.speciality_id = speciality.id ";
+
+    QString select_dist_hours = "SELECT "
+                                "distribution.lection_hr, "
+                                "distribution.practice_hr, "
+                                "distribution.labs_hr, "
+                                "distribution.individ_hr, "
+                                "distribution.kontr_rab_hr, "
+                                "distribution.consultation_hr, "
+                                "distribution.offset_hr, "
+                                "distribution.examen_hr, "
+                                "distribution.coursework_hr, "
+                                "distribution.diplomwork_hr, "
+                                "distribution.praktika_hr, "
+                                "distribution.gak_hr, "
+                                "distribution.other1, "
+                                "distribution.other2, "
+                                "distribution.other3, "
+                                "distribution.lection_hr + "
+                                "distribution.practice_hr + "
+                                "distribution.labs_hr + "
+                                "distribution.individ_hr + "
+                                "distribution.kontr_rab_hr + "
+                                "distribution.consultation_hr + "
+                                "distribution.offset_hr + "
+                                "distribution.examen_hr + "
+                                "distribution.coursework_hr + "
+                                "distribution.diplomwork_hr + "
+                                "distribution.praktika_hr + "
+                                "distribution.gak_hr + "
+                                "distribution.other1 + "
+                                "distribution.other2 + "
+                                "distribution.other3 AS sum  "
+                                "FROM distribution , subjects_in_semmester "
+                                "WHERE distribution.subjects_in_semmester_id = subjects_in_semmester.id ";
+
+    QString select_sins_names = "SELECT "
+                                "curriculum.subject_name, "
+                                "speciality.faculty_name, "
+                                "speciality.special_name, "
+                                "speciality.form_training_name, "
+                                "students.course, "
+                                "students.num_group, "
+                                "students.num_undergroup, "
+                                "students.quantity_course "
+                                "FROM subjects_in_semmester , curriculum, students , speciality "
+                                "WHERE "
+                                "subjects_in_semmester.curriculum_id = curriculum.id AND "
+                                "subjects_in_semmester.students_id = students.id AND "
+                                "students.speciality_id = speciality.id ";
+
     for (int i=0; i<teachers_id_list.length(); ++i){
 
         if (teachers_id_list.at(i) != "0") {
@@ -91,103 +182,62 @@ bool create_report(QStringList teachers_id_list, QString template_patch, QString
             temp << "  Объем";
             temp_tabledata.set_header_sheet(temp);
 
-            // temp_tabledata.list_one
+            // temp_tabledata.list_two  temp_tabledata.list_one
 
-            query2.exec(select_list_data + teachers_id_list.at(i) +
-                        " AND ( "
-                        " curriculum.semmester % 2 = 1 "
-                        " )");
+            for (int z=0; z<2; ++z){
+                query2.exec(select_list_data + teachers_id_list.at(i) +
+                            " AND ( "
+                            " curriculum.semmester % 2 = " + QString::number(z) +
+                            " ) " + order_by);
 
-            temp_list_of_stringlist.clear();
-            for(int j=0; j<24; ++j){
-                temp_of_int1[j] =  0;
-            }
+                temp_list_of_stringlist.clear();
+                for(int j=0; j<24; ++j){
+                    temp_of_int1[j] =  0;
+                }
 
-            while (query2.next()){
+                while (query2.next()){
+                    temp.clear();
+                    for(int j=0; j<24; ++j){
+                        if (j < 9){
+                            temp << query2.value(j).toString();
+                        } else {
+                            if (query2.value(j).toInt() == 0){
+                                temp << "";
+                            } else {
+                                temp << query2.value(j).toString();
+                            }
+                        }
+                        temp_of_int1[j] += query2.value(j).toInt();
+
+                    }
+                    temp_list_of_stringlist << temp;
+                }
+
                 temp.clear();
                 for(int j=0; j<24; ++j){
-                    if (j < 9){
-                        temp << query2.value(j).toString();
-                    } else {
-                        if (query2.value(j).toInt() == 0){
-                            temp << "";
-                        } else {
-                            temp << query2.value(j).toString();
-                        }
+                    QString s="";
+                    if ( j>7 && temp_of_int1[j] != 0){
+                        s.setNum(temp_of_int1[j]);
                     }
-                    temp_of_int1[j] += query2.value(j).toInt();
-
+                    temp << s;
                 }
-                temp_list_of_stringlist << temp;
-            }
-            temp_tabledata.set_list_one(temp_list_of_stringlist);
-            temp.clear();
-            for(int j=0; j<24; ++j){
-                QString s="";
-                if (temp_of_int1[j] != 0){
-                    s.setNum(temp_of_int1[j]);
+
+                if(z == 0){
+                    temp_tabledata.set_list_two(temp_list_of_stringlist);
+                    temp_tabledata.set_list_two_sum(temp);
+                } else {
+                    temp_tabledata.set_list_one(temp_list_of_stringlist);
+                    temp_tabledata.set_list_one_sum(temp);
                 }
-                temp << s;
             }
-            temp_tabledata.set_list_one_sum(temp);
-
-            // temp_tabledata.list_two
-            query2.exec(select_list_data + teachers_id_list.at(i) +
-                        " AND ( "
-                        " curriculum.semmester % 2 = 0 "
-                        " )");
-
-            temp_list_of_stringlist.clear();
-            for(int j=0; j<24; ++j){
-                temp_of_int2[j] =  0;
-            }
-            while (query2.next()){
-                temp.clear();
-                for(int j=0; j<24; ++j){
-                    if (j < 9){
-                        temp << query2.value(j).toString();
-                    } else {
-                        if (query2.value(j).toInt() == 0){
-                            temp << "";
-                        } else {
-                            temp << query2.value(j).toString();
-                        }
-                    }
-                    temp_of_int2[j] += query2.value(j).toInt();
-                }
-                temp_list_of_stringlist << temp;
-            }
-            temp_tabledata.set_list_two(temp_list_of_stringlist);
-            temp.clear();
-            for(int j=0; j<24; ++j){
-                QString s = "";
-                if (temp_of_int2[j] != 0){
-                    s.setNum(temp_of_int2[j]);
-                }
-                temp << s;
-            }
-            temp_tabledata.set_list_two_sum(temp);
-
-            //   set  temp_tabledata.set_list_all_sum
-            temp.clear();
-            for(int j=0; j<24; ++j){
-                QString s = "";
-                if (temp_of_int1[j] + temp_of_int2[j] != 0){
-                    s.setNum(temp_of_int1[j] + temp_of_int2[j]);
-                }
-                temp << s;
-            }
-
-            temp_tabledata.set_list_all_sum(temp);
-            list_tabledata << temp_tabledata;
-
         } else {
-            query.exec("DELETE FROM distribution WHERE distribution.teachers_id = '0';");
             //teachers_id_list.at(i) = "0"
-            qDebug() << "Вакании подсчет";
+            qDebug() << "Вакансии подсчет";
+
+            query.exec("DELETE FROM distribution WHERE distribution.teachers_id = '0';");
 
             // temp_tabledata.header_sheet
-
+            temp.clear();
             temp << "Вакансии";
             temp << "";
             temp << "";
@@ -209,122 +259,90 @@ bool create_report(QStringList teachers_id_list, QString template_patch, QString
             temp << "";
             temp_tabledata.set_header_sheet(temp);
 
+
             // temp_tabledata.list_one
+            for (int z=0; z<2; ++z){
+                query2.exec(select_sins_hours +
+                            "AND curriculum.semmester % 2 = " + QString::number(z) + order_by);
 
-            query2.exec("SELECT "
-                        "subjects_in_semmester.id, "
-                        "subjects_in_semmester.lection_hr, "
-                        "subjects_in_semmester.labs_hr, "
-                        "subjects_in_semmester.practice_hr,"
-                        "subjects_in_semmester.individ_hr, "
-                        "subjects_in_semmester.kontr_rab_hr, "
-                        "subjects_in_semmester.consultation_hr, "
-                        "subjects_in_semmester.offset_hr, "
-                        "subjects_in_semmester.examen_hr, "
-                        "subjects_in_semmester.coursework_hr, "
-                        "subjects_in_semmester.diplomwork_hr, "
-                        "subjects_in_semmester.praktika_hr, "
-                        "subjects_in_semmester.gak_hr, "
-                        "subjects_in_semmester.other1, "
-                        "subjects_in_semmester.other2, "
-                        "subjects_in_semmester.other3, "
-                        "subjects_in_semmester.lection_hr + subjects_in_semmester.labs_hr+subjects_in_semmester.practice_hr+"
-                        "individ_hr+kontr_rab_hr+consultation_hr+"
-                        "offset_hr+examen_hr+coursework_hr+diplomwork_hr+praktika_hr+gak_hr+"
-                        "other1+other2+other3 AS sum "
-                        "FROM subjects_in_semmester, curriculum "
-                        "WHERE subjects_in_semmester.curriculum_id = curriculum.id AND "
-                        "subjects_in_semmester.students_id = students.id AND "
-                        "students.speciality_id = speciality.id AND "
-                        "curriculum.semmester % 2 = 1 "
-                        "ORDER BY speciality.special_name, speciality.form_training_name ");
-
-            temp_list_of_stringlist.clear();
-
-            while (query2.next()){
-                temp.clear();
-
-                for(int j=0; j<24; ++j){
-                    //temp_of_int_sins[j] = query2.value(j).toString();
+                temp_list_of_stringlist.clear();
+                for(int j=0; j<16; ++j){
+                    temp_of_int_vacansion_sum[j] = 0;
                 }
-
-                query3.exec("SELECT "
-                            "distribution.id, "
-                            "curriculum.subject_name, "
-                            "curriculum.semmester, "
-                            "teachers.f || ' ' || teachers.i || ' ' || teachers.o AS 'FIO', "
-                            "distribution.lection_hr, "
-                            "distribution.labs_hr, "
-                            "distribution.practice_hr, "
-                            "distribution.individ_hr, "
-                            "distribution.kontr_rab_hr, "
-                            "distribution.consultation_hr, "
-                            "distribution.offset_hr, "
-                            "distribution.examen_hr, "
-                            "distribution.coursework_hr, "
-                            "distribution.diplomwork_hr, "
-                            "distribution.praktika_hr, "
-                            "distribution.gak_hr, "
-                            "distribution.other1, "
-                            "distribution.other2, "
-                            "distribution.other3, "
-                            "distribution.lection_hr + "
-                            "distribution.labs_hr + "
-                            "distribution.practice_hr + "
-                            "distribution.individ_hr + "
-                            "distribution.kontr_rab_hr + "
-                            "distribution.consultation_hr + "
-                            "distribution.offset_hr + "
-                            "distribution.examen_hr + "
-                            "distribution.coursework_hr + "
-                            "distribution.diplomwork_hr + "
-                            "distribution.praktika_hr + "
-                            "distribution.gak_hr + "
-                            "distribution.other1 + "
-                            "distribution.other2 + "
-                            "distribution.other3 "
-                            "AS sum "
-                            "FROM distribution,teachers,subjects_in_semmester,curriculum "
-                            "WHERE "
-                            "distribution.teachers_id = teachers.id AND "
-                            "distribution.subjects_in_semmester_id = subjects_in_semmester.id AND "
-                            "subjects_in_semmester.curriculum_id = curriculum.id AND "
-                            "distribution.subjects_in_semmester_id = " + query2.value(0).toString() + "; ");
-
-                for(int j=0; j<24; ++j){
-                    temp_of_int_dist[j] = 0;
-                }
-
                 while (query2.next()){
-                    for(int j=0; j<24; ++j){
-                        //temp_of_int_dist[j] += query3.value(j).toString();
+                    temp.clear();
+
+                    for(int j=0; j<16; ++j){
+                        temp_of_int_sins[j] = query2.value(j+1).toInt();
                     }
 
+                    query3.exec(select_dist_hours +
+                                " AND subjects_in_semmester.id = '" + query2.value(0).toString() + "'; ");
+
+                    temp.clear();
+                    // в temp_of_int_dist заносим все распределенные часы по предмету
+                    for(int j=0; j<16; ++j){
+                        temp_of_int_dist[j] = 0;
+                    }
+                    while (query3.next()){
+                        for(int j=0; j<16; ++j){
+                            temp_of_int_dist[j] += query3.value(j).toInt();
+                        }
+                    }
+
+                    flag = false;
+                    for(int j=0; j<16; ++j){
+                        temp_of_int_vacansion[j] = temp_of_int_sins[j] - temp_of_int_dist[j];
+                        if (temp_of_int_vacansion[j] != 0){
+                            flag = true;
+                        }
+                    }
+
+                    if (flag){
+                        // мини запрос
+                        query4.exec(select_sins_names +
+                                    " AND subjects_in_semmester.id = '" + query2.value(0).toString() + "'; ");
+                        query4.next();
+
+                        for(int j=0; j<24; ++j){
+                            if (j < 8){
+                                temp << query4.value(j).toString();
+                            } else {
+                                temp_of_int_vacansion_sum[j-8] += temp_of_int_vacansion[j-8];
+                                if (temp_of_int_vacansion[j-8] == 0){
+                                    temp << "";
+                                } else {
+                                    temp << QString::number(temp_of_int_vacansion[j-8]);
+                                }
+                            }
+                        }
+                        temp_list_of_stringlist << temp;
+                    }
                 }
 
-
-
-                temp_list_of_stringlist << temp;
-            }
-            temp_tabledata.set_list_one(temp_list_of_stringlist);
-
-            temp.clear();
-            for(int j=0; j<24; ++j){
-                QString s="";
-                if (temp_of_int1[j] != 0){
-                    s.setNum(temp_of_int1[j]);
+                temp.clear();
+                for(int j=0; j<24; ++j){
+                    QString s="";
+                    if ( j>7 && temp_of_int_vacansion_sum[j-8] != 0){
+                        s.setNum(temp_of_int_vacansion_sum[j-8]);
+                    }
+                    temp << s;
                 }
-                temp << s;
+
+                if(z == 0){
+                    temp_tabledata.set_list_two(temp_list_of_stringlist);
+                    temp_tabledata.set_list_two_sum(temp);
+                } else {
+                    temp_tabledata.set_list_one(temp_list_of_stringlist);
+                    temp_tabledata.set_list_one_sum(temp);
+                }
             }
-            temp_tabledata.set_list_one_sum(temp);
 
 
-
-
-
-
-        }
+       }
+        list_tabledata << temp_tabledata;
     }
+
 
     if(type_report == "xlsx"){
         return create_report_xlsx(list_tabledata,template_patch, report_patch);

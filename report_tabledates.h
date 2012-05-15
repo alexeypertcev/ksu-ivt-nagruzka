@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QStringList>
 #include "errors.h"
+#include "functions.h"
 
 class Tabledata
 {

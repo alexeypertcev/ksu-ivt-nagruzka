@@ -1,5 +1,6 @@
 #include "report_tabledates.h"
 
+
 Tabledata::Tabledata()
 {
 }
@@ -20,7 +21,7 @@ void Tabledata::set_list_two_sum(QStringList lts){
     list_two_sum = lts;
 }
 void Tabledata::set_list_all_sum(QStringList las){
-    list_all_sum = las;
+//    list_all_sum = las;
 }
 
 QStringList Tabledata::get_header_sheet(){
@@ -39,7 +40,18 @@ QStringList Tabledata::get_list_two_sum(){
     return list_two_sum;
 }
 QStringList Tabledata::get_list_all_sum(){
-    return list_all_sum;
+    QStringList buf;
+    buf.clear();
+
+    if (list_one_sum.length() != list_two_sum.length()){
+        return buf;
+    }
+
+    for (int i=0; i<list_one_sum.length(); ++i){
+        buf << functions::toReportString(QString::number(list_one_sum.at(i).toInt() + list_two_sum.at(i).toInt()));
+    }
+
+    return buf;
 }
 
 QString Tabledata::get_header_FIO(){
@@ -47,7 +59,11 @@ QString Tabledata::get_header_FIO(){
     if (header_sheet.length() < 3){
         return "";
     }
-    temp = header_sheet.at(0) + ", " + header_sheet.at(1) + " " + header_sheet.at(2);
+    if (header_sheet.at(1) == ""){
+        temp = header_sheet.at(0);
+    } else {
+        temp = header_sheet.at(0) + ", " + header_sheet.at(1) + " " + header_sheet.at(2);
+    }
     return temp;
 }
 

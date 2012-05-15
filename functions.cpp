@@ -11,3 +11,11 @@ QString functions::toDataString(QString s)
     }
     return s;
 }
+
+QString functions::toReportString(QString s)
+{
+    if (s == "0"){
+        return "";
+    }
+    return s;
+}

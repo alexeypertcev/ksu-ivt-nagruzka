@@ -27,7 +27,7 @@ Teachers_list::Teachers_list(QWidget *parent) :
     ui->tableView->setColumnWidth(++i,70);
 
     while (i < 11){
-        ui->tableView->setColumnWidth(++i,55);
+        ui->tableView->setColumnWidth(++i,54);
     }
     //headerview.
     QHBoxLayout *layout = new QHBoxLayout();

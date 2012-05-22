@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>726</width>
+    <width>750</width>
     <height>657</height>
    </rect>
   </property>
@@ -16,9 +16,9 @@
   <widget class="QTableView" name="tableView">
    <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>5</x>
      <y>20</y>
-     <width>711</width>
+     <width>740</width>
      <height>631</height>
     </rect>
    </property>

@@ -240,6 +240,35 @@ QVariant Coefficients_model::data(const QModelIndex &index, int role) const
             if (value.toString() == "coefficient_consultation_add_is_examen_for_group"){
                 return "Дополнительно для консультаций (если экзамен), часов на группу ";
             }
+            if (value.toString() == "coefficient_ruk_vo_kurs_work_hr"){
+                return "Руководство курсовыми работами, часов";
+            }
+            if (value.toString() == "coefficient_ruk_vo_VKR_spec_hr"){
+                return "Руководство ВКР специалиста, часов";
+            }
+            if (value.toString() == "coefficient_ruk_vo_VKR_bak_hr"){
+                return "Руководство ВКР бакалавра, часов";
+            }
+            if (value.toString() == "coefficient_zachita_kurs_rab_na_kommis_min"){
+                return "Защита курсовых работ на заседании комиссии, минут";
+            }
+            if (value.toString() == "coefficient_ruk_vo_VKR_mag_hr"){
+                return "Руководство ВКР магистра, часов";
+            }
+            if (value.toString() == "coefficient_recenzir_VKR_hr"){
+                return "Рецензирование ВКР, часов";
+            }
+            if (value.toString() == "coefficient_normokontrol_hr"){
+                return "Нормоконтроль, часов";
+            }
+            if (value.toString() == "coefficient_ychastie_work_GAK_min"){
+                return "Участие в работе ГАК, часов";
+            }
+            if (value.toString() == "coefficient_ruk_vo_aspirants_hr"){
+                return "Руководство аспирантами, часов";
+            }
+
+            return value.toString();
         }
         break;
     }

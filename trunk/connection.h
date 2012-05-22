@@ -152,7 +152,7 @@ static bool create_all_tables(){
                    "  REFERENCES teachers (id))");
         query.exec("CREATE TABLE coefficients ( "
                    "name TEXT NOT NULL, "
-                   "value INTEGER NOT NULL, "
+                   "value REAL NOT NULL, "
                    "CONSTRAINT name PRIMARY KEY (name))");
         query.exec("CREATE TABLE other_data ( "
                    "name TEXT NOT NULL, "
@@ -210,9 +210,17 @@ static bool insert_main_data()
         query.exec("insert into coefficients values('coefficient_consultation_och_zaoch_percent', 10)");
         query.exec("insert into coefficients values('coefficient_consultation_add_is_examen_for_group', 2)");
 
-
-
-
+        // not found
+        query.exec("insert into coefficients values('coefficient_ruk_vo_kurs_work_hr', 5)");
+        query.exec("insert into coefficients values('coefficient_ruk_vo_VKR_spec_hr', 20)");
+        query.exec("insert into coefficients values('coefficient_ruk_vo_VKR_bak_hr', 12)");
+        query.exec("insert into coefficients values('coefficient_zachita_kurs_rab_na_kommis_min', 15)");
+        query.exec("insert into coefficients values('coefficient_ruk_vo_VKR_mag_hr', 28)");
+        query.exec("insert into coefficients values('coefficient_recenzir_VKR_hr', 1)");
+        query.exec("insert into coefficients values('coefficient_normokontrol_hr', 1)");
+        query.exec("insert into coefficients values('coefficient_ychastie_work_GAK_min', 30)");
+        query.exec("insert into coefficients values('coefficient_ruk_vo_aspirants_hr', 50)");
+        //
 
         query.exec("insert into other_data values('academic_year', '2011/2012')");
         query.exec("insert into other_data values('name_kafedry_faculty', 'Программного обеспечения и администрирования информационных систем')");

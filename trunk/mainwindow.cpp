@@ -60,6 +60,24 @@ MainWindow::MainWindow(QString apppath, QWidget *parent) :
     if (createConnection(path_db)){
         load_db();
     }
+
+    QObject::connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(update_curriculum()));
+    QObject::connect(ui->comboBox_2, SIGNAL(currentIndexChanged(int)), this, SLOT(update_subinsem()));
+    QObject::connect(ui->comboBox_3, SIGNAL(currentIndexChanged(int)), this, SLOT(update_distribution()));
+    QObject::connect(ui->tableView_6, SIGNAL(activated(QModelIndex)), this, SLOT(update_sins_to_distribution_detail()));
+    QObject::connect(ui->tableView_6, SIGNAL(activated(QModelIndex)), this, SLOT(update_sqlmodel_distribution()));
+    QObject::connect(ui->radioButton_3, SIGNAL(clicked()), this, SLOT(update_distribution()));
+    QObject::connect(ui->radioButton_2, SIGNAL(clicked()), this, SLOT(update_distribution()));
+    QObject::connect(ui->radioButton, SIGNAL(clicked()), this, SLOT(update_distribution()));
+    QObject::connect(ui->tableView_9, SIGNAL(activated(QModelIndex)), this, SLOT(update_report_name()));
+
+    QObject::connect(ui->radioButton_4, SIGNAL(clicked()), this, SLOT(update_report_name()));
+    QObject::connect(ui->radioButton_5, SIGNAL(clicked()), this, SLOT(update_report_name()));
+    QObject::connect(ui->radioButton_6, SIGNAL(clicked()), this, SLOT(update_report_name()));
+    QObject::connect(ui->radioButton_7, SIGNAL(clicked()), this, SLOT(update_report_name()));
+
+    QObject::connect(sqlmodel_distribution, SIGNAL(table_changed()), teachers_list, SLOT(update()));
+    QObject::connect(sqlmodel_teachers, SIGNAL(table_changed()), teachers_list, SLOT(update()));
 }
 
 MainWindow::~MainWindow()
@@ -178,23 +196,19 @@ void MainWindow::load_db()
     set_design_all_tab();
     update_report_name();
 
-    QObject::connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(update_curriculum()));
-    QObject::connect(ui->comboBox_2, SIGNAL(currentIndexChanged(int)), this, SLOT(update_subinsem()));
-    QObject::connect(ui->comboBox_3, SIGNAL(currentIndexChanged(int)), this, SLOT(update_distribution()));
-    QObject::connect(ui->tableView_6, SIGNAL(activated(QModelIndex)), this, SLOT(update_sins_to_distribution_detail()));
-    QObject::connect(ui->tableView_6, SIGNAL(activated(QModelIndex)), this, SLOT(update_sqlmodel_distribution()));
-    QObject::connect(ui->radioButton_3, SIGNAL(clicked()), this, SLOT(update_distribution()));
-    QObject::connect(ui->radioButton_2, SIGNAL(clicked()), this, SLOT(update_distribution()));
-    QObject::connect(ui->radioButton, SIGNAL(clicked()), this, SLOT(update_distribution()));
-    QObject::connect(ui->tableView_9, SIGNAL(activated(QModelIndex)), this, SLOT(update_report_name()));
+    query.exec("SELECT name FROM coefficients WHERE name = 'coefficient_ruk_vo_kurs_work_hr'");
 
-    QObject::connect(ui->radioButton_4, SIGNAL(clicked()), this, SLOT(update_report_name()));
-    QObject::connect(ui->radioButton_5, SIGNAL(clicked()), this, SLOT(update_report_name()));
-    QObject::connect(ui->radioButton_6, SIGNAL(clicked()), this, SLOT(update_report_name()));
-    QObject::connect(ui->radioButton_7, SIGNAL(clicked()), this, SLOT(update_report_name()));
-
-    QObject::connect(sqlmodel_distribution, SIGNAL(table_changed()), teachers_list, SLOT(update()));
-    QObject::connect(sqlmodel_teachers, SIGNAL(table_changed()), teachers_list, SLOT(update()));
+    if (!query.next()){
+        query.exec("insert into coefficients values('coefficient_ruk_vo_kurs_work_hr', 5)");
+        query.exec("insert into coefficients values('coefficient_ruk_vo_VKR_spec_hr', 20)");
+        query.exec("insert into coefficients values('coefficient_ruk_vo_VKR_bak_hr', 12)");
+        query.exec("insert into coefficients values('coefficient_zachita_kurs_rab_na_kommis_min', 15)");
+        query.exec("insert into coefficients values('coefficient_ruk_vo_VKR_mag_hr', 28)");
+        query.exec("insert into coefficients values('coefficient_recenzir_VKR_hr', 1)");
+        query.exec("insert into coefficients values('coefficient_normokontrol_hr', 1)");
+        query.exec("insert into coefficients values('coefficient_ychastie_work_GAK_min', 30)");
+        query.exec("insert into coefficients values('coefficient_ruk_vo_aspirants_hr', 50)");
+    }
 }
 
 void MainWindow::set_applicationDirPath(QString app_path){

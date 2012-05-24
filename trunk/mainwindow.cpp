@@ -35,7 +35,8 @@ MainWindow::MainWindow(QString apppath, QWidget *parent) :
 
     version = "v0.184";
     applicationDirPath = apppath;
-    path_db = applicationDirPath + "/nagruzka.db";
+    database_name = "nagruzka";
+    path_db = applicationDirPath + "/" + database_name + ".db";
     report_path = applicationDirPath;
     report_format = "xlsx";
 
@@ -89,8 +90,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::load_db()
 {
-    remove_more_backups();
-    create_backup();
+    auto_create_backup();
 
     QSqlQuery query;
 
@@ -447,10 +447,11 @@ void MainWindow::create_backup()
     QDateTime datetime;
     datetime = datetime.currentDateTime();
 
-    QFile file(applicationDirPath + "/nagruzka_" + datetime.toString("dd-MM-yyyy_hh-mm-ss") + ".dbackup");
+    QFile file(applicationDirPath + "/database_backups/" + database_name + "_" + datetime.toString("dd-MM-yyyy_hh-mm-ss") + ".dbackup");
     if (file.open(QIODevice::WriteOnly | QIODevice::Text)){
 
         QTextStream out(&file);
+        out.setCodec("UTF-8");
 //        out << "Backup database ksu-ivt-nagruzka " << version << ",  " << QDate::currentDate().toString() << " " << QTime::currentTime().toString() << "\n";
         QSqlQuery query, query2;
         QString s;
@@ -573,20 +574,47 @@ void MainWindow::create_backup()
 
 }
 
-void MainWindow::remove_more_backups()
+void MainWindow::auto_create_backup()
 {
-    QDir current(applicationDirPath);
+    QDir backups_dir(applicationDirPath);
     QStringList stringlist;
     QStringList filterslist;
+    QString name_old_back;
+    int backups_count = 10;
+
     filterslist.clear();
     filterslist << "*.dbackup";
 
     stringlist.clear();
-    stringlist = current.entryList(filterslist,QDir::Files,QDir::Name);
-
-    for (int i=0; i<(stringlist.length()-2); ++i){
-        qDebug() << stringlist.at(i);
+    stringlist = backups_dir.entryList(filterslist,QDir::Files,QDir::Name);
+    for (int i=0; i<stringlist.length(); ++i){
         QFile::remove(applicationDirPath + "/" + stringlist.at(i));
+    }
+
+    backups_dir.mkdir("database_backups");
+    backups_dir.cd("database_backups");
+
+    stringlist.clear();
+    stringlist = backups_dir.entryList(filterslist,QDir::Files,QDir::Name);
+
+    if (stringlist.length() >= backups_count){
+
+        name_old_back = stringlist.at(stringlist.length() - 1);  // название последнего бэкапа
+        // example name nagruzka_24-05-2012_19-28-20.dbackup
+        name_old_back.remove(22, 14);
+        name_old_back.remove(0, database_name.length()+1);
+        QDateTime datetime;
+        datetime = datetime.currentDateTime();
+
+        if (name_old_back != datetime.toString("dd-MM-yyyy_hh")){
+            for (int i=0; i<(stringlist.length()-(backups_count-1)); ++i){
+                QFile::remove(applicationDirPath + "/database_backups/" + stringlist.at(i));
+            }
+
+            create_backup();
+        }
+    } else {
+        create_backup();
     }
 }
 
@@ -1058,6 +1086,7 @@ void MainWindow::on_action_txt_triggered()
 
 void MainWindow::on_action_txt_2_triggered()
 {
+    /*
     QFile file(applicationDirPath + "/nagruzka_backup_zhmakin.txt");
     if (!file.open(QFile::ReadOnly))
         return;
@@ -1087,6 +1116,7 @@ void MainWindow::on_action_txt_2_triggered()
 
     file.close();
     load_db();
+    */
 }
 
 void MainWindow::on_action_6_triggered()

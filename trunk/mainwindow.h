@@ -58,7 +58,7 @@ private:
     void update_sins_to_distribution_preview();
 
     void create_backup();
-    void remove_more_backups();
+    void auto_create_backup();
 
     QString translit(QString s);
     QString offset_get(int hours, int is_exists);
@@ -72,6 +72,7 @@ private:
     QString path_db;
     QSqlDatabase db;
     QString applicationDirPath;
+    QString database_name;
     SubjectSqlModel* sqlmodel_subject;
     QSqlRelationalTableModel* tablemodel_teachers;
     QSqlRelationalTableModel* tablemodel_curriculum;

@@ -2,7 +2,7 @@
 //#include "workzip.cpp"
 
 
-bool create_report(QStringList teachers_id_list, QString template_patch, QString report_patch, QString type_report){
+bool Reports_creater::create_report(QStringList teachers_id_list, QString template_patch, QString report_patch, QString type_report){
 
     // тут запрос к БД на все данные, подсчет суммарных данных
     QSqlQuery query, query2, query3, query4;
@@ -354,15 +354,15 @@ bool create_report(QStringList teachers_id_list, QString template_patch, QString
     return true;
 }
 
-bool create_report_ods(QList<Tabledata> list_tabledata, QString template_patch, QString report_patch)
+bool Reports_creater::create_report_ods(QList<Tabledata> list_tabledata, QString template_path, QString report_path)
 {
     return false;
 }
 
-bool create_report_xlsx(QList<Tabledata> list_tabledata, QString template_patch, QString report_patch)
+bool Reports_creater::create_report_xlsx(QList<Tabledata> list_tabledata, QString template_path, QString report_path)
 {
     Tabledata temp_tabledata;
-    QFile::remove(report_patch);
+    QFile::remove(report_path);
 
     TDocXLSX doc;
     TWorkBook& book = doc.m_workbook;
@@ -655,13 +655,84 @@ bool create_report_xlsx(QList<Tabledata> list_tabledata, QString template_patch,
         book.insert( sheet1, temp_tabledata.get_header_sheet().at(0).toStdString() );
     }
 
-    doc.save(report_patch.toStdString());
+    doc.save(report_path.toStdString());
     return true;
 }
 
+bool Reports_creater::create_report_for_kafedry(QString report_path)
+{
+    // создание отчета нагрузка на кафедре
 
+    QSqlQuery query;
+    QString s;
+    unsigned int sum;
+    query.exec("SELECT curriculum.subject_name, curriculum.semmester, "
+                           "speciality.special_name, "
+                           "speciality.form_training_name, students.course, "
+                           "students.num_group, students.num_undergroup, "
+                           "students.quantity_course, subjects_in_semmester.lection_hr, "
+                           "subjects_in_semmester.labs_hr, subjects_in_semmester.practice_hr,"
+                           "individ_hr, kontr_rab_hr, consultation_hr, "
+                           "offset_hr,  examen_hr, coursework_hr, diplomwork_hr, praktika_hr, gak_hr, "
+                           "other1,  other2, other3, "
+                           "subjects_in_semmester.lection_hr+subjects_in_semmester.labs_hr+subjects_in_semmester.practice_hr+"
+                           "individ_hr+kontr_rab_hr+consultation_hr+"
+                           "offset_hr+examen_hr+coursework_hr+diplomwork_hr+praktika_hr+gak_hr+"
+                           "other1+other2+other3 AS sum "
+                           "FROM subjects_in_semmester, curriculum, students, speciality "
+                           "WHERE subjects_in_semmester.curriculum_id = curriculum.id AND "
+                           "subjects_in_semmester.students_id = students.id AND "
+                           "students.speciality_id = speciality.id "
+                           "ORDER BY speciality.special_name, speciality.form_training_name, curriculum.semmester, curriculum.subject_name, subjects_in_semmester.id;");
 
-reports_creater::reports_creater()
+    QFile file(report_path);
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text)){
+
+        QTextStream out(&file);
+
+        s =    "Название предмета;"
+               "Семместр;"
+               "Специальность;"
+               "Форма обучения;"
+               "Курс;"
+               "Количество групп;"
+               "Количество подгрупп;"
+               "Студентов на курсе;"
+               "Лекции;"
+               "Лабораторные;"
+               "Практические;"
+               "Индивидуальные;"
+               "Контрольные работы;"
+               "Консультации;"
+               "Зачет;"
+               "Экзамен;"
+               "Курсовая работа;"
+               "Дипломная работа;"
+               "Практика;"
+               "ГАК;"
+               "Прочее;"
+               "Прочее;"
+               "Прочее;"
+               "Всего;";  //24
+
+        out << s << "\n";
+        sum = 0;
+        while(query.next()){
+            s="";
+            for (int i=0; i<24; ++i){
+                s += query.value(i).toString() + ";";
+            }
+            sum += query.value(23).toUInt();
+            out << s << "\n";
+        }
+        out << QString("Общая сумма:;;;;;;;;;;;;;;;;;;;;;;;") << QString::number(sum) << QString(";\n");
+
+    } else {
+//        QMessageBox::warning(this, "Error", "Невозможно создать файл");
+    }
+}
+
+Reports_creater::Reports_creater()
 {
 }
 

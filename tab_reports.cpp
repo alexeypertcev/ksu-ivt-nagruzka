@@ -9,6 +9,7 @@ bool Reports::create_report_teacherscard(QStringList teachers_id_list, QString t
     Tabledata temp_tabledata;
     QList<Tabledata> list_tabledata;
     QStringList temp;
+    QStringList temp_header;
     QList<QStringList> temp_list_of_stringlist;
     int temp_of_int1[24];
 
@@ -151,6 +152,9 @@ bool Reports::create_report_teacherscard(QStringList teachers_id_list, QString t
                                 "subjects_in_semmester.students_id = students.id AND "
                                 "students.speciality_id = speciality.id ";
 
+    QString current_status_name;
+    int current_status_hours;
+    int current_all_hours;
     for (int i=0; i<teachers_id_list.length(); ++i){
 
         if (teachers_id_list.at(i) != "0") {
@@ -159,30 +163,32 @@ bool Reports::create_report_teacherscard(QStringList teachers_id_list, QString t
             query.exec("SELECT teachers.f, teachers.i, teachers.o, teachers.status_name "
                        "FROM teachers WHERE teachers.id = " + teachers_id_list.at(i));
             query.next();
-            temp.clear();
-            temp << query.value(0).toString();
-            temp << query.value(1).toString();
-            temp << query.value(2).toString();
-            temp << query.value(3).toString();
+            temp_header.clear();
+            temp_header << query.value(0).toString();
+            temp_header << query.value(1).toString();
+            temp_header << query.value(2).toString();
+            temp_header << query.value(3).toString();
+            current_status_name = query.value(3).toString();
 
             query.exec("SELECT name, value FROM other_data;");
             while(query.next()){
                 if (query.value(0).toString() == "academic_year"){
-                    temp <<  query.value(1).toString();
+                    temp_header <<  query.value(1).toString();
                 } else if (query.value(0).toString() == "name_kafedry_faculty"){
-                    temp <<  query.value(1).toString();
+                    temp_header <<  query.value(1).toString();
                 } else if (query.value(0).toString() == "business_base_of_training"){
-                    temp <<  query.value(1).toString();
+                    temp_header <<  query.value(1).toString();
                 } else if (query.value(0).toString() == "vice_rector_on_education_work"){
-                    temp <<  query.value(1).toString();
+                    temp_header <<  query.value(1).toString();
                 }
             }
-
-            temp << "  Объем";
-            temp_tabledata.set_header_sheet(temp);
+            query.exec("SELECT status.hours "
+                       "FROM status WHERE name = '" + current_status_name +"';");
+            query.next();
+            current_status_hours = query.value(0).toInt();
 
             // temp_tabledata.list_two  temp_tabledata.list_one
-
+            current_all_hours = 0;
             for (int z=0; z<2; ++z){
                 query2.exec(select_list_data + teachers_id_list.at(i) +
                             " AND ( "
@@ -220,6 +226,7 @@ bool Reports::create_report_teacherscard(QStringList teachers_id_list, QString t
                     }
                     temp << s;
                 }
+                current_all_hours += temp_of_int1[23];
 
                 if(z == 0){
                     temp_tabledata.set_list_two(temp_list_of_stringlist);
@@ -229,9 +236,12 @@ bool Reports::create_report_teacherscard(QStringList teachers_id_list, QString t
                     temp_tabledata.set_list_one_sum(temp);
                 }
             }
+
+            temp_header << QString::number((double)current_all_hours / (double)current_status_hours, 'f', 2);
+            temp_tabledata.set_header_sheet(temp_header);
         } else {
             //teachers_id_list.at(i) = "0"
-            qDebug() << "Вакансии подсчет";
+//            qDebug() << "Вакансии подсчет";
 
             query.exec("DELETE FROM distribution WHERE distribution.teachers_id = '0';");
 

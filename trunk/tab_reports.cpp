@@ -371,8 +371,12 @@ bool Reports_creater::create_report_xlsx(QList<Tabledata> list_tabledata, QStrin
         temp_tabledata = list_tabledata.at(i);
         // проверить длину списков
 
-
         TSpreadSheet sheet1 = book.m_spreadsheets.insert();
+
+        sheet1.set_column_width(1,1,45);
+        sheet1.set_column_width(2,24,5);
+        sheet1.set_column_width(25,25,7);
+        sheet1.set_column_width(26,26,5);
 
         TFont font_tnr_8_normal = book.m_stylesheet.m_fonts.insert( "Times New Roman", 8, EFF_NONE );
         TFont font_tnr_8_bold = book.m_stylesheet.m_fonts.insert( "Times New Roman", 8, EFF_BOLD );
@@ -390,15 +394,11 @@ bool Reports_creater::create_report_xlsx(QList<Tabledata> list_tabledata, QStrin
 
 
         TCellXF cellformat_header0 = book.m_stylesheet.m_cellxfs.insert( font_tnr_8_normal, TAlignment( EHORIZONTAL_LEFT, EVERTICAL_CENTER, false, false, 0, 0 ), TBorder(), TFill() );
-        TCellXF cellformat_header0_wrap = book.m_stylesheet.m_cellxfs.insert( font_tnr_8_normal, TAlignment( EHORIZONTAL_LEFT, EVERTICAL_CENTER, true, false, 0, 0 ), TBorder(), TFill() );
         TCellXF cellformat_header1 = book.m_stylesheet.m_cellxfs.insert( font_tnr_8_bold, TAlignment( EHORIZONTAL_LEFT, EVERTICAL_CENTER, false, false, 0, 0 ), TBorder(), TFill() );
         TCellXF cellformat_header2 = book.m_stylesheet.m_cellxfs.insert( font_tnr_10_normal, TAlignment( EHORIZONTAL_RIGHT, EVERTICAL_CENTER, false, false, 0, 0 ), TBorder(), TFill() );
         TCellXF cellformat_header3 = book.m_stylesheet.m_cellxfs.insert( font_tnr_12_normal, TAlignment( EHORIZONTAL_RIGHT, EVERTICAL_CENTER, false, false, 0, 0 ), TBorder(), TFill() );
         TCellXF cellformat_header4 = book.m_stylesheet.m_cellxfs.insert( font_tnr_10_normal, TAlignment( EHORIZONTAL_LEFT, EVERTICAL_CENTER, false, false, 0, 0 ), TBorder(), TFill() );
         TCellXF cellformat_header4_border = book.m_stylesheet.m_cellxfs.insert( font_tnr_10_normal, TAlignment( EHORIZONTAL_LEFT, EVERTICAL_CENTER, false, false, 0, 0 ), border_all_medium, TFill() );
-        TCellXF cellformat_header5 = book.m_stylesheet.m_cellxfs.insert( font_tnr_8_normal, TAlignment( EHORIZONTAL_CENTER, EVERTICAL_CENTER, false, false, 0, 0 ), TBorder(), TFill() );
-        TCellXF cellformat_header6 = book.m_stylesheet.m_cellxfs.insert( font_tnr_8_normal, TAlignment( EHORIZONTAL_CENTER, EVERTICAL_CENTER, false, false, 90, 0 ), TBorder(), TFill() );
-        TCellXF cellformat_header6_wrap = book.m_stylesheet.m_cellxfs.insert( font_tnr_8_normal, TAlignment( EHORIZONTAL_CENTER, EVERTICAL_CENTER, true, false, 90, 0 ), TBorder(), TFill() );
 
         TCellXF cellformat_header0_b_t = book.m_stylesheet.m_cellxfs.insert( font_tnr_8_normal, TAlignment( EHORIZONTAL_LEFT, EVERTICAL_CENTER, false, false, 0, 0 ), border_top_double, TFill() );
         TCellXF cellformat_header0_wrap_b_t = book.m_stylesheet.m_cellxfs.insert( font_tnr_8_normal, TAlignment( EHORIZONTAL_LEFT, EVERTICAL_CENTER, true, false, 0, 0 ), border_top_double, TFill() );
@@ -409,7 +409,7 @@ bool Reports_creater::create_report_xlsx(QList<Tabledata> list_tabledata, QStrin
         TCellXF cellformat_header6_wrap_b_b = book.m_stylesheet.m_cellxfs.insert( font_tnr_8_normal, TAlignment( EHORIZONTAL_CENTER, EVERTICAL_CENTER, true, false, 90, 0 ), border_buttom_double, TFill() );
         TCellXF cellformat_header6_b_rtb = book.m_stylesheet.m_cellxfs.insert( font_tnr_8_normal, TAlignment( EHORIZONTAL_CENTER, EVERTICAL_CENTER, false, false, 90, 0 ), border_right_top_bottom_double, TFill() );
 
-             /*row collumn*/
+             /*[row][collumn]*/
         sheet1[ 0 ][ 0 ] = "Министерство образования и науки Российской Федерации";
         sheet1[ 0 ][ 0 ] = cellformat_header0;
         sheet1[ 1 ][ 0 ] = "Государсвенное образовательное учреждение";
@@ -559,6 +559,31 @@ bool Reports_creater::create_report_xlsx(QList<Tabledata> list_tabledata, QStrin
         sheet1[ 10 ][ 25 ] = cellformat_header6_b_rtb;
         sheet1[ 11 ][ 25 ] = " ";
         sheet1[ 11 ][ 25 ] = cellformat_header6_b_rtb;
+
+        sheet1.set_row_height(10, "23");
+        sheet1.set_row_height(11, "64");
+
+        sheet1.set_merge("A11:A12");
+        sheet1.set_merge("B11:B12");
+        sheet1.set_merge("C11:C12");
+        sheet1.set_merge("D11:D12");
+        sheet1.set_merge("E11:E12");
+        sheet1.set_merge("F11:F12");
+        sheet1.set_merge("G11:G12");
+        sheet1.set_merge("H11:H12");
+        sheet1.set_merge("I11:K11");
+        sheet1.set_merge("L11:M11");
+        sheet1.set_merge("N11:N12");
+        sheet1.set_merge("O11:O12");
+        sheet1.set_merge("P11:P12");
+        sheet1.set_merge("Q11:Q12");
+        sheet1.set_merge("R11:R12");
+        sheet1.set_merge("S11:S12");
+        sheet1.set_merge("T11:T12");
+        sheet1.set_merge("U11:U12");
+        sheet1.set_merge("V11:X11");
+        sheet1.set_merge("Y11:Y12");
+        sheet1.set_merge("Z11:Z12");
 
         int current_row = 12;
         int i, j, shift;
@@ -730,6 +755,7 @@ bool Reports_creater::create_report_for_kafedry(QString report_path)
     } else {
 //        QMessageBox::warning(this, "Error", "Невозможно создать файл");
     }
+    return true;
 }
 
 Reports_creater::Reports_creater()

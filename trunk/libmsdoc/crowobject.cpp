@@ -3,6 +3,11 @@
 CRowObject::CRowObject(int id):
     m_id( id )
 {
+    height.clear();
+}
+
+CRowObject::CRowObject()
+{
 }
 
 int CRowObject::id() const
@@ -23,18 +28,22 @@ return result.first;
 
 TCell CRowObject::operator [] (const TString& name)
 {
-return operator [] ( FromStrId( name ) );
+    return operator [] ( FromStrId( name ) );
+}
+
+void CRowObject::set_height(std::string s)
+{
+    height = s;
 }
 
 int CRowObject::save(std::stringstream& sheet) const
 {
-    if (row() == 11) {
-        sheet << "<row r=\"" << row() << "\" ht='23' customHeight='1'>";
-    } else if (row() == 12){
-        sheet << "<row r=\"" << row() << "\" ht=\"64\" customHeight=\"1\">";
-    } else {
+    if (height.empty()){
         sheet << "<row r=\"" << row() << "\">";
+    }else{
+        sheet << "<row r=\"" << row() << "\" ht='" + height + "' customHeight='1'>";
     }
+
 //cells
 TCells::const_iterator it = m_cells.begin();
 TCells::const_iterator end = m_cells.end();

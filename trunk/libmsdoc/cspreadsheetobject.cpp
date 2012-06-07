@@ -4,15 +4,35 @@
 CSpreadSheetObject::CSpreadSheetObject(const TString& dir, TRelationShips& relationships):
     TBaseRelationShipObject( relationships ), m_dir( dir )
 {
+    widht_col_data.clear();
+    merged_cells.clear();
 }
 
 CSpreadSheetObject::CSpreadSheetObject(const CSpreadSheetObject& origin):
     TBaseRelationShipObject( origin ), m_dir( origin.m_dir )   
 {
+    widht_col_data.clear();
+    merged_cells.clear();
 }
 
 CSpreadSheetObject::~CSpreadSheetObject()
 {
+}
+
+void CSpreadSheetObject::set_collum_widht(int col_begin, int col_end, int widht)
+{
+    widht_col_data << "<col min='" + QString::number(col_begin) + "' max='" + QString::number(col_end) + "' width='" + QString::number(widht) + "' customWidth='1'/>";
+}
+
+void CSpreadSheetObject::set_row_height(int row, std::string s)
+{
+    CRowObject *r_o = &m_rows[row];
+    r_o->set_height(s);
+}
+
+void CSpreadSheetObject::set_merge(QString s)
+{
+    merged_cells << "<mergeCell ref=\"" + s + "\"/>";
 }
 
 TRow CSpreadSheetObject::operator [] (int index)
@@ -31,13 +51,14 @@ int CSpreadSheetObject::save(TZip& archive, TContent& content) const
     //sheet << "xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\">\n";
     //TODO default settings
 
-    sheet << "<cols>\n";
-    sheet << "<col min='1' max='1' width='45' customWidth='1'/>\n";
-    sheet << "<col min='2' max='24' width='5' customWidth='1'/>\n";
-    sheet << "<col min='25' max='25' width='7' customWidth='1'/>\n";
-    sheet << "<col min='26' max='26' width='5' customWidth='1'/>\n";
-    sheet << "</cols>\n";
-
+    if (!widht_col_data.isEmpty()){
+        sheet << "<cols>\n";
+        for (int i=0; i<widht_col_data.length(); ++i){
+            sheet << widht_col_data.at(i).toStdString();
+            sheet << "\n";
+        }
+        sheet << "</cols>\n";
+    }
     sheet << "<sheetData>\n";
     //rows
     TRows::const_iterator it = m_rows.begin();
@@ -48,29 +69,16 @@ int CSpreadSheetObject::save(TZip& archive, TContent& content) const
     }
 
     sheet << "</sheetData>\n";
-    sheet << "<mergeCells count=\"21\">";
-    sheet << "<mergeCell ref=\"A11:A12\"/>";
-    sheet << "<mergeCell ref=\"B11:B12\"/>";
-    sheet << "<mergeCell ref=\"C11:C12\"/>";
-    sheet << "<mergeCell ref=\"D11:D12\"/>";
-    sheet << "<mergeCell ref=\"E11:E12\"/>";
-    sheet << "<mergeCell ref=\"F11:F12\"/>";
-    sheet << "<mergeCell ref=\"G11:G12\"/>";
-    sheet << "<mergeCell ref=\"H11:H12\"/>";
-    sheet << "<mergeCell ref=\"I11:K11\"/>";
-    sheet << "<mergeCell ref=\"L11:M11\"/>";
-    sheet << "<mergeCell ref=\"N11:N12\"/>";
-    sheet << "<mergeCell ref=\"O11:O12\"/>";
-    sheet << "<mergeCell ref=\"P11:P12\"/>";
-    sheet << "<mergeCell ref=\"Q11:Q12\"/>";
-    sheet << "<mergeCell ref=\"R11:R12\"/>";
-    sheet << "<mergeCell ref=\"S11:S12\"/>";
-    sheet << "<mergeCell ref=\"T11:T12\"/>";
-    sheet << "<mergeCell ref=\"U11:U12\"/>";
-    sheet << "<mergeCell ref=\"V11:X11\"/>";
-    sheet << "<mergeCell ref=\"Y11:Y12\"/>";
-    sheet << "<mergeCell ref=\"Z11:Z12\"/>";
+
+    if (!merged_cells.isEmpty()){
+        sheet << QString("<mergeCells count=\"" + QString::number(merged_cells.length()) + "\">").toStdString();
+
+        for (int i = 0; i<merged_cells.length(); ++i){
+            sheet << merged_cells.at(i).toStdString();
+            sheet << "\n";
+        }
     sheet << "</mergeCells>";
+    }
 
     sheet << "</worksheet>\n";
     archive.add_file( filename(), sheet.str() );

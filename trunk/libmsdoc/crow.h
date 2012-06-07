@@ -13,18 +13,20 @@ class CRow:
     public TRows::iterator
 {
 private:
-/* you can't do that */
-CRow&   operator = (const CRow&);
+    /* you can't do that */
+    CRow&   operator = (const CRow&);
 
 protected:
-typedef TRows::iterator base;
-using base::operator ->;
+    typedef TRows::iterator base;
+    using base::operator ->;
 
 public:
-        CRow(const base& it);
+    CRow(const base& it);
 
-TCell   operator [] (int index);
-TCell   operator [] (const TString& name);
+    TCell   operator [] (int index);
+    TCell   operator [] (const TString& name);
+
+//    void set_row_height(int row, std::string s);
 };
 
 #endif

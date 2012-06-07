@@ -78,7 +78,7 @@ void Settings::on_pushButton_del_spec_clicked()
     QSqlQuery query;
     if (!query.exec(s)){
         QMessageBox::warning(this, tr("Error querry"),
-                             tr(" Невозможно выполнить данное действие \n Возможно значение которое вы хотите удалить испульзуется в базе данных"));
+                             tr(" Невозможно выполнить данное действие \n Возможно значение которое вы хотите удалить используется в базе данных"));
     }
     tablemodel_spec->select();
 }

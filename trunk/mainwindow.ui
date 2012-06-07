@@ -544,7 +544,7 @@
         <x>10</x>
         <y>10</y>
         <width>1241</width>
-        <height>611</height>
+        <height>601</height>
        </rect>
       </property>
       <property name="currentIndex">
@@ -557,9 +557,9 @@
        <widget class="QPushButton" name="pushButton_5">
         <property name="geometry">
          <rect>
-          <x>50</x>
-          <y>170</y>
-          <width>181</width>
+          <x>460</x>
+          <y>250</y>
+          <width>141</width>
           <height>31</height>
          </rect>
         </property>
@@ -570,8 +570,8 @@
        <widget class="QLineEdit" name="lineEdit_3">
         <property name="geometry">
          <rect>
-          <x>50</x>
-          <y>140</y>
+          <x>10</x>
+          <y>290</y>
           <width>601</width>
           <height>23</height>
          </rect>

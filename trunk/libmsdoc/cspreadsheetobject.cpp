@@ -6,6 +6,7 @@ CSpreadSheetObject::CSpreadSheetObject(const TString& dir, TRelationShips& relat
 {
     widht_col_data.clear();
     merged_cells.clear();
+    zoom = "100";
 }
 
 CSpreadSheetObject::CSpreadSheetObject(const CSpreadSheetObject& origin):
@@ -13,6 +14,7 @@ CSpreadSheetObject::CSpreadSheetObject(const CSpreadSheetObject& origin):
 {
     widht_col_data.clear();
     merged_cells.clear();
+    zoom = "100";
 }
 
 CSpreadSheetObject::~CSpreadSheetObject()
@@ -24,6 +26,11 @@ void CSpreadSheetObject::set_collum_widht(int col_begin, int col_end, int widht)
     widht_col_data << "<col min='" + QString::number(col_begin) + "' max='" + QString::number(col_end) + "' width='" + QString::number(widht) + "' customWidth='1'/>";
 }
 
+void CSpreadSheetObject::set_collum_widht(int col_begin, int col_end, QString widht)
+{
+    widht_col_data << "<col min='" + QString::number(col_begin) + "' max='" + QString::number(col_end) + "' width='" + widht + "' customWidth='1'/>";
+}
+
 void CSpreadSheetObject::set_row_height(int row, std::string s)
 {
     CRowObject *r_o = &m_rows[row];
@@ -33,6 +40,11 @@ void CSpreadSheetObject::set_row_height(int row, std::string s)
 void CSpreadSheetObject::set_merge(QString s)
 {
     merged_cells << "<mergeCell ref=\"" + s + "\"/>";
+}
+
+void CSpreadSheetObject::set_zoom(QString z)
+{
+    zoom = z;
 }
 
 TRow CSpreadSheetObject::operator [] (int index)
@@ -50,6 +62,13 @@ int CSpreadSheetObject::save(TZip& archive, TContent& content) const
     sheet << "xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\">\n";
     //sheet << "xmlns:r=\"http://schemas.openxmlformats.org/officeDocument/2006/relationships\">\n";
     //TODO default settings
+
+    if (zoom != "100"){
+        sheet << "<sheetViews>\n";
+        sheet << QString("<sheetView tabSelected=\"1\" zoomScale=\"" + zoom + "\" zoomScaleNormal=\"" + zoom + "\" workbookViewId=\"0\">").toStdString();
+        sheet << "</sheetView>\n";
+        sheet << "</sheetViews>\n";
+    }
 
     if (!widht_col_data.isEmpty()){
         sheet << "<cols>\n";

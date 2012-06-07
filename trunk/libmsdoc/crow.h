@@ -25,8 +25,6 @@ public:
 
     TCell   operator [] (int index);
     TCell   operator [] (const TString& name);
-
-//    void set_row_height(int row, std::string s);
 };
 
 #endif

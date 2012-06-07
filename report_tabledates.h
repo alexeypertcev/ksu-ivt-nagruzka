@@ -19,6 +19,8 @@ public:
     void set_list_all_sum(QStringList las);
 
     QString get_header_FIO();
+    QString get_header_Family();
+    QString get_header_Family_I_O();
     QString get_header_degre_and_status();
     QString get_header_academic_year();
     QString get_header_name_kafedry_faculty();
@@ -39,6 +41,9 @@ public:
     QStringList get_list_one_sum();
     QStringList get_list_two_sum();
     QStringList get_list_all_sum();
+
+    QList<QStringList> get_list(int i);
+    QStringList get_list_sum(int i);
 
 private:
     QStringList header_sheet;

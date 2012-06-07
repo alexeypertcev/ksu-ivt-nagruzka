@@ -54,6 +54,32 @@ QStringList Tabledata::get_list_all_sum(){
     return buf;
 }
 
+QList<QStringList> Tabledata::get_list(int i)
+{
+    if (i == 1){
+        return get_list_one();
+    } else if (i == 2){
+        return get_list_two();
+    } else {
+        QList<QStringList> list;
+        list.clear();
+        return list;
+    }
+}
+
+QStringList Tabledata::get_list_sum(int i)
+{
+    if (i == 1){
+        return get_list_one_sum();
+    } else if (i == 2){
+        return get_list_two_sum();
+    } else {
+        QStringList list;
+        list.clear();
+        return list;
+    }
+}
+
 QString Tabledata::get_header_FIO(){
     QString temp;
     if (header_sheet.length() < 3){
@@ -65,6 +91,25 @@ QString Tabledata::get_header_FIO(){
         temp = header_sheet.at(0) + ", " + header_sheet.at(1) + " " + header_sheet.at(2);
     }
     return temp;
+}
+
+QString Tabledata::get_header_Family()
+{
+    if (header_sheet.length() < 1){
+        return "";
+    }
+    return header_sheet.at(0);
+}
+
+QString Tabledata::get_header_Family_I_O()
+{
+    if (header_sheet.length() < 3){
+        return "";
+    }
+    if (header_sheet.at(1) == "" || header_sheet.at(2) == ""){
+        return header_sheet.at(0);
+    }
+    return QString(header_sheet.at(0) + " " + header_sheet.at(1).at(0) + ". " + header_sheet.at(2).at(0) + ".");
 }
 
 QString Tabledata::get_header_degre_and_status(){

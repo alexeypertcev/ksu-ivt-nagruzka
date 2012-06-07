@@ -15,19 +15,22 @@ class CSpreadSheet:
     public std::list<CSpreadSheetObject>::iterator
 {
 private:
-/* you can't do that */
-CSpreadSheet&   operator = (const CSpreadSheet&);
+    /* you can't do that */
+    CSpreadSheet&   operator = (const CSpreadSheet&);
 
 protected:
-typedef std::list<CSpreadSheetObject>::iterator base;
-using base::operator ->;
+    typedef std::list<CSpreadSheetObject>::iterator base;
+    using base::operator ->;
 
 public:
-                CSpreadSheet(const base& it);
+    CSpreadSheet(const base& it);
+    void set_column_width(int col_begin, int col_end, int width);
+    void set_row_height(int row, QString h);
+    void set_row_height(int row, int h);
+    void set_merge(QString s);
+    TRow operator [] (int index);
 
-TRow            operator [] (int index);
-
-                operator IRelationShipObject& ();
+    operator IRelationShipObject& ();
 };
 
 #endif

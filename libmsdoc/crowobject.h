@@ -3,6 +3,8 @@
 
 #include <sstream>
 #include <map>
+#include <QMap>
+#include <QString>
 
 class CRowObject;
 typedef CRowObject TRowObject;
@@ -14,21 +16,23 @@ typedef std::map<int,TRowObject> TRows;
 class CRowObject
 {
 private:
-/* you can't do that */
-CRowObject& operator = (const CRowObject&);
+    /* you can't do that */
+    CRowObject& operator = (const CRowObject&);
 
 protected:
-int     m_id;
-TCells  m_cells;
-
+    int     m_id;
+    TCells  m_cells;
+    std::string height;
 public:
-        CRowObject(int id);
-int     id() const;
-int     row() const;
-TCell   operator [] (int index);
-TCell   operator [] (const TString& name);
+    CRowObject(int id);
+    CRowObject();
+    int     id() const;
+    int     row() const;
+    TCell   operator [] (int index);
+    TCell   operator [] (const TString& name);
 
-int     save(std::stringstream& sheet) const;
+    void set_height(std::string s);
+    int     save(std::stringstream& sheet) const;
 };
 
 #endif

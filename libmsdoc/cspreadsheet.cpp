@@ -12,6 +12,11 @@ void CSpreadSheet::set_column_width(int col_begin, int col_end, int width)
     (*this)->set_collum_widht(col_begin,col_end,width);
 }
 
+void CSpreadSheet::set_column_width(int col_begin, int col_end, QString width)
+{
+    (*this)->set_collum_widht(col_begin,col_end,width);
+}
+
 void CSpreadSheet::set_row_height(int row, QString h)
 {
     (*this)->set_row_height(row, h.toStdString());
@@ -25,6 +30,11 @@ void CSpreadSheet::set_row_height(int row, int h)
 void CSpreadSheet::set_merge(QString s)
 {
     (*this)->set_merge(s);
+}
+
+void CSpreadSheet::set_zoom(QString z)
+{
+    (*this)->set_zoom(z);
 }
 
 TRow CSpreadSheet::operator [] (int index)

@@ -55,7 +55,7 @@ MainWindow::MainWindow(QString apppath, QWidget *parent) :
     sqlmodel_distribution = new DistributionSqlModel(this);
     sqlmodel_teachers_report = new TeachersReportSqlModel(this);
 
-    ui->lineEdit_3->setText(applicationDirPath + "/subject_in_semester.csv");
+    ui->lineEdit_3->setText(applicationDirPath + "/kafedra.xlsx");
     ui->lineEdit->setText("/home/perec/Загрузки/ПОиАИС_utf8.txt");
 
     if (createConnection(path_db)){
@@ -93,8 +93,27 @@ void MainWindow::load_db()
     auto_create_backup();
 
     QSqlQuery query;
-
     query.exec("PRAGMA foreign_keys = ON;");
+
+
+    query.exec("SELECT name FROM coefficients WHERE name = 'coefficient_ruk_vo_kurs_work_hr'");
+    if (!query.next()){
+        query.exec("insert into coefficients values('coefficient_ruk_vo_kurs_work_hr', 5)");
+        query.exec("insert into coefficients values('coefficient_ruk_vo_VKR_spec_hr', 20)");
+        query.exec("insert into coefficients values('coefficient_ruk_vo_VKR_bak_hr', 12)");
+        query.exec("insert into coefficients values('coefficient_zachita_kurs_rab_na_kommis_min', 15)");
+        query.exec("insert into coefficients values('coefficient_ruk_vo_VKR_mag_hr', 28)");
+        query.exec("insert into coefficients values('coefficient_recenzir_VKR_hr', 1)");
+        query.exec("insert into coefficients values('coefficient_normokontrol_hr', 1)");
+        query.exec("insert into coefficients values('coefficient_ychastie_work_GAK_min', 30)");
+        query.exec("insert into coefficients values('coefficient_ruk_vo_aspirants_hr', 50)");
+    }
+
+    query.exec("SELECT name FROM other_data WHERE name = 'name_kafedry_smail'");
+    if (!query.next()){
+        query.exec("insert into other_data values('name_kafedry_smail', 'ПОиАИС')");
+    }
+
 
     tablemodel_spec = new QSqlRelationalTableModel(this);
     tablemodel_spec->setTable("speciality");
@@ -195,20 +214,6 @@ void MainWindow::load_db()
     teachers_list = new Teachers_list();
     set_design_all_tab();
     update_report_name();
-
-    query.exec("SELECT name FROM coefficients WHERE name = 'coefficient_ruk_vo_kurs_work_hr'");
-
-    if (!query.next()){
-        query.exec("insert into coefficients values('coefficient_ruk_vo_kurs_work_hr', 5)");
-        query.exec("insert into coefficients values('coefficient_ruk_vo_VKR_spec_hr', 20)");
-        query.exec("insert into coefficients values('coefficient_ruk_vo_VKR_bak_hr', 12)");
-        query.exec("insert into coefficients values('coefficient_zachita_kurs_rab_na_kommis_min', 15)");
-        query.exec("insert into coefficients values('coefficient_ruk_vo_VKR_mag_hr', 28)");
-        query.exec("insert into coefficients values('coefficient_recenzir_VKR_hr', 1)");
-        query.exec("insert into coefficients values('coefficient_normokontrol_hr', 1)");
-        query.exec("insert into coefficients values('coefficient_ychastie_work_GAK_min', 30)");
-        query.exec("insert into coefficients values('coefficient_ruk_vo_aspirants_hr', 50)");
-    }
 }
 
 void MainWindow::set_applicationDirPath(QString app_path){
@@ -1215,12 +1220,12 @@ void MainWindow::on_pushButton_9_clicked()
         }
         teachers_id_list << "0"; //для неиспользованных часов
     }
-    Reports_creater report_creater;
+    Reports reports;
     // create report (QList(teachers.id), path_report+name_report, ods,)
     if (report_format == "xlsx"){
-        report_creater.create_report(teachers_id_list, "", ui->lineEdit_2->text(),report_format);
+        reports.create_report_teacherscard(teachers_id_list, "", ui->lineEdit_2->text(),report_format);
     } else if(report_format == "ods"){
-        report_creater.create_report(teachers_id_list, applicationDirPath + "/template.ods", ui->lineEdit_2->text(),report_format);
+//        report.create_report(teachers_id_list, applicationDirPath + "/template.ods", ui->lineEdit_2->text(),report_format);
     }
 }
 
@@ -1238,8 +1243,8 @@ void MainWindow::on_pushButton_8_clicked(bool checked)
 
 void MainWindow::on_pushButton_5_clicked()
 {
-    Reports_creater report_creater;
-    report_creater.create_report_for_kafedry(ui->lineEdit_3->text());
+    Reports reports;
+    reports.create_report_for_kafedry(ui->lineEdit_3->text());
 }
 
 void MainWindow::on_pushButton_clear_subinsemmester_clicked()

@@ -25,9 +25,11 @@ protected:
 public:
     CSpreadSheet(const base& it);
     void set_column_width(int col_begin, int col_end, int width);
+    void set_column_width(int col_begin, int col_end, QString width);
     void set_row_height(int row, QString h);
     void set_row_height(int row, int h);
     void set_merge(QString s);
+    void set_zoom(QString z);
     TRow operator [] (int index);
 
     operator IRelationShipObject& ();

@@ -145,6 +145,14 @@ void Settings::on_lineEdit_4_editingFinished()
     update_other_data();
 }
 
+void Settings::on_lineEdit_5_editingFinished()
+{
+    QString s = "update other_data set 'value' = '"+ ui->lineEdit_5->text() +"' where name = 'name_kafedry_smail'";
+    QSqlQuery query;
+    query.exec(s);
+    update_other_data();
+}
+
 void Settings::update_other_data()
 {
     QSqlQuery query;
@@ -159,6 +167,8 @@ void Settings::update_other_data()
             ui->lineEdit_3->setText(query.value(1).toString());
         } else if (query.value(0).toString() == "vice_rector_on_education_work"){
             ui->lineEdit_4->setText(query.value(1).toString());
+        } else if (query.value(0).toString() == "name_kafedry_smail"){
+            ui->lineEdit_5->setText(query.value(1).toString());
         } else {
             ERROR_REPORT("0x");
         }
@@ -292,3 +302,5 @@ bool Coefficients_model::setData(const QModelIndex &index, const QVariant &value
     refresh();
     return true;
 }
+
+

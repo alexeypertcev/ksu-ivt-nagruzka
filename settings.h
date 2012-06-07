@@ -43,6 +43,7 @@ private slots:
     void on_lineEdit_3_editingFinished();
     void on_lineEdit_4_editingFinished();
     void update_other_data();
+    void on_lineEdit_5_editingFinished();
 };
 
 class Coefficients_model : public QSqlQueryModel

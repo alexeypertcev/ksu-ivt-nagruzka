@@ -10,21 +10,16 @@
 
 #include "libmsdoc/cdocxlsx.h"
 
-class Reports_creater
+class Reports
 {
 public:
-    /*
-     report_for_teachers
-     report_for_kafedry
+    //    bool create_report_ods( QList<Tabledata> list_tabledata, QString template_path, QString report_path);
 
-     report_for_subject
+    Reports(){}
 
-     */
+    bool create_report_teacherscard(QStringList teachers_id_list, QString template_patch, QString report_patch, QString type_report);
 
-    Reports_creater();
-    bool create_report(QStringList teachers_id_list, QString template_patch, QString report_patch, QString type_report);
-    bool create_report_ods( QList<Tabledata> list_tabledata, QString template_path, QString report_path);
-    bool create_report_xlsx(QList<Tabledata> list_tabledata, QString template_path, QString report_path);
+    bool write_report_teacherscard_xlsx(QList<Tabledata> list_tabledata, QString template_path, QString report_path);
 
     bool create_report_for_kafedry(QString report_path);
 };

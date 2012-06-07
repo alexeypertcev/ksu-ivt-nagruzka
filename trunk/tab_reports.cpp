@@ -12,7 +12,6 @@ bool Reports::create_report_teacherscard(QStringList teachers_id_list, QString t
     QList<QStringList> temp_list_of_stringlist;
     int temp_of_int1[24];
 
-
     int temp_of_int_sins[16];
     int temp_of_int_dist[16];
     int temp_of_int_vacansion[16];
@@ -360,8 +359,62 @@ bool Reports::write_report_teacherscard_xlsx(QList<Tabledata> list_tabledata, QS
     TDocXLSX doc;
     TWorkBook& book = doc.m_workbook;
 
-    for (int i=0; i<list_tabledata.length(); ++i){
-        temp_tabledata = list_tabledata.at(i);
+    QStringList names_sheets;
+    names_sheets.clear();
+    for (int q = 0; q<list_tabledata.length(); ++q){
+        temp_tabledata = list_tabledata.at(q);
+        names_sheets << temp_tabledata.get_header_Family();
+    }
+
+    // поиск и замена одинаковых фамилий/названий листов
+    QList<int> equal;
+    QList<int> equal1;
+    int buf;
+    for (int i = 0; i<names_sheets.length(); ++i){
+        equal.clear();
+        for (int j = i+1; j<names_sheets.length(); ++j){
+            if (names_sheets.at(i) == names_sheets.at(j)){
+                equal << j;
+            }
+        }
+        if (!equal.isEmpty()){
+            equal << i;
+            for (int k = 0; k<equal.length(); ++k){
+                temp_tabledata = list_tabledata.at(equal.at(k));
+                names_sheets[equal.at(k)] = temp_tabledata.get_header_Family_I_O();
+            }
+            for (int i1=0; i1<equal.length(); ++i1){
+                equal1.clear();
+                for (int j1=i1+1; j1<equal.length(); ++j1){
+                    if (names_sheets.at(equal.at(i1)) == names_sheets.at(equal.at(j1))){
+                        equal1 << equal.at(j1);
+                    }
+                }
+                if (!equal1.isEmpty()){
+                    equal1 << equal.at(i1);
+                    for (int i3 = 0; i3< equal1.length(); ++i3){
+                        for (int j3 = i3+1; j3<equal1.length(); ++j3){
+                            if (equal1.at(i3) > equal1.at(j3)){
+                                buf = equal1.at(i3);
+                                equal1[i3] = equal1.at(j3);
+                                equal1[j3] = buf;
+                            }
+                        }
+                    }
+
+                    for (int k1 = 0; k1 < equal1.length(); ++k1){
+                        names_sheets[equal1.at(k1)] = names_sheets.at(equal1.at(k1)) + " 0" + QString::number(k1+1);
+                    }
+
+                }
+            }
+
+        }
+    }
+   //---------------------------
+
+    for (int i_sheet=0; i_sheet<list_tabledata.length(); ++i_sheet){
+        temp_tabledata = list_tabledata.at(i_sheet);
         // проверить длину списков
 
         TSpreadSheet sheet1 = book.m_spreadsheets.insert();
@@ -584,78 +637,51 @@ bool Reports::write_report_teacherscard_xlsx(QList<Tabledata> list_tabledata, QS
         temp_list_stringlist.clear();
         temp_stringlist.clear();
 
-
-        temp_list_stringlist = temp_tabledata.get_list_one();
-        for (i = 0; i < temp_list_stringlist.length(); ++i){
-            temp_stringlist = temp_list_stringlist.at(i);
-            shift = 0;
-            for (j = 0; j < temp_stringlist.length(); ++j){
-                if ( j == 12){
-                    shift = 1;
-                    sheet1[ current_row ][j] = " ";
-                    sheet1[ current_row ][j] = cellformat_header4;
+    // two semmester -------------
+        for (int sem = 1; sem<=2; ++sem){
+            temp_list_stringlist = temp_tabledata.get_list(sem);
+            for (i = 0; i < temp_list_stringlist.length(); ++i){
+                temp_stringlist = temp_list_stringlist.at(i);
+                shift = 0;
+                for (j = 0; j < temp_stringlist.length(); ++j){
+                    if ( j == 12){
+                        shift = 1;
+                        sheet1[ current_row ][j] = " ";
+                        sheet1[ current_row ][j] = cellformat_header4;
+                    }
+                    if (j > 3) {
+                        sheet1[ current_row ][j + shift] = temp_stringlist.at(j).toInt();
+                    } else {
+                        sheet1[ current_row ][j + shift] = temp_stringlist.at(j).toStdString();
+                    }
+                    sheet1[ current_row ][j + shift] = cellformat_header4;
                 }
-                sheet1[ current_row ][j + shift] = temp_stringlist.at(j).toStdString();
-                sheet1[ current_row ][j + shift] = cellformat_header4;
-            }
-            ++current_row;        sheet1.set_row_height(10, "23");
-            sheet1.set_row_height(11, "64");
-
-        }
-
-        ++current_row;
-        temp_stringlist = temp_tabledata.get_list_one_sum();
-
-        shift = 0;
-        for (j = 0; j < temp_stringlist.length(); ++j){
-            if ( j == 12){
-                shift = 1;
-                sheet1[ current_row ][j] = " ";
-                sheet1[ current_row ][j] = cellformat_header4_border;
-            }
-            sheet1[ current_row ][j + shift] = temp_stringlist.at(j).toStdString();
-            sheet1[ current_row ][j + shift] = cellformat_header4_border;
-        }
-
-        sheet1[ current_row ][0] = "Итого за 1е полугодие:";
-        ++current_row;
-
-        ++current_row;
-        temp_list_stringlist = temp_tabledata.get_list_two();
-
-        for (i = 0; i < temp_list_stringlist.length(); ++i){
-            temp_stringlist = temp_list_stringlist.at(i);
-            shift = 0;
-            for (j = 0; j < temp_stringlist.length(); ++j){
-                if ( j == 12){
-                    shift = 1;
-                    sheet1[ current_row ][j] = " ";
-                    sheet1[ current_row ][j] = cellformat_header4;
-                }
-                sheet1[ current_row ][j + shift] = temp_stringlist.at(j).toStdString();
-                sheet1[ current_row ][j + shift] = cellformat_header4;
-
+                ++current_row;
             }
             ++current_row;
-        }
+            temp_stringlist = temp_tabledata.get_list_sum(sem);
 
-        ++current_row;
-        temp_stringlist = temp_tabledata.get_list_two_sum();
-
-        shift = 0;
-        for (j = 0; j < temp_stringlist.length(); ++j){
-            if ( j == 12){
-                shift = 1;
-                sheet1[ current_row ][j] = " ";
-                sheet1[ current_row ][j] = cellformat_header4_border;
+            shift = 0;
+            for (j = 0; j < temp_stringlist.length(); ++j){
+                if ( j == 12){
+                    shift = 1;
+                    sheet1[ current_row ][j] = " ";
+                    sheet1[ current_row ][j] = cellformat_header4_border;
+                }
+                if (j > 3){
+                    sheet1[ current_row ][j + shift] = temp_stringlist.at(j).toInt();
+                } else {
+                    sheet1[ current_row ][j + shift] = temp_stringlist.at(j).toStdString();
+                }
+                sheet1[ current_row ][j + shift] = cellformat_header4_border;
             }
-            sheet1[ current_row ][j + shift] = temp_stringlist.at(j).toStdString();
-            sheet1[ current_row ][j + shift] = cellformat_header4_border;
-        }
-        sheet1[ current_row ][0] = "Итого за 2е полугодие:";
-        ++current_row;
 
-        ++current_row;
+            sheet1[ current_row ][0] = QString("Итого за "+ QString::number(sem)+"е полугодие:").toStdString();
+            ++current_row;
+            ++current_row;
+        }
+    // ----------------------
+
         temp_stringlist = temp_tabledata.get_list_all_sum();
 
         shift = 0;
@@ -665,12 +691,16 @@ bool Reports::write_report_teacherscard_xlsx(QList<Tabledata> list_tabledata, QS
                 sheet1[ current_row ][j] = " ";
                 sheet1[ current_row ][j] = cellformat_header4_border;
             }
-            sheet1[ current_row ][j + shift] = temp_stringlist.at(j).toStdString();
+            if (j > 3){
+                sheet1[ current_row ][j + shift] = temp_stringlist.at(j).toInt();
+            } else {
+                sheet1[ current_row ][j + shift] = temp_stringlist.at(j).toStdString();
+            }
             sheet1[ current_row ][j + shift] = cellformat_header4_border;
         }
         sheet1[ current_row ][0] = "Итого за год:";
 
-        book.insert( sheet1, temp_tabledata.get_header_sheet().at(0).toStdString() );
+        book.insert( sheet1, names_sheets.at(i_sheet).toStdString() );
     }
 
     doc.save(report_path.toStdString());

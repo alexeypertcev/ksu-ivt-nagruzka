@@ -60,6 +60,8 @@ MainWindow::MainWindow(QString apppath, QWidget *parent) :
 
     if (createConnection(path_db)){
         load_db();
+    } else {
+        ERROR_REPORT("0x001")
     }
 
     QObject::connect(ui->comboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(update_curriculum()));
@@ -95,25 +97,7 @@ void MainWindow::load_db()
     QSqlQuery query;
     query.exec("PRAGMA foreign_keys = ON;");
 
-
-    query.exec("SELECT name FROM coefficients WHERE name = 'coefficient_ruk_vo_kurs_work_hr'");
-    if (!query.next()){
-        query.exec("insert into coefficients values('coefficient_ruk_vo_kurs_work_hr', 5)");
-        query.exec("insert into coefficients values('coefficient_ruk_vo_VKR_spec_hr', 20)");
-        query.exec("insert into coefficients values('coefficient_ruk_vo_VKR_bak_hr', 12)");
-        query.exec("insert into coefficients values('coefficient_zachita_kurs_rab_na_kommis_min', 15)");
-        query.exec("insert into coefficients values('coefficient_ruk_vo_VKR_mag_hr', 28)");
-        query.exec("insert into coefficients values('coefficient_recenzir_VKR_hr', 1)");
-        query.exec("insert into coefficients values('coefficient_normokontrol_hr', 1)");
-        query.exec("insert into coefficients values('coefficient_ychastie_work_GAK_min', 30)");
-        query.exec("insert into coefficients values('coefficient_ruk_vo_aspirants_hr', 50)");
-    }
-
-    query.exec("SELECT name FROM other_data WHERE name = 'name_kafedry_smail'");
-    if (!query.next()){
-        query.exec("insert into other_data values('name_kafedry_smail', 'ПОиАИС')");
-    }
-
+    check_and_restore_DB();
 
     tablemodel_spec = new QSqlRelationalTableModel(this);
     tablemodel_spec->setTable("speciality");
@@ -145,9 +129,6 @@ void MainWindow::load_db()
 
     StaffDelegate *staff_delegate = new StaffDelegate(this);
     ui->tableView_2->setItemDelegateForColumn(6, staff_delegate);
-
-
-
     ui->tableView_2->update();
 
     // students table
@@ -177,26 +158,19 @@ void MainWindow::load_db()
     ui->tableView_4->setItemDelegateForColumn(9, checkBox_delegate);
     ui->tableView_4->setItemDelegateForColumn(10, checkBox_delegate);
     ui->tableView_4->setItemDelegateForColumn(11, checkBox_delegate);
-
     ui->tableView_4->update();
 
     // subjects_in_semmester table
-    // sqlmodel_subinsem = new SubjectinsemesterSqlModel(this);
     update_subinsem();
     ui->tableView_5->setModel(sqlmodel_subinsem);
 
-
     // distribution tables
-
-    // sinstodistrib_preview = new Sins_to_distrib_preview_SqlModel(this);
     update_sins_to_distribution_preview();
     ui->tableView_6->setModel(sinstodistrib_preview);
 
-    // sinstodistrib_detail = new Sins_to_distrib_detail_SqlModel(this);
     update_sins_to_distribution_detail();
     ui->tableView_7->setModel(sinstodistrib_detail);
 
-    // sqlmodel_distribution = new DistributionSqlModel(this);
     update_sqlmodel_distribution();
     ui->tableView_8->setModel(sqlmodel_distribution);
 
@@ -208,7 +182,6 @@ void MainWindow::load_db()
     sqlmodel_teachers_report->refresh();
     ui->tableView_9->setModel(sqlmodel_teachers_report);
     ui->tableView_9->update();
-
 
     settings = new Settings(this, tablemodel_spec, tablemodel_stat);
     teachers_list = new Teachers_list();
@@ -247,7 +220,6 @@ void MainWindow::on_pushButton_del_subject_clicked()
     QModelIndex index = indexes.at(0);
     sqlmodel_subject->del( sqlmodel_subject->data( sqlmodel_subject->index(index.row(),0), Qt::DisplayRole ).toString());
 
-//    sqlmodel_subject->del(ui->tableView->currentIndex().data(Qt::DisplayRole).toString());
     sqlmodel_subject->refresh();
 }
 
@@ -288,6 +260,28 @@ void MainWindow::on_action_10_activated()
     settings->exec();
 }
 
+void MainWindow::check_and_restore_DB()
+{
+    QSqlQuery query;
+    query.exec("SELECT name FROM coefficients WHERE name = 'coefficient_ruk_vo_kurs_work_hr'");
+    if (!query.next()){
+        query.exec("insert into coefficients values('coefficient_ruk_vo_kurs_work_hr', 5)");
+        query.exec("insert into coefficients values('coefficient_ruk_vo_VKR_spec_hr', 20)");
+        query.exec("insert into coefficients values('coefficient_ruk_vo_VKR_bak_hr', 12)");
+        query.exec("insert into coefficients values('coefficient_zachita_kurs_rab_na_kommis_min', 15)");
+        query.exec("insert into coefficients values('coefficient_ruk_vo_VKR_mag_hr', 28)");
+        query.exec("insert into coefficients values('coefficient_recenzir_VKR_hr', 1)");
+        query.exec("insert into coefficients values('coefficient_normokontrol_hr', 1)");
+        query.exec("insert into coefficients values('coefficient_ychastie_work_GAK_min', 30)");
+        query.exec("insert into coefficients values('coefficient_ruk_vo_aspirants_hr', 50)");
+    }
+
+    query.exec("SELECT name FROM other_data WHERE name = 'name_kafedry_smail'");
+    if (!query.next()){
+        query.exec("insert into other_data values('name_kafedry_smail', 'ПОиАИС')");
+    }
+}
+
 void MainWindow::on_pushButton_clicked(){
 // отмена удаления преподавателя
     if (sqlmodel_teachers->save_removed()){
@@ -302,11 +296,13 @@ void MainWindow::on_pushButton_add_student_clicked()
     QString speciality_id;
     query.exec("SELECT speciality_id FROM students;");
 
-    query.last();
-    speciality_id = query.value(0).toString();
-
-    sqlmodel_students->add(speciality_id, "1", "1", "1", "0");
-    sqlmodel_students->refresh();
+    if (query.last()){
+        speciality_id = query.value(0).toString();
+        sqlmodel_students->add(speciality_id, "1", "1", "1", "0");
+        sqlmodel_students->refresh();
+    } else {
+        ERROR_REPORT("0x301")
+    }
 }
 
 void MainWindow::on_pushButton_del_student_clicked()
@@ -317,9 +313,7 @@ void MainWindow::on_pushButton_del_student_clicked()
 
 void MainWindow::on_pushButton_add_curriculum_clicked()
 {
-    if (!sqlmodel_curriculum->add()){
-        QMessageBox::warning(this, tr("Error querry"),"");
-    }
+    sqlmodel_curriculum->add();
     sqlmodel_curriculum->refresh();
 }
 
@@ -330,9 +324,7 @@ void MainWindow::on_pushButton_del_curriculum_clicked()
 }
 
 void MainWindow::on_pushButton_add_subjects_in_semmester_clicked(){
-    if (!sqlmodel_subinsem->add()){
-        QMessageBox::warning(this, tr("Error querry"),"");
-    }
+    sqlmodel_subinsem->add();
     sqlmodel_subinsem->refresh();
 }
 
@@ -376,13 +368,11 @@ void MainWindow::on_tabWidget_currentChanged(int index)
         update_distribution();
         break;
     case 6:
-        //qDebug() << "update_report()";
         sqlmodel_teachers_report->refresh();
         update_report_name();
         set_design_reports();
         break;
     default:
-
         break;
     }
 }
@@ -448,7 +438,6 @@ void MainWindow::update_sins_to_distribution_preview()
 
 void MainWindow::create_backup()
 {
-//    qDebug() << "backup";
     QDateTime datetime;
     datetime = datetime.currentDateTime();
 
@@ -460,107 +449,41 @@ void MainWindow::create_backup()
         QSqlQuery query;
         QString s;
         int i;
+        String_query temp;
 
-        query.exec("SELECT name FROM form_training");
-        while(query.next()){
-            out << "form_training values( "<< query.value(0).toString() << " )\n";
-        }
+        QList<String_query> queries;
+        queries << String_query("form_training", "SELECT name FROM form_training", 1);
+        queries << String_query("subject",       "SELECT name FROM subject", 1);
+        queries << String_query("speciality",    "SELECT id, faculty_name, special_name, form_training_name FROM speciality", 4);
+        queries << String_query("students",      "SELECT id, speciality_id, course, num_group, num_undergroup, quantity_course FROM students", 6);
+        queries << String_query("status",        "SELECT name, hours FROM status", 2);
+        queries << String_query("staff",         "SELECT id, name FROM staff", 2);
+        queries << String_query("teachers",      "SELECT id, f, i, o, status_name, rate, staff_id FROM teachers", 7);
+        queries << String_query("curriculum",    "SELECT id, speciality_id, subject_name, semmester, lection_hr, labs_hr, practice_hr, controlwork, KCP_hr, is_examen, is_offset, is_coursework FROM curriculum", 12);
+        queries << String_query("subjects_in_semmester",  "SELECT id, curriculum_id, students_id, lection_hr, labs_hr, practice_hr, individ_hr, kontr_rab_hr, consultation_hr, offset_hr, "
+                                "examen_hr, coursework_hr, diplomwork_hr, praktika_hr, gak_hr, other1, other2, other3 FROM subjects_in_semmester", 18);
+        queries << String_query("distribution", "SELECT id, teachers_id, subjects_in_semmester_id, lection_hr, labs_hr, practice_hr, individ_hr, kontr_rab_hr, consultation_hr, "
+                                "offset_hr, examen_hr, coursework_hr, diplomwork_hr, praktika_hr, gak_hr, other1, other2, other3 FROM distribution", 18);
+        queries << String_query("coefficients",   "SELECT name, value FROM coefficients", 2);
+        queries << String_query("other_data",     "SELECT name, value FROM other_data", 2);
 
-        query.exec("SELECT name FROM subject");
-        while(query.next()){
-            out << "subject values( "<< query.value(0).toString() << " )\n";
-        }
 
-        query.exec("SELECT id, faculty_name, special_name, form_training_name FROM speciality");
-        while(query.next()){
-            i = 0;
-            s = query.value(i).toString();
-            while (i<3){
-                s += ", " + query.value(++i).toString();
+
+        for (int j=0; j<queries.length(); ++j){
+            temp = queries.at(j);
+            query.exec(temp.query());
+            while(query.next()){
+                i = 0;
+                s = query.value(i).toString();
+                while ( i < (temp.count() - 1)){
+                    s += ", " + query.value(++i).toString();
+                }
+                out << temp.table() + " values ( " << s << " )\n";
             }
-
-            out << "speciality values( "<< s << " )\n";
-        }
-
-        query.exec("SELECT id, speciality_id, course, num_group, num_undergroup, quantity_course FROM students");
-        while(query.next()){
-            i = 0;
-            s = query.value(i).toString();
-            while (i<5){
-                s += ", " + query.value(++i).toString();
-            }
-
-            out << "students values( " << s << " )\n";
-        }
-
-        query.exec("SELECT name,hours FROM status");
-        while(query.next()){
-            i = 0;
-            s = query.value(i).toString();
-            while (i<1){
-                s += ", " + query.value(++i).toString();
-            }
-
-            out << "status values ( " << s << " )\n";
-        }
-
-        query.exec("SELECT id,name FROM staff");
-        while(query.next()){
-            i = 0;
-            s = query.value(i).toString();
-            while (i<1){
-                s += ", " + query.value(++i).toString();
-            }
-
-            out << "staff values ( " << s << " )\n";
-        }
-
-        query.exec("SELECT id, f, i, o, status_name, rate, staff_id FROM teachers");
-        while(query.next()){
-            i = 0;
-            s = query.value(i).toString();
-            while (i<6){
-                s += ", " + query.value(++i).toString();
-            }
-
-            out << "teachers values ( " << s << " )\n";
-        }
-
-        query.exec("SELECT id, speciality_id, subject_name, semmester, lection_hr, labs_hr, practice_hr, controlwork, KCP_hr, is_examen, is_offset, is_coursework FROM curriculum");
-        while(query.next()){
-            i = 0;
-            s = query.value(i).toString();
-            while (i<11){
-                s += ", " + query.value(++i).toString();
-            }
-
-            out << "curriculum values ( " << s << " )\n";
-        }
-
-        query.exec("SELECT id, curriculum_id, students_id, lection_hr, labs_hr, practice_hr, individ_hr, kontr_rab_hr, consultation_hr, offset_hr, "
-                   "examen_hr, coursework_hr, diplomwork_hr, praktika_hr, gak_hr, other1, other2, other3 FROM subjects_in_semmester");
-        while(query.next()){
-            i = 0;
-            s = query.value(i).toString();
-            while (i<17){
-                s += ", " + query.value(++i).toString();
-            }
-
-            out << "subjects_in_semmester values ( " << s << " )\n";
-        }
-
-        query.exec("SELECT id, teachers_id, subjects_in_semmester_id, lection_hr, labs_hr, practice_hr, individ_hr, kontr_rab_hr, consultation_hr, "
-                   "offset_hr, examen_hr, coursework_hr, diplomwork_hr, praktika_hr, gak_hr, other1, other2, other3 FROM distribution");
-        while(query.next()){
-            i = 0;
-            s = query.value(i).toString();
-            while (i<17){
-                s += ", " + query.value(++i).toString();
-            }
-
-            out << "distribution values ( " << s << " )\n";
         }
         file.close();
+    } else {
+        ERROR_REPORT("0x002")
     }
 }
 
@@ -901,7 +824,6 @@ void MainWindow::on_pushButton_3_clicked()
 
 void MainWindow::on_pushButton_2_clicked()
 {
-    qDebug() << "идет пересчет...";
     // перерасчет таблицы "предметы в семместре"
 
     QSqlQuery query, query2, query3;
@@ -1018,7 +940,11 @@ void MainWindow::on_pushButton_2_clicked()
     }
 
     update_subinsem();
-    qDebug() << "готово";
+
+
+    QMessageBox msgBox;
+    msgBox.setText("Данные в таблице 'Предметы в семместре' \nуспешно обновлены");
+    msgBox.exec();
 }
 
 QString MainWindow::offset_get(int hours, int is_exists){
@@ -1065,9 +991,6 @@ QString MainWindow::consultation_get(int lection_hr, QString speciality_id, int 
 
      return QString::number(res, 'g', 6);
 }
-
-
-
 
 void MainWindow::on_action_txt_triggered()
 {
@@ -1284,8 +1207,15 @@ void MainWindow::update_coefficients(){
             coefficient_consultation_add_is_examen_for_group = query.value(1).toUInt();
         } else if (query.value(0).toString() == "coefficient_coursework_for_quantitycourse_hr"){
             coefficient_coursework_for_quantitycourse_hr = query.value(1).toUInt();
-        } else {
-            ERROR_REPORT("0x");
-        }
+        } else if (query.value(0).toString() == "coefficient_ruk_vo_kurs_work_hr"){
+        } else if (query.value(0).toString() == "coefficient_ruk_vo_VKR_spec_hr"){
+        } else if (query.value(0).toString() == "coefficient_ruk_vo_VKR_bak_hr"){
+        } else if (query.value(0).toString() == "coefficient_zachita_kurs_rab_na_kommis_min"){
+        } else if (query.value(0).toString() == "coefficient_ruk_vo_VKR_mag_hr"){
+        } else if (query.value(0).toString() == "coefficient_recenzir_VKR_hr"){
+        } else if (query.value(0).toString() == "coefficient_normokontrol_hr"){
+        } else if (query.value(0).toString() == "coefficient_ychastie_work_GAK_min"){
+        } else if (query.value(0).toString() == "coefficient_ruk_vo_aspirants_hr"){
+        } else { ERROR_REPORT("0x003");}
     }
 }

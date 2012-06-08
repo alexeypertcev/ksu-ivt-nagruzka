@@ -146,6 +146,25 @@ private slots:
     void update_coefficients();
     void on_action_9_activated();
     void on_action_10_activated();
+
+    void check_and_restore_DB();
 };
 
+class String_query{
+public:
+    String_query(){
+        _table_name = ""; _query = ""; _count = 0;
+    }
+    String_query(QString tn, QString q, int c){
+        _table_name = tn; _query = q; _count = c;
+    }
+    QString table(){ return _table_name;}
+    QString query(){ return _query;}
+    int count(){ return _count;}
+
+private:
+    QString _table_name;
+    QString _query;
+    int _count;
+};
 #endif // MAINWINDOW_H

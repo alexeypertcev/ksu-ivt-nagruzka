@@ -411,17 +411,14 @@ bool Reports::write_report_teacherscard_xlsx(QList<Tabledata> list_tabledata, QS
                             }
                         }
                     }
-
                     for (int k1 = 0; k1 < equal1.length(); ++k1){
                         names_sheets[equal1.at(k1)] = names_sheets.at(equal1.at(k1)) + " 0" + QString::number(k1+1);
                     }
-
                 }
             }
-
         }
     }
-   //---------------------------
+   // ---------------------------
 
     for (int i_sheet=0; i_sheet<list_tabledata.length(); ++i_sheet){
         temp_tabledata = list_tabledata.at(i_sheet);
@@ -479,7 +476,6 @@ bool Reports::write_report_teacherscard_xlsx(QList<Tabledata> list_tabledata, QS
         sheet1[ 1 ][ 24 ] = cellformat_header2;
         sheet1[ 3 ][ 24 ] = "____________________/" + temp_tabledata.get_header_vice_rector_on_education_work().toStdString();
         sheet1[ 3 ][ 24 ] = cellformat_header2;
-
         sheet1[ 4 ][ 16 ] = "КАРТОЧКА УЧЕБНЫХ ПОРУЧЕНИЙ НА " + temp_tabledata.get_header_academic_year().toStdString() + " УЧЕБНЫЙ ГОД (" + temp_tabledata.get_header_business_base_of_training().toStdString() + ")";
         sheet1[ 4 ][ 16 ] = cellformat_header3;
 
@@ -500,7 +496,6 @@ bool Reports::write_report_teacherscard_xlsx(QList<Tabledata> list_tabledata, QS
         sheet1[ 7 ][ 1 ] = cellformat_header4;
         sheet1[ 8 ][ 6 ] = temp_tabledata.get_header_obiem().toStdString();
         sheet1[ 8 ][ 6 ] = cellformat_header4;
-
         sheet1[ 10 ][ 0 ] = "Наименование учебной дисциплины или учебных поручений";
         sheet1[ 10 ][ 0 ] = cellformat_header5_b_ltb;
         sheet1[ 11 ][ 0 ] = " ";
@@ -647,7 +642,7 @@ bool Reports::write_report_teacherscard_xlsx(QList<Tabledata> list_tabledata, QS
         temp_list_stringlist.clear();
         temp_stringlist.clear();
 
-    // two semmester -------------
+    // ------------- both semmester -------------
         for (int sem = 1; sem<=2; ++sem){
             temp_list_stringlist = temp_tabledata.get_list(sem);
             for (i = 0; i < temp_list_stringlist.length(); ++i){
@@ -656,15 +651,15 @@ bool Reports::write_report_teacherscard_xlsx(QList<Tabledata> list_tabledata, QS
                 for (j = 0; j < temp_stringlist.length(); ++j){
                     if ( j == 12){
                         shift = 1;
-                        sheet1[ current_row ][j] = " ";
-                        sheet1[ current_row ][j] = cellformat_header4;
+                        sheet1[current_row][j] = " ";
+                        sheet1[current_row][j] = cellformat_header4;
                     }
                     if (j > 3) {
-                        sheet1[ current_row ][j + shift] = temp_stringlist.at(j).toInt();
+                        sheet1[current_row][j + shift] = temp_stringlist.at(j).toInt();
                     } else {
-                        sheet1[ current_row ][j + shift] = temp_stringlist.at(j).toStdString();
+                        sheet1[current_row][j + shift] = temp_stringlist.at(j).toStdString();
                     }
-                    sheet1[ current_row ][j + shift] = cellformat_header4;
+                    sheet1[current_row][j + shift] = cellformat_header4;
                 }
                 ++current_row;
             }
@@ -675,25 +670,23 @@ bool Reports::write_report_teacherscard_xlsx(QList<Tabledata> list_tabledata, QS
             for (j = 0; j < temp_stringlist.length(); ++j){
                 if ( j == 12){
                     shift = 1;
-                    sheet1[ current_row ][j] = " ";
-                    sheet1[ current_row ][j] = cellformat_header4_border;
+                    sheet1[current_row][j] = " ";
+                    sheet1[current_row][j] = cellformat_header4_border;
                 }
                 if (j > 3){
-                    sheet1[ current_row ][j + shift] = temp_stringlist.at(j).toInt();
+                    sheet1[current_row][j + shift] = temp_stringlist.at(j).toInt();
                 } else {
-                    sheet1[ current_row ][j + shift] = temp_stringlist.at(j).toStdString();
+                    sheet1[current_row][j + shift] = temp_stringlist.at(j).toStdString();
                 }
-                sheet1[ current_row ][j + shift] = cellformat_header4_border;
+                sheet1[current_row][j + shift] = cellformat_header4_border;
             }
-
-            sheet1[ current_row ][0] = QString("Итого за "+ QString::number(sem)+"е полугодие:").toStdString();
+            sheet1[current_row][0] = QString("Итого за "+ QString::number(sem)+"е полугодие:").toStdString();
             ++current_row;
             ++current_row;
         }
-    // ----------------------
+    // ------------------------------------
 
         temp_stringlist = temp_tabledata.get_list_all_sum();
-
         shift = 0;
         for (j = 0; j < temp_stringlist.length(); ++j){
             if ( j == 12){
@@ -719,77 +712,6 @@ bool Reports::write_report_teacherscard_xlsx(QList<Tabledata> list_tabledata, QS
 
 bool Reports::create_report_for_kafedry(QString report_path)
 {
-    /*
-    QSqlQuery query;
-    QString s;
-    unsigned int sum;
-    query.exec("SELECT curriculum.subject_name, curriculum.semmester, "
-                           "speciality.special_name, "
-                           "speciality.form_training_name, students.course, "
-                           "students.num_group, students.num_undergroup, "
-                           "students.quantity_course, subjects_in_semmester.lection_hr, "
-                           "subjects_in_semmester.labs_hr, subjects_in_semmester.practice_hr,"
-                           "individ_hr, kontr_rab_hr, consultation_hr, "
-                           "offset_hr,  examen_hr, coursework_hr, diplomwork_hr, praktika_hr, gak_hr, "
-                           "other1,  other2, other3, "
-                           "subjects_in_semmester.lection_hr+subjects_in_semmester.labs_hr+subjects_in_semmester.practice_hr+"
-                           "individ_hr+kontr_rab_hr+consultation_hr+"
-                           "offset_hr+examen_hr+coursework_hr+diplomwork_hr+praktika_hr+gak_hr+"
-                           "other1+other2+other3 AS sum "
-                           "FROM subjects_in_semmester, curriculum, students, speciality "
-                           "WHERE subjects_in_semmester.curriculum_id = curriculum.id AND "
-                           "subjects_in_semmester.students_id = students.id AND "
-                           "students.speciality_id = speciality.id "
-                           "ORDER BY speciality.special_name, speciality.form_training_name, curriculum.semmester, curriculum.subject_name, subjects_in_semmester.id;");
-
-    QFile file(report_path);
-    if (file.open(QIODevice::WriteOnly | QIODevice::Text)){
-
-        QTextStream out(&file);
-
-        s =    "Название предмета;"
-               "Семместр;"
-               "Специальность;"
-               "Форма обучения;"
-               "Курс;"
-               "Количество групп;"
-               "Количество подгрупп;"
-               "Студентов на курсе;"
-               "Лекции;"
-               "Лабораторные;"
-               "Практические;"
-               "Индивидуальные;"
-               "Контрольные работы;"
-               "Консультации;"
-               "Зачет;"
-               "Экзамен;"
-               "Курсовая работа;"
-               "Дипломная работа;"
-               "Практика;"
-               "ГАК;"
-               "Прочее;"
-               "Прочее;"
-               "Прочее;"
-               "Всего;";  //24
-
-        out << s << "\n";
-        sum = 0;
-        while(query.next()){
-            s="";
-            for (int i=0; i<24; ++i){
-                s += query.value(i).toString() + ";";
-            }
-            sum += query.value(23).toUInt();
-            out << s << "\n";
-        }
-        out << QString("Общая сумма:;;;;;;;;;;;;;;;;;;;;;;;") << QString::number(sum) << QString(";\n");
-
-    } else {
-//        QMessageBox::warning(this, "Error", "Невозможно создать файл");
-    }
-
-*/
-/*****************************************************************************************/
     // xlsx
     QFile::remove(report_path);
 
@@ -802,7 +724,7 @@ bool Reports::create_report_for_kafedry(QString report_path)
         header_data << query.value(0).toString();
     } else {
         header_data << " ";
-        ERROR_REPORT( 0x701)
+        ERROR_REPORT("0x701")
     }
 
     query.exec("SELECT value FROM other_data WHERE name = 'academic_year'");
@@ -810,7 +732,7 @@ bool Reports::create_report_for_kafedry(QString report_path)
         header_data << query.value(0).toString();
     } else {
         header_data << " ";
-        ERROR_REPORT( 0x702)
+        ERROR_REPORT("0x702")
     }
 
     header_data << "№";
@@ -841,7 +763,6 @@ bool Reports::create_report_for_kafedry(QString report_path)
 
     TDocXLSX doc;
     TWorkBook& book = doc.m_workbook;
-
     TSpreadSheet sheet1 = book.m_spreadsheets.insert();
 
     sheet1.set_column_width(1,1,"4.71");
@@ -857,39 +778,38 @@ bool Reports::create_report_for_kafedry(QString report_path)
     TFont font_calibri_14_bold = book.m_stylesheet.m_fonts.insert( "Calibri", 14, EFF_BOLD );
     TFont font_calibri_11_normal = book.m_stylesheet.m_fonts.insert( "Calibri", 11, EFF_NONE );
 
-    TBorderLine borderline_thin = TBorderLine( EBORDERSTYLE_THIN );
+    TBorderLine borderline_thin   = TBorderLine( EBORDERSTYLE_THIN );
     TBorderLine borderline_double = TBorderLine( EBORDERSTYLE_DOUBLE );
     TBorderLine borderline_medium = TBorderLine( EBORDERSTYLE_MEDIUM );
-    TBorderLine borderline_none = TBorderLine( EBORDERSTYLE_NONE );
+    TBorderLine borderline_none   = TBorderLine( EBORDERSTYLE_NONE );
 
     /* left right top bottom*/
-    TBorder border_all_thin = book.m_stylesheet.m_borders.insert( borderline_thin, borderline_thin, borderline_thin, borderline_thin, TBorderLine(), false, false, false );
-    TBorder border_top_medium_all_thin = book.m_stylesheet.m_borders.insert( borderline_thin, borderline_thin, borderline_medium, borderline_thin, TBorderLine(), false, false, false );
+    TBorder border_all_thin  = book.m_stylesheet.m_borders.insert( borderline_thin, borderline_thin, borderline_thin, borderline_thin, TBorderLine(), false, false, false );
+    TBorder border_top_medium_all_thin     = book.m_stylesheet.m_borders.insert( borderline_thin, borderline_thin, borderline_medium, borderline_thin,   TBorderLine(), false, false, false );
     TBorder border_top_rig_medium_all_thin = book.m_stylesheet.m_borders.insert( borderline_thin, borderline_medium, borderline_medium, borderline_thin, TBorderLine(), false, false, false );
-    TBorder border_top_double_all_thin = book.m_stylesheet.m_borders.insert( borderline_thin, borderline_thin, borderline_double, borderline_thin, TBorderLine(), false, false, false );
+    TBorder border_top_double_all_thin = book.m_stylesheet.m_borders.insert( borderline_thin, borderline_thin, borderline_double, borderline_thin,   TBorderLine(), false, false, false );
     TBorder border_thin_doub_doub_thin = book.m_stylesheet.m_borders.insert( borderline_thin, borderline_double, borderline_double, borderline_thin, TBorderLine(), false, false, false );
-    TBorder border_thin_doub_thin_thin = book.m_stylesheet.m_borders.insert( borderline_thin, borderline_double, borderline_thin, borderline_thin, TBorderLine(), false, false, false );
-    TBorder border_all_thin_rmedium = book.m_stylesheet.m_borders.insert( borderline_thin, borderline_medium, borderline_thin, borderline_thin, TBorderLine(), false, false, false );
-    TBorder border_top_double_all_thin_rmedium = book.m_stylesheet.m_borders.insert( borderline_thin, borderline_medium, borderline_double, borderline_thin, TBorderLine(), false, false, false );
-    TBorder border_top_medium_all_none = book.m_stylesheet.m_borders.insert( borderline_none, borderline_none, borderline_medium, borderline_none, TBorderLine(), false, false, false );
+    TBorder border_thin_doub_thin_thin = book.m_stylesheet.m_borders.insert( borderline_thin, borderline_double, borderline_thin, borderline_thin,   TBorderLine(), false, false, false );
+    TBorder border_all_thin_rmedium    = book.m_stylesheet.m_borders.insert( borderline_thin, borderline_medium, borderline_thin, borderline_thin,   TBorderLine(), false, false, false );
+    TBorder border_top_double_all_thin_rmedium  = book.m_stylesheet.m_borders.insert( borderline_thin, borderline_medium, borderline_double, borderline_thin, TBorderLine(), false, false, false );
+    TBorder border_top_medium_all_none          = book.m_stylesheet.m_borders.insert( borderline_none, borderline_none, borderline_medium, borderline_none,   TBorderLine(), false, false, false );
 
-    TCellXF cf_title = book.m_stylesheet.m_cellxfs.insert( font_calibri_14_bold, TAlignment( EHORIZONTAL_CENTER, EVERTICAL_CENTER, false, false, 0, 0 ), TBorder(), TFill() );
-    TCellXF cf_header = book.m_stylesheet.m_cellxfs.insert( font_calibri_11_normal, TAlignment( EHORIZONTAL_CENTER, EVERTICAL_CENTER, false, false, 0, 0 ), border_top_medium_all_thin, TFill() );
+    TCellXF cf_title      = book.m_stylesheet.m_cellxfs.insert( font_calibri_14_bold,   TAlignment( EHORIZONTAL_CENTER, EVERTICAL_CENTER, false, false, 0, 0 ), TBorder(), TFill() );
+    TCellXF cf_header     = book.m_stylesheet.m_cellxfs.insert( font_calibri_11_normal, TAlignment( EHORIZONTAL_CENTER, EVERTICAL_CENTER, false, false, 0, 0 ), border_top_medium_all_thin, TFill() );
     TCellXF cf_header_end = book.m_stylesheet.m_cellxfs.insert( font_calibri_11_normal, TAlignment( EHORIZONTAL_CENTER, EVERTICAL_CENTER, false, false, 0, 0 ), border_top_rig_medium_all_thin, TFill() );
-    TCellXF cf_all_thin_center = book.m_stylesheet.m_cellxfs.insert( font_calibri_11_normal, TAlignment( EHORIZONTAL_CENTER, EVERTICAL_CENTER, false, false, 0, 0 ), border_all_thin, TFill() );
-    TCellXF cf_all_thin_left = book.m_stylesheet.m_cellxfs.insert( font_calibri_11_normal, TAlignment( EHORIZONTAL_LEFT, EVERTICAL_CENTER, false, false, 0, 0 ), border_all_thin, TFill() );
+    TCellXF cf_all_thin_center  = book.m_stylesheet.m_cellxfs.insert( font_calibri_11_normal, TAlignment( EHORIZONTAL_CENTER, EVERTICAL_CENTER, false, false, 0, 0 ), border_all_thin, TFill() );
+    TCellXF cf_all_thin_left    = book.m_stylesheet.m_cellxfs.insert( font_calibri_11_normal, TAlignment( EHORIZONTAL_LEFT,   EVERTICAL_CENTER, false, false, 0, 0 ), border_all_thin, TFill() );
     TCellXF cf_doub_thin_center = book.m_stylesheet.m_cellxfs.insert( font_calibri_11_normal, TAlignment( EHORIZONTAL_CENTER, EVERTICAL_CENTER, false, false, 0, 0 ), border_top_double_all_thin, TFill() );
-    TCellXF cf_doub_thin_left = book.m_stylesheet.m_cellxfs.insert( font_calibri_11_normal, TAlignment( EHORIZONTAL_LEFT, EVERTICAL_CENTER, false, false, 0, 0 ), border_top_double_all_thin, TFill() );
-    TCellXF cf_all_thin_rdoub_center = book.m_stylesheet.m_cellxfs.insert( font_calibri_11_normal, TAlignment( EHORIZONTAL_CENTER, EVERTICAL_CENTER, false, false, 0, 0 ), border_thin_doub_thin_thin, TFill() );
-    TCellXF cf_all_thin_right_rmed = book.m_stylesheet.m_cellxfs.insert( font_calibri_11_normal, TAlignment( EHORIZONTAL_RIGHT, EVERTICAL_CENTER, false, false, 0, 0 ), border_all_thin_rmedium, TFill() );
+    TCellXF cf_doub_thin_left   = book.m_stylesheet.m_cellxfs.insert( font_calibri_11_normal, TAlignment( EHORIZONTAL_LEFT,   EVERTICAL_CENTER, false, false, 0, 0 ), border_top_double_all_thin, TFill() );
+    TCellXF cf_all_thin_rdoub_center  = book.m_stylesheet.m_cellxfs.insert( font_calibri_11_normal, TAlignment( EHORIZONTAL_CENTER, EVERTICAL_CENTER, false, false, 0, 0 ), border_thin_doub_thin_thin, TFill() );
+    TCellXF cf_all_thin_right_rmed    = book.m_stylesheet.m_cellxfs.insert( font_calibri_11_normal, TAlignment( EHORIZONTAL_RIGHT,  EVERTICAL_CENTER, false, false, 0, 0 ), border_all_thin_rmedium,    TFill() );
     TCellXF cf_doub_thin_rdoub_center = book.m_stylesheet.m_cellxfs.insert( font_calibri_11_normal, TAlignment( EHORIZONTAL_CENTER, EVERTICAL_CENTER, false, false, 0, 0 ), border_thin_doub_doub_thin, TFill() );
-    TCellXF cf_doub_thin_right_rmed = book.m_stylesheet.m_cellxfs.insert( font_calibri_11_normal, TAlignment( EHORIZONTAL_RIGHT, EVERTICAL_CENTER, false, false, 0, 0 ), border_top_double_all_thin_rmedium, TFill() );
+    TCellXF cf_doub_thin_right_rmed   = book.m_stylesheet.m_cellxfs.insert( font_calibri_11_normal, TAlignment( EHORIZONTAL_RIGHT,  EVERTICAL_CENTER, false, false, 0, 0 ), border_top_double_all_thin_rmedium, TFill() );
     TCellXF cf_header_bottom_c = book.m_stylesheet.m_cellxfs.insert( font_calibri_11_normal, TAlignment( EHORIZONTAL_CENTER, EVERTICAL_CENTER, false, false, 0, 0 ), border_top_medium_all_none, TFill() );
-    TCellXF cf_header_bottom_l = book.m_stylesheet.m_cellxfs.insert( font_calibri_11_normal, TAlignment( EHORIZONTAL_LEFT, EVERTICAL_CENTER, false, false, 0, 0 ), border_top_medium_all_none, TFill() );
-    TCellXF cf_header_bottom_r = book.m_stylesheet.m_cellxfs.insert( font_calibri_11_normal, TAlignment( EHORIZONTAL_RIGHT, EVERTICAL_CENTER, false, false, 0, 0 ), border_top_medium_all_none, TFill() );
+    TCellXF cf_header_bottom_l = book.m_stylesheet.m_cellxfs.insert( font_calibri_11_normal, TAlignment( EHORIZONTAL_LEFT,   EVERTICAL_CENTER, false, false, 0, 0 ), border_top_medium_all_none, TFill() );
+    TCellXF cf_header_bottom_r = book.m_stylesheet.m_cellxfs.insert( font_calibri_11_normal, TAlignment( EHORIZONTAL_RIGHT,  EVERTICAL_CENTER, false, false, 0, 0 ), border_top_medium_all_none, TFill() );
 
-
-    /*[row][collumn]*/
+    /* [ row ][ collumn ] */
     sheet1[ 0 ][ 0 ] = QString("Нагрузка по кафедре " + header_data.at(0) + " " + header_data.at(1) + " уч. год").toStdString();
     sheet1[ 0 ][ 0 ] = cf_title;
 
@@ -933,7 +853,6 @@ bool Reports::create_report_for_kafedry(QString report_path)
                 sheet1[ current_row ][ i+1 ] = query.value(i).toInt();
             }
         }
-
         if (current_spec_and_form == (query.value(2).toString()+query.value(3).toString())){
             for (int i = 0; i<25; ++i){
                 if (i == 1 || i == 3){
@@ -961,7 +880,6 @@ bool Reports::create_report_for_kafedry(QString report_path)
                 }
             }
         }
-
         ++current_row;
         sum += query.value(23).toUInt();
     }

@@ -158,39 +158,28 @@ bool CurriculumSqlModel::del(QString id)
         ERROR_REPORT("0x400");
         return false;
     }
-    if (!query.next()){
-        ERROR_REPORT("0x401");
-        return false;
-    }
-
-    subjects_in_semmester_id = query.value(0).toString();
-
     if (query.next()){
-        ERROR_REPORT("0x402");
-        return false;
+        subjects_in_semmester_id = query.value(0).toString();
+
+        if (query.next()){
+            ERROR_REPORT("0x401");
+        }
     }
 
     s = "DELETE FROM distribution WHERE distribution.subjects_in_semmester_id = '" + subjects_in_semmester_id + "';";
-
     if (!query.exec(s)){
-        ERROR_REPORT("0x403");
-        return false;
+        ERROR_REPORT("0x402");
     }
 
     s = "DELETE FROM subjects_in_semmester WHERE id = '" + subjects_in_semmester_id + "';";
-    //qDebug() << s;
+    if (!query.exec(s)){
+        ERROR_REPORT("0x403");
+    }
 
+    s = "DELETE FROM curriculum WHERE id = '" + id + "';";
     if (!query.exec(s)){
         ERROR_REPORT("0x404");
         return false;
     }
-
-     s = "DELETE FROM curriculum WHERE id = '" + id + "';";
-
-     if (!query.exec(s)){
-         ERROR_REPORT("0x405");
-         return false;
-     }
-
     return true;
 }

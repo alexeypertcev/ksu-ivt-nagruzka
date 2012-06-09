@@ -1,7 +1,5 @@
 #include "tab_distribution.h"
-#include <QDebug>
-#include <QMessageBox>
-#include <QtSql>
+
 
 //********************************************************************************
 //  class DistributionSqlModel
@@ -34,20 +32,33 @@ void DistributionSqlModel::check_entry()
 {
     QSqlQuery query;
     QString s = "SELECT id FROM distribution WHERE distribution.subjects_in_semmester_id = " + subjects_in_semmestre_id + ";";
-    query.exec(s);
+
+#ifdef DEBUG_ENABLE_SELECT
+    DEBUG_MESSAGE( s )
+#endif
+
+    if (!query.exec(s)){
+        ERROR_REPORT("0x601")
+        return ;
+    }
 
     if(!query.next()){
-        QString id,lection_hr,labs_hr,practice_hr,individ_hr,kontr_rab_hr,consultation_hr,
-                offset_hr,examen_hr,coursework_hr,diplomwork_hr,praktika_hr,gak_hr,
-                other1,other2,other3;
         s = "SELECT id,lection_hr,labs_hr,practice_hr,individ_hr,kontr_rab_hr,consultation_hr, "
             " offset_hr,examen_hr,coursework_hr,diplomwork_hr,praktika_hr,gak_hr, "
             " other1,other2,other3 FROM subjects_in_semmester WHERE subjects_in_semmester.id = " + subjects_in_semmestre_id + ";";
 
+#ifdef DEBUG_ENABLE_SELECT
+        DEBUG_MESSAGE( s )
+#endif
+
         if (!query.exec(s)){
-            qDebug() << "error select";
+            ERROR_REPORT("0x602")
+            return ;
         }
         if (query.next()){
+            QString id,lection_hr,labs_hr,practice_hr,individ_hr,kontr_rab_hr,consultation_hr,
+                    offset_hr,examen_hr,coursework_hr,diplomwork_hr,praktika_hr,gak_hr,
+                    other1,other2,other3;
 
             id              = query.value(0).toString();
             lection_hr      = query.value(1).toString();
@@ -86,12 +97,13 @@ void DistributionSqlModel::check_entry()
                     other2 + ", "+                      // "other2 REAL NOT NULL, "
                     other3 +                            // "other3 REAL NOT NULL, "
                     ");";
-
+#ifdef DEBUG_ENABLE_MODIFY
+            DEBUG_MESSAGE( s )
+#endif
             if (!query.exec(s)){
-                qDebug() << "fail insert to distribution";
+                ERROR_REPORT("0x603")
+                return ;
             }
-        } else{
-            qDebug() << "error next";
         }
     }
 }
@@ -121,7 +133,15 @@ QSqlQuery query;
             "0 "                   // "other3 REAL NOT NULL, "
             ");";
 
-    return query.exec(s);
+#ifdef DEBUG_ENABLE_MODIFY
+    DEBUG_MESSAGE( s )
+#endif
+
+    if (!query.exec(s)){
+        ERROR_REPORT("0x604")
+        return false;
+    }
+    return true;
 }
 
 bool DistributionSqlModel::del(QString id)
@@ -129,7 +149,15 @@ bool DistributionSqlModel::del(QString id)
     QString s = "DELETE FROM distribution WHERE id = '" + id + "';";
     QSqlQuery query;
 
-    return query.exec(s);
+#ifdef DEBUG_ENABLE_MODIFY
+    DEBUG_MESSAGE( s )
+#endif
+
+    if (!query.exec(s)){
+        ERROR_REPORT("0x605")
+        return false;
+    }
+    return true;
 }
 
 void DistributionSqlModel::refresh()
@@ -144,76 +172,94 @@ void DistributionSqlModel::refresh()
         " offset_hr + examen_hr + coursework_hr + diplomwork_hr + praktika_hr + gak_hr + "
         " other1 + other2 + other3 AS sum "
         "FROM subjects_in_semmester WHERE subjects_in_semmester.id = " + subjects_in_semmestre_id + ";";
-    query.exec(s);
-    query.next();
 
-    not_used_lection_hr  = query.value(1).toInt() - sum_field("lection_hr");
-    not_used_labs_hr     = query.value(2).toInt() - sum_field("labs_hr");
-    not_used_practice_hr = query.value(3).toInt() - sum_field("practice_hr");
-    not_used_individ_hr  = query.value(4).toInt() - sum_field("individ_hr");
-    not_used_kontr_rab_hr    = query.value(5).toInt() - sum_field("kontr_rab_hr");
-    not_used_consultation_hr = query.value(6).toInt() - sum_field("consultation_hr");
-    not_used_offset_hr     = query.value(7).toInt() - sum_field("offset_hr");
-    not_used_examen_hr     = query.value(8).toInt() - sum_field("examen_hr");
-    not_used_coursework_hr = query.value(9).toInt() - sum_field("coursework_hr");
-    not_used_diplomwork_hr = query.value(10).toInt() - sum_field("diplomwork_hr");
-    not_used_praktika_hr   = query.value(11).toInt() - sum_field("praktika_hr");
-    not_used_gak_hr = query.value(12).toInt() - sum_field("gak_hr");
-    not_used_other1 = query.value(13).toInt() - sum_field("other1");
-    not_used_other2 = query.value(14).toInt() - sum_field("other2");
-    not_used_other3 = query.value(15).toInt() - sum_field("other3");
-    not_used_all =  not_used_lection_hr + not_used_labs_hr + not_used_practice_hr + not_used_individ_hr +
-                    not_used_kontr_rab_hr + not_used_consultation_hr + not_used_offset_hr + not_used_examen_hr +
-                    not_used_coursework_hr + not_used_diplomwork_hr + not_used_praktika_hr + not_used_gak_hr +
-                    not_used_other1 + not_used_other2 + not_used_other3;
+#ifdef DEBUG_ENABLE_SELECT
+    DEBUG_MESSAGE( s )
+#endif
 
-    query.exec("SELECT teachers_id FROM distribution WHERE distribution.subjects_in_semmester_id = " + subjects_in_semmestre_id + ";");
-    query.next();
+    if (!query.exec(s)){
+        ERROR_REPORT("0x606")
+        return ;
+    }
+    if (query.next()){
 
-    if (!query.isNull(0)){
+        not_used_lection_hr  = query.value(1).toInt() - sum_field("lection_hr");
+        not_used_labs_hr     = query.value(2).toInt() - sum_field("labs_hr");
+        not_used_practice_hr = query.value(3).toInt() - sum_field("practice_hr");
+        not_used_individ_hr  = query.value(4).toInt() - sum_field("individ_hr");
+        not_used_kontr_rab_hr    = query.value(5).toInt() - sum_field("kontr_rab_hr");
+        not_used_consultation_hr = query.value(6).toInt() - sum_field("consultation_hr");
+        not_used_offset_hr     = query.value(7).toInt() - sum_field("offset_hr");
+        not_used_examen_hr     = query.value(8).toInt() - sum_field("examen_hr");
+        not_used_coursework_hr = query.value(9).toInt() - sum_field("coursework_hr");
+        not_used_diplomwork_hr = query.value(10).toInt() - sum_field("diplomwork_hr");
+        not_used_praktika_hr   = query.value(11).toInt() - sum_field("praktika_hr");
+        not_used_gak_hr = query.value(12).toInt() - sum_field("gak_hr");
+        not_used_other1 = query.value(13).toInt() - sum_field("other1");
+        not_used_other2 = query.value(14).toInt() - sum_field("other2");
+        not_used_other3 = query.value(15).toInt() - sum_field("other3");
+        not_used_all =  not_used_lection_hr + not_used_labs_hr + not_used_practice_hr + not_used_individ_hr +
+                        not_used_kontr_rab_hr + not_used_consultation_hr + not_used_offset_hr + not_used_examen_hr +
+                        not_used_coursework_hr + not_used_diplomwork_hr + not_used_praktika_hr + not_used_gak_hr +
+                        not_used_other1 + not_used_other2 + not_used_other3;
 
-        this->setQuery("SELECT "
-                   "distribution.id, "
-                   "curriculum.subject_name, "
-                   "curriculum.semmester, "
-                   "teachers.f || ' ' || teachers.i || ' ' || teachers.o AS 'FIO', "
-                   "distribution.lection_hr, "
-                   "distribution.labs_hr, "
-                   "distribution.practice_hr, "
-                   "distribution.individ_hr, "
-                   "distribution.kontr_rab_hr, "
-                   "distribution.consultation_hr, "
-                   "distribution.offset_hr, "
-                   "distribution.examen_hr, "
-                   "distribution.coursework_hr, "
-                   "distribution.diplomwork_hr, "
-                   "distribution.praktika_hr, "
-                   "distribution.gak_hr, "
-                   "distribution.other1, "
-                   "distribution.other2, "
-                   "distribution.other3, "
-                   "distribution.lection_hr + "
-                   "distribution.labs_hr + "
-                   "distribution.practice_hr + "
-                   "distribution.individ_hr + "
-                   "distribution.kontr_rab_hr + "
-                   "distribution.consultation_hr + "
-                   "distribution.offset_hr + "
-                   "distribution.examen_hr + "
-                   "distribution.coursework_hr + "
-                   "distribution.diplomwork_hr + "
-                   "distribution.praktika_hr + "
-                   "distribution.gak_hr + "
-                   "distribution.other1 + "
-                   "distribution.other2 + "
-                   "distribution.other3 "
-                   "AS sum "
-                   "FROM distribution,teachers,subjects_in_semmester,curriculum "
-                   "WHERE "
-                   "distribution.teachers_id = teachers.id AND "
-                   "distribution.subjects_in_semmester_id = subjects_in_semmester.id AND "
-                   "subjects_in_semmester.curriculum_id = curriculum.id AND "
-                   "distribution.subjects_in_semmester_id = " + subjects_in_semmestre_id + "; ");
+        s = "SELECT teachers_id FROM distribution WHERE distribution.subjects_in_semmester_id = " + subjects_in_semmestre_id + ";";
+
+#ifdef DEBUG_ENABLE_SELECT
+        DEBUG_MESSAGE( s )
+#endif
+
+        if (!query.exec(s)){
+            ERROR_REPORT("0x607")
+            return ;
+        }
+        query.next();
+
+        if (!query.isNull(0)){
+
+            this->setQuery("SELECT "
+                       "distribution.id, "
+                       "curriculum.subject_name, "
+                       "curriculum.semmester, "
+                       "teachers.f || ' ' || teachers.i || ' ' || teachers.o AS 'FIO', "
+                       "distribution.lection_hr, "
+                       "distribution.labs_hr, "
+                       "distribution.practice_hr, "
+                       "distribution.individ_hr, "
+                       "distribution.kontr_rab_hr, "
+                       "distribution.consultation_hr, "
+                       "distribution.offset_hr, "
+                       "distribution.examen_hr, "
+                       "distribution.coursework_hr, "
+                       "distribution.diplomwork_hr, "
+                       "distribution.praktika_hr, "
+                       "distribution.gak_hr, "
+                       "distribution.other1, "
+                       "distribution.other2, "
+                       "distribution.other3, "
+                       "distribution.lection_hr + "
+                       "distribution.labs_hr + "
+                       "distribution.practice_hr + "
+                       "distribution.individ_hr + "
+                       "distribution.kontr_rab_hr + "
+                       "distribution.consultation_hr + "
+                       "distribution.offset_hr + "
+                       "distribution.examen_hr + "
+                       "distribution.coursework_hr + "
+                       "distribution.diplomwork_hr + "
+                       "distribution.praktika_hr + "
+                       "distribution.gak_hr + "
+                       "distribution.other1 + "
+                       "distribution.other2 + "
+                       "distribution.other3 "
+                       "AS sum "
+                       "FROM distribution,teachers,subjects_in_semmester,curriculum "
+                       "WHERE "
+                       "distribution.teachers_id = teachers.id AND "
+                       "distribution.subjects_in_semmester_id = subjects_in_semmester.id AND "
+                       "subjects_in_semmester.curriculum_id = curriculum.id AND "
+                       "distribution.subjects_in_semmester_id = " + subjects_in_semmestre_id + "; ");
+        }
     }
     // послать сигнал для списка преподавателей
     table_changed();
@@ -363,10 +409,14 @@ bool DistributionSqlModel::setData(const QModelIndex &index, const QVariant &val
         }
 
     QString s = "update distribution set "+ field +" = "+ functions::toDataString(value.toString()) +" where id = "+ data(primaryKeyIndex, Qt::DisplayRole).toString();
-    qDebug() << s;
+
+#ifdef DEBUG_ENABLE_MODIFY
+    DEBUG_MESSAGE( s )
+#endif
 
     QSqlQuery query;
     if (!query.exec(s)){
+        ERROR_REPORT("0x608")
         return false;
     }
     this->refresh();
@@ -376,23 +426,47 @@ bool DistributionSqlModel::setData(const QModelIndex &index, const QVariant &val
 int DistributionSqlModel::rowCountDB(){
     QSqlQuery query;
     QString s = "SELECT COUNT(*) FROM distribution WHERE distribution.subjects_in_semmester_id = " + subjects_in_semmestre_id + ";";
-    query.exec(s);
-    query.next();
-    return query.value(0).toInt();
+
+#ifdef DEBUG_ENABLE_SELECT
+    DEBUG_MESSAGE( s )
+#endif
+
+    if (!query.exec(s)){
+        ERROR_REPORT("0x609")
+        return false;
+    }
+    if (query.next()){
+        return query.value(0).toInt();
+    }
+    return 0;
 }
 
 int DistributionSqlModel::sum_field(QString field){
     QSqlQuery query;
     QString s = "SELECT SUM("+ field +") FROM distribution WHERE distribution.subjects_in_semmester_id = " + subjects_in_semmestre_id + ";";
-    query.exec(s);
-    query.next();
-    return query.value(0).toInt();
+
+#ifdef DEBUG_ENABLE_SELECT
+    DEBUG_MESSAGE( s )
+#endif
+
+    if (!query.exec(s)){
+        ERROR_REPORT("0x60A")
+        return false;
+    }
+    if (query.next()){
+        return query.value(0).toInt();
+    }
+    return 0;
 }
 
 bool DistributionSqlModel::clearTable(){
     QString s;
     QSqlQuery query;
     s = "DELETE FROM distribution;";
+
+#ifdef DEBUG_ENABLE_MODIFY
+    DEBUG_MESSAGE( s )
+#endif
 
     if (!query.exec(s)){
         ERROR_REPORT("0x600");
@@ -416,10 +490,6 @@ Qt::ItemFlags Sins_to_distrib_preview_SqlModel::flags(
         const QModelIndex &index) const
 {
     Qt::ItemFlags flags = QSqlQueryModel::flags(index);
-    /*if (index.column() > 8 && index.column() < 24 )
-    {
-        flags |= Qt::ItemIsEditable;
-    }*/
     return flags;
 }
 
@@ -436,7 +506,6 @@ void Sins_to_distrib_preview_SqlModel::refresh()
                        "AND curriculum.speciality_id = " + speciality_id + ") AND ("
                        + semester + " ) ORDER BY semmester, subject_name;");
     }
-
 }
 
 void Sins_to_distrib_preview_SqlModel::setspeciality_id(QString id)
@@ -491,10 +560,6 @@ Qt::ItemFlags Sins_to_distrib_detail_SqlModel::flags(
         const QModelIndex &index) const
 {
     Qt::ItemFlags flags = QSqlQueryModel::flags(index);
-    /*if (index.column() > 8 && index.column() < 24 )
-    {
-        flags |= Qt::ItemIsEditable;
-    }*/
     return flags;
 }
 

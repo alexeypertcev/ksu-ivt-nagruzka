@@ -1,5 +1,3 @@
-#include <QtSql>
-#include <QMessageBox>
 #include "tab_subjectinsemester.h"
 
 SubjectinsemesterSqlModel::SubjectinsemesterSqlModel(QObject *parent) :
@@ -74,7 +72,9 @@ bool SubjectinsemesterSqlModel::setData(const QModelIndex &index, const QVariant
         }
 
     QString s = "update subjects_in_semmester set "+ field +" = '"+ functions::toDataString(value.toString()) +"' where id = "+ data(primaryKeyIndex, Qt::DisplayRole).toString();
-    qDebug() << s;
+#ifdef DEBUG_ENABLE_MODIFY
+    DEBUG_MESSAGE( s )
+#endif
 
     QSqlQuery query;
     if (!query.exec(s)){
@@ -159,6 +159,10 @@ unsigned int SubjectinsemesterSqlModel::get_sum_current_speciality(){
                 "ORDER BY speciality.special_name, speciality.form_training_name, curriculum.semmester, curriculum.subject_name, subjects_in_semmester.id;";
     }
 
+#ifdef DEBUG_ENABLE_SELECT
+    DEBUG_MESSAGE( s )
+#endif
+
     if (query.exec(s)) {
         unsigned int temp_sum = 0;
         while (query.next()) {
@@ -178,91 +182,6 @@ void SubjectinsemesterSqlModel::setspeciality_id(QString id)
 
 bool SubjectinsemesterSqlModel::add()
 {
-    /*
-    QSqlQuery query;
-    QString s, curriculum_id, students_id;
-    if (speciality_id == "all"){
-        s = "SELECT "
-            "subjects_in_semmester.curriculum_id, subjects_in_semmester.students_id "
-            "FROM subjects_in_semmester, curriculum, students, speciality "
-            "WHERE subjects_in_semmester.curriculum_id = curriculum.id AND "
-            "subjects_in_semmester.students_id = students.id AND "
-            "students.speciality_id = speciality.id "
-            "ORDER BY speciality.special_name DESC, speciality.form_training_name DESC, curriculum.semmester DESC, curriculum.subject_name DESC, subjects_in_semmester.id DESC;";
-
-    } else {
-        s = "SELECT "
-            "subjects_in_semmester.curriculum_id, subjects_in_semmester.students_id "
-            "FROM subjects_in_semmester, curriculum, students, speciality "
-            "WHERE subjects_in_semmester.curriculum_id = curriculum.id AND "
-            "subjects_in_semmester.students_id = students.id AND "
-            "students.speciality_id = speciality.id AND "
-            "students.speciality_id = " + speciality_id + " "
-            "ORDER BY speciality.special_name DESC, speciality.form_training_name DESC, curriculum.semmester DESC, curriculum.subject_name DESC, subjects_in_semmester.id DESC;";
-    }
-    if (!query.exec(s))
-    {
-        qDebug() << "error 0x001 ошибка в запросе выбора последней записи";
-        return false;
-    }
-    if(!query.next()){
-        qDebug() << "error 0x002";
-        //return false;
-    }
-    if (query.value(0).toString() == "" || query.value(1).toString() == ""){
-        if (speciality_id == "all"){
-            s = "SELECT id "
-                "FROM curriculum "
-                "ORDER BY speciality_id DESC, semmester DESC, subject_name DESC;";
-        } else {
-            s = "SELECT id "
-                "FROM curriculum "
-                "WHERE speciality_id = " + speciality_id + " "
-                "ORDER BY semmester DESC, subject_name DESC;";
-        }
-
-        if (!query.exec(s)){
-            qDebug() << "error 0x003";
-            return false;
-        }
-        if (!query.next()){
-            qDebug() << "error 0x004";
-            return false;
-        }
-        if (query.value(0).toString() == ""){
-            qDebug() << "error 0x005 попытка создать запись в 'предметы в семместре' но 'учебный план' не содержит не одной записи";
-            return false;
-        }
-        curriculum_id = query.value(0).toString();
-
-        s = "SELECT id FROM students ORDER BY id DESC;";
-        if (!query.exec(s)){
-            qDebug() << "error 0x006";
-            return false;
-        }
-        if (!query.next()){
-            qDebug() << "error 0x007";
-            return false;
-        }
-        if (query.value(0).toString() == ""){
-            qDebug() << "error 0x008 попытка создать запись в 'предметы в семместре' но 'студенты' не содержит не одной записи";
-            return false;
-        }
-        students_id = query.value(0).toString();
-
-    } else {
-        curriculum_id = query.value(0).toString();
-        students_id = query.value(1).toString();
-    }
-    qDebug() << curriculum_id;
-    qDebug() << students_id;
-
-    s = "insert into subjects_in_semmester values(NULL, '" + curriculum_id + "', '" + students_id + "', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);";
-    if (!query.exec(s)){
-        qDebug() << "error 0x009";
-        return false;
-    }
-    */
     return false;
 }
 
@@ -272,13 +191,20 @@ bool SubjectinsemesterSqlModel::del(QString id)
     QSqlQuery query;
     s = "DELETE FROM distribution WHERE distribution.subjects_in_semmester_id = '" + id + "';";
 
+#ifdef DEBUG_ENABLE_MODIFY
+    DEBUG_MESSAGE( s )
+#endif
+
     if (!query.exec(s)){
         ERROR_REPORT("0x502");
         return false;
     }
 
     s = "DELETE FROM subjects_in_semmester WHERE id = '" + id + "';";
-    //qDebug() << s;
+
+#ifdef DEBUG_ENABLE_MODIFY
+    DEBUG_MESSAGE( s )
+#endif
 
     if (!query.exec(s)){
         ERROR_REPORT("0x503");
@@ -363,9 +289,18 @@ int SubjectinsemesterSqlModel::rowCountDB(){
                   "students.speciality_id = speciality.id AND "
                   "students.speciality_id = " + speciality_id + " ";
     }
+
+#ifdef DEBUG_ENABLE_SELECT
+    DEBUG_MESSAGE( s )
+#endif
+
     if (query.exec(s)) {
-        query.next();
-        return query.value(0).toInt();
+        if (query.next()){
+            return query.value(0).toInt();
+        } else {
+            ERROR_REPORT("0x507");
+            return 0;
+        }
     } else {
         ERROR_REPORT("0x504");
         return 0;
@@ -377,12 +312,20 @@ bool SubjectinsemesterSqlModel::clearTable(){
     QSqlQuery query;
     s = "DELETE FROM distribution;";
 
+#ifdef DEBUG_ENABLE_MODIFY
+    DEBUG_MESSAGE( s )
+#endif
+
     if (!query.exec(s)){
         ERROR_REPORT("0x505");
-        return false;
     }
 
     s = "DELETE FROM subjects_in_semmester;";
+
+#ifdef DEBUG_ENABLE_MODIFY
+    DEBUG_MESSAGE( s )
+#endif
+
     if (!query.exec(s)){
         ERROR_REPORT("0x506");
         return false;

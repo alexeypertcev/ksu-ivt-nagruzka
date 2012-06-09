@@ -2,7 +2,6 @@
 
 ****************************************************************************/
 
-#include <QtSql>
 #include "tab_teachers.h"
 
 TeachersSqlModel::TeachersSqlModel(QObject *parent) :
@@ -66,10 +65,14 @@ bool TeachersSqlModel::setData(const QModelIndex &index, const QVariant &value, 
         }
 
     QString s = "update teachers set "+ field +" = '"+ value.toString() +"' where id = "+ data(primaryKeyIndex).toString();
-    qDebug() << s;
+
+#ifdef DEBUG_ENABLE_MODIFY
+    DEBUG_MESSAGE( s )
+#endif
 
     QSqlQuery query;
     if (!query.exec(s)){
+        ERROR_REPORT("0x200")
         return false;
     }
     this->refresh();
@@ -79,42 +82,74 @@ bool TeachersSqlModel::setData(const QModelIndex &index, const QVariant &value, 
 bool TeachersSqlModel::add()
 {
     QString s = "insert into teachers values(NULL, ' ', ' ', ' ', 'выберите..', '1', 0);";
-    qDebug() << s;
+
+#ifdef DEBUG_ENABLE_MODIFY
+    DEBUG_MESSAGE( s )
+#endif
+
     QSqlQuery query;
 
     bool_save_removed = false;
-    return query.exec(s);
+    if (!query.exec(s)){
+        ERROR_REPORT("0x201")
+        return false;
+    }
+    this->refresh();
+    return true;
 }
 
 bool TeachersSqlModel::del(QString id)
 {
-    QString s = "DELETE FROM teachers WHERE id = '" + id + "';";
-//    qDebug() << s;
-
     QSqlQuery query;
+    QString s = "SELECT id, f, i, o, status_name, rate, staff_id FROM teachers WHERE id = '"+ id + "';";
 
-    query.exec("SELECT id, f, i, o, status_name, rate, staff_id FROM teachers WHERE id = '"+ id + "';");
-    query.next();
-   this->id = query.value(0).toString();
-    f = query.value(1).toString();
-    i = query.value(2).toString();
-    o = query.value(3).toString();
-    status_name = query.value(4).toString();
-    rate = query.value(5).toString();
-    staff_id = query.value(6).toString();
+#ifdef DEBUG_ENABLE_SELECT
+    DEBUG_MESSAGE( s )
+#endif
 
-    bool_save_removed = true;
-    return query.exec(s);
+    if (query.exec(s)){
+        if (query.next()){
+            this->id = query.value(0).toString();
+            f = query.value(1).toString();
+            i = query.value(2).toString();
+            o = query.value(3).toString();
+            status_name = query.value(4).toString();
+            rate = query.value(5).toString();
+            staff_id = query.value(6).toString();
+
+            bool_save_removed = true;
+        }
+    }
+    s = "DELETE FROM teachers WHERE id = '" + id + "';";
+
+#ifdef DEBUG_ENABLE_MODIFY
+    DEBUG_MESSAGE( s )
+#endif
+
+    if (!query.exec(s)){
+        ERROR_REPORT("0x202")
+        return false;
+    }
+    this->refresh();
+    return true;
 }
 
 bool TeachersSqlModel::cancel_del()
 {
-    QString s = "insert into teachers values('"+id+"', '"+f+"', '" +i+"', '"+o+"', '"+status_name+"', '"+rate+"', '"+staff_id+"');";
-    qDebug() << s;
+    QString s = "insert into teachers values('"+ this->id +"', '"+f+"', '" +i+"', '"+o+"', '"+status_name+"', '"+rate+"', '"+staff_id+"');";
+
+#ifdef DEBUG_ENABLE_MODIFY
+    DEBUG_MESSAGE( s )
+#endif
 
     QSqlQuery query;
     bool_save_removed = false;
-    return query.exec(s);
+    if (!query.exec(s)){
+        ERROR_REPORT("0x203")
+        return false;
+    }
+    this->refresh();
+    return true;
 }
 
 bool TeachersSqlModel::save_removed()
@@ -156,9 +191,17 @@ int TeachersReportSqlModel::rowCount(const QModelIndex &parent) const
 int TeachersReportSqlModel::rowCountDB(){
     QSqlQuery query;
     QString s = "SELECT COUNT(*) FROM teachers ;";
-    query.exec(s);
-    query.next();
-    return query.value(0).toInt();
+
+#ifdef DEBUG_ENABLE_SELECT
+    DEBUG_MESSAGE( s )
+#endif
+
+    if (query.exec(s)){
+        if (query.next()){
+            return query.value(0).toInt();
+        }
+    }
+    return 0;
 }
 
 QVariant TeachersReportSqlModel::data(const QModelIndex &index, int role) const

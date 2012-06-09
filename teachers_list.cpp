@@ -1,7 +1,4 @@
 #include "teachers_list.h"
-#include "ui_teachers_list.h"
-#include <QDebug>
-#include <QHBoxLayout>
 
 Teachers_list::Teachers_list(QWidget *parent) :
     QDialog(parent),
@@ -126,18 +123,12 @@ Qt::ItemFlags Teachers_list_model::flags(
         const QModelIndex &index) const
 {
     Qt::ItemFlags flags = QSqlQueryModel::flags(index);
-    /*if (index.column() > 8 && index.column() < 24 )
-    {
-        flags |= Qt::ItemIsEditable;
-    }*/
     return flags;
 }
 
 
 void Teachers_list_model::refresh()
 {
-
-
     QSqlQuery query, query2;
     unsigned int buf_all_hours;
     unsigned int buf_aud_hours;
@@ -165,24 +156,37 @@ void Teachers_list_model::refresh()
                    "ORDER BY f,i,o");
     //
     //**********************************************************
+    QString s = "SELECT teachers.id, status_name, rate "
+            "FROM teachers WHERE teachers.id != '0'"
+            "ORDER BY f,i,o";
 
-    query.exec("SELECT teachers.id, status_name, rate "
-               "FROM teachers WHERE teachers.id != '0'"
-               "ORDER BY f,i,o");
+#ifdef DEBUG_ENABLE_SELECT
+    DEBUG_MESSAGE( s )
+#endif
+
+    if (!query.exec(s)){
+        ERROR_REPORT("0x80D")
+        return ;
+    }
     while(query.next()){
+        s = "SELECT hours FROM status WHERE name = '"+ query.value(1).toString() +"';";
 
-        query2.exec("SELECT hours FROM status WHERE name = '"+ query.value(1).toString() +"';");
-        query2.next();
-        rate = query.value(2).toString();
-        staff_hour = query2.value(0).toUInt();
-        rate_staff_hour =  query.value(2).toDouble() * query2.value(0).toDouble();
+#ifdef DEBUG_ENABLE_SELECT
+        DEBUG_MESSAGE( s )
+#endif
 
-        rate_list << rate + "/" + QString::number(rate_staff_hour);
+        if (!query2.exec(s)){
+            ERROR_REPORT("0x80E")
+            return ;
+        }
+        if (query2.next()){
+            rate = query.value(2).toString();
+            staff_hour = query2.value(0).toUInt();
+            rate_staff_hour =  query.value(2).toDouble() * query2.value(0).toDouble();
 
-    //--- для нечетных семместров(весны)-------------------------------------------
-        buf_all_hours = 0;
-        buf_aud_hours = 0;
-        query2.exec("SELECT distribution.lection_hr, "
+            rate_list << rate + "/" + QString::number(rate_staff_hour);
+
+            QString string_query = "SELECT distribution.lection_hr, "
                     "distribution.labs_hr, "
                     "distribution.practice_hr, "
                     "distribution.individ_hr, "
@@ -201,49 +205,19 @@ void Teachers_list_model::refresh()
                     "WHERE teachers_id = '" + query.value(0).toString() + "' AND "
                     "distribution.subjects_in_semmester_id = subjects_in_semmester.id AND "
                     "subjects_in_semmester.curriculum_id = curriculum.id AND "
-                    "( curriculum.semmester % 2 = 0 )");
+                    "( curriculum.semmester % 2 = ";
 
-        while(query2.next()){
-
-            for (int i = 0; i<15; ++i){
-                if (i<4){
-                    buf_aud_hours += query2.value(i).toUInt();
-                }
-                    buf_all_hours += query2.value(i).toUInt();
-            }
-        }
-
-        vesna_hours << QString::number(buf_all_hours);
-        //vesna_p_ayd << (QString::number(buf_aud_hours) + "/" + QString::number(buf_all_hours));
-        if (buf_all_hours != 0){
-            vesna_p_ayd << QString::number((double)buf_aud_hours / (double)buf_all_hours,'f',2);
-        } else {
-            vesna_p_ayd << " ";
-        }
-
-        //--- для четных семместров(осени)-------------------------------------------
+        //--- для нечетных семместров(весны)-------------------------------------------
             buf_all_hours = 0;
             buf_aud_hours = 0;
-            query2.exec("SELECT distribution.lection_hr, "
-                        "distribution.labs_hr, "
-                        "distribution.practice_hr, "
-                        "distribution.individ_hr, "
-                        "distribution.kontr_rab_hr, "
-                        "distribution.consultation_hr, "
-                        "distribution.offset_hr, "
-                        "distribution.examen_hr, "
-                        "distribution.coursework_hr, "
-                        "distribution.diplomwork_hr, "
-                        "distribution.praktika_hr, "
-                        "distribution.gak_hr, "
-                        "distribution.other1, "
-                        "distribution.other2, "
-                        "distribution.other3 "
-                        "FROM distribution, subjects_in_semmester, curriculum "
-                        "WHERE teachers_id = '" + query.value(0).toString() + "' AND "
-                        "distribution.subjects_in_semmester_id = subjects_in_semmester.id AND "
-                        "subjects_in_semmester.curriculum_id = curriculum.id AND "
-                        "( curriculum.semmester % 2 = 1 )");
+            s = string_query + " 0 )";
+#ifdef DEBUG_ENABLE_SELECT
+            DEBUG_MESSAGE( s )
+#endif
+
+            if (!query2.exec(s)){
+                ERROR_REPORT("0x80F")
+            }
 
             while(query2.next()){
 
@@ -251,12 +225,40 @@ void Teachers_list_model::refresh()
                     if (i<4){
                         buf_aud_hours += query2.value(i).toUInt();
                     }
-                        buf_all_hours += query2.value(i).toUInt();
+                    buf_all_hours += query2.value(i).toUInt();
+                }
+            }
+
+            vesna_hours << QString::number(buf_all_hours);
+            if (buf_all_hours != 0){
+                vesna_p_ayd << QString::number((double)buf_aud_hours / (double)buf_all_hours,'f',2);
+            } else {
+                vesna_p_ayd << " ";
+            }
+
+            //--- для четных семместров(осени)-------------------------------------------
+            buf_all_hours = 0;
+            buf_aud_hours = 0;
+            s = string_query + " 1 )";
+
+#ifdef DEBUG_ENABLE_SELECT
+            DEBUG_MESSAGE( s )
+#endif
+
+            if (!query2.exec(s)){
+                ERROR_REPORT("0x810")
+            }
+
+            while(query2.next()){
+                for (int i = 0; i<15; ++i){
+                    if (i<4){
+                        buf_aud_hours += query2.value(i).toUInt();
+                    }
+                    buf_all_hours += query2.value(i).toUInt();
                 }
             }
 
             osen_hours << QString::number(buf_all_hours);
-            //osen_p_ayd << (QString::number(buf_aud_hours) + "/" + QString::number(buf_all_hours));
             if (buf_all_hours != 0){
                 osen_p_ayd << QString::number((double)buf_aud_hours / (double)buf_all_hours,'f',2);
             } else {
@@ -264,39 +266,46 @@ void Teachers_list_model::refresh()
             }
 
             //--- для всех семместров(года)-------------------------------------------
-                buf_all_hours = 0;
-                buf_aud_hours = 0;
-                buf_lection_hours = 0;
-                query2.exec("SELECT lection_hr, labs_hr, practice_hr, individ_hr, "
-                            "kontr_rab_hr, consultation_hr, offset_hr, examen_hr, "
-                            "coursework_hr, diplomwork_hr, praktika_hr, gak_hr, "
-                            "other1, other2, other3 "
-                            "FROM distribution WHERE teachers_id = "+ query.value(0).toString() +";");
+            buf_all_hours = 0;
+            buf_aud_hours = 0;
+            buf_lection_hours = 0;
+            s = "SELECT lection_hr, labs_hr, practice_hr, individ_hr, "
+                "kontr_rab_hr, consultation_hr, offset_hr, examen_hr, "
+                "coursework_hr, diplomwork_hr, praktika_hr, gak_hr, "
+                "other1, other2, other3 "
+                "FROM distribution WHERE teachers_id = "+ query.value(0).toString() +";";
 
-                while(query2.next()){
-                    buf_lection_hours += query2.value(0).toUInt();
-                    for (int i = 0; i<15; ++i){
-                        if (i<4){
-                            buf_aud_hours += query2.value(i).toUInt();
-                        }
-                        buf_all_hours += query2.value(i).toUInt();
+#ifdef DEBUG_ENABLE_SELECT
+            DEBUG_MESSAGE( s )
+#endif
+            if (!query2.exec(s)){
+                ERROR_REPORT("0x811")
+            }
+
+            while(query2.next()){
+                buf_lection_hours += query2.value(0).toUInt();
+                for (int i = 0; i<15; ++i){
+                    if (i<4){
+                        buf_aud_hours += query2.value(i).toUInt();
                     }
+                    buf_all_hours += query2.value(i).toUInt();
                 }
-                year_lection << QString::number(buf_lection_hours);
-                year_hours << QString::number(buf_all_hours);
-                //year_p_ayd << (QString::number(buf_aud_hours) + "/" + QString::number(buf_all_hours));
-                if (buf_all_hours != 0){
-                    year_p_ayd << QString::number((double)buf_aud_hours / (double)buf_all_hours,'f',2);
-                } else {
-                    year_p_ayd << " ";
-                }
+            }
+            year_lection << QString::number(buf_lection_hours);
+            year_hours << QString::number(buf_all_hours);
+            if (buf_all_hours != 0){
+                year_p_ayd << QString::number((double)buf_aud_hours / (double)buf_all_hours,'f',2);
+            } else {
+                year_p_ayd << " ";
+            }
 
-                if (rate_staff_hour != 0){
-                    rate_dole << QString::number(((double)buf_all_hours / (double)staff_hour), 'f', 2);
-                } else {
-                    rate_dole << " ";
-                }
+            if (rate_staff_hour != 0){
+                rate_dole << QString::number(((double)buf_all_hours / (double)staff_hour), 'f', 2);
+            } else {
+                rate_dole << " ";
+            }
         }
+    }
 }
 
 QVariant Teachers_list_model::data(const QModelIndex &index, int role) const

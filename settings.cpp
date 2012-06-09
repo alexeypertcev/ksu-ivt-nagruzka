@@ -1,19 +1,11 @@
 #include "settings.h"
 #include "ui_settings.h"
 
-#include <QtGui>
-#include <QtSql>
-#include <QSqlDatabase>
-#include <QSqlRelationalTableModel>
-#include <QMessageBox>
-#include <QModelIndex>
-
 Settings::Settings(QWidget *parent, QSqlRelationalTableModel* tm_spec, QSqlRelationalTableModel* tm_stat) :
     QDialog(parent),
     ui(new Ui::Settings)
 {
     ui->setupUi(this);
-
 
     tablemodel_spec = tm_spec;
     tablemodel_spec->setRelation(3, QSqlRelation("form_training", "name", "name"));
@@ -58,12 +50,14 @@ Settings::~Settings()
 void Settings::on_pushButton_add_spec_clicked()
 {
     QString s = "insert into speciality values(NULL, 'ФИВТ', 'МОиАИС', 'оч')";
-    qDebug() << s;
+
+#ifdef DEBUG_ENABLE_MODIFY
+    DEBUG_MESSAGE( s )
+#endif
 
     QSqlQuery query;
     if (!query.exec(s)){
-        QMessageBox::warning(this, tr("Error querry"),
-                             tr("The database reported an error: %1").arg(tablemodel_spec->lastError().text()));
+        ERROR_REPORT("0x801")
     }
     tablemodel_spec->select();
 }
@@ -73,12 +67,13 @@ void Settings::on_pushButton_del_spec_clicked()
     int row = ui->tableView->currentIndex().row();
     QString s = "DELETE FROM speciality WHERE id = '" + tablemodel_spec->data( tablemodel_spec->index(row,0),
                                                                               Qt::DisplayRole ).toString() + "';";
-    qDebug() << s;
+#ifdef DEBUG_ENABLE_MODIFY
+    DEBUG_MESSAGE( s )
+#endif
 
     QSqlQuery query;
     if (!query.exec(s)){
-        QMessageBox::warning(this, tr("Error querry"),
-                             tr(" Невозможно выполнить данное действие \n Возможно значение которое вы хотите удалить используется в базе данных"));
+        ERROR_REPORT("0x802")
     }
     tablemodel_spec->select();
 }
@@ -86,12 +81,14 @@ void Settings::on_pushButton_del_spec_clicked()
 void Settings::on_pushButton_add_dolj_clicked()
 {
     QString s = "insert into status values('', 0)";
-    qDebug() << s;
+
+#ifdef DEBUG_ENABLE_MODIFY
+    DEBUG_MESSAGE( s )
+#endif
 
     QSqlQuery query;
     if (!query.exec(s)){
-        QMessageBox::warning(this, tr("Error querry"),
-                             tr("The database reported an error: %1").arg(tablemodel_stat->lastError().text()));
+        ERROR_REPORT("0x803")
     }
     tablemodel_stat->select();
 }
@@ -99,12 +96,14 @@ void Settings::on_pushButton_add_dolj_clicked()
 void Settings::on_pushButton_del_dolj_clicked()
 {
     QString s = "DELETE FROM status WHERE name = '"+ ui->tableView_2->currentIndex().data(Qt::DisplayRole).toString() + "';";
-    qDebug() << s;
+
+#ifdef DEBUG_ENABLE_MODIFY
+    DEBUG_MESSAGE( s )
+#endif
 
     QSqlQuery query;
     if (!query.exec(s)){
-        QMessageBox::warning(this, tr("Error querry"),
-                             tr("The database reported an error: %1").arg(tablemodel_stat->lastError().text()));
+        ERROR_REPORT("0x804")
     }
     tablemodel_stat->select();
 }
@@ -116,47 +115,88 @@ void Settings::set_tab(int index){
 void Settings::on_lineEdit_editingFinished()
 {
     QString s = "update other_data set 'value' = '"+ ui->lineEdit->text() +"' where name = 'academic_year'";
+
+#ifdef DEBUG_ENABLE_MODIFY
+    DEBUG_MESSAGE( s )
+#endif
+
     QSqlQuery query;
-    query.exec(s);
+    if (!query.exec(s)){
+        ERROR_REPORT("0x805")
+    }
     update_other_data();
 }
 
 void Settings::on_lineEdit_2_editingFinished()
 {
     QString s = "update other_data set 'value' = '"+ ui->lineEdit_2->text() +"' where name = 'name_kafedry_faculty'";
+
+#ifdef DEBUG_ENABLE_MODIFY
+    DEBUG_MESSAGE( s )
+#endif
+
     QSqlQuery query;
-    query.exec(s);
+    if (!query.exec(s)){
+        ERROR_REPORT("0x806")
+    }
     update_other_data();
 }
 
 void Settings::on_lineEdit_3_editingFinished()
 {
     QString s = "update other_data set 'value' = '"+ ui->lineEdit_3->text() +"' where name = 'business_base_of_training'";
+#ifdef DEBUG_ENABLE_MODIFY
+    DEBUG_MESSAGE( s )
+#endif
+
     QSqlQuery query;
-    query.exec(s);
+    if (!query.exec(s)){
+        ERROR_REPORT("0x807")
+    }
     update_other_data();
 }
 
 void Settings::on_lineEdit_4_editingFinished()
 {
     QString s = "update other_data set 'value' = '"+ ui->lineEdit_4->text() +"' where name = 'vice_rector_on_education_work'";
+#ifdef DEBUG_ENABLE_MODIFY
+    DEBUG_MESSAGE( s )
+#endif
+
     QSqlQuery query;
-    query.exec(s);
+    if (!query.exec(s)){
+        ERROR_REPORT("0x808")
+    }
     update_other_data();
 }
 
 void Settings::on_lineEdit_5_editingFinished()
 {
     QString s = "update other_data set 'value' = '"+ ui->lineEdit_5->text() +"' where name = 'name_kafedry_smail'";
+#ifdef DEBUG_ENABLE_MODIFY
+    DEBUG_MESSAGE( s )
+#endif
+
     QSqlQuery query;
-    query.exec(s);
+    if (!query.exec(s)){
+        ERROR_REPORT("0x809")
+    }
     update_other_data();
 }
 
 void Settings::update_other_data()
 {
     QSqlQuery query;
-    query.exec("SELECT name, value FROM other_data");
+    QString s = "SELECT name, value FROM other_data";
+
+#ifdef DEBUG_ENABLE_SELECT
+    DEBUG_MESSAGE( s )
+#endif
+
+    if (!query.exec(s)){
+        ERROR_REPORT("0x80A")
+        return ;
+    }
 
     while(query.next()){
         if (query.value(0).toString() == "academic_year"){
@@ -170,7 +210,7 @@ void Settings::update_other_data()
         } else if (query.value(0).toString() == "name_kafedry_smail"){
             ui->lineEdit_5->setText(query.value(1).toString());
         } else {
-            ERROR_REPORT("0x");
+            ERROR_REPORT("0x80B");
         }
     }
 }
@@ -179,12 +219,9 @@ void Settings::update_other_data()
 *   Coefficients_model
 ************************************************************/
 
-
 Coefficients_model::Coefficients_model(QObject *parent) :
     QSqlQueryModel(parent)
 {
-
-
 }
 
 Qt::ItemFlags Coefficients_model::flags(
@@ -202,13 +239,12 @@ void Coefficients_model::refresh()
 {
     this->setQuery("SELECT name, name, value  "
                    "FROM coefficients");
-
 }
 
 QVariant Coefficients_model::data(const QModelIndex &index, int role) const
 {
     QVariant value = QSqlQueryModel::data(index, role);
-    QString buf;
+    //QString buf;
     switch (role)
     {
     case Qt::DisplayRole:
@@ -277,7 +313,6 @@ QVariant Coefficients_model::data(const QModelIndex &index, int role) const
             if (value.toString() == "coefficient_ruk_vo_aspirants_hr"){
                 return "Руководство аспирантами, часов";
             }
-
             return value.toString();
         }
         break;
@@ -293,14 +328,15 @@ bool Coefficients_model::setData(const QModelIndex &index, const QVariant &value
     QModelIndex primaryKeyIndex = QSqlQueryModel::index(index.row(), 0);
 
     QString s = "update coefficients set value = '"+ value.toString() +"' where name = '"+ data(primaryKeyIndex, Qt::DisplayRole).toString() + "';";
-    qDebug() << s;
+#ifdef DEBUG_ENABLE_MODIFY
+    DEBUG_MESSAGE( s )
+#endif
 
     QSqlQuery query;
     if (!query.exec(s)){
+        ERROR_REPORT("0x80C");
         return false;
     }
     refresh();
     return true;
 }
-
-

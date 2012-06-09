@@ -4,7 +4,7 @@
 #ifndef SUBJECTINSEMESTER_SQLMODEL_H
 #define SUBJECTINSEMESTER_SQLMODEL_H
 
-#include <QSqlQueryModel>
+#include <QtSql>
 #include "errors.h"
 #include "functions.h"
 

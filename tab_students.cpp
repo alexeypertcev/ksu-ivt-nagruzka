@@ -2,7 +2,6 @@
 
 ****************************************************************************/
 
-#include <QtSql>
 #include "tab_students.h"
 
 StudentsSqlModel::StudentsSqlModel(QObject *parent) :
@@ -55,10 +54,14 @@ bool StudentsSqlModel::setData(const QModelIndex &index, const QVariant &value, 
         }
 
     QString s = "update students set "+ field +" = '"+ functions::toDataString(value.toString()) +"' where id = "+ data(primaryKeyIndex).toString();
-    qDebug() << s;
+
+#ifdef DEBUG_ENABLE_MODIFY
+    DEBUG_MESSAGE( s )
+#endif
 
     QSqlQuery query;
     if (!query.exec(s)){
+        ERROR_REPORT("0x300")
         return false;
     }
     this->refresh();
@@ -69,21 +72,32 @@ bool StudentsSqlModel::add(QString speciality_id, QString course, QString num_gr
 {
     QString s = "insert into students values(NULL, "+ speciality_id +", "+ course +", "+ num_group +", "+
                                                       num_undergroup +", "+ quantity_course +");";
-    qDebug() << s;
+#ifdef DEBUG_ENABLE_MODIFY
+    DEBUG_MESSAGE( s )
+#endif
 
     QSqlQuery query;
-    query.exec(s);
-
+    if (!query.exec(s)){
+        ERROR_REPORT("0x302")
+        return false;
+    }
+    this->refresh();
     return true;
 }
 
 bool StudentsSqlModel::del(QString id)
 {
     QString s = "DELETE FROM students WHERE id = '" + id + "';";
-    qDebug() << s;
+
+#ifdef DEBUG_ENABLE_MODIFY
+    DEBUG_MESSAGE( s )
+#endif
 
     QSqlQuery query;
-    query.exec(s);
-
+    if (!query.exec(s)){
+        ERROR_REPORT("0x303")
+        return false;
+    }
+    this->refresh();
     return true;
 }

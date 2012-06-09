@@ -5,8 +5,11 @@
 #include <QSqlQueryModel>
 #include <QSqlQuery>
 #include <QStandardItemModel>
+#include <QHBoxLayout>
 #include "errors.h"
 #include "HierarchicalHeaderView.h"
+#include "ui_teachers_list.h"
+
 
 QT_BEGIN_NAMESPACE
 class Teachers_list_model;

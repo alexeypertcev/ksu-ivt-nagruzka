@@ -4,7 +4,7 @@
 #ifndef TEACHERS_H
 #define TEACHERS_H
 
-#include <QSqlQueryModel>
+#include <QtSql>
 #include <QItemDelegate>
 #include "errors.h"
 

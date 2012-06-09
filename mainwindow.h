@@ -5,25 +5,22 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QSqlDatabase>
-#include "errors.h"
+#include <QtGui>
+#include <QtSql>
 
 QT_BEGIN_NAMESPACE
-class QSqlRelationalTableModel;
-class SubjectSqlModel;
-class QSqlQueryModel;
-class CurriculumSqlModel;
+class SpecialityForComboBoxSqlModel;
 class Settings;
+class Teachers_list;
+class SubjectSqlModel;
 class StudentsSqlModel;
 class TeachersSqlModel;
-class SpecialityDelegate;
+class CurriculumSqlModel;
 class SubjectinsemesterSqlModel;
 class Sins_to_distrib_preview_SqlModel;
 class Sins_to_distrib_detail_SqlModel;
 class DistributionSqlModel;
 class TeachersReportSqlModel;
-class Teachers_list;
-class SpecialityForComboBoxSqlModel;
 QT_END_NAMESPACE
 
 namespace Ui {
@@ -56,7 +53,6 @@ private:
     void update_teachers();
     void update_students();
     void update_sins_to_distribution_preview();
-
     void create_backup();
     void auto_create_backup();
 
@@ -70,7 +66,6 @@ private:
     Settings* settings;
     Teachers_list* teachers_list;
     QString path_db;
-    QSqlDatabase db;
     QString applicationDirPath;
     QString database_name;
     SubjectSqlModel* sqlmodel_subject;
@@ -137,17 +132,15 @@ private slots:
     void on_action_txt_2_triggered();
     void on_action_6_triggered();
     void on_pushButton_9_clicked();
-
     void on_pushButton_8_clicked(bool checked);
     void on_pushButton_5_clicked();
     void on_pushButton_clear_subinsemmester_clicked();
     void on_pushButton_clear_distribution_clicked();
-
     void update_coefficients();
     void on_action_9_activated();
     void on_action_10_activated();
-
     void check_and_restore_DB();
+    void update_spec_checkbox();
 };
 
 class String_query{

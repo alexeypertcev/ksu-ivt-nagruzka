@@ -5,15 +5,11 @@
 #ifndef CONNECTION_H
 #define CONNECTION_H
 
-#include <QMessageBox>
-#include <QSqlDatabase>
-#include <QSqlError>
-#include <QSqlQuery>
 #include <QtGui>
 #include <QtSql>
 #include "errors.h"
 
-QSqlDatabase db;
+QSqlDatabase current_db;
 
 const QString foreign_keys_ON = "PRAGMA foreign_keys = ON;";
 const QString create_table_form_training =
@@ -144,30 +140,14 @@ const QString create_table_other_data =
 
 static bool createConnection(QString path_db)
 {
-    db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName(path_db);
-
-    if (!db.open()) {
-        QMessageBox::critical(0, qApp->tr("Cannot open database"),
-            qApp->tr("Unable to establish a database connection.\n"
-                     "This example needs SQLite support. Please read "
-                     "the Qt SQL driver documentation for information how "
-                     "to build it.\n\n"
-                     "Click Cancel to exit."), QMessageBox::Cancel);
-        return false;
-    }
-    return true;
+    current_db = QSqlDatabase::addDatabase("QSQLITE");
+    current_db.setDatabaseName(path_db);
+    return current_db.open();
 }
 
 static bool create_all_tables(){
 
-    if (!db.open()) {
-        QMessageBox::critical(0, qApp->tr("Cannot open database"),
-            qApp->tr("Unable to establish a database connection.\n"
-                     "This example needs SQLite support. Please read "
-                     "the Qt SQL driver documentation for information how "
-                     "to build it.\n\n"
-                     "Click Cancel to exit."), QMessageBox::Cancel);
+    if (!current_db.open()) {
         return false;
     } else{
         QSqlQuery query;
@@ -191,13 +171,7 @@ static bool create_all_tables(){
 static bool insert_main_data()
 {
 
-    if (!db.open()) {
-        QMessageBox::critical(0, qApp->tr("Cannot open database"),
-            qApp->tr("Unable to establish a database connection.\n"
-                     "This example needs SQLite support. Please read "
-                     "the Qt SQL driver documentation for information how "
-                     "to build it.\n\n"
-                     "Click Cancel to exit."), QMessageBox::Cancel);
+    if (!current_db.open()) {
         return false;
     } else{
         QSqlQuery query;
@@ -258,13 +232,7 @@ static bool insert_main_data()
 static bool drop_all_tables()
 {
 
-    if (!db.open()) {
-        QMessageBox::critical(0, qApp->tr("Cannot open database"),
-            qApp->tr("Unable to establish a database connection.\n"
-                     "This example needs SQLite support. Please read "
-                     "the Qt SQL driver documentation for information how "
-                     "to build it.\n\n"
-                     "Click Cancel to exit."), QMessageBox::Cancel);
+    if (!current_db.open()) {
         return false;
     } else{
         QSqlQuery query;
@@ -278,6 +246,8 @@ static bool drop_all_tables()
         query.exec("DROP TABLE status");
         query.exec("DROP TABLE form_training");
         query.exec("DROP TABLE staff");
+        query.exec("DROP TABLE coefficients");
+        query.exec("DROP TABLE other_data");
     }
     return true;
 }

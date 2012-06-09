@@ -1,7 +1,7 @@
 #ifndef DISTRIBUTION_H
 #define DISTRIBUTION_H
 
-#include <QSqlQueryModel>
+#include <QtSql>
 #include "errors.h"
 #include "functions.h"
 

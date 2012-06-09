@@ -1,9 +1,4 @@
 #include "components.h"
-#include <QDebug>
-#include <QSqlQuery>
-#include <QDebug>
-
-
 
 //***************************************************************
 //  Class  SaveIdTableView
@@ -144,8 +139,11 @@ int SpecialityForComboBoxSqlModel::rowCountDB(){
     QSqlQuery query;
     QString s = "SELECT COUNT(*) FROM speciality; ";
     if (query.exec(s)) {
-        query.next();
-        return query.value(0).toInt();
+        if (query.next()){
+            return query.value(0).toInt();
+        } else {
+            return 0;
+        }
     } else {
         return 0;
     }

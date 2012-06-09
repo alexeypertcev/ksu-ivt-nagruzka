@@ -1,8 +1,5 @@
 #include "tab_subject.h"
 
-#include <QtSql>
-//#include "tab_students.h"
-
 SubjectSqlModel::SubjectSqlModel(QObject *parent) :
     QSqlQueryModel(parent)
 {
@@ -29,22 +26,19 @@ void SubjectSqlModel::refresh()
 
 bool SubjectSqlModel::setData(const QModelIndex &index, const QVariant &value, int /* role */)
 {
-    if (index.column() < 0 || index.column() > 0)
+    if (index.column() != 0)
         return false;
 
     QModelIndex primaryKeyIndex = QSqlQueryModel::index(index.row(), 0);
-    QString field = ";";
-    switch (index.column()){
-        case 0:
-            field = "name";
-            break;
-        }
+    QString s = "update subject set name = '"+ value.toString() +"' where name = '"+ data(primaryKeyIndex).toString() + "';";
 
-    QString s = "update subject set "+ field +" = '"+ value.toString() +"' where name = '"+ data(primaryKeyIndex).toString() + "';";
-    qDebug() << s;
+#ifdef DEBUG_ENABLE_MODIFY
+    DEBUG_MESSAGE( s )
+#endif
 
     QSqlQuery query;
     if (!query.exec(s)){
+        ERROR_REPORT("0x100")
         return false;
     }
     this->refresh();
@@ -54,17 +48,33 @@ bool SubjectSqlModel::setData(const QModelIndex &index, const QVariant &value, i
 bool SubjectSqlModel::add(QString subject)
 {
     QString s = "insert into subject values( '" + subject + "');";
-    qDebug() << s;
+
+#ifdef DEBUG_ENABLE_MODIFY
+    DEBUG_MESSAGE( s )
+#endif
 
     QSqlQuery query;
-    return query.exec(s);
+    if (!query.exec(s)){
+        ERROR_REPORT("0x101")
+        return false;
+    }
+    this->refresh();
+    return true;
 }
 
 bool SubjectSqlModel::del(QString subject)
 {
     QString s = "DELETE FROM subject WHERE name = '" + subject + "';";
-    qDebug() << s;
+
+#ifdef DEBUG_ENABLE_MODIFY
+    DEBUG_MESSAGE( s )
+#endif
 
     QSqlQuery query;
-    return query.exec(s);
+    if (!query.exec(s)){
+        ERROR_REPORT("0x102")
+        return false;
+    }
+    this->refresh();
+    return true;
 }

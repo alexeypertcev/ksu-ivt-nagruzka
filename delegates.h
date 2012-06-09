@@ -6,9 +6,11 @@
 
 #include <QItemDelegate>
 #include <QModelIndex>
-#include <QObject>
-#include <QSize>
 #include <QSpinBox>
+#include <QtGui>
+#include <QtSql>
+#include "components.h"
+
 #include "errors.h"
 
 class SpinBoxDelegate : public QItemDelegate

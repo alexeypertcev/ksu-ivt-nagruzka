@@ -1,6 +1,12 @@
+//#define DEBUG_ENABLE_MODIFY
+//#define DEBUG_ENABLE_SELECT
+
+
 #include <QtGui/QApplication>
 #include <QtSql>
 #include "mainwindow.h"
+
+
 
 int main(int argc, char *argv[])
 {

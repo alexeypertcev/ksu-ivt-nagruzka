@@ -4,8 +4,8 @@
 #ifndef STUDENTS_H
 #define STUDENTS_H
 
-#include <QSqlQueryModel>
 #include <QItemDelegate>
+#include <QtSql>
 #include "errors.h"
 #include "functions.h"
 

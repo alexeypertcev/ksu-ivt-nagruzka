@@ -5,9 +5,9 @@
 #ifndef CURRICULUMSQLMODEL_H
 #define CURRICULUMSQLMODEL_H
 
-#include <QSqlQueryModel>
 #include <QItemDelegate>
 #include <QSpinBox>
+#include <QtSql>
 #include "errors.h"
 #include "functions.h"
 

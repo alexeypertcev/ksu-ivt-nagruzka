@@ -3,6 +3,7 @@
 
 #include <QSqlQueryModel>
 #include <QItemDelegate>
+#include <QSqlQuery>
 #include "errors.h"
 #include "functions.h"
 

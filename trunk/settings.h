@@ -5,7 +5,9 @@
 #define SETTINGS_H
 
 #include <QDialog>
-#include <QSqlQueryModel>
+#include <QtGui>
+#include <QtSql>
+#include <QModelIndex>
 #include "errors.h"
 
 QT_BEGIN_NAMESPACE

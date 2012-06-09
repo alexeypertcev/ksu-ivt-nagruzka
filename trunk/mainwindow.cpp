@@ -6,6 +6,7 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+
 #include "connection.h"
 #include "delegates.h"
 #include "settings.h"
@@ -19,13 +20,7 @@
 #include "teachers_list.h"
 #include "dialogs.h"
 #include "constants.h"
-
-
-#include <QtGui>
-#include <QtSql>
-#include <QMessageBox>
-#include <QStatusBar>
-
+#include "errors.h"
 
 MainWindow::MainWindow(QString apppath, QWidget *parent) :
     QMainWindow(parent),
@@ -105,11 +100,7 @@ void MainWindow::load_db()
     tablemodel_spec->select();
 
     //sqlmodel_spec = new QSqlQueryModel(this);
-    spec_for_combobox_sqlmodel->refresh();
-
-    ui->comboBox->setModel(spec_for_combobox_sqlmodel);
-    ui->comboBox_2->setModel(spec_for_combobox_sqlmodel);
-    ui->comboBox_3->setModel(spec_for_combobox_sqlmodel);
+    update_spec_checkbox();
 
     tablemodel_stat = new QSqlRelationalTableModel(this);
     tablemodel_stat->setTable("status");
@@ -217,9 +208,10 @@ void MainWindow::on_pushButton_add_subject_clicked()
 void MainWindow::on_pushButton_del_subject_clicked()
 {
     QModelIndexList indexes = ui->tableView->selectionModel()->selectedRows();
-    QModelIndex index = indexes.at(0);
-    sqlmodel_subject->del( sqlmodel_subject->data( sqlmodel_subject->index(index.row(),0), Qt::DisplayRole ).toString());
-
+    if (indexes.length() > 0){
+        QModelIndex index = indexes.at(0);
+        sqlmodel_subject->del( sqlmodel_subject->data( sqlmodel_subject->index(index.row(),0), Qt::DisplayRole ).toString());
+    }
     sqlmodel_subject->refresh();
 }
 
@@ -240,12 +232,14 @@ void MainWindow::on_action_4_activated()
 {
     settings->set_tab(0);
     settings->exec();
+    update_spec_checkbox();
 }
 
 void MainWindow::on_action_5_activated()
 {
     settings->set_tab(1);
     settings->exec();
+    update_spec_checkbox();
 }
 
 void MainWindow::on_action_9_activated()
@@ -282,6 +276,17 @@ void MainWindow::check_and_restore_DB()
     }
 }
 
+void MainWindow::update_spec_checkbox()
+{
+    qDebug() << "upda check";
+    spec_for_combobox_sqlmodel->refresh();
+
+    ui->comboBox->setModel(spec_for_combobox_sqlmodel);
+    ui->comboBox_2->setModel(spec_for_combobox_sqlmodel);
+    ui->comboBox_3->setModel(spec_for_combobox_sqlmodel);
+
+}
+
 void MainWindow::on_pushButton_clicked(){
 // отмена удаления преподавателя
     if (sqlmodel_teachers->save_removed()){
@@ -294,14 +299,36 @@ void MainWindow::on_pushButton_add_student_clicked()
 {
     QSqlQuery query;
     QString speciality_id;
-    query.exec("SELECT speciality_id FROM students;");
+    QString s = "SELECT speciality_id FROM students;";
+#ifdef DEBUG_ENABLE_SELECT
+    DEBUG_MESSAGE( s )
+#endif
 
-    if (query.last()){
-        speciality_id = query.value(0).toString();
-        sqlmodel_students->add(speciality_id, "1", "1", "1", "0");
-        sqlmodel_students->refresh();
+    if (query.exec(s)){
+        if (query.last()){
+            speciality_id = query.value(0).toString();
+            sqlmodel_students->add(speciality_id, "1", "1", "1", "0");
+            sqlmodel_students->refresh();
+        } else {
+            QString s = "SELECT id FROM speciality ORDER BY id DESC;";
+
+#ifdef DEBUG_ENABLE_SELECT
+            DEBUG_MESSAGE( s )
+#endif
+            if (query.exec(s)){
+                if (query.next()){
+                    speciality_id = query.value(0).toString();
+                    sqlmodel_students->add(speciality_id, "1", "1", "1", "0");
+                    sqlmodel_students->refresh();
+                } else{
+                    ERROR_REPORT("0x301");
+                }
+            } else {
+                ERROR_REPORT("0x305");
+            }
+        }
     } else {
-        ERROR_REPORT("0x301")
+        ERROR_REPORT("0x304");
     }
 }
 

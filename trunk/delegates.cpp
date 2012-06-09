@@ -3,14 +3,7 @@
 **
 ****************************************************************************/
 
-#include <QtGui>
-#include <QtSql>
-#include <QSqlTableModel>
-
 #include "delegates.h"
-#include "components.h"
-
-
 
 //**********************************************************
 //  class  SpinBoxDelegate

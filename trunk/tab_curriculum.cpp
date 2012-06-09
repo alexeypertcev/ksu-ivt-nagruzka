@@ -2,8 +2,6 @@
 
 ****************************************************************************/
 
-#include <QtSql>
-#include <QMessageBox>
 #include "tab_curriculum.h"
 
 CurriculumSqlModel::CurriculumSqlModel(QObject *parent)
@@ -66,9 +64,11 @@ bool CurriculumSqlModel::setData(const QModelIndex &index, const QVariant &value
             field = "is_coursework";
             break;
         }
-//QDir::currentPath();
+
     QString s = "update curriculum set "+ field +" = '"+ functions::toDataString(value.toString()) +"' where id = "+ data(primaryKeyIndex).toString();
-    qDebug() << s;
+#ifdef DEBUG_ENABLE_MODIFY
+    DEBUG_MESSAGE( s )
+#endif
 
     QSqlQuery query;
     if (!query.exec(s)){
@@ -117,33 +117,63 @@ bool CurriculumSqlModel::add()
                    "WHERE speciality_id = " + speciality_id + " "
                    "ORDER BY semmester DESC, subject_name DESC;";
     }
+#ifdef DEBUG_ENABLE_SELECT
+    DEBUG_MESSAGE( s )
+#endif
+
     if (!query.exec(s))
     {
+        ERROR_REPORT("0x405")
         return false;
     }
-    query.next();
-    if (query.value(0).toString() == "" || query.value(1).toString() == "" || query.value(2).toString() == ""){
-        if (speciality_id == "all"){
-            query.exec("SELECT id FROM speciality ORDER BY id DESC;");
-            query.next();
+    if (query.next()){
             temp_speciality_id = query.value(0).toString();
+            subject_name = query.value(1).toString();
+            semmester = query.value(2).toString();
+    } else {
+        if (speciality_id == "all"){
+            s = "SELECT id FROM speciality ORDER BY id DESC;";
+
+#ifdef DEBUG_ENABLE_SELECT
+            DEBUG_MESSAGE( s )
+#endif
+            if (!query.exec(s)){
+                ERROR_REPORT("0x406")
+                return false;
+            }
+            if (query.next()){
+                temp_speciality_id = query.value(0).toString();
+            } else {
+                ERROR_REPORT("0x407")
+                return false;
+            }
         } else {
             temp_speciality_id = speciality_id;
         }
 
-        query.exec("SELECT name FROM subject ORDER BY name DESC;");
-        query.next();
-        subject_name = query.value(0).toString();
+        s = "SELECT name FROM subject ORDER BY name DESC;";
 
-        semmester = "1";
-
-    } else {
-        temp_speciality_id = query.value(0).toString();
-        subject_name = query.value(1).toString();
-        semmester = query.value(2).toString();
+#ifdef DEBUG_ENABLE_SELECT
+        DEBUG_MESSAGE( s )
+#endif
+        if (!query.exec(s)){
+            ERROR_REPORT("0x408")
+            return false;
+        }
+        if (query.next()){
+            subject_name = query.value(0).toString();
+            semmester = "1";
+        } else {
+            ERROR_REPORT("0x409")
+            return false;
+        }
     }
 
     s = "insert into curriculum values(NULL, '" + temp_speciality_id + "', '" + subject_name + "', '"  + semmester +  "', 0, 0, 0, 0, 0, 0, 0, 0);";
+
+#ifdef DEBUG_ENABLE_MODIFY
+    DEBUG_MESSAGE( s )
+#endif
     return query.exec(s);
 }
 
@@ -154,6 +184,11 @@ bool CurriculumSqlModel::del(QString id)
     QSqlQuery query;
 
     s = "SELECT subjects_in_semmester.id FROM subjects_in_semmester WHERE subjects_in_semmester.curriculum_id = '" + id + "';";
+
+#ifdef DEBUG_ENABLE_MODIFY
+    DEBUG_MESSAGE( s )
+#endif
+
     if (!query.exec(s)){
         ERROR_REPORT("0x400");
         return false;
@@ -167,16 +202,31 @@ bool CurriculumSqlModel::del(QString id)
     }
 
     s = "DELETE FROM distribution WHERE distribution.subjects_in_semmester_id = '" + subjects_in_semmester_id + "';";
+
+#ifdef DEBUG_ENABLE_MODIFY
+    DEBUG_MESSAGE( s )
+#endif
+
     if (!query.exec(s)){
         ERROR_REPORT("0x402");
     }
 
     s = "DELETE FROM subjects_in_semmester WHERE id = '" + subjects_in_semmester_id + "';";
+
+#ifdef DEBUG_ENABLE_MODIFY
+    DEBUG_MESSAGE( s )
+#endif
+
     if (!query.exec(s)){
         ERROR_REPORT("0x403");
     }
 
     s = "DELETE FROM curriculum WHERE id = '" + id + "';";
+
+#ifdef DEBUG_ENABLE_MODIFY
+    DEBUG_MESSAGE( s )
+#endif
+
     if (!query.exec(s)){
         ERROR_REPORT("0x404");
         return false;

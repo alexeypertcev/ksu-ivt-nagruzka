@@ -66,6 +66,7 @@ bool CurriculumSqlModel::setData(const QModelIndex &index, const QVariant &value
         }
 
     QString s = "update curriculum set "+ field +" = '"+ functions::toDataString(value.toString()) +"' where id = "+ data(primaryKeyIndex).toString();
+
 #ifdef DEBUG_ENABLE_MODIFY
     DEBUG_MESSAGE( s )
 #endif

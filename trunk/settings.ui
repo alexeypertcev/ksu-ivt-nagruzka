@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>543</width>
-    <height>411</height>
+    <width>573</width>
+    <height>485</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,8 +18,8 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>521</width>
-     <height>391</height>
+     <width>551</width>
+     <height>461</height>
     </rect>
    </property>
    <property name="currentIndex">
@@ -34,8 +34,8 @@
       <rect>
        <x>10</x>
        <y>10</y>
-       <width>391</width>
-       <height>341</height>
+       <width>421</width>
+       <height>411</height>
       </rect>
      </property>
      <attribute name="verticalHeaderVisible">
@@ -45,7 +45,7 @@
     <widget class="QPushButton" name="pushButton_add_spec">
      <property name="geometry">
       <rect>
-       <x>410</x>
+       <x>440</x>
        <y>10</y>
        <width>91</width>
        <height>24</height>
@@ -58,7 +58,7 @@
     <widget class="QPushButton" name="pushButton_del_spec">
      <property name="geometry">
       <rect>
-       <x>410</x>
+       <x>440</x>
        <y>40</y>
        <width>91</width>
        <height>24</height>
@@ -78,8 +78,8 @@
       <rect>
        <x>10</x>
        <y>10</y>
-       <width>391</width>
-       <height>341</height>
+       <width>421</width>
+       <height>411</height>
       </rect>
      </property>
      <attribute name="verticalHeaderVisible">
@@ -89,7 +89,7 @@
     <widget class="QPushButton" name="pushButton_add_dolj">
      <property name="geometry">
       <rect>
-       <x>410</x>
+       <x>440</x>
        <y>10</y>
        <width>91</width>
        <height>24</height>
@@ -102,7 +102,7 @@
     <widget class="QPushButton" name="pushButton_del_dolj">
      <property name="geometry">
       <rect>
-       <x>410</x>
+       <x>440</x>
        <y>40</y>
        <width>91</width>
        <height>24</height>
@@ -122,8 +122,8 @@
       <rect>
        <x>10</x>
        <y>10</y>
-       <width>491</width>
-       <height>341</height>
+       <width>521</width>
+       <height>411</height>
       </rect>
      </property>
      <attribute name="verticalHeaderVisible">
@@ -153,8 +153,8 @@
       <rect>
        <x>20</x>
        <y>30</y>
-       <width>471</width>
-       <height>20</height>
+       <width>511</width>
+       <height>23</height>
       </rect>
      </property>
      <property name="text">
@@ -179,8 +179,8 @@
       <rect>
        <x>20</x>
        <y>80</y>
-       <width>471</width>
-       <height>20</height>
+       <width>511</width>
+       <height>23</height>
       </rect>
      </property>
      <property name="text">
@@ -205,8 +205,8 @@
       <rect>
        <x>20</x>
        <y>180</y>
-       <width>471</width>
-       <height>20</height>
+       <width>511</width>
+       <height>23</height>
       </rect>
      </property>
      <property name="text">
@@ -231,8 +231,8 @@
       <rect>
        <x>20</x>
        <y>230</y>
-       <width>471</width>
-       <height>20</height>
+       <width>511</width>
+       <height>23</height>
       </rect>
      </property>
      <property name="text">
@@ -244,7 +244,7 @@
       <rect>
        <x>20</x>
        <y>130</y>
-       <width>471</width>
+       <width>511</width>
        <height>23</height>
       </rect>
      </property>

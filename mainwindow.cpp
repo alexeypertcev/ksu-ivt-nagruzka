@@ -1069,19 +1069,35 @@ void MainWindow::update_report_name()
         report_format = "ods";
     }
 
+    QString report_name = "reportname";
     if (ui->radioButton_6->isChecked()){
         if (ui->tableView_9->get_id() == "0"){
-            ui->lineEdit_2->setText(report_path + "/vacation." + report_format);
+            report_name = "vacation";
         } else {
             QSqlQuery query;
-            query.exec("SELECT f FROM teachers WHERE id = " + ui->tableView_9->get_id() + ";");
-            query.next();
-            ui->lineEdit_2->setText(report_path + "/" + translit(query.value(0).toString()) + "." + report_format);
+            QString s = "SELECT f FROM teachers WHERE id = " + ui->tableView_9->get_id() + ";";
+
+#ifdef DEBUG_ENABLE_SELECT
+            DEBUG_MESSAGE( s )
+#endif
+
+            if (!query.exec(s)){
+                ERROR_REPORT("0x703")
+            }
+            if (query.next()){
+                if (translit(query.value(0).toString()) != ""){
+                    report_name = translit(query.value(0).toString());
+                }
+            } else {
+                ERROR_REPORT("0x704")
+            }
         }
     }else{
         //report_format;
-        ui->lineEdit_2->setText(report_path + "/all_teachers." + report_format);
+        report_name = "all_teachers";
     }
+
+    ui->lineEdit_2->setText(report_path + "/" + report_name + "." + report_format);
 }
 
 QString MainWindow::translit(QString s){

@@ -21,12 +21,15 @@ Settings::Settings(QWidget *parent, QSqlRelationalTableModel* tm_spec, QSqlRelat
     tablemodel_spec->setHeaderData(1, Qt::Horizontal, QObject::tr("Факультет"));
     tablemodel_spec->setHeaderData(2, Qt::Horizontal, QObject::tr("Специальность"));
     tablemodel_spec->setHeaderData(3, Qt::Horizontal, QObject::tr("Форма обучения"));
-    ui->tableView->setColumnWidth(0,35);
-    ui->tableView->setColumnWidth(1,85);
-    ui->tableView->setColumnWidth(2,100);
-    ui->tableView->setColumnWidth(3,105);
+    ui->tableView->setColumnWidth(0,50);
+    ui->tableView->setColumnWidth(1,100);
+    ui->tableView->setColumnWidth(2,115);
+    ui->tableView->setColumnWidth(3,120);
 
-    ui->tableView_2->setColumnWidth(0,120);
+    tablemodel_stat->setHeaderData(0, Qt::Horizontal, QObject::tr("Должность"));
+    tablemodel_stat->setHeaderData(1, Qt::Horizontal, QObject::tr("Часы"));
+    ui->tableView_2->setColumnWidth(0,150);
+    ui->tableView_2->setColumnWidth(1,150);
 
     coefficients_model = new Coefficients_model();
     coefficients_model->refresh();
@@ -35,8 +38,8 @@ Settings::Settings(QWidget *parent, QSqlRelationalTableModel* tm_spec, QSqlRelat
     coefficients_model->setHeaderData(1, Qt::Horizontal, QObject::tr("Название"));
     coefficients_model->setHeaderData(2, Qt::Horizontal, QObject::tr("Норма"));
     ui->tableView_3->setColumnWidth(0,0);
-    ui->tableView_3->setColumnWidth(1,360);
-    ui->tableView_3->setColumnWidth(2,50);
+    ui->tableView_3->setColumnWidth(1,400);
+    ui->tableView_3->setColumnWidth(2,60);
 
     update_other_data();
 }

@@ -337,6 +337,7 @@ bool Coefficients_model::setData(const QModelIndex &index, const QVariant &value
 
     QSqlQuery query;
     if (!query.exec(s)){
+
         ERROR_REPORT("0x80C");
         return false;
     }

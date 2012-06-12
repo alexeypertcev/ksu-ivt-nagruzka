@@ -22,6 +22,8 @@
 #include "constants.h"
 #include "errors.h"
 
+
+
 MainWindow::MainWindow(QString apppath, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -278,9 +280,7 @@ void MainWindow::check_and_restore_DB()
 
 void MainWindow::update_spec_checkbox()
 {
-    qDebug() << "upda check";
     spec_for_combobox_sqlmodel->refresh();
-
     ui->comboBox->setModel(spec_for_combobox_sqlmodel);
     ui->comboBox_2->setModel(spec_for_combobox_sqlmodel);
     ui->comboBox_3->setModel(spec_for_combobox_sqlmodel);

@@ -34,9 +34,6 @@ void SaveIdTableView::update_ids()
         {
             ids << temp_model->data(temp_model->index(i,0)).toString();
         }
-    } else {
-        qDebug() << "temp_model is NULL";
-
     }
 }
 

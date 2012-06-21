@@ -9,17 +9,7 @@ Settings::Settings(QWidget *parent, QSqlRelationalTableModel* tm_stat) :
     ui(new Ui::Settings)
 {
     ui->setupUi(this);
-/*
-    tablemodel_spec = tm_spec;
-    tablemodel_spec->setRelation(3, QSqlRelation("form_training", "name", "name"));
-    ui->tableView->setModel(tablemodel_spec);
-    ui->tableView->setItemDelegate(new QSqlRelationalDelegate(ui->tableView));
-    ui->tableView->update();
-    tablemodel_spec->setHeaderData(0, Qt::Horizontal, QObject::tr("ID"));
-    tablemodel_spec->setHeaderData(1, Qt::Horizontal, QObject::tr("Факультет"));
-    tablemodel_spec->setHeaderData(2, Qt::Horizontal, QObject::tr("Специальность"));
-    tablemodel_spec->setHeaderData(3, Qt::Horizontal, QObject::tr("Форма обучения"));
-*/
+
     ComboBoxDelegate *form_training = new ComboBoxDelegate("form_training",this);
     sqlmodel_speciality = new Speciality_model();
     sqlmodel_speciality->refresh();
@@ -56,9 +46,9 @@ Settings::Settings(QWidget *parent, QSqlRelationalTableModel* tm_stat) :
     coefficients_model->setHeaderData(2, Qt::Horizontal, QObject::tr("Специальность"));
     coefficients_model->setHeaderData(3, Qt::Horizontal, QObject::tr("Норма"));
     ui->tableView_3->setColumnWidth(0,0);
-    ui->tableView_3->setColumnWidth(1,360);
+    ui->tableView_3->setColumnWidth(1,358);
     ui->tableView_3->setColumnWidth(2,97);
-    ui->tableView_3->setColumnWidth(3,45);
+    ui->tableView_3->setColumnWidth(3,43);
 
     SpecialityAllDelegate *specialityAlldelegate = new SpecialityAllDelegate(this);
     ui->tableView_3->setItemDelegateForColumn(2, specialityAlldelegate);

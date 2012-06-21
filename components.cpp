@@ -129,7 +129,7 @@ QVariant SpecialityForComboBoxSqlModel::data(const QModelIndex &index, int role)
 void SpecialityForComboBoxSqlModel::refresh(){
     rowsCountDB = rowCountDB();
     this->setQuery("SELECT special_name || '(' || form_training_name || ')', id "
-                   "FROM speciality ORDER BY id;");
+                   "FROM speciality WHERE id != 0 ORDER BY special_name, form_training_name;");
 }
 
 int SpecialityForComboBoxSqlModel::rowCountDB(){
@@ -137,7 +137,7 @@ int SpecialityForComboBoxSqlModel::rowCountDB(){
     QString s = "SELECT COUNT(*) FROM speciality; ";
     if (query.exec(s)) {
         if (query.next()){
-            return query.value(0).toInt();
+            return (query.value(0).toInt() - 1);
         } else {
             return 0;
         }

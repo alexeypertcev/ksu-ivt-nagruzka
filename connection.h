@@ -130,7 +130,10 @@ const QString create_table_distribution =
 const QString create_table_coefficients =
         "CREATE TABLE coefficients ( "
         "name TEXT NOT NULL, "
+        "speciality_id INTEGER NOT NULL, "
         "value REAL NOT NULL, "
+        "CONSTRAINT speciality_id FOREIGN KEY (speciality_id) "
+        " REFERENCES speciality (id), "
         "CONSTRAINT name PRIMARY KEY (name))";
 const QString create_table_other_data =
         "CREATE TABLE other_data ( "
@@ -182,7 +185,7 @@ static bool insert_main_data()
         query.exec("insert into form_training values('оч')");
         query.exec("insert into form_training values('оч-заоч')");
         query.exec("insert into form_training values('заоч')");
-        query.exec("insert into speciality values(NULL, 'ФИВТ','МОиАИС', 'оч')");
+        query.exec("insert into speciality values(0, 'все','', 'оч')");
 
         query.exec("insert into status values('выберите..', 0)");
         query.exec("insert into status values('профессор', 680)");
@@ -198,27 +201,27 @@ static bool insert_main_data()
 
         query.exec("insert into teachers values(0, 'выберите..', ' ', ' ', 'выберите..', 1 , 0);");
 
-        query.exec("insert into coefficients values('coefficient_lection_hr', 1)");
-        query.exec("insert into coefficients values('coefficient_labs_for_undergroup_hr', 1)");
-        query.exec("insert into coefficients values('coefficient_practice_for_group_hr', 1)");
-        query.exec("insert into coefficients values('coefficient_individ_for_KCR_hr', 1)");
-        query.exec("insert into coefficients values('coefficient_kontr_rab_for_quantitycourse_min', 15)");
-        query.exec("insert into coefficients values('coefficient_offset_for_quantitycourse_min', 15)");
-        query.exec("insert into coefficients values('coefficient_examen_for_quantitycourse_min', 20)");
-        query.exec("insert into coefficients values('coefficient_coursework_for_quantitycourse_hr', 3)");
-        query.exec("insert into coefficients values('coefficient_consultation_ochnui_percent', 5)");
-        query.exec("insert into coefficients values('coefficient_consultation_zaochnui_percent', 15)");
-        query.exec("insert into coefficients values('coefficient_consultation_och_zaoch_percent', 10)");
-        query.exec("insert into coefficients values('coefficient_consultation_add_is_examen_for_group', 2)");
-        query.exec("insert into coefficients values('coefficient_ruk_vo_kurs_work_hr', 5)");
-        query.exec("insert into coefficients values('coefficient_ruk_vo_VKR_spec_hr', 20)");
-        query.exec("insert into coefficients values('coefficient_ruk_vo_VKR_bak_hr', 12)");
-        query.exec("insert into coefficients values('coefficient_zachita_kurs_rab_na_kommis_min', 15)");
-        query.exec("insert into coefficients values('coefficient_ruk_vo_VKR_mag_hr', 28)");
-        query.exec("insert into coefficients values('coefficient_recenzir_VKR_hr', 1)");
-        query.exec("insert into coefficients values('coefficient_normokontrol_hr', 1)");
-        query.exec("insert into coefficients values('coefficient_ychastie_work_GAK_min', 30)");
-        query.exec("insert into coefficients values('coefficient_ruk_vo_aspirants_hr', 50)");
+        query.exec("insert into coefficients values('coefficient_lection_hr', 0, 1)");
+        query.exec("insert into coefficients values('coefficient_labs_for_undergroup_hr', 0, 1)");
+        query.exec("insert into coefficients values('coefficient_practice_for_group_hr', 0, 1)");
+        query.exec("insert into coefficients values('coefficient_individ_for_KCR_hr', 0, 1)");
+        query.exec("insert into coefficients values('coefficient_kontr_rab_for_quantitycourse_min', 0, 15)");
+        query.exec("insert into coefficients values('coefficient_offset_for_quantitycourse_min', 0, 15)");
+        query.exec("insert into coefficients values('coefficient_examen_for_quantitycourse_min', 0, 20)");
+        query.exec("insert into coefficients values('coefficient_coursework_for_quantitycourse_hr', 0, 3)");
+        query.exec("insert into coefficients values('coefficient_consultation_ochnui_percent', 0, 5)");
+        query.exec("insert into coefficients values('coefficient_consultation_zaochnui_percent', 0, 15)");
+        query.exec("insert into coefficients values('coefficient_consultation_och_zaoch_percent', 0, 10)");
+        query.exec("insert into coefficients values('coefficient_consultation_add_is_examen_for_group', 0, 2)");
+        query.exec("insert into coefficients values('coefficient_ruk_vo_kurs_work_hr', 0, 5)");
+        query.exec("insert into coefficients values('coefficient_ruk_vo_VKR_spec_hr', 0, 20)");
+        query.exec("insert into coefficients values('coefficient_ruk_vo_VKR_bak_hr', 0, 12)");
+        query.exec("insert into coefficients values('coefficient_zachita_kurs_rab_na_kommis_min', 0, 15)");
+        query.exec("insert into coefficients values('coefficient_ruk_vo_VKR_mag_hr', 0, 28)");
+        query.exec("insert into coefficients values('coefficient_recenzir_VKR_hr', 0, 1)");
+        query.exec("insert into coefficients values('coefficient_normokontrol_hr', 0, 1)");
+        query.exec("insert into coefficients values('coefficient_ychastie_work_GAK_min', 0, 30)");
+        query.exec("insert into coefficients values('coefficient_ruk_vo_aspirants_hr', 0, 50)");
         query.exec("insert into other_data values('academic_year', '2011/2012')");
         query.exec("insert into other_data values('name_kafedry_faculty', 'Программного обеспечения и администрирования информационных систем')");
         query.exec("insert into other_data values('name_kafedry_smail', 'ПОиАИС')");

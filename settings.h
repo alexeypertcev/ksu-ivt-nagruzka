@@ -48,6 +48,7 @@ private slots:
     void on_lineEdit_4_editingFinished();
     void update_other_data();
     void on_lineEdit_5_editingFinished();
+    void on_pushButton_clicked();
 };
 
 class Speciality_model : public QSqlQueryModel

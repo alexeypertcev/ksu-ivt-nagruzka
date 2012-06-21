@@ -129,7 +129,7 @@ QWidget *SpecialityDelegate::createEditor(QWidget *parent,
     SaveIdComboBox *editor = new SaveIdComboBox(parent);
     QSqlQueryModel* sqlmodel = new QSqlQueryModel(parent);
     sqlmodel->setQuery("SELECT special_name || '(' || form_training_name || ')', id "
-                       "FROM speciality WHERE id != 0 ORDER BY special_name, form_training_name;");
+                       "FROM speciality WHERE id != 0 ORDER BY faculty_name, special_name, form_training_name;");
     editor->setModel(sqlmodel);
     return editor;
 }
@@ -367,7 +367,7 @@ void StaffDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
 
     SaveIdComboBox *comboBox = static_cast<SaveIdComboBox*>(editor);
     QString value = comboBox->get_id();
-    qDebug() << "value: " << value;
+    //qDebug() << "value: " << value;
     model->setData(index, value, Qt::EditRole);
 }
 
@@ -377,4 +377,56 @@ void StaffDelegate::updateEditorGeometry(QWidget *editor,
     editor->setGeometry(option.rect);
 }
 
+//**********************************************************
+//  class  SpecialityAllDelegate
+//**********************************************************
 
+SpecialityAllDelegate::SpecialityAllDelegate(QObject *parent)
+    : QItemDelegate(parent)
+{
+}
+
+QWidget *SpecialityAllDelegate::createEditor(QWidget *parent,
+    const QStyleOptionViewItem &/* option */,
+    const QModelIndex &/* index */) const
+{
+    SaveIdComboBox *editor = new SaveIdComboBox(parent);
+    SpecialityForComboBoxSqlModel* sqlmodel = new SpecialityForComboBoxSqlModel(parent);
+    sqlmodel->refresh();
+    editor->setModel(sqlmodel);
+    return editor;
+}
+
+void SpecialityAllDelegate::setEditorData(QWidget *editor,
+                                    const QModelIndex &index) const
+{
+    QString value = index.model()->data(index, Qt::EditRole).toString();
+
+    SaveIdComboBox *saveIdBox = static_cast<SaveIdComboBox*>(editor);
+    int i;
+    for (i = 0; i<saveIdBox->count(); ++i)
+    {
+        if ( saveIdBox->itemText(i) == value ){ break; }
+    }
+
+    saveIdBox->setCurrentIndex(i);
+}
+
+void SpecialityAllDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
+                                   const QModelIndex &index) const
+{
+
+    SaveIdComboBox *comboBox = static_cast<SaveIdComboBox*>(editor);
+    QString value = comboBox->get_id();
+    if (value == "Все"){
+        model->setData(index, "0", Qt::EditRole);
+    } else {
+        model->setData(index, value, Qt::EditRole);
+    }
+}
+
+void SpecialityAllDelegate::updateEditorGeometry(QWidget *editor,
+    const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
+{
+    editor->setGeometry(option.rect);
+}

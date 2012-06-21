@@ -129,7 +129,7 @@ QWidget *SpecialityDelegate::createEditor(QWidget *parent,
     SaveIdComboBox *editor = new SaveIdComboBox(parent);
     QSqlQueryModel* sqlmodel = new QSqlQueryModel(parent);
     sqlmodel->setQuery("SELECT special_name || '(' || form_training_name || ')', id "
-                       "FROM speciality;");
+                       "FROM speciality WHERE id != 0 ORDER BY special_name, form_training_name;");
     editor->setModel(sqlmodel);
     return editor;
 }

@@ -23,7 +23,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>3</number>
+    <number>2</number>
    </property>
    <widget class="QWidget" name="tab">
     <attribute name="title">
@@ -123,12 +123,25 @@
        <x>10</x>
        <y>10</y>
        <width>521</width>
-       <height>411</height>
+       <height>381</height>
       </rect>
      </property>
      <attribute name="verticalHeaderVisible">
       <bool>false</bool>
      </attribute>
+    </widget>
+    <widget class="QPushButton" name="pushButton">
+     <property name="geometry">
+      <rect>
+       <x>380</x>
+       <y>400</y>
+       <width>151</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Создать дополнительную</string>
+     </property>
     </widget>
    </widget>
    <widget class="QWidget" name="tab_4">

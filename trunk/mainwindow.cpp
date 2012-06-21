@@ -276,6 +276,34 @@ void MainWindow::check_and_restore_DB()
     if (!query.next()){
         query.exec("insert into other_data values('name_kafedry_smail', 'ПОиАИС')");
     }
+    if (!query.exec("SELECT speciality_id FROM coefficients")){
+        query.exec("DROP TABLE coefficients");
+        query.exec(create_table_coefficients);
+
+        query.exec("insert into speciality values(0, 'все','', 'оч')");
+        query.exec("insert into coefficients values('coefficient_lection_hr', 0, 1)");
+        query.exec("insert into coefficients values('coefficient_labs_for_undergroup_hr', 0, 1)");
+        query.exec("insert into coefficients values('coefficient_practice_for_group_hr', 0, 1)");
+        query.exec("insert into coefficients values('coefficient_individ_for_KCR_hr', 0, 1)");
+        query.exec("insert into coefficients values('coefficient_kontr_rab_for_quantitycourse_min', 0, 15)");
+        query.exec("insert into coefficients values('coefficient_offset_for_quantitycourse_min', 0, 15)");
+        query.exec("insert into coefficients values('coefficient_examen_for_quantitycourse_min', 0, 20)");
+        query.exec("insert into coefficients values('coefficient_coursework_for_quantitycourse_hr', 0, 3)");
+        query.exec("insert into coefficients values('coefficient_consultation_ochnui_percent', 0, 5)");
+        query.exec("insert into coefficients values('coefficient_consultation_zaochnui_percent', 0, 15)");
+        query.exec("insert into coefficients values('coefficient_consultation_och_zaoch_percent', 0, 10)");
+        query.exec("insert into coefficients values('coefficient_consultation_add_is_examen_for_group', 0, 2)");
+        query.exec("insert into coefficients values('coefficient_ruk_vo_kurs_work_hr', 0, 5)");
+        query.exec("insert into coefficients values('coefficient_ruk_vo_VKR_spec_hr', 0, 20)");
+        query.exec("insert into coefficients values('coefficient_ruk_vo_VKR_bak_hr', 0, 12)");
+        query.exec("insert into coefficients values('coefficient_zachita_kurs_rab_na_kommis_min', 0, 15)");
+        query.exec("insert into coefficients values('coefficient_ruk_vo_VKR_mag_hr', 0, 28)");
+        query.exec("insert into coefficients values('coefficient_recenzir_VKR_hr', 0, 1)");
+        query.exec("insert into coefficients values('coefficient_normokontrol_hr', 0, 1)");
+        query.exec("insert into coefficients values('coefficient_ychastie_work_GAK_min', 0, 30)");
+        query.exec("insert into coefficients values('coefficient_ruk_vo_aspirants_hr', 0, 50)");
+    }
+
 }
 
 void MainWindow::update_spec_checkbox()
@@ -873,7 +901,72 @@ void MainWindow::on_pushButton_2_clicked()
     QString new_examen_hr;
     QString new_coursework_hr;
 
-    update_coefficients();
+    unsigned int coefficient_lection_hr = 0;
+    unsigned int coefficient_labs_for_undergroup_hr = 0;
+    unsigned int coefficient_practice_for_group_hr = 0;
+    unsigned int coefficient_individ_for_KCR_hr = 0;
+    unsigned int coefficient_kontr_rab_for_quantitycourse_min = 0;
+    unsigned int coefficient_offset_for_quantitycourse_min = 0;
+    unsigned int coefficient_examen_for_quantitycourse_min = 0;
+    unsigned int coefficient_consultation_ochnui_percent = 0;
+    unsigned int coefficient_consultation_zaochnui_percent = 0;
+    unsigned int coefficient_consultation_och_zaoch_percent = 0;
+    unsigned int coefficient_consultation_add_is_examen_for_group = 0;
+    unsigned int coefficient_coursework_for_quantitycourse_hr = 0;
+
+    int control_sum = 0;
+    query.exec("SELECT name, value FROM coefficients");
+    while(query.next()){
+        if (query.value(0).toString() == "coefficient_lection_hr"){
+            coefficient_lection_hr = query.value(1).toUInt();
+            ++control_sum;
+        } else if (query.value(0).toString() == "coefficient_labs_for_undergroup_hr"){
+            coefficient_labs_for_undergroup_hr = query.value(1).toUInt();
+            ++control_sum;
+        } else if (query.value(0).toString() == "coefficient_practice_for_group_hr"){
+            coefficient_practice_for_group_hr = query.value(1).toUInt();
+            ++control_sum;
+        } else if (query.value(0).toString() == "coefficient_individ_for_KCR_hr"){
+            coefficient_individ_for_KCR_hr = query.value(1).toUInt();
+            ++control_sum;
+        } else if (query.value(0).toString() == "coefficient_kontr_rab_for_quantitycourse_min"){
+            coefficient_kontr_rab_for_quantitycourse_min = query.value(1).toUInt();
+            ++control_sum;
+        } else if (query.value(0).toString() == "coefficient_offset_for_quantitycourse_min"){
+            coefficient_offset_for_quantitycourse_min = query.value(1).toUInt();
+            ++control_sum;
+        } else if (query.value(0).toString() == "coefficient_examen_for_quantitycourse_min"){
+            coefficient_examen_for_quantitycourse_min = query.value(1).toUInt();
+            ++control_sum;
+        } else if (query.value(0).toString() == "coefficient_consultation_ochnui_percent"){
+            coefficient_consultation_ochnui_percent = query.value(1).toUInt();
+            ++control_sum;
+        } else if (query.value(0).toString() == "coefficient_consultation_zaochnui_percent"){
+            coefficient_consultation_zaochnui_percent = query.value(1).toUInt();
+            ++control_sum;
+        } else if (query.value(0).toString() == "coefficient_consultation_och_zaoch_percent"){
+            coefficient_consultation_och_zaoch_percent = query.value(1).toUInt();
+            ++control_sum;
+        } else if (query.value(0).toString() == "coefficient_consultation_add_is_examen_for_group"){
+            coefficient_consultation_add_is_examen_for_group = query.value(1).toUInt();
+            ++control_sum;
+        } else if (query.value(0).toString() == "coefficient_coursework_for_quantitycourse_hr"){
+            coefficient_coursework_for_quantitycourse_hr = query.value(1).toUInt();
+            ++control_sum;
+        } else if (query.value(0).toString() == "coefficient_ruk_vo_kurs_work_hr"){
+        } else if (query.value(0).toString() == "coefficient_ruk_vo_VKR_spec_hr"){
+        } else if (query.value(0).toString() == "coefficient_ruk_vo_VKR_bak_hr"){
+        } else if (query.value(0).toString() == "coefficient_zachita_kurs_rab_na_kommis_min"){
+        } else if (query.value(0).toString() == "coefficient_ruk_vo_VKR_mag_hr"){
+        } else if (query.value(0).toString() == "coefficient_recenzir_VKR_hr"){
+        } else if (query.value(0).toString() == "coefficient_normokontrol_hr"){
+        } else if (query.value(0).toString() == "coefficient_ychastie_work_GAK_min"){
+        } else if (query.value(0).toString() == "coefficient_ruk_vo_aspirants_hr"){
+        } else { ERROR_REPORT("0x003");}
+    }
+    if (control_sum != 12){
+        ERROR_REPORT("0x004");
+    }
 
     query.exec("SELECT curriculum.id, speciality_id, "
                "subject_name, semmester, lection_hr, labs_hr, practice_hr, "
@@ -906,10 +999,14 @@ void MainWindow::on_pushButton_2_clicked()
 
                 new_lection_hr = QString::number(lection_hr*coefficient_lection_hr, 10);              // "lection_hr INTEGER NOT NULL, "
                 new_labs_hr = QString::number(labs_hr*num_undergroup*coefficient_labs_for_undergroup_hr, 10);       // "labs_hr INTEGER NOT NULL, "
-                new_practice_hr = QString::number(practice_hr*num_group*coefficient_practice_for_group_hr, 10);    // "practice_hr INTEGER NOT NULL, "
-                new_individ_hr = QString::number(KCR_hr*coefficient_individ_for_KCR_hr, 10);                  // "individ_hr REAL NOT NULL, "
+                new_practice_hr = QString::number(practice_hr*num_group*coefficient_practice_for_group_hr, 10);     // "practice_hr INTEGER NOT NULL, "
+                new_individ_hr = QString::number(KCR_hr*coefficient_individ_for_KCR_hr, 10);                        // "individ_hr REAL NOT NULL, "
                 new_kontr_rab_hr = QString::number((int)ceil(controlwork*quantity_course*(((double)coefficient_kontr_rab_for_quantitycourse_min)/60)), 10);    // "kontr_rab_hr REAL NOT NULL, "
-                new_consultation_hr = consultation_get(lection_hr, speciality_id, num_group, is_examen);  // "consultation_hr REAL NOT NULL, "
+                new_consultation_hr = consultation_get(lection_hr, speciality_id, num_group, is_examen,
+                                                       coefficient_consultation_ochnui_percent,
+                                                       coefficient_consultation_och_zaoch_percent,
+                                                       coefficient_consultation_zaochnui_percent,
+                                                       coefficient_consultation_add_is_examen_for_group);     // "consultation_hr REAL NOT NULL, "
                 new_offset_hr = offset_get((int)ceil(quantity_course*(((double)coefficient_offset_for_quantitycourse_min)/60)), is_offset);       // "offset_hr REAL NOT NULL, "
                 new_examen_hr = examen_get((int)ceil(quantity_course*(((double)coefficient_examen_for_quantitycourse_min)/60)), is_examen);       // "examen_hr REAL NOT NULL, "
                 new_coursework_hr = QString::number(is_coursework*quantity_course*coefficient_coursework_for_quantitycourse_hr, 10);  // "coursework_hr
@@ -968,7 +1065,6 @@ void MainWindow::on_pushButton_2_clicked()
 
     update_subinsem();
 
-
     QMessageBox msgBox;
     msgBox.setText("Данные в таблице 'Предметы в семместре' \nуспешно обновлены");
     msgBox.exec();
@@ -991,7 +1087,11 @@ QString MainWindow::examen_get(int hours, int is_exists){
 }
 
 
-QString MainWindow::consultation_get(int lection_hr, QString speciality_id, int num_group, int is_examen)
+QString MainWindow::consultation_get(int lection_hr, QString speciality_id, int num_group, int is_examen,
+                                     unsigned int coefficient_consultation_ochnui_percent,
+                                     unsigned int coefficient_consultation_och_zaoch_percent,
+                                     unsigned int coefficient_consultation_zaochnui_percent,
+                                     unsigned int coefficient_consultation_add_is_examen_for_group)
 {
     int percent = 0;
     double res = 0;
@@ -1218,47 +1318,5 @@ void MainWindow::on_pushButton_clear_distribution_clicked()
     if (dialog.exec() == 1){
         sqlmodel_distribution->clearTable();
         update_distribution();
-    }
-}
-
-void MainWindow::update_coefficients(){
-    QSqlQuery query;
-    query.exec("SELECT name, value FROM coefficients");
-
-    while(query.next()){
-        if (query.value(0).toString() == "coefficient_lection_hr"){
-            coefficient_lection_hr = query.value(1).toUInt();
-        } else if (query.value(0).toString() == "coefficient_labs_for_undergroup_hr"){
-            coefficient_labs_for_undergroup_hr = query.value(1).toUInt();
-        } else if (query.value(0).toString() == "coefficient_practice_for_group_hr"){
-            coefficient_practice_for_group_hr = query.value(1).toUInt();
-        } else if (query.value(0).toString() == "coefficient_individ_for_KCR_hr"){
-            coefficient_individ_for_KCR_hr = query.value(1).toUInt();
-        } else if (query.value(0).toString() == "coefficient_kontr_rab_for_quantitycourse_min"){
-            coefficient_kontr_rab_for_quantitycourse_min = query.value(1).toUInt();
-        } else if (query.value(0).toString() == "coefficient_offset_for_quantitycourse_min"){
-            coefficient_offset_for_quantitycourse_min = query.value(1).toUInt();
-        } else if (query.value(0).toString() == "coefficient_examen_for_quantitycourse_min"){
-            coefficient_examen_for_quantitycourse_min = query.value(1).toUInt();
-        } else if (query.value(0).toString() == "coefficient_consultation_ochnui_percent"){
-            coefficient_consultation_ochnui_percent = query.value(1).toUInt();
-        } else if (query.value(0).toString() == "coefficient_consultation_zaochnui_percent"){
-            coefficient_consultation_zaochnui_percent = query.value(1).toUInt();
-        } else if (query.value(0).toString() == "coefficient_consultation_och_zaoch_percent"){
-            coefficient_consultation_och_zaoch_percent = query.value(1).toUInt();
-        } else if (query.value(0).toString() == "coefficient_consultation_add_is_examen_for_group"){
-            coefficient_consultation_add_is_examen_for_group = query.value(1).toUInt();
-        } else if (query.value(0).toString() == "coefficient_coursework_for_quantitycourse_hr"){
-            coefficient_coursework_for_quantitycourse_hr = query.value(1).toUInt();
-        } else if (query.value(0).toString() == "coefficient_ruk_vo_kurs_work_hr"){
-        } else if (query.value(0).toString() == "coefficient_ruk_vo_VKR_spec_hr"){
-        } else if (query.value(0).toString() == "coefficient_ruk_vo_VKR_bak_hr"){
-        } else if (query.value(0).toString() == "coefficient_zachita_kurs_rab_na_kommis_min"){
-        } else if (query.value(0).toString() == "coefficient_ruk_vo_VKR_mag_hr"){
-        } else if (query.value(0).toString() == "coefficient_recenzir_VKR_hr"){
-        } else if (query.value(0).toString() == "coefficient_normokontrol_hr"){
-        } else if (query.value(0).toString() == "coefficient_ychastie_work_GAK_min"){
-        } else if (query.value(0).toString() == "coefficient_ruk_vo_aspirants_hr"){
-        } else { ERROR_REPORT("0x003");}
     }
 }

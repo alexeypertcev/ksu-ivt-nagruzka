@@ -1,30 +1,43 @@
 #include "settings.h"
 #include "ui_settings.h"
+#include "functions.h"
+#include "delegates.h"
 
-Settings::Settings(QWidget *parent, QSqlRelationalTableModel* tm_spec, QSqlRelationalTableModel* tm_stat) :
+
+Settings::Settings(QWidget *parent, QSqlRelationalTableModel* tm_stat) :
     QDialog(parent),
     ui(new Ui::Settings)
 {
     ui->setupUi(this);
-
+/*
     tablemodel_spec = tm_spec;
     tablemodel_spec->setRelation(3, QSqlRelation("form_training", "name", "name"));
     ui->tableView->setModel(tablemodel_spec);
     ui->tableView->setItemDelegate(new QSqlRelationalDelegate(ui->tableView));
     ui->tableView->update();
-
-    tablemodel_stat = tm_stat;
-    ui->tableView_2->setModel(tablemodel_stat);
-    ui->tableView_2->update();
-
     tablemodel_spec->setHeaderData(0, Qt::Horizontal, QObject::tr("ID"));
     tablemodel_spec->setHeaderData(1, Qt::Horizontal, QObject::tr("Факультет"));
     tablemodel_spec->setHeaderData(2, Qt::Horizontal, QObject::tr("Специальность"));
     tablemodel_spec->setHeaderData(3, Qt::Horizontal, QObject::tr("Форма обучения"));
-    ui->tableView->setColumnWidth(0,50);
-    ui->tableView->setColumnWidth(1,100);
-    ui->tableView->setColumnWidth(2,115);
-    ui->tableView->setColumnWidth(3,120);
+*/
+    ComboBoxDelegate *form_training = new ComboBoxDelegate("form_training",this);
+    sqlmodel_speciality = new Speciality_model();
+    sqlmodel_speciality->refresh();
+    ui->tableView->setModel(sqlmodel_speciality);
+    ui->tableView->setItemDelegateForColumn(3, form_training);
+
+    sqlmodel_speciality->setHeaderData(0, Qt::Horizontal, QObject::tr("ID"));
+    sqlmodel_speciality->setHeaderData(1, Qt::Horizontal, QObject::tr("Факультет"));
+    sqlmodel_speciality->setHeaderData(2, Qt::Horizontal, QObject::tr("Специальность"));
+    sqlmodel_speciality->setHeaderData(3, Qt::Horizontal, QObject::tr("Форма обучения"));
+    ui->tableView->setColumnWidth(0,0);
+    ui->tableView->setColumnWidth(1,115);
+    ui->tableView->setColumnWidth(2,130);
+    ui->tableView->setColumnWidth(3,145);
+
+    tablemodel_stat = tm_stat;
+    ui->tableView_2->setModel(tablemodel_stat);
+    ui->tableView_2->update();
 
     tablemodel_stat->setHeaderData(0, Qt::Horizontal, QObject::tr("Должность"));
     tablemodel_stat->setHeaderData(1, Qt::Horizontal, QObject::tr("Часы"));
@@ -52,23 +65,37 @@ Settings::~Settings()
 
 void Settings::on_pushButton_add_spec_clicked()
 {
-    QString s = "insert into speciality values(NULL, 'ФИВТ', 'МОиАИС', 'оч')";
+    QSqlQuery query;
+    QString s = "SELECT id, faculty_name, special_name, form_training_name "
+                "FROM speciality WHERE id != 0 ORDER BY faculty_name DESC, special_name DESC, form_training_name DESC ";
 
-#ifdef DEBUG_ENABLE_MODIFY
+#ifdef DEBUG_ENABLE_SELECT
     DEBUG_MESSAGE( s )
 #endif
 
-    QSqlQuery query;
-    if (!query.exec(s)){
-        ERROR_REPORT("0x801")
+    if (query.exec(s)){
+        if (query.next()){
+            s = "insert into speciality values(NULL, '" + query.value(1).toString() + "', '" + query.value(2).toString() + "', 'оч')";
+        } else {
+            s = "insert into speciality values(NULL, '', '', 'оч')";
+        }
+
+#ifdef DEBUG_ENABLE_MODIFY
+        DEBUG_MESSAGE( s )
+#endif
+        if (!query.exec(s)){
+            ERROR_REPORT("0x801")
+        }
+        sqlmodel_speciality->refresh();
+    } else {
+        ERROR_REPORT("0x813");
     }
-    tablemodel_spec->select();
 }
 
 void Settings::on_pushButton_del_spec_clicked()
 {
     int row = ui->tableView->currentIndex().row();
-    QString s = "DELETE FROM speciality WHERE id = '" + tablemodel_spec->data( tablemodel_spec->index(row,0),
+    QString s = "DELETE FROM speciality WHERE id = '" + sqlmodel_speciality->data( sqlmodel_speciality->index(row,0),
                                                                               Qt::DisplayRole ).toString() + "';";
 #ifdef DEBUG_ENABLE_MODIFY
     DEBUG_MESSAGE( s )
@@ -78,7 +105,7 @@ void Settings::on_pushButton_del_spec_clicked()
     if (!query.exec(s)){
         ERROR_REPORT("0x802")
     }
-    tablemodel_spec->select();
+    sqlmodel_speciality->refresh();
 }
 
 void Settings::on_pushButton_add_dolj_clicked()
@@ -216,6 +243,82 @@ void Settings::update_other_data()
             ERROR_REPORT("0x80B");
         }
     }
+}
+
+/***********************************************************
+*   Speciality_model
+************************************************************/
+
+Speciality_model::Speciality_model(QObject *parent) :
+    QSqlQueryModel(parent)
+{
+}
+
+Qt::ItemFlags Speciality_model::flags(
+        const QModelIndex &index) const
+{
+    Qt::ItemFlags flags = QSqlQueryModel::flags(index);
+    if ((index.column() >= 1)||(index.column() <= 3))
+    {
+        flags |= Qt::ItemIsEditable;
+    }
+    return flags;
+}
+
+void Speciality_model::refresh()
+{
+    this->setQuery("SELECT id, faculty_name, special_name, form_training_name "
+                   "FROM speciality WHERE id != 0 ORDER BY faculty_name, special_name, form_training_name;");
+}
+
+QVariant Speciality_model::data(const QModelIndex &index, int role) const
+{
+    QVariant value = QSqlQueryModel::data(index, role);
+    //QString buf;
+    switch (role)
+    {
+    case Qt::DisplayRole:
+        if (index.column() == 1)
+        {
+            return value.toString();
+        }
+        break;
+    }
+    return value;
+}
+
+bool Speciality_model::setData(const QModelIndex &index, const QVariant &value, int /* role */)
+{
+    if ((index.column() < 1) || (index.column() > 3))
+        return false;
+
+    QModelIndex primaryKeyIndex = QSqlQueryModel::index(index.row(), 0);
+    QString field = ";";
+    switch (index.column()){
+        case 1:
+            field = "faculty_name";
+            break;
+        case 2:
+            field = "special_name";
+            break;
+        case 3:
+            field = "form_training_name";
+            break;
+        }
+
+    QString s = "update speciality set "+ field +" = '"+ functions::toDataString(value.toString()) +"' where id = "+ data(primaryKeyIndex, Qt::DisplayRole).toString();
+#ifdef DEBUG_ENABLE_MODIFY
+    DEBUG_MESSAGE( s )
+#endif
+
+    QSqlQuery query;
+    if (!query.exec(s)){
+
+        ERROR_REPORT("0x812");
+        return false;
+    }
+    refresh();
+    return true;
 }
 
 /***********************************************************

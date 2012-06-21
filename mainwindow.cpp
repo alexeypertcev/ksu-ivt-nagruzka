@@ -95,12 +95,12 @@ void MainWindow::load_db()
     query.exec("PRAGMA foreign_keys = ON;");
 
     check_and_restore_DB();
-
+/*
     tablemodel_spec = new QSqlRelationalTableModel(this);
     tablemodel_spec->setTable("speciality");
     tablemodel_spec->setEditStrategy(QSqlTableModel::OnFieldChange);
     tablemodel_spec->select();
-
+*/
     //sqlmodel_spec = new QSqlQueryModel(this);
     update_spec_checkbox();
 
@@ -176,7 +176,7 @@ void MainWindow::load_db()
     ui->tableView_9->setModel(sqlmodel_teachers_report);
     ui->tableView_9->update();
 
-    settings = new Settings(this, tablemodel_spec, tablemodel_stat);
+    settings = new Settings(this, tablemodel_stat);
     teachers_list = new Teachers_list();
     set_design_all_tab();
     update_report_name();

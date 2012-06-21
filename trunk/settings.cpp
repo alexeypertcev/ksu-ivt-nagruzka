@@ -2,7 +2,7 @@
 #include "ui_settings.h"
 #include "functions.h"
 #include "delegates.h"
-
+#define DEBUG_ENABLE_MODIFY
 
 Settings::Settings(QWidget *parent, QSqlRelationalTableModel* tm_stat) :
     QDialog(parent),
@@ -34,6 +34,8 @@ Settings::Settings(QWidget *parent, QSqlRelationalTableModel* tm_stat) :
     ui->tableView->setColumnWidth(1,115);
     ui->tableView->setColumnWidth(2,130);
     ui->tableView->setColumnWidth(3,145);
+    ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
 
     tablemodel_stat = tm_stat;
     ui->tableView_2->setModel(tablemodel_stat);
@@ -43,17 +45,25 @@ Settings::Settings(QWidget *parent, QSqlRelationalTableModel* tm_stat) :
     tablemodel_stat->setHeaderData(1, Qt::Horizontal, QObject::tr("Часы"));
     ui->tableView_2->setColumnWidth(0,150);
     ui->tableView_2->setColumnWidth(1,150);
+    ui->tableView_2->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui->tableView_2->setSelectionBehavior(QAbstractItemView::SelectRows);
 
     coefficients_model = new Coefficients_model();
     coefficients_model->refresh();
     ui->tableView_3->setModel(coefficients_model);
 
     coefficients_model->setHeaderData(1, Qt::Horizontal, QObject::tr("Название"));
-    coefficients_model->setHeaderData(2, Qt::Horizontal, QObject::tr("Норма"));
+    coefficients_model->setHeaderData(2, Qt::Horizontal, QObject::tr("Специальность"));
+    coefficients_model->setHeaderData(3, Qt::Horizontal, QObject::tr("Норма"));
     ui->tableView_3->setColumnWidth(0,0);
-    ui->tableView_3->setColumnWidth(1,400);
-    ui->tableView_3->setColumnWidth(2,60);
+    ui->tableView_3->setColumnWidth(1,360);
+    ui->tableView_3->setColumnWidth(2,97);
+    ui->tableView_3->setColumnWidth(3,45);
 
+    SpecialityAllDelegate *specialityAlldelegate = new SpecialityAllDelegate(this);
+    ui->tableView_3->setItemDelegateForColumn(2, specialityAlldelegate);
+    ui->tableView_3->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui->tableView_3->setSelectionBehavior(QAbstractItemView::SelectRows);
     update_other_data();
 }
 
@@ -274,7 +284,6 @@ void Speciality_model::refresh()
 QVariant Speciality_model::data(const QModelIndex &index, int role) const
 {
     QVariant value = QSqlQueryModel::data(index, role);
-    //QString buf;
     switch (role)
     {
     case Qt::DisplayRole:
@@ -334,7 +343,7 @@ Qt::ItemFlags Coefficients_model::flags(
         const QModelIndex &index) const
 {
     Qt::ItemFlags flags = QSqlQueryModel::flags(index);
-    if (index.column() == 2 )
+    if ((index.column() == 2 )||(index.column() == 3 ))
     {
         flags |= Qt::ItemIsEditable;
     }
@@ -343,8 +352,8 @@ Qt::ItemFlags Coefficients_model::flags(
 
 void Coefficients_model::refresh()
 {
-    this->setQuery("SELECT name, name, value  "
-                   "FROM coefficients");
+    this->setQuery("SELECT name, name, special_name || '(' || form_training_name || ')', value "
+                   "FROM coefficients, speciality WHERE coefficients.speciality_id = speciality.id ");
 }
 
 QVariant Coefficients_model::data(const QModelIndex &index, int role) const
@@ -420,6 +429,10 @@ QVariant Coefficients_model::data(const QModelIndex &index, int role) const
                 return "Руководство аспирантами, часов";
             }
             return value.toString();
+        } else if (index.column() == 2){
+            if (value.toString() == "(оч)"){
+                return "Все";
+            }
         }
         break;
     }
@@ -428,12 +441,22 @@ QVariant Coefficients_model::data(const QModelIndex &index, int role) const
 
 bool Coefficients_model::setData(const QModelIndex &index, const QVariant &value, int /* role */)
 {
-    if (index.column() != 2)
+    if ((index.column() < 2)||(index.column() > 3))
         return false;
 
     QModelIndex primaryKeyIndex = QSqlQueryModel::index(index.row(), 0);
 
-    QString s = "update coefficients set value = '"+ value.toString() +"' where name = '"+ data(primaryKeyIndex, Qt::DisplayRole).toString() + "';";
+    QString field = ";";
+    switch (index.column()){
+        case 2:
+            field = "speciality_id";
+            break;
+        case 3:
+            field = "value";
+            break;
+        }
+
+    QString s = "UPDATE coefficients SET "+ field +" = '"+ value.toString() +"' WHERE name = '"+ data(primaryKeyIndex, Qt::DisplayRole).toString() + "';";
 #ifdef DEBUG_ENABLE_MODIFY
     DEBUG_MESSAGE( s )
 #endif
@@ -446,4 +469,11 @@ bool Coefficients_model::setData(const QModelIndex &index, const QVariant &value
     }
     refresh();
     return true;
+}
+
+void Settings::on_pushButton_clicked()
+{
+    // добавление дополнительного коеффициента
+
+
 }

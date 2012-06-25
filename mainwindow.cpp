@@ -95,12 +95,7 @@ void MainWindow::load_db()
     query.exec("PRAGMA foreign_keys = ON;");
 
     check_and_restore_DB();
-/*
-    tablemodel_spec = new QSqlRelationalTableModel(this);
-    tablemodel_spec->setTable("speciality");
-    tablemodel_spec->setEditStrategy(QSqlTableModel::OnFieldChange);
-    tablemodel_spec->select();
-*/
+
     //sqlmodel_spec = new QSqlQueryModel(this);
     update_spec_checkbox();
 
@@ -280,28 +275,7 @@ void MainWindow::check_and_restore_DB()
         query.exec("DROP TABLE coefficients");
         query.exec(create_table_coefficients);
 
-        query.exec("insert into speciality values(0, 'все','', 'оч')");
-        query.exec("insert into coefficients values('coefficient_lection_hr', 0, 1)");
-        query.exec("insert into coefficients values('coefficient_labs_for_undergroup_hr', 0, 1)");
-        query.exec("insert into coefficients values('coefficient_practice_for_group_hr', 0, 1)");
-        query.exec("insert into coefficients values('coefficient_individ_for_KCR_hr', 0, 1)");
-        query.exec("insert into coefficients values('coefficient_kontr_rab_for_quantitycourse_min', 0, 15)");
-        query.exec("insert into coefficients values('coefficient_offset_for_quantitycourse_min', 0, 15)");
-        query.exec("insert into coefficients values('coefficient_examen_for_quantitycourse_min', 0, 20)");
-        query.exec("insert into coefficients values('coefficient_coursework_for_quantitycourse_hr', 0, 3)");
-        query.exec("insert into coefficients values('coefficient_consultation_ochnui_percent', 0, 5)");
-        query.exec("insert into coefficients values('coefficient_consultation_zaochnui_percent', 0, 15)");
-        query.exec("insert into coefficients values('coefficient_consultation_och_zaoch_percent', 0, 10)");
-        query.exec("insert into coefficients values('coefficient_consultation_add_is_examen_for_group', 0, 2)");
-        query.exec("insert into coefficients values('coefficient_ruk_vo_kurs_work_hr', 0, 5)");
-        query.exec("insert into coefficients values('coefficient_ruk_vo_VKR_spec_hr', 0, 20)");
-        query.exec("insert into coefficients values('coefficient_ruk_vo_VKR_bak_hr', 0, 12)");
-        query.exec("insert into coefficients values('coefficient_zachita_kurs_rab_na_kommis_min', 0, 15)");
-        query.exec("insert into coefficients values('coefficient_ruk_vo_VKR_mag_hr', 0, 28)");
-        query.exec("insert into coefficients values('coefficient_recenzir_VKR_hr', 0, 1)");
-        query.exec("insert into coefficients values('coefficient_normokontrol_hr', 0, 1)");
-        query.exec("insert into coefficients values('coefficient_ychastie_work_GAK_min', 0, 30)");
-        query.exec("insert into coefficients values('coefficient_ruk_vo_aspirants_hr', 0, 50)");
+        insert_main_data_to_coefficients();
     }
 
 }
@@ -985,6 +959,9 @@ void MainWindow::on_pushButton_2_clicked()
         is_offset = query.value(10).toInt();
         is_coursework = query.value(11).toInt();
         course = (semmester+1)/2;
+
+        // получаем коеффициенты по speciality_id
+
         query2.exec("SELECT students.id, speciality_id, "
                     "course, num_group, num_undergroup, quantity_course "
                     "FROM students "

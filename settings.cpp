@@ -466,4 +466,6 @@ void Settings::on_pushButton_clicked()
     // добавление дополнительного коеффициента
 
 
+
+
 }

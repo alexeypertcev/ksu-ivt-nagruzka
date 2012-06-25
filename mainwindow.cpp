@@ -962,6 +962,10 @@ void MainWindow::on_pushButton_2_clicked()
 
         // получаем коеффициенты по speciality_id
 
+
+
+
+
         query2.exec("SELECT students.id, speciality_id, "
                     "course, num_group, num_undergroup, quantity_course "
                     "FROM students "

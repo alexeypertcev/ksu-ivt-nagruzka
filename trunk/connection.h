@@ -129,12 +129,12 @@ const QString create_table_distribution =
         " REFERENCES teachers (id))";
 const QString create_table_coefficients =
         "CREATE TABLE coefficients ( "
+        "id INTEGER PRIMARY KEY AUTOINCREMENT, "
         "name TEXT NOT NULL, "
         "speciality_id INTEGER NOT NULL, "
         "value REAL NOT NULL, "
         "CONSTRAINT speciality_id FOREIGN KEY (speciality_id) "
-        " REFERENCES speciality (id), "
-        "CONSTRAINT name PRIMARY KEY (name))";
+        " REFERENCES speciality (id))";
 const QString create_table_other_data =
         "CREATE TABLE other_data ( "
         "name TEXT NOT NULL, "
@@ -171,12 +171,43 @@ static bool create_all_tables(){
     return true;
 }
 
+static bool insert_main_data_to_coefficients()
+{
+    if (current_db.open()) {
+        QSqlQuery query;
+        // main data
+        query.exec(foreign_keys_ON);
+
+        query.exec("insert into coefficients values(NULL, 'coefficient_lection_hr', 0, 1)");
+        query.exec("insert into coefficients values(NULL, 'coefficient_labs_for_undergroup_hr', 0, 1)");
+        query.exec("insert into coefficients values(NULL, 'coefficient_practice_for_group_hr',  0, 1)");
+        query.exec("insert into coefficients values(NULL, 'coefficient_individ_for_KCR_hr',     0, 1)");
+        query.exec("insert into coefficients values(NULL, 'coefficient_kontr_rab_for_quantitycourse_min', 0, 15)");
+        query.exec("insert into coefficients values(NULL, 'coefficient_offset_for_quantitycourse_min',    0, 15)");
+        query.exec("insert into coefficients values(NULL, 'coefficient_examen_for_quantitycourse_min',    0, 20)");
+        query.exec("insert into coefficients values(NULL, 'coefficient_coursework_for_quantitycourse_hr', 0, 3)");
+        query.exec("insert into coefficients values(NULL, 'coefficient_consultation_ochnui_percent',      0, 5)");
+        query.exec("insert into coefficients values(NULL, 'coefficient_consultation_zaochnui_percent',    0, 15)");
+        query.exec("insert into coefficients values(NULL, 'coefficient_consultation_och_zaoch_percent',   0, 10)");
+        query.exec("insert into coefficients values(NULL, 'coefficient_consultation_add_is_examen_for_group', 0, 2)");
+        query.exec("insert into coefficients values(NULL, 'coefficient_ruk_vo_kurs_work_hr', 0, 5)");
+        query.exec("insert into coefficients values(NULL, 'coefficient_ruk_vo_VKR_spec_hr',  0, 20)");
+        query.exec("insert into coefficients values(NULL, 'coefficient_ruk_vo_VKR_bak_hr',   0, 12)");
+        query.exec("insert into coefficients values(NULL, 'coefficient_zachita_kurs_rab_na_kommis_min', 0, 15)");
+        query.exec("insert into coefficients values(NULL, 'coefficient_ruk_vo_VKR_mag_hr',     0, 28)");
+        query.exec("insert into coefficients values(NULL, 'coefficient_recenzir_VKR_hr',       0, 1)");
+        query.exec("insert into coefficients values(NULL, 'coefficient_normokontrol_hr',       0, 1)");
+        query.exec("insert into coefficients values(NULL, 'coefficient_ychastie_work_GAK_min', 0, 30)");
+        query.exec("insert into coefficients values(NULL, 'coefficient_ruk_vo_aspirants_hr',   0, 50)");
+        return true;
+     }
+    return false;
+}
+
 static bool insert_main_data()
 {
 
-    if (!current_db.open()) {
-        return false;
-    } else{
+    if (current_db.open()) {
         QSqlQuery query;
 
         // main data
@@ -201,36 +232,18 @@ static bool insert_main_data()
 
         query.exec("insert into teachers values(0, 'выберите..', ' ', ' ', 'выберите..', 1 , 0);");
 
-        query.exec("insert into coefficients values('coefficient_lection_hr', 0, 1)");
-        query.exec("insert into coefficients values('coefficient_labs_for_undergroup_hr', 0, 1)");
-        query.exec("insert into coefficients values('coefficient_practice_for_group_hr', 0, 1)");
-        query.exec("insert into coefficients values('coefficient_individ_for_KCR_hr', 0, 1)");
-        query.exec("insert into coefficients values('coefficient_kontr_rab_for_quantitycourse_min', 0, 15)");
-        query.exec("insert into coefficients values('coefficient_offset_for_quantitycourse_min', 0, 15)");
-        query.exec("insert into coefficients values('coefficient_examen_for_quantitycourse_min', 0, 20)");
-        query.exec("insert into coefficients values('coefficient_coursework_for_quantitycourse_hr', 0, 3)");
-        query.exec("insert into coefficients values('coefficient_consultation_ochnui_percent', 0, 5)");
-        query.exec("insert into coefficients values('coefficient_consultation_zaochnui_percent', 0, 15)");
-        query.exec("insert into coefficients values('coefficient_consultation_och_zaoch_percent', 0, 10)");
-        query.exec("insert into coefficients values('coefficient_consultation_add_is_examen_for_group', 0, 2)");
-        query.exec("insert into coefficients values('coefficient_ruk_vo_kurs_work_hr', 0, 5)");
-        query.exec("insert into coefficients values('coefficient_ruk_vo_VKR_spec_hr', 0, 20)");
-        query.exec("insert into coefficients values('coefficient_ruk_vo_VKR_bak_hr', 0, 12)");
-        query.exec("insert into coefficients values('coefficient_zachita_kurs_rab_na_kommis_min', 0, 15)");
-        query.exec("insert into coefficients values('coefficient_ruk_vo_VKR_mag_hr', 0, 28)");
-        query.exec("insert into coefficients values('coefficient_recenzir_VKR_hr', 0, 1)");
-        query.exec("insert into coefficients values('coefficient_normokontrol_hr', 0, 1)");
-        query.exec("insert into coefficients values('coefficient_ychastie_work_GAK_min', 0, 30)");
-        query.exec("insert into coefficients values('coefficient_ruk_vo_aspirants_hr', 0, 50)");
+        insert_main_data_to_coefficients();
         query.exec("insert into other_data values('academic_year', '2011/2012')");
         query.exec("insert into other_data values('name_kafedry_faculty', 'Программного обеспечения и администрирования информационных систем')");
         query.exec("insert into other_data values('name_kafedry_smail', 'ПОиАИС')");
         query.exec("insert into other_data values('business_base_of_training', 'бюджет')");
         query.exec("insert into other_data values('vice_rector_on_education_work', 'Захаров В.В.')");
-
+        return true;
      }
-    return true;
+     return false;
 }
+
+
 
 static bool drop_all_tables()
 {

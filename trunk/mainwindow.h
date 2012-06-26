@@ -60,10 +60,10 @@ private:
     QString offset_get(int hours, int is_exists);
     QString examen_get(int hours, int is_exists);
     QString consultation_get(int lection_hr, QString speciality_id, int num_group, int is_examen,
-                             unsigned int coefficient_consultation_ochnui_percent,
-                             unsigned int coefficient_consultation_och_zaoch_percent,
-                             unsigned int coefficient_consultation_zaochnui_percent,
-                             unsigned int coefficient_consultation_add_is_examen_for_group);
+                             unsigned int coef_consultation_ochnui_percent,
+                             unsigned int coef_consultation_och_zaoch_percent,
+                             unsigned int coef_consultation_zaochnui_percent,
+                             unsigned int coef_consultation_add_is_examen_for_group);
 
     unsigned short status; //0 - нет БД 1 - есть БД
     unsigned short size_vertical_scroll;

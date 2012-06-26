@@ -257,6 +257,11 @@ void MainWindow::check_and_restore_DB()
     if (!query.next()){
         query.exec("insert into other_data values('name_kafedry_smail', 'ПОиАИС')");
     }
+    if (query.exec("SELECT id FROM speciality WHERE id = 0")){
+        if (!query.next()){
+            query.exec("insert into speciality values(0, 'все','', 'оч')");
+        }
+    }
     if (!query.exec("SELECT speciality_id FROM coefficients")){
         query.exec(drop_table_coefficients);
         query.exec(create_table_coefficients);

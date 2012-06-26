@@ -141,6 +141,19 @@ const QString create_table_other_data =
         "value TEXT NOT NULL, "
         "CONSTRAINT name PRIMARY KEY (name))";
 
+const QString drop_table_distribution          = "DROP TABLE distribution";
+const QString drop_table_subjects_in_semmester = "DROP TABLE subjects_in_semmester";
+const QString drop_table_curriculum = "DROP TABLE curriculum";
+const QString drop_table_students   = "DROP TABLE students";
+const QString drop_table_teachers   = "DROP TABLE teachers";
+const QString drop_table_speciality = "DROP TABLE speciality";
+const QString drop_table_subject    = "DROP TABLE subject";
+const QString drop_table_status     = "DROP TABLE status";
+const QString drop_table_form_training = "DROP TABLE form_training";
+const QString drop_table_staff         = "DROP TABLE staff";
+const QString drop_table_coefficients  = "DROP TABLE coefficients";
+const QString drop_table_other_data    = "DROP TABLE other_data";
+
 static bool createConnection(QString path_db)
 {
     current_db = QSqlDatabase::addDatabase("QSQLITE");
@@ -178,27 +191,27 @@ static bool insert_main_data_to_coefficients()
         // main data
         query.exec(foreign_keys_ON);
 
-        query.exec("insert into coefficients values(NULL, 'coefficient_lection_hr', 0, 1)");
-        query.exec("insert into coefficients values(NULL, 'coefficient_labs_for_undergroup_hr', 0, 1)");
-        query.exec("insert into coefficients values(NULL, 'coefficient_practice_for_group_hr',  0, 1)");
-        query.exec("insert into coefficients values(NULL, 'coefficient_individ_for_KCR_hr',     0, 1)");
-        query.exec("insert into coefficients values(NULL, 'coefficient_kontr_rab_for_quantitycourse_min', 0, 15)");
-        query.exec("insert into coefficients values(NULL, 'coefficient_offset_for_quantitycourse_min',    0, 15)");
-        query.exec("insert into coefficients values(NULL, 'coefficient_examen_for_quantitycourse_min',    0, 20)");
-        query.exec("insert into coefficients values(NULL, 'coefficient_coursework_for_quantitycourse_hr', 0, 3)");
-        query.exec("insert into coefficients values(NULL, 'coefficient_consultation_ochnui_percent',      0, 5)");
-        query.exec("insert into coefficients values(NULL, 'coefficient_consultation_zaochnui_percent',    0, 15)");
-        query.exec("insert into coefficients values(NULL, 'coefficient_consultation_och_zaoch_percent',   0, 10)");
-        query.exec("insert into coefficients values(NULL, 'coefficient_consultation_add_is_examen_for_group', 0, 2)");
-        query.exec("insert into coefficients values(NULL, 'coefficient_ruk_vo_kurs_work_hr', 0, 5)");
-        query.exec("insert into coefficients values(NULL, 'coefficient_ruk_vo_VKR_spec_hr',  0, 20)");
-        query.exec("insert into coefficients values(NULL, 'coefficient_ruk_vo_VKR_bak_hr',   0, 12)");
-        query.exec("insert into coefficients values(NULL, 'coefficient_zachita_kurs_rab_na_kommis_min', 0, 15)");
-        query.exec("insert into coefficients values(NULL, 'coefficient_ruk_vo_VKR_mag_hr',     0, 28)");
-        query.exec("insert into coefficients values(NULL, 'coefficient_recenzir_VKR_hr',       0, 1)");
-        query.exec("insert into coefficients values(NULL, 'coefficient_normokontrol_hr',       0, 1)");
-        query.exec("insert into coefficients values(NULL, 'coefficient_ychastie_work_GAK_min', 0, 30)");
-        query.exec("insert into coefficients values(NULL, 'coefficient_ruk_vo_aspirants_hr',   0, 50)");
+        query.exec("insert into coefficients values(NULL, '00_coef_lection_hr', 0, 1)");
+        query.exec("insert into coefficients values(NULL, '01_coef_labs_for_undergroup_hr', 0, 1)");
+        query.exec("insert into coefficients values(NULL, '02_coef_practice_for_group_hr',  0, 1)");
+        query.exec("insert into coefficients values(NULL, '03_coef_individ_for_KCR_hr',     0, 1)");
+        query.exec("insert into coefficients values(NULL, '04_coef_kontr_rab_for_quantitycourse_min', 0, 15)");
+        query.exec("insert into coefficients values(NULL, '05_coef_offset_for_quantitycourse_min',    0, 15)");
+        query.exec("insert into coefficients values(NULL, '06_coef_examen_for_quantitycourse_min',    0, 20)");
+        query.exec("insert into coefficients values(NULL, '07_coef_coursework_for_quantitycourse_hr', 0, 3)");
+        query.exec("insert into coefficients values(NULL, '08_coef_consultation_ochnui_percent',      0, 5)");
+        query.exec("insert into coefficients values(NULL, '09_coef_consultation_zaochnui_percent',    0, 15)");
+        query.exec("insert into coefficients values(NULL, '10_coef_consultation_och_zaoch_percent',   0, 10)");
+        query.exec("insert into coefficients values(NULL, '11_coef_consultation_add_is_examen_for_group', 0, 2)");
+        query.exec("insert into coefficients values(NULL, '12_coef_ruk_vo_kurs_work_hr', 0, 5)");
+        query.exec("insert into coefficients values(NULL, '13_coef_ruk_vo_VKR_spec_hr',  0, 20)");
+        query.exec("insert into coefficients values(NULL, '14_coef_ruk_vo_VKR_bak_hr',   0, 12)");
+        query.exec("insert into coefficients values(NULL, '15_coef_zachita_kurs_rab_na_kommis_min', 0, 15)");
+        query.exec("insert into coefficients values(NULL, '16_coef_ruk_vo_VKR_mag_hr',     0, 28)");
+        query.exec("insert into coefficients values(NULL, '17_coef_recenzir_VKR_hr',       0, 1)");
+        query.exec("insert into coefficients values(NULL, '18_coef_normokontrol_hr',       0, 1)");
+        query.exec("insert into coefficients values(NULL, '19_coef_ychastie_work_GAK_min', 0, 30)");
+        query.exec("insert into coefficients values(NULL, '20_coef_ruk_vo_aspirants_hr',   0, 50)");
         return true;
      }
     return false;
@@ -243,8 +256,6 @@ static bool insert_main_data()
      return false;
 }
 
-
-
 static bool drop_all_tables()
 {
 
@@ -252,18 +263,18 @@ static bool drop_all_tables()
         return false;
     } else{
         QSqlQuery query;
-        query.exec("DROP TABLE distribution");
-        query.exec("DROP TABLE subjects_in_semmester");
-        query.exec("DROP TABLE curriculum");
-        query.exec("DROP TABLE students");
-        query.exec("DROP TABLE teachers");
-        query.exec("DROP TABLE speciality");
-        query.exec("DROP TABLE subject");
-        query.exec("DROP TABLE status");
-        query.exec("DROP TABLE form_training");
-        query.exec("DROP TABLE staff");
-        query.exec("DROP TABLE coefficients");
-        query.exec("DROP TABLE other_data");
+        query.exec(drop_table_distribution);
+        query.exec(drop_table_subjects_in_semmester);
+        query.exec(drop_table_curriculum);
+        query.exec(drop_table_students);
+        query.exec(drop_table_teachers);
+        query.exec(drop_table_speciality);
+        query.exec(drop_table_subject);
+        query.exec(drop_table_status);
+        query.exec(drop_table_form_training);
+        query.exec(drop_table_staff);
+        query.exec(drop_table_coefficients);
+        query.exec(drop_table_other_data);
     }
     return true;
 }

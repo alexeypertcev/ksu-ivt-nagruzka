@@ -2,7 +2,6 @@
 #include "ui_settings.h"
 #include "functions.h"
 #include "delegates.h"
-#define DEBUG_ENABLE_MODIFY
 
 Settings::Settings(QWidget *parent, QSqlRelationalTableModel* tm_stat) :
     QDialog(parent),
@@ -342,8 +341,9 @@ Qt::ItemFlags Coefficients_model::flags(
 
 void Coefficients_model::refresh()
 {
-    this->setQuery("SELECT name, name, special_name || '(' || form_training_name || ')', value "
-                   "FROM coefficients, speciality WHERE coefficients.speciality_id = speciality.id ");
+    this->setQuery("SELECT coefficients.id, name, special_name || '(' || form_training_name || ')', value "
+                   "FROM coefficients, speciality WHERE coefficients.speciality_id = speciality.id "
+                   "ORDER BY name, coefficients.id DESC ");
 }
 
 QVariant Coefficients_model::data(const QModelIndex &index, int role) const
@@ -355,67 +355,67 @@ QVariant Coefficients_model::data(const QModelIndex &index, int role) const
     case Qt::DisplayRole:
         if (index.column() == 1)
         {
-            if (value.toString() == "coefficient_lection_hr"){
+            if (value.toString() == "00_coef_lection_hr"){
                 return "Для лекций, часов на лекцию";
             }
-            if (value.toString() == "coefficient_labs_for_undergroup_hr"){
+            if (value.toString() == "01_coef_labs_for_undergroup_hr"){
                 return "Для лабораторных работ, часов на подгруппу";
             }
-            if (value.toString() == "coefficient_practice_for_group_hr"){
+            if (value.toString() == "02_coef_practice_for_group_hr"){
                 return "Для практических занятий, часов на группу";
             }
-            if (value.toString() == "coefficient_individ_for_KCR_hr"){
+            if (value.toString() == "03_coef_individ_for_KCR_hr"){
                 return "Для индивидуальных занятий, часов на КСР";
             }
-            if (value.toString() == "coefficient_kontr_rab_for_quantitycourse_min"){
+            if (value.toString() == "04_coef_kontr_rab_for_quantitycourse_min"){
                 return "Для контрольных работ, минут на количество человек на курсе";
             }
-            if (value.toString() == "coefficient_offset_for_quantitycourse_min"){
+            if (value.toString() == "05_coef_offset_for_quantitycourse_min"){
                 return "Для зачетов, минут на количество человек на курсе";
             }
-            if (value.toString() == "coefficient_examen_for_quantitycourse_min"){
+            if (value.toString() == "06_coef_examen_for_quantitycourse_min"){
                 return "Для экзаменов, минут на количество человек на курсе";
             }
-            if (value.toString() == "coefficient_coursework_for_quantitycourse_hr"){
+            if (value.toString() == "07_coef_coursework_for_quantitycourse_hr"){
                 return "Для курсовых работ, минут на количество человек на курсе";
             }
-            if (value.toString() == "coefficient_consultation_ochnui_percent"){
+            if (value.toString() == "08_coef_consultation_ochnui_percent"){
                 return "Для консультаций очной формы, процент от лекций";
             }
-            if (value.toString() == "coefficient_consultation_zaochnui_percent"){
+            if (value.toString() == "09_coef_consultation_zaochnui_percent"){
                 return "Для консультаций заочной формы, процент от лекций";
             }
-            if (value.toString() == "coefficient_consultation_och_zaoch_percent"){
+            if (value.toString() == "10_coef_consultation_och_zaoch_percent"){
                 return "Для консультаций очно-заочной формы, процент от лекций";
             }
-            if (value.toString() == "coefficient_consultation_add_is_examen_for_group"){
+            if (value.toString() == "11_coef_consultation_add_is_examen_for_group"){
                 return "Дополнительно для консультаций (если экзамен), часов на группу ";
             }
-            if (value.toString() == "coefficient_ruk_vo_kurs_work_hr"){
+            if (value.toString() == "12_coef_ruk_vo_kurs_work_hr"){
                 return "Руководство курсовыми работами, часов";
             }
-            if (value.toString() == "coefficient_ruk_vo_VKR_spec_hr"){
+            if (value.toString() == "13_coef_ruk_vo_VKR_spec_hr"){
                 return "Руководство ВКР специалиста, часов";
             }
-            if (value.toString() == "coefficient_ruk_vo_VKR_bak_hr"){
+            if (value.toString() == "14_coef_ruk_vo_VKR_bak_hr"){
                 return "Руководство ВКР бакалавра, часов";
             }
-            if (value.toString() == "coefficient_zachita_kurs_rab_na_kommis_min"){
+            if (value.toString() == "15_coef_zachita_kurs_rab_na_kommis_min"){
                 return "Защита курсовых работ на заседании комиссии, минут";
             }
-            if (value.toString() == "coefficient_ruk_vo_VKR_mag_hr"){
+            if (value.toString() == "16_coef_ruk_vo_VKR_mag_hr"){
                 return "Руководство ВКР магистра, часов";
             }
-            if (value.toString() == "coefficient_recenzir_VKR_hr"){
+            if (value.toString() == "17_coef_recenzir_VKR_hr"){
                 return "Рецензирование ВКР, часов";
             }
-            if (value.toString() == "coefficient_normokontrol_hr"){
+            if (value.toString() == "18_coef_normokontrol_hr"){
                 return "Нормоконтроль, часов";
             }
-            if (value.toString() == "coefficient_ychastie_work_GAK_min"){
+            if (value.toString() == "19_coef_ychastie_work_GAK_min"){
                 return "Участие в работе ГАК, часов";
             }
-            if (value.toString() == "coefficient_ruk_vo_aspirants_hr"){
+            if (value.toString() == "20_coef_ruk_vo_aspirants_hr"){
                 return "Руководство аспирантами, часов";
             }
             return value.toString();
@@ -446,16 +446,73 @@ bool Coefficients_model::setData(const QModelIndex &index, const QVariant &value
             break;
         }
 
-    QString s = "UPDATE coefficients SET "+ field +" = '"+ value.toString() +"' WHERE name = '"+ data(primaryKeyIndex, Qt::DisplayRole).toString() + "';";
+    QString id = data(primaryKeyIndex, Qt::DisplayRole).toString();
+    QString s = ";";
+    QSqlQuery query;
+    if (field == "speciality_id"){
+        s = "SELECT speciality_id, name, value FROM coefficients WHERE id = '"+ id + "';";
+#ifdef DEBUG_ENABLE_SELECT
+        DEBUG_MESSAGE( s )
+#endif
+        if (!query.exec(s)){
+            ERROR_REPORT("0x");
+            return false;
+        }
+        if (!query.next()){
+            ERROR_REPORT("0x");
+            return false;
+        }
+        QString _name =  query.value(1).toString();
+        QString _value = query.value(2).toString();
+        QString old_spec = query.value(0).toString();
+        QString new_spec = value.toString();
+
+        if (new_spec != old_spec){
+            if (old_spec == "0"){
+                s = "insert into coefficients values(NULL, '"+ _name +"', "+ new_spec +", "+ _value +")";
 #ifdef DEBUG_ENABLE_MODIFY
-    DEBUG_MESSAGE( s )
+                DEBUG_MESSAGE( s )
+#endif
+                if (!query.exec(s)){
+                    ERROR_REPORT("0x");
+                    return false;
+                }
+            } else {
+                if (new_spec == "0"){
+                    // ищем если есть с ноль иначе переименовываем
+                    s = "DELETE FROM coefficients WHERE id = '" + id + "';";
+#ifdef DEBUG_ENABLE_MODIFY
+                    DEBUG_MESSAGE( s )
+#endif
+                    if (!query.exec(s)){
+                        ERROR_REPORT("0x");
+                        return false;
+                    }
+                } else {
+                    // обновляем с одной спец на другую
+                    s = "UPDATE coefficients SET speciality_id = '"+ new_spec +"' WHERE id = '" + id + "';";
+#ifdef DEBUG_ENABLE_MODIFY
+                    DEBUG_MESSAGE( s )
+#endif
+                    if (!query.exec(s)){
+                        ERROR_REPORT("0x");
+                        return false;
+                    }
+                }
+            }
+        }
+    } else {
+
+        s = "UPDATE coefficients SET "+ field +" = '"+ value.toString() +"' WHERE id = '" + id + "';";
+#ifdef DEBUG_ENABLE_MODIFY
+        DEBUG_MESSAGE( s )
 #endif
 
-    QSqlQuery query;
-    if (!query.exec(s)){
+        if (!query.exec(s)){
 
-        ERROR_REPORT("0x80C");
-        return false;
+            ERROR_REPORT("0x80C");
+            return false;
+        }
     }
     refresh();
     return true;
@@ -464,6 +521,10 @@ bool Coefficients_model::setData(const QModelIndex &index, const QVariant &value
 void Settings::on_pushButton_clicked()
 {
     // добавление дополнительного коеффициента
+    // id
+    QString s = "SELECT name, value "
+                "FROM coefficients ";
+    //coefficients_model->data( sqlmodel_curriculum->index(ui->tableView_3->currentIndex().row(),0), Qt::DisplayRole ).toString();
 
 
 

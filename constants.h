@@ -101,11 +101,5 @@
 #define NAME_TOTAL_SMAIL  "Ит."
 
 #define NAME_FIO_FULL "ФИО"
-/*
-
-*/
-
-
-
 
 #endif // CONSTANTS_H

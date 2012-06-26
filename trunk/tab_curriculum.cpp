@@ -1,7 +1,7 @@
 /****************************************************************************
 
 ****************************************************************************/
-
+#define DEBUG_ENABLE_MODIFY
 #include "tab_curriculum.h"
 
 CurriculumSqlModel::CurriculumSqlModel(QObject *parent)
@@ -143,7 +143,12 @@ bool CurriculumSqlModel::add()
                 return false;
             }
             if (query.next()){
-                temp_speciality_id = query.value(0).toString();
+                if (query.value(0).toString() != "0"){
+                    temp_speciality_id = query.value(0).toString();
+                } else {
+                    ERROR_REPORT("0x40A")
+                    return false;
+                }
             } else {
                 ERROR_REPORT("0x407")
                 return false;

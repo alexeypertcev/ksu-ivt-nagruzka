@@ -304,9 +304,13 @@ void MainWindow::on_pushButton_add_student_clicked()
 #endif
             if (query.exec(s)){
                 if (query.next()){
-                    speciality_id = query.value(0).toString();
-                    sqlmodel_students->add(speciality_id, "1", "1", "1", "0");
-                    sqlmodel_students->refresh();
+                    if (query.value(0).toString() != "0"){
+                        speciality_id = query.value(0).toString();
+                        sqlmodel_students->add(speciality_id, "1", "1", "1", "0");
+                        sqlmodel_students->refresh();
+                    } else {
+                        ERROR_REPORT("0x306");
+                    }
                 } else{
                     ERROR_REPORT("0x301");
                 }
@@ -861,20 +865,20 @@ void MainWindow::on_pushButton_2_clicked()
     QString new_coursework_hr;
     QString s = ";";
 
-    unsigned int coef_lection_hr = 0;
-    unsigned int coef_labs_for_undergroup_hr = 0;
-    unsigned int coef_practice_for_group_hr = 0;
-    unsigned int coef_individ_for_KCR_hr = 0;
-    unsigned int coef_kontr_rab_for_quantitycourse_min = 0;
-    unsigned int coef_offset_for_quantitycourse_min = 0;
-    unsigned int coef_examen_for_quantitycourse_min = 0;
-    unsigned int coef_consultation_ochnui_percent = 0;
-    unsigned int coef_consultation_zaochnui_percent = 0;
-    unsigned int coef_consultation_och_zaoch_percent = 0;
-    unsigned int coef_consultation_add_is_examen_for_group = 0;
-    unsigned int coef_coursework_for_quantitycourse_hr = 0;
+    double coef_lection_hr = 0;
+    double coef_labs_for_undergroup_hr = 0;
+    double coef_practice_for_group_hr = 0;
+    double coef_individ_for_KCR_hr = 0;
+    double coef_kontr_rab_for_quantitycourse_min = 0;
+    double coef_offset_for_quantitycourse_min = 0;
+    double coef_examen_for_quantitycourse_min = 0;
+    double coef_consultation_ochnui_percent = 0;
+    double coef_consultation_zaochnui_percent = 0;
+    double coef_consultation_och_zaoch_percent = 0;
+    double coef_consultation_add_is_examen_for_group = 0;
+    double coef_coursework_for_quantitycourse_hr = 0;
 
-    QList<int> coef_list_value;
+    QList<double> coef_list_value;
     coef_list_value.clear();
 
     QStringList coef_list_name;
@@ -912,7 +916,7 @@ void MainWindow::on_pushButton_2_clicked()
         course = (semmester+1)/2;
 
         // получаем коеффициенты по speciality_id
-        unsigned int buf;
+        double buf;
 
         coef_list_value.clear();
         for (int k = 0; k < coef_list_name.length(); ++k){
@@ -926,7 +930,7 @@ void MainWindow::on_pushButton_2_clicked()
                 return ;
             }
             if (query2.next()){
-                buf = query2.value(0).toUInt();
+                buf = query2.value(0).toDouble();
             } else {
                 s = "SELECT value FROM coefficients WHERE name = '" + coef_list_name.at(k) + "' AND speciality_id = 0;";
 #ifdef DEBUG_ENABLE_SELECT
@@ -937,7 +941,7 @@ void MainWindow::on_pushButton_2_clicked()
                     return ;
                 }
                 if (query2.next()){
-                    buf = query2.value(0).toUInt();
+                    buf = query2.value(0).toDouble();
                 } else {
                     ERROR_REPORT("0x007")
                     return ;
@@ -971,19 +975,19 @@ void MainWindow::on_pushButton_2_clicked()
                 num_undergroup = query2.value(4).toInt();
                 quantity_course = query2.value(5).toInt();
 
-                new_lection_hr = QString::number(lection_hr*coef_lection_hr, 10);              // "lection_hr INTEGER NOT NULL, "
-                new_labs_hr = QString::number(labs_hr*num_undergroup*coef_labs_for_undergroup_hr, 10);       // "labs_hr INTEGER NOT NULL, "
-                new_practice_hr = QString::number(practice_hr*num_group*coef_practice_for_group_hr, 10);     // "practice_hr INTEGER NOT NULL, "
-                new_individ_hr = QString::number(KCR_hr*coef_individ_for_KCR_hr, 10);                        // "individ_hr REAL NOT NULL, "
-                new_kontr_rab_hr = QString::number((int)ceil(controlwork*quantity_course*(((double)coef_kontr_rab_for_quantitycourse_min)/60)), 10);    // "kontr_rab_hr REAL NOT NULL, "
+                new_lection_hr   = QString::number(int(((double)lection_hr*coef_lection_hr)+0.5), 10);              // "lection_hr INTEGER NOT NULL, "
+                new_labs_hr      = QString::number(int(labs_hr*num_undergroup*coef_labs_for_undergroup_hr + 0.5), 10);       // "labs_hr INTEGER NOT NULL, "
+                new_practice_hr  = QString::number(int(practice_hr*num_group*coef_practice_for_group_hr + 0.5), 10);     // "practice_hr INTEGER NOT NULL, "
+                new_individ_hr   = QString::number(int(KCR_hr*coef_individ_for_KCR_hr + 0.5));                        // "individ_hr REAL NOT NULL, "
+                new_kontr_rab_hr = QString::number(int((controlwork*quantity_course*(((double)coef_kontr_rab_for_quantitycourse_min)/60)) + 0.5), 10);    // "kontr_rab_hr REAL NOT NULL, "
                 new_consultation_hr = consultation_get(lection_hr, speciality_id, num_group, is_examen,
                                                        coef_consultation_ochnui_percent,
                                                        coef_consultation_och_zaoch_percent,
                                                        coef_consultation_zaochnui_percent,
                                                        coef_consultation_add_is_examen_for_group);     // "consultation_hr REAL NOT NULL, "
-                new_offset_hr = offset_get((int)ceil(quantity_course*(((double)coef_offset_for_quantitycourse_min)/60)), is_offset);       // "offset_hr REAL NOT NULL, "
-                new_examen_hr = examen_get((int)ceil(quantity_course*(((double)coef_examen_for_quantitycourse_min)/60)), is_examen);       // "examen_hr REAL NOT NULL, "
-                new_coursework_hr = QString::number(is_coursework*quantity_course*coef_coursework_for_quantitycourse_hr, 10);  // "coursework_hr
+                new_offset_hr = offset_get(int((quantity_course*(((double)coef_offset_for_quantitycourse_min)/60)) + 0.5), is_offset);       // "offset_hr REAL NOT NULL, "
+                new_examen_hr = examen_get(int((quantity_course*(((double)coef_examen_for_quantitycourse_min)/60)) + 0.5), is_examen);       // "examen_hr REAL NOT NULL, "
+                new_coursework_hr = QString::number(int((is_coursework*quantity_course*coef_coursework_for_quantitycourse_hr) + 0.5));  // "coursework_hr
 
                 squery = "SELECT subjects_in_semmester.id FROM subjects_in_semmester "
                          "WHERE subjects_in_semmester.curriculum_id = '" + curriculum_id + "' AND "
@@ -1033,7 +1037,9 @@ void MainWindow::on_pushButton_2_clicked()
                                 "0" +                       // "other3 REAL NOT NULL, "
                                 ");";
                 }
-                if (!query3.exec(squery)){QMessageBox::warning(this, tr("Error querry"), "");}
+                if (!query3.exec(squery)){
+                    ERROR_REPORT("0x00A")
+                }
             }
     }
 

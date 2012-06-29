@@ -327,6 +327,7 @@ bool Reports::create_report_teacherscard(QStringList teachers_id_list, QString t
                                 }
                             }
                         }
+                        temp << "";
                         temp_list_of_stringlist << temp;
                     }
                 }
@@ -342,6 +343,7 @@ bool Reports::create_report_teacherscard(QStringList teachers_id_list, QString t
                     }
                     temp << s;
                 }
+                temp << "";
 
                 if(z == 0){
                     temp_tabledata.set_list_two(temp_list_of_stringlist);

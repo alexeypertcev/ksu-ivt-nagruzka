@@ -203,29 +203,28 @@ bool Reports::create_report_teacherscard(QStringList teachers_id_list, QString t
                 while (query2.next()){
                     temp.clear();
                     for(int j=0; j<24; ++j){
-                        if (j < 9){
-                            temp << query2.value(j).toString();
-                        } else {
-                            if (query2.value(j).toInt() == 0){
-                                temp << "";
-                            } else {
-                                temp << query2.value(j).toString();
-                            }
+                        if (j == 12){
+                            temp << "";
                         }
+                        temp << query2.value(j).toString();
                         temp_of_int1[j] += query2.value(j).toInt();
-
                     }
+                    temp << "";
                     temp_list_of_stringlist << temp;
                 }
 
                 temp.clear();
                 for(int j=0; j<24; ++j){
+                    if (j == 12){
+                        temp << "";
+                    }
                     QString s="";
                     if ( j>7 && temp_of_int1[j] != 0){
                         s.setNum(temp_of_int1[j]);
                     }
                     temp << s;
                 }
+                temp << "";
                 current_all_hours += temp_of_int1[23];
 
                 if(z == 0){
@@ -314,6 +313,9 @@ bool Reports::create_report_teacherscard(QStringList teachers_id_list, QString t
                         query4.next();
 
                         for(int j=0; j<24; ++j){
+                            if (j == 12){
+                                temp << "";
+                            }
                             if (j < 8){
                                 temp << query4.value(j).toString();
                             } else {
@@ -331,6 +333,9 @@ bool Reports::create_report_teacherscard(QStringList teachers_id_list, QString t
 
                 temp.clear();
                 for(int j=0; j<24; ++j){
+                    if (j == 12){
+                        temp << "";
+                    }
                     QString s="";
                     if ( j>7 && temp_of_int_vacansion_sum[j-8] != 0){
                         s.setNum(temp_of_int_vacansion_sum[j-8]);
@@ -426,17 +431,25 @@ bool Reports::write_report_teacherscard_xlsx(QList<Tabledata> list_tabledata, QS
 
         TSpreadSheet sheet1 = book.m_spreadsheets.insert();
 
-        sheet1.set_column_width(1,1,45);
-        sheet1.set_column_width(2,24,5);
-        sheet1.set_column_width(25,25,7);
-        sheet1.set_column_width(26,26,5);
+        sheet1.set_column_width(1,1,"45");
+        sheet1.set_column_width(2,2,"6");
+        sheet1.set_column_width(3,3,"11.7109375");
+        sheet1.set_column_width(4,24,"5");
+        sheet1.set_column_width(25,25,"7");
+        sheet1.set_column_width(26,26,"5");
 
         TFont font_tnr_8_normal = book.m_stylesheet.m_fonts.insert( "Times New Roman", 8, EFF_NONE );
         TFont font_tnr_8_bold = book.m_stylesheet.m_fonts.insert( "Times New Roman", 8, EFF_BOLD );
         TFont font_tnr_10_normal = book.m_stylesheet.m_fonts.insert( "Times New Roman", 10, EFF_NONE );
         TFont font_tnr_12_normal = book.m_stylesheet.m_fonts.insert( "Times New Roman", 12, EFF_NONE );
+        TFont font_arial_10_normal = book.m_stylesheet.m_fonts.insert( "Arial Cyr", 10, EFF_NONE );
+
                                                                           /* left right top bottom*/
         TBorder border_all_medium = book.m_stylesheet.m_borders.insert( TBorderLine( EBORDERSTYLE_MEDIUM ), TBorderLine( EBORDERSTYLE_MEDIUM ), TBorderLine( EBORDERSTYLE_MEDIUM ), TBorderLine( EBORDERSTYLE_MEDIUM ), TBorderLine(), false, false, false );
+        TBorder border_top_but_double = book.m_stylesheet.m_borders.insert( TBorderLine( EBORDERSTYLE_THIN ), TBorderLine( EBORDERSTYLE_THIN ), TBorderLine( EBORDERSTYLE_DOUBLE ), TBorderLine( EBORDERSTYLE_DOUBLE ), TBorderLine(), false, false, false );
+        TBorder border_top_but_right_double = book.m_stylesheet.m_borders.insert( TBorderLine( EBORDERSTYLE_THIN ), TBorderLine( EBORDERSTYLE_DOUBLE ), TBorderLine( EBORDERSTYLE_DOUBLE ), TBorderLine( EBORDERSTYLE_DOUBLE ), TBorderLine(), false, false, false );
+        TBorder border_all_thin = book.m_stylesheet.m_borders.insert( TBorderLine( EBORDERSTYLE_THIN ), TBorderLine( EBORDERSTYLE_THIN ), TBorderLine( EBORDERSTYLE_THIN ), TBorderLine( EBORDERSTYLE_THIN ), TBorderLine(), false, false, false );
+        TBorder border_all_thin_right_double = book.m_stylesheet.m_borders.insert( TBorderLine( EBORDERSTYLE_THIN ), TBorderLine( EBORDERSTYLE_DOUBLE ), TBorderLine( EBORDERSTYLE_THIN ), TBorderLine( EBORDERSTYLE_THIN ), TBorderLine(), false, false, false );
 
         TBorder border_left_top_bottom_double = book.m_stylesheet.m_borders.insert( TBorderLine( EBORDERSTYLE_DOUBLE ), TBorderLine( EBORDERSTYLE_MEDIUM ), TBorderLine( EBORDERSTYLE_DOUBLE ), TBorderLine( EBORDERSTYLE_DOUBLE ), TBorderLine(), false, false, false );
         TBorder border_right_top_bottom_double = book.m_stylesheet.m_borders.insert( TBorderLine( EBORDERSTYLE_MEDIUM ), TBorderLine( EBORDERSTYLE_DOUBLE ), TBorderLine( EBORDERSTYLE_DOUBLE ), TBorderLine( EBORDERSTYLE_DOUBLE ), TBorderLine(), false, false, false );
@@ -449,7 +462,7 @@ bool Reports::write_report_teacherscard_xlsx(QList<Tabledata> list_tabledata, QS
         TCellXF cellformat_header2 = book.m_stylesheet.m_cellxfs.insert( font_tnr_10_normal, TAlignment( EHORIZONTAL_RIGHT, EVERTICAL_CENTER, false, false, 0, 0 ), TBorder(), TFill() );
         TCellXF cellformat_header3 = book.m_stylesheet.m_cellxfs.insert( font_tnr_12_normal, TAlignment( EHORIZONTAL_RIGHT, EVERTICAL_CENTER, false, false, 0, 0 ), TBorder(), TFill() );
         TCellXF cellformat_header4 = book.m_stylesheet.m_cellxfs.insert( font_tnr_10_normal, TAlignment( EHORIZONTAL_LEFT, EVERTICAL_CENTER, false, false, 0, 0 ), TBorder(), TFill() );
-        TCellXF cellformat_header4_border = book.m_stylesheet.m_cellxfs.insert( font_tnr_10_normal, TAlignment( EHORIZONTAL_LEFT, EVERTICAL_CENTER, false, false, 0, 0 ), border_all_medium, TFill() );
+//        TCellXF cellformat_header4_border = book.m_stylesheet.m_cellxfs.insert( font_tnr_10_normal, TAlignment( EHORIZONTAL_LEFT, EVERTICAL_CENTER, false, false, 0, 0 ), border_all_medium, TFill() );
 
         TCellXF cellformat_header0_b_t = book.m_stylesheet.m_cellxfs.insert( font_tnr_8_normal, TAlignment( EHORIZONTAL_LEFT, EVERTICAL_CENTER, false, false, 0, 0 ), border_top_double, TFill() );
         TCellXF cellformat_header0_wrap_b_t = book.m_stylesheet.m_cellxfs.insert( font_tnr_8_normal, TAlignment( EHORIZONTAL_LEFT, EVERTICAL_CENTER, true, false, 0, 0 ), border_top_double, TFill() );
@@ -460,7 +473,17 @@ bool Reports::write_report_teacherscard_xlsx(QList<Tabledata> list_tabledata, QS
         TCellXF cellformat_header6_wrap_b_b = book.m_stylesheet.m_cellxfs.insert( font_tnr_8_normal, TAlignment( EHORIZONTAL_CENTER, EVERTICAL_CENTER, true, false, 90, 0 ), border_buttom_double, TFill() );
         TCellXF cellformat_header6_b_rtb = book.m_stylesheet.m_cellxfs.insert( font_tnr_8_normal, TAlignment( EHORIZONTAL_CENTER, EVERTICAL_CENTER, false, false, 90, 0 ), border_right_top_bottom_double, TFill() );
 
-             /*[row][collumn]*/
+        TCellXF cf_sum_left = book.m_stylesheet.m_cellxfs.insert( font_tnr_10_normal, TAlignment( EHORIZONTAL_LEFT, EVERTICAL_CENTER, false, false, 0, 0 ), border_top_but_double, TFill() );
+        TCellXF cf_sum = book.m_stylesheet.m_cellxfs.insert( font_tnr_10_normal, TAlignment( EHORIZONTAL_CENTER, EVERTICAL_CENTER, false, false, 0, 0 ), border_top_but_double, TFill() );
+        TCellXF cf_sum_right = book.m_stylesheet.m_cellxfs.insert( font_tnr_10_normal, TAlignment( EHORIZONTAL_CENTER, EVERTICAL_CENTER, false, false, 0, 0 ), border_top_but_right_double, TFill() );
+
+        TCellXF cf_body_left = book.m_stylesheet.m_cellxfs.insert( font_tnr_10_normal, TAlignment( EHORIZONTAL_LEFT, EVERTICAL_CENTER, false, false, 0, 0 ), border_all_thin, TFill() );
+        TCellXF cf_body = book.m_stylesheet.m_cellxfs.insert( font_tnr_10_normal, TAlignment( EHORIZONTAL_CENTER, EVERTICAL_CENTER, false, false, 0, 0 ), border_all_thin, TFill() );
+        TCellXF cf_body_right = book.m_stylesheet.m_cellxfs.insert( font_tnr_10_normal, TAlignment( EHORIZONTAL_CENTER, EVERTICAL_CENTER, false, false, 0, 0 ), border_all_thin_right_double, TFill() );
+        TCellXF cf_arial_10_center = book.m_stylesheet.m_cellxfs.insert( font_arial_10_normal, TAlignment( EHORIZONTAL_CENTER, EVERTICAL_CENTER, false, false, 0, 0 ), TBorder(), TFill() );
+        TCellXF cf_arial_10_left = book.m_stylesheet.m_cellxfs.insert( font_arial_10_normal, TAlignment( EHORIZONTAL_LEFT, EVERTICAL_CENTER, false, false, 0, 0 ), TBorder(), TFill() );
+
+            /*[row][collumn]*/
         sheet1[ 0 ][ 0 ] = "Министерство образования и науки Российской Федерации";
         sheet1[ 0 ][ 0 ] = cellformat_header0;
         sheet1[ 1 ][ 0 ] = "Государсвенное образовательное учреждение";
@@ -649,59 +672,103 @@ bool Reports::write_report_teacherscard_xlsx(QList<Tabledata> list_tabledata, QS
                 temp_stringlist = temp_list_stringlist.at(i);
                 shift = 0;
                 for (j = 0; j < temp_stringlist.length(); ++j){
-                    if ( j == 12){
-                        shift = 1;
-                        sheet1[current_row][j] = " ";
-                        sheet1[current_row][j] = cellformat_header4;
-                    }
-                    if (j > 3) {
-                        sheet1[current_row][j + shift] = temp_stringlist.at(j).toInt();
+                    if ((j > 3) && (j != 12) && (j < temp_stringlist.length()-1)) {
+                        sheet1[current_row][j] = temp_stringlist.at(j).toInt();
                     } else {
-                        sheet1[current_row][j + shift] = temp_stringlist.at(j).toStdString();
+                        sheet1[current_row][j] = temp_stringlist.at(j).toStdString();
                     }
-                    sheet1[current_row][j + shift] = cellformat_header4;
+                    if (j < 4){
+                        sheet1[current_row][j] = cf_body_left;
+                    } else if (j == temp_stringlist.length()-1){
+                        sheet1[current_row][j] = cf_body_right;
+                    } else {
+                        sheet1[current_row][j] = cf_body;
+                    }
                 }
                 ++current_row;
             }
+            // --------------- промежуток
+            for (j = 0; j < 26; ++j){
+                sheet1[current_row][j] = "";
+                if (j == temp_stringlist.length()-1){
+                    sheet1[current_row][j] = cf_body_right;
+                } else {
+                    sheet1[current_row][j] = cf_body;
+                }
+            }
+            // ---------
             ++current_row;
+
             temp_stringlist = temp_tabledata.get_list_sum(sem);
 
             shift = 0;
             for (j = 0; j < temp_stringlist.length(); ++j){
-                if ( j == 12){
-                    shift = 1;
-                    sheet1[current_row][j] = " ";
-                    sheet1[current_row][j] = cellformat_header4_border;
-                }
-                if (j > 3){
-                    sheet1[current_row][j + shift] = temp_stringlist.at(j).toInt();
+                if ((j > 3) && (j != 12) && (j < temp_stringlist.length()-1)){
+                    sheet1[current_row][j] = temp_stringlist.at(j).toInt();
                 } else {
-                    sheet1[current_row][j + shift] = temp_stringlist.at(j).toStdString();
+                    sheet1[current_row][j] = temp_stringlist.at(j).toStdString();
                 }
-                sheet1[current_row][j + shift] = cellformat_header4_border;
+                if (j < 4){
+                    sheet1[current_row][j] = cf_sum_left;
+                } else if (j == temp_stringlist.length()-1){
+                    sheet1[current_row][j] = cf_sum_right;
+                } else {
+                    sheet1[current_row][j] = cf_sum;
+                }
             }
             sheet1[current_row][0] = QString("Итого за "+ QString::number(sem)+"е полугодие:").toStdString();
+
             ++current_row;
+            // --------------- промежуток
+            for (j = 0; j < 26; ++j){
+                sheet1[current_row][j] = "";
+                if (j == temp_stringlist.length()-1){
+                    sheet1[current_row][j] = cf_body_right;
+                } else {
+                    sheet1[current_row][j] = cf_body;
+                }
+            }
+            // ---------
             ++current_row;
+            // --------------- промежуток
+            for (j = 0; j < 26; ++j){
+                sheet1[current_row][j] = "";
+                if (j == temp_stringlist.length()-1){
+                    sheet1[current_row][j] = cf_body_right;
+                } else {
+                    sheet1[current_row][j] = cf_body;
+                }
+            }
+            // ---------
         }
     // ------------------------------------
 
         temp_stringlist = temp_tabledata.get_list_all_sum();
         shift = 0;
         for (j = 0; j < temp_stringlist.length(); ++j){
-            if ( j == 12){
-                shift = 1;
-                sheet1[ current_row ][j] = " ";
-                sheet1[ current_row ][j] = cellformat_header4_border;
-            }
-            if (j > 3){
-                sheet1[ current_row ][j + shift] = temp_stringlist.at(j).toInt();
+            if ((j > 3) && (j != 12) && (j < temp_stringlist.length()-1)){
+                sheet1[current_row][j] = temp_stringlist.at(j).toInt();
             } else {
-                sheet1[ current_row ][j + shift] = temp_stringlist.at(j).toStdString();
+                sheet1[current_row][j] = temp_stringlist.at(j).toStdString();
             }
-            sheet1[ current_row ][j + shift] = cellformat_header4_border;
+            if (j < 4){
+                sheet1[current_row][j] = cf_sum_left;
+            } else if (j == temp_stringlist.length()-1){
+                sheet1[current_row][j] = cf_sum_right;
+            } else {
+                sheet1[current_row][j] = cf_sum;
+            }
         }
         sheet1[ current_row ][0] = "Итого за год:";
+
+        ++current_row;
+        ++current_row;
+        sheet1[current_row][0] = "Декан";
+        sheet1[current_row][0] = cf_arial_10_center;
+        sheet1[current_row][3] = "Зав. кафедрой";
+        sheet1[current_row][3] = cf_arial_10_left;
+        sheet1[current_row][15] = "Преподаватель";
+        sheet1[current_row][15] = cf_arial_10_left;
 
         book.insert( sheet1, names_sheets.at(i_sheet).toStdString() );
     }

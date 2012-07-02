@@ -104,6 +104,7 @@ int CSpreadSheetObject::save(TZip& archive, TContent& content) const
         }
     sheet << "</mergeCells>";
     }
+    //sheet << orientation_tag.toStdString();
     sheet << "</worksheet>\n";
     archive.add_file( filename(), sheet.str() );
 

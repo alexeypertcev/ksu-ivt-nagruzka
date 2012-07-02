@@ -20,6 +20,7 @@ private:
     QStringList widht_col_data;
     QStringList merged_cells;
     QString zoom;
+    QString orientation_tag;
 protected:
     TRows         m_rows;
     TString       m_dir;
@@ -36,7 +37,7 @@ public:
     void set_row_height(int row, std::string s);
     void set_merge(QString s);
     void set_zoom(QString z);
-
+    void set_orientation_tag(QString paperSize, QString s);
     TRow operator [] (int index);
     int save(TZip& archive, TContent& content) const;
 

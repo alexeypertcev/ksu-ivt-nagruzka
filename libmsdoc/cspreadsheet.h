@@ -30,6 +30,7 @@ public:
     void set_row_height(int row, int h);
     void set_merge(QString s);
     void set_zoom(QString z);
+    void set_orientation_tag(QString paperSize, QString s);
     TRow operator [] (int index);
 
     operator IRelationShipObject& ();

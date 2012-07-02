@@ -15,6 +15,7 @@ CSpreadSheetObject::CSpreadSheetObject(const CSpreadSheetObject& origin):
     widht_col_data.clear();
     merged_cells.clear();
     zoom = "100";
+    orientation_tag = "";
 }
 
 CSpreadSheetObject::~CSpreadSheetObject()
@@ -45,6 +46,11 @@ void CSpreadSheetObject::set_merge(QString s)
 void CSpreadSheetObject::set_zoom(QString z)
 {
     zoom = z;
+}
+
+void CSpreadSheetObject::set_orientation_tag(QString paperSize, QString s)
+{
+    orientation_tag = "<pageSetup paperSize=\""+paperSize+"\" orientation=\"" + s + "\" r:id=\"rId1\"/>";
 }
 
 TRow CSpreadSheetObject::operator [] (int index)
@@ -98,7 +104,6 @@ int CSpreadSheetObject::save(TZip& archive, TContent& content) const
         }
     sheet << "</mergeCells>";
     }
-
     sheet << "</worksheet>\n";
     archive.add_file( filename(), sheet.str() );
 

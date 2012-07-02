@@ -464,7 +464,6 @@ bool Reports::write_report_teacherscard_xlsx(QList<Tabledata> list_tabledata, QS
         TCellXF cellformat_header2 = book.m_stylesheet.m_cellxfs.insert( font_tnr_10_normal, TAlignment( EHORIZONTAL_RIGHT, EVERTICAL_CENTER, false, false, 0, 0 ), TBorder(), TFill() );
         TCellXF cellformat_header3 = book.m_stylesheet.m_cellxfs.insert( font_tnr_12_normal, TAlignment( EHORIZONTAL_RIGHT, EVERTICAL_CENTER, false, false, 0, 0 ), TBorder(), TFill() );
         TCellXF cellformat_header4 = book.m_stylesheet.m_cellxfs.insert( font_tnr_10_normal, TAlignment( EHORIZONTAL_LEFT, EVERTICAL_CENTER, false, false, 0, 0 ), TBorder(), TFill() );
-//        TCellXF cellformat_header4_border = book.m_stylesheet.m_cellxfs.insert( font_tnr_10_normal, TAlignment( EHORIZONTAL_LEFT, EVERTICAL_CENTER, false, false, 0, 0 ), border_all_medium, TFill() );
 
         TCellXF cellformat_header0_b_t = book.m_stylesheet.m_cellxfs.insert( font_tnr_8_normal, TAlignment( EHORIZONTAL_LEFT, EVERTICAL_CENTER, false, false, 0, 0 ), border_top_double, TFill() );
         TCellXF cellformat_header0_wrap_b_t = book.m_stylesheet.m_cellxfs.insert( font_tnr_8_normal, TAlignment( EHORIZONTAL_LEFT, EVERTICAL_CENTER, true, false, 0, 0 ), border_top_double, TFill() );
@@ -488,7 +487,7 @@ bool Reports::write_report_teacherscard_xlsx(QList<Tabledata> list_tabledata, QS
             /*[row][collumn]*/
         sheet1[ 0 ][ 0 ] = "Министерство образования и науки Российской Федерации";
         sheet1[ 0 ][ 0 ] = cellformat_header0;
-        sheet1[ 1 ][ 0 ] = "Государсвенное образовательное учреждение";
+        sheet1[ 1 ][ 0 ] = "Федеральное государственное бюджетное образовательное учреждение";
         sheet1[ 1 ][ 0 ] = cellformat_header0;
         sheet1[ 2 ][ 0 ] = "высшего профессионального образования";
         sheet1[ 2 ][ 0 ] = cellformat_header0;

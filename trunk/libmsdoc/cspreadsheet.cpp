@@ -37,6 +37,11 @@ void CSpreadSheet::set_zoom(QString z)
     (*this)->set_zoom(z);
 }
 
+void CSpreadSheet::set_orientation_tag(QString paperSize, QString s)
+{
+    (*this)->set_orientation_tag(paperSize, s);
+}
+
 TRow CSpreadSheet::operator [] (int index)
 {
     return (*this)->operator [] ( index );

@@ -440,6 +440,7 @@ bool Reports::write_report_teacherscard_xlsx(QList<Tabledata> list_tabledata, QS
         sheet1.set_column_width(25,25,"7");
         sheet1.set_column_width(26,26,"5");
 
+
         TFont font_tnr_8_normal = book.m_stylesheet.m_fonts.insert( "Times New Roman", 8, EFF_NONE );
         TFont font_tnr_8_bold = book.m_stylesheet.m_fonts.insert( "Times New Roman", 8, EFF_BOLD );
         TFont font_tnr_10_normal = book.m_stylesheet.m_fonts.insert( "Times New Roman", 10, EFF_NONE );

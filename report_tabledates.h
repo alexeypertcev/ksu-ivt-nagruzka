@@ -51,6 +51,6 @@ private:
     QList<QStringList> list_two;
     QStringList list_one_sum;
     QStringList list_two_sum;
-    QStringList list_all_sum;
+    //QStringList list_all_sum;
 };
 #endif // REPORT_TABLEDATES_H

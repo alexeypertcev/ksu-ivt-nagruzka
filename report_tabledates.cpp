@@ -34,21 +34,72 @@ QList<QStringList> Tabledata::get_list_two(){
     return list_two;
 }
 QStringList Tabledata::get_list_one_sum(){
-    return list_one_sum;
+    QStringList buf;
+    buf.clear();
+
+    if (list_one.length() > 0){
+        QList<int> buf_int;
+        buf_int.clear();
+
+        int size_string = list_one.at(0).length();
+
+        for (int i=0; i<size_string; ++i){
+            buf_int << 0;
+        }
+
+        for (int i=0; i<list_one.length(); ++i){
+            for (int j=8; j<size_string; ++j){
+                buf_int[j] += list_one.at(i).at(j).toInt();
+            }
+        }
+
+        for (int i=0; i<size_string; ++i){
+            buf << functions::toReportString(QString::number(buf_int.at(i)));
+        }
+    }
+
+    return buf;
 }
 QStringList Tabledata::get_list_two_sum(){
-    return list_two_sum;
+    QStringList buf;
+    buf.clear();
+
+    if (list_two.length() > 0){
+        QList<int> buf_int;
+        buf_int.clear();
+
+        int size_string = list_two.at(0).length();
+
+        for (int i=0; i<size_string; ++i){
+            buf_int << 0;
+        }
+
+        for (int i=0; i<list_two.length(); ++i){
+            for (int j=8; j<size_string; ++j){
+                buf_int[j] += list_two.at(i).at(j).toInt();
+            }
+        }
+
+        for (int i=0; i<size_string; ++i){
+            buf << functions::toReportString(QString::number(buf_int.at(i)));
+        }
+    }
+
+    return buf;
 }
 QStringList Tabledata::get_list_all_sum(){
     QStringList buf;
     buf.clear();
 
-    if (list_one_sum.length() != list_two_sum.length()){
+    QStringList buf_list_one_sum = get_list_one_sum();
+    QStringList buf_list_two_sum = get_list_two_sum();
+
+    if (buf_list_one_sum.length() != buf_list_two_sum.length()){
         return buf;
     }
 
-    for (int i=0; i<list_one_sum.length(); ++i){
-        buf << functions::toReportString(QString::number(list_one_sum.at(i).toInt() + list_two_sum.at(i).toInt()));
+    for (int i=0; i<buf_list_one_sum.length(); ++i){
+        buf << functions::toReportString(QString::number(buf_list_one_sum.at(i).toInt() + buf_list_two_sum.at(i).toInt()));
     }
 
     return buf;

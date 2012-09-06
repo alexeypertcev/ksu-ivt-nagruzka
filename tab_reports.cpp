@@ -2,7 +2,7 @@
 //#include "workzip.cpp"
 
 
-bool Reports::create_report_teacherscard(QStringList teachers_id_list, QString template_patch, QString report_patch, QString type_report){
+bool Reports::create_report_teacherscard(QStringList teachers_id_list, QString template_patch, QString report_patch, QString type_report, bool split_kard){
 
     // тут запрос к БД на все данные, подсчет суммарных данных
     QSqlQuery query, query2, query3, query4;
@@ -236,7 +236,9 @@ bool Reports::create_report_teacherscard(QStringList teachers_id_list, QString t
                 }
             }
 
+            // объем учебной нагрузки
             temp_header << QString::number((double)current_all_hours / (double)current_status_hours, 'f', 2);
+
             temp_tabledata.set_header_sheet(temp_header);
         } else {
             //teachers_id_list.at(i) = "0"
@@ -430,6 +432,8 @@ bool Reports::write_report_teacherscard_xlsx(QList<Tabledata> list_tabledata, QS
     for (int i_sheet=0; i_sheet<list_tabledata.length(); ++i_sheet){
         temp_tabledata = list_tabledata.at(i_sheet);
         // проверить длину списков
+        //
+        // -----------------------
 
         TSpreadSheet sheet1 = book.m_spreadsheets.insert();
 

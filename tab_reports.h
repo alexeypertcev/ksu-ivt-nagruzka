@@ -17,7 +17,7 @@ public:
 
     Reports(){}
 
-    bool create_report_teacherscard(QStringList teachers_id_list, QString template_patch, QString report_patch, QString type_report);
+    bool create_report_teacherscard(QStringList teachers_id_list, QString template_patch, QString report_patch, QString type_report, bool split_kard);
 
     bool write_report_teacherscard_xlsx(QList<Tabledata> list_tabledata, QString template_path, QString report_path);
 

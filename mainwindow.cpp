@@ -1236,6 +1236,7 @@ void MainWindow::on_pushButton_9_clicked()
 {
     QStringList teachers_id_list;
     QSqlQuery query;
+    bool split_kard = ui->checkBox->isChecked();
 
     // заполнить teachers_id_list
     teachers_id_list.clear();
@@ -1258,8 +1259,9 @@ void MainWindow::on_pushButton_9_clicked()
     }
     Reports reports;
     // create report (QList(teachers.id), path_report+name_report, ods,)
+
     if (report_format == "xlsx"){
-        reports.create_report_teacherscard(teachers_id_list, "", ui->lineEdit_2->text(),report_format);
+        reports.create_report_teacherscard(teachers_id_list, "", ui->lineEdit_2->text(), report_format, split_kard);
     } else if(report_format == "ods"){
 //        report.create_report(teachers_id_list, applicationDirPath + "/template.ods", ui->lineEdit_2->text(),report_format);
     }

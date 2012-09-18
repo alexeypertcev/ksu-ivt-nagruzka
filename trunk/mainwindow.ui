@@ -725,12 +725,12 @@
          <rect>
           <x>690</x>
           <y>100</y>
-          <width>191</width>
+          <width>231</width>
           <height>21</height>
          </rect>
         </property>
         <property name="text">
-         <string>Разбивать карточки от ставки</string>
+         <string>Разбивать карточки по 1.0 ставки</string>
         </property>
        </widget>
       </widget>
@@ -754,7 +754,7 @@
      <x>0</x>
      <y>0</y>
      <width>1270</width>
-     <height>21</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">

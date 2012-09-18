@@ -3,6 +3,8 @@
 
 Tabledata::Tabledata()
 {
+    name_table_fam = "";
+    name_table_part = "";
 }
 
 void Tabledata::set_header_sheet(QStringList hs){
@@ -14,15 +16,7 @@ void Tabledata::set_list_one(QList<QStringList> lo){
 void Tabledata::set_list_two(QList<QStringList> lt){
     list_two = lt;
 }
-void Tabledata::set_list_one_sum(QStringList lon){
-    list_one_sum = lon;
-}
-void Tabledata::set_list_two_sum(QStringList lts){
-    list_two_sum = lts;
-}
-void Tabledata::set_list_all_sum(QStringList las){
-//    list_all_sum = las;
-}
+
 
 QStringList Tabledata::get_header_sheet(){
     return header_sheet;
@@ -33,23 +27,36 @@ QList<QStringList> Tabledata::get_list_one(){
 QList<QStringList> Tabledata::get_list_two(){
     return list_two;
 }
-QStringList Tabledata::get_list_one_sum(){
+
+QStringList Tabledata::get_list_sum(int i)
+{
+    QList<QStringList> list;
+    if (i == 1){
+        list = list_one;
+    } else if (i == 2){
+        list = list_two;
+    } else {
+        QStringList list;
+        list.clear();
+        return list;
+    }
+
     QStringList buf;
     buf.clear();
 
-    if (list_one.length() > 0){
+    if (list.length() > 0){
         QList<int> buf_int;
         buf_int.clear();
 
-        int size_string = list_one.at(0).length();
+        int size_string = list.at(0).length();
 
         for (int i=0; i<size_string; ++i){
             buf_int << 0;
         }
 
-        for (int i=0; i<list_one.length(); ++i){
+        for (int i=0; i<list.length(); ++i){
             for (int j=8; j<size_string; ++j){
-                buf_int[j] += list_one.at(i).at(j).toInt();
+                buf_int[j] += list.at(i).at(j).toInt();
             }
         }
 
@@ -60,32 +67,32 @@ QStringList Tabledata::get_list_one_sum(){
 
     return buf;
 }
+
+QString Tabledata::get_name_table_fam()
+{
+        return name_table_fam;
+}
+
+QString Tabledata::get_name_table_all()
+{
+    return name_table_fam + " " + name_table_part;
+}
+
+void Tabledata::set_name_table_fam(QString s)
+{
+    name_table_fam = s;
+}
+
+void Tabledata::set_name_table_part(QString s)
+{
+    name_table_part = s;
+}
+
+QStringList Tabledata::get_list_one_sum(){
+    return get_list_sum(1);
+}
 QStringList Tabledata::get_list_two_sum(){
-    QStringList buf;
-    buf.clear();
-
-    if (list_two.length() > 0){
-        QList<int> buf_int;
-        buf_int.clear();
-
-        int size_string = list_two.at(0).length();
-
-        for (int i=0; i<size_string; ++i){
-            buf_int << 0;
-        }
-
-        for (int i=0; i<list_two.length(); ++i){
-            for (int j=8; j<size_string; ++j){
-                buf_int[j] += list_two.at(i).at(j).toInt();
-            }
-        }
-
-        for (int i=0; i<size_string; ++i){
-            buf << functions::toReportString(QString::number(buf_int.at(i)));
-        }
-    }
-
-    return buf;
+    return get_list_sum(2);
 }
 QStringList Tabledata::get_list_all_sum(){
     QStringList buf;
@@ -118,18 +125,7 @@ QList<QStringList> Tabledata::get_list(int i)
     }
 }
 
-QStringList Tabledata::get_list_sum(int i)
-{
-    if (i == 1){
-        return get_list_one_sum();
-    } else if (i == 2){
-        return get_list_two_sum();
-    } else {
-        QStringList list;
-        list.clear();
-        return list;
-    }
-}
+
 
 QString Tabledata::get_header_FIO(){
     QString temp;

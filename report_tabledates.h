@@ -45,12 +45,23 @@ public:
     QList<QStringList> get_list(int i);
     QStringList get_list_sum(int i);
 
+    QString get_name_table_fam();
+    QString get_name_table_all();
+    void set_name_table_fam(QString s);
+    void set_name_table_part(QString s);
+
+//    QStringList del_past_subject()
+
 private:
+    QString name_table_fam;
+    QString name_table_part;
+
     QStringList header_sheet;
     QList<QStringList> list_one;
     QList<QStringList> list_two;
-    QStringList list_one_sum;
-    QStringList list_two_sum;
+
+    //QStringList list_one_sum;
+    //QStringList list_two_sum;
     //QStringList list_all_sum;
 };
 #endif // REPORT_TABLEDATES_H

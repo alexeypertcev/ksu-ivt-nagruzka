@@ -11,6 +11,7 @@ class Tabledata
 public:
     Tabledata();
 
+    void clear();
     void set_header_sheet(QStringList hs);
     void set_list_one(QList<QStringList> lo);
     void set_list_two(QList<QStringList> lt);

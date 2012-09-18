@@ -7,6 +7,16 @@ Tabledata::Tabledata()
     name_table_part = "";
 }
 
+void Tabledata::clear()
+{
+    name_table_fam = "";
+    name_table_part = "";
+
+    header_sheet.clear();
+    list_one.clear();
+    list_two.clear();
+}
+
 void Tabledata::set_header_sheet(QStringList hs){
     header_sheet = hs;
 }

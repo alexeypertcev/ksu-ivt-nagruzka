@@ -160,6 +160,7 @@ bool Reports::create_report_teacherscard(QStringList teachers_id_list, QString t
     int current_status_hours;
     int current_all_hours;
     for (int i=0; i<teachers_id_list.length(); ++i){
+        temp_tabledata.clear();
 
         if (teachers_id_list.at(i) != "0") {
 
@@ -360,17 +361,30 @@ bool Reports::create_report_teacherscard(QStringList teachers_id_list, QString t
             }
         }
 
-        if (split_kard)
-        if (temp_tabledata.get_header_obiem().toDouble() > boundary_amount){
-            // проверка итогового объема, разбиение карточки на сплиты
+        if (split_kard) {
+            if (temp_tabledata.get_header_obiem().toDouble() > boundary_amount){
+                // проверка итогового объема, разбиение карточки на сплиты
+                temp_tabledata.set_name_table_part( "part 1");
+                temp_tabledata1.set_header_sheet(temp_tabledata.get_header_sheet());
+                temp_tabledata1.set_name_table_fam(temp_tabledata.get_name_table_fam());
+                temp_tabledata1.set_name_table_part("part 2");
 
+
+
+                list_tabledata << temp_tabledata;
+                list_tabledata << temp_tabledata1;
+            } else {
+                list_tabledata << temp_tabledata;
+            }
+        } else {
+            list_tabledata << temp_tabledata;
         }
 
-        list_tabledata << temp_tabledata;
     }
 
     //------------------------------------------------------------
     // поиск и замена одинаковых фамилий/названий листов
+    // встроить в алгоритм формирования листов
 
     QList<int> equal;
     QList<int> equal1;
@@ -381,9 +395,7 @@ bool Reports::create_report_teacherscard(QStringList teachers_id_list, QString t
             temp_tabledata1 = list_tabledata.at(i);
             temp_tabledata2 = list_tabledata.at(j);
             if (temp_tabledata1.get_name_table_fam() == temp_tabledata2.get_name_table_fam()){
-                if (temp_tabledata1.get_name_table_all() == temp_tabledata2.get_name_table_all()){
                     equal << j;
-                }
             }
         }
         if (!equal.isEmpty()){
@@ -397,7 +409,7 @@ bool Reports::create_report_teacherscard(QStringList teachers_id_list, QString t
                 for (int j1=i1+1; j1<equal.length(); ++j1){
                     temp_tabledata1 = list_tabledata.at(equal.at(i1));
                     temp_tabledata2 = list_tabledata.at(equal.at(j1));
-                    if (temp_tabledata1.get_name_table_fam() == temp_tabledata2.get_name_table_fam()){
+                    if (temp_tabledata1.get_name_table_all() == temp_tabledata2.get_name_table_all()){
                         equal1 << equal.at(j1);
                     }
                 }

@@ -19,7 +19,8 @@ bool Reports::create_report_teacherscard(QStringList teachers_id_list, QString t
     int temp_of_int_dist[16];
     int temp_of_int_vacansion[16];
     int temp_of_int_vacansion_sum[16];
-    bool flag;
+    bool flag = false;
+    bool temp_tabledata1_flag = false;
 
     double boundary_amount = 1.02;
 
@@ -174,8 +175,6 @@ bool Reports::create_report_teacherscard(QStringList teachers_id_list, QString t
             temp_header << query.value(2).toString();
             temp_header << query.value(3).toString();
             current_status_name = query.value(3).toString();
-
-            temp_tabledata.set_name_table_fam(query.value(0).toString());
 
             query.exec("SELECT name, value FROM other_data;");
             while(query.next()){
@@ -360,26 +359,37 @@ bool Reports::create_report_teacherscard(QStringList teachers_id_list, QString t
                 }
             }
         }
+        temp_tabledata1_flag = false;
+
+        temp_tabledata.set_name_table_fam(temp_tabledata.get_header_Family());
+
+        // тут просмотреть все предыдущие названия
+        for (int i=0; i<list_tabledata.length(); ++i){
+            if (list_tabledata[i].get_name_table_fam() == temp_tabledata.get_header_Family()){
+
+            }
+
+        }
 
         if (split_kard) {
             if (temp_tabledata.get_header_obiem().toDouble() > boundary_amount){
                 // проверка итогового объема, разбиение карточки на сплиты
                 temp_tabledata.set_name_table_part( "part 1");
-                temp_tabledata1.set_header_sheet(temp_tabledata.get_header_sheet());
-                temp_tabledata1.set_name_table_fam(temp_tabledata.get_name_table_fam());
                 temp_tabledata1.set_name_table_part("part 2");
 
 
 
-                list_tabledata << temp_tabledata;
-                list_tabledata << temp_tabledata1;
-            } else {
-                list_tabledata << temp_tabledata;
+
+                temp_tabledata1.set_header_sheet(temp_tabledata.get_header_sheet());
+                temp_tabledata1.set_name_table_fam(temp_tabledata.get_name_table_fam());
+                temp_tabledata1_flag = true;
             }
-        } else {
-            list_tabledata << temp_tabledata;
         }
 
+        list_tabledata << temp_tabledata;
+        if (temp_tabledata1_flag){
+            list_tabledata << temp_tabledata1;
+        }
     }
 
     //------------------------------------------------------------

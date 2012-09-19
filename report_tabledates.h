@@ -15,9 +15,9 @@ public:
     void set_header_sheet(QStringList hs);
     void set_list_one(QList<QStringList> lo);
     void set_list_two(QList<QStringList> lt);
-    void set_list_one_sum(QStringList lon);
-    void set_list_two_sum(QStringList lts);
-    void set_list_all_sum(QStringList las);
+//    void set_list_one_sum(QStringList lon);
+//    void set_list_two_sum(QStringList lts);
+//    void set_list_all_sum(QStringList las);
 
     QString get_header_FIO();
     QString get_header_Family();
@@ -29,12 +29,7 @@ public:
     QString get_header_vice_rector_on_education_work();
     QString get_header_obiem();
 
-    /*
-    query.exec("insert into other_data values('academic_year', '2011/2012')");
-    query.exec("insert into other_data values('name_kafedry_faculty', 'Программного обеспечения и администрирования информационных систем')");
-    query.exec("insert into other_data values('business_base_of_training', 'бюджет')");
-    query.exec("insert into other_data values('vice_rector_on_education_work', 'Захаров В.В.')");
-    */
+    void set_header_obiem(double ob);
 
     QStringList get_header_sheet();
     QList<QStringList> get_list_one();
@@ -51,9 +46,17 @@ public:
     void set_name_table_fam(QString s);
     void set_name_table_part(QString s);
 
-//    QStringList del_past_subject()
+    void remove_list_one_last();
+    void remove_list_two_last();
+    bool is_empty_list_one();
+    bool is_empty_list_two();
+    QStringList get_list_one_last();
+    QStringList get_list_two_last();
+    int get_total_hours();
 
 private:
+    double obiem;
+
     QString name_table_fam;
     QString name_table_part;
 
@@ -61,8 +64,5 @@ private:
     QList<QStringList> list_one;
     QList<QStringList> list_two;
 
-    //QStringList list_one_sum;
-    //QStringList list_two_sum;
-    //QStringList list_all_sum;
 };
 #endif // REPORT_TABLEDATES_H

@@ -5,13 +5,18 @@ Tabledata::Tabledata()
 {
     name_table_fam = "";
     name_table_part = "";
+    obiem = 0;
+
+    header_sheet.clear();
+    list_one.clear();
+    list_two.clear();
 }
 
 void Tabledata::clear()
 {
     name_table_fam = "";
     name_table_part = "";
-
+    obiem = 0;
     header_sheet.clear();
     list_one.clear();
     list_two.clear();
@@ -98,6 +103,46 @@ void Tabledata::set_name_table_part(QString s)
     name_table_part = s;
 }
 
+void Tabledata::remove_list_one_last()
+{
+    list_one.removeLast();
+}
+
+void Tabledata::remove_list_two_last()
+{
+    list_two.removeLast();
+}
+
+bool Tabledata::is_empty_list_one()
+{
+    return list_one.isEmpty();
+}
+
+bool Tabledata::is_empty_list_two()
+{
+    return list_two.isEmpty();
+}
+
+QStringList Tabledata::get_list_one_last()
+{
+    return list_one.at(list_one.length() - 1);
+}
+
+QStringList Tabledata::get_list_two_last()
+{
+    return list_two.at(list_two.length() - 1);
+}
+
+int Tabledata::get_total_hours()
+{
+    QStringList stringlist = get_list_all_sum();
+    if (stringlist.length() > 1){
+        return stringlist.at(stringlist.length()-2).toInt();
+    } else {
+        return -1;
+    }
+}
+
 QStringList Tabledata::get_list_one_sum(){
     return get_list_sum(1);
 }
@@ -110,6 +155,22 @@ QStringList Tabledata::get_list_all_sum(){
 
     QStringList buf_list_one_sum = get_list_one_sum();
     QStringList buf_list_two_sum = get_list_two_sum();
+
+    if (buf_list_one_sum.isEmpty()){
+        for (int i=0; i<buf_list_two_sum.length(); ++i){
+            buf << functions::toReportString(QString::number(buf_list_two_sum.at(i).toInt()));
+        }
+
+        return buf;
+    }
+
+    if (buf_list_two_sum.isEmpty()){
+        for (int i=0; i<buf_list_one_sum.length(); ++i){
+            buf << functions::toReportString(QString::number(buf_list_one_sum.at(i).toInt()));
+        }
+
+        return buf;
+    }
 
     if (buf_list_one_sum.length() != buf_list_two_sum.length()){
         return buf;
@@ -134,8 +195,6 @@ QList<QStringList> Tabledata::get_list(int i)
         return list;
     }
 }
-
-
 
 QString Tabledata::get_header_FIO(){
     QString temp;
@@ -213,9 +272,11 @@ QString Tabledata::get_header_vice_rector_on_education_work()
 }
 
 QString Tabledata::get_header_obiem(){
-    int i = 8;
-    if (header_sheet.length() < (i+1)){
-        return "";
-    }
-    return header_sheet.at(i);
+
+    return QString::number(obiem, 'f', 2);
+}
+
+void Tabledata::set_header_obiem(double ob)
+{
+    obiem = ob;
 }

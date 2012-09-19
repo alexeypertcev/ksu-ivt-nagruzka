@@ -24,6 +24,7 @@ bool Reports::create_report_teacherscard(QStringList teachers_id_list, QString t
     QList<int> equal;
     QList<int> equal1;
     QList<int> additinal_list;
+
     double boundary_amount = 1.02;
     QString s = "SELECT value FROM other_data WHERE name = 'boundary_amount'";
 
@@ -176,7 +177,7 @@ bool Reports::create_report_teacherscard(QStringList teachers_id_list, QString t
                                 "students.speciality_id = speciality.id ";
 
     QString current_status_name;
-    int current_status_hours;
+    int current_status_hours = 1;
     int current_all_hours;
     additinal_list.clear();
 
@@ -261,12 +262,10 @@ bool Reports::create_report_teacherscard(QStringList teachers_id_list, QString t
             }
 
             // объем учебной нагрузки
-            temp_header << QString::number((double)current_all_hours / (double)current_status_hours, 'f', 2);
-
+            //temp_header << QString::number((double)current_all_hours / (double)current_status_hours, 'f', 2);
+            temp_tabledata.set_header_obiem((double)temp_tabledata.get_total_hours() / (double)current_status_hours);
             temp_tabledata.set_header_sheet(temp_header);
         } else {
-            //teachers_id_list.at(i) = "0"
-//            qDebug() << "Вакансии подсчет";
             temp_tabledata.set_name_table_fam("Вакансии");
 
             query.exec("DELETE FROM distribution WHERE distribution.teachers_id = '0';");
@@ -380,7 +379,6 @@ bool Reports::create_report_teacherscard(QStringList teachers_id_list, QString t
             }
         }
         temp_tabledata1_flag = false;
-
         temp_tabledata.set_name_table_fam(temp_tabledata.get_header_Family());
 
         // тут просмотреть все предыдущие названия
@@ -391,9 +389,29 @@ bool Reports::create_report_teacherscard(QStringList teachers_id_list, QString t
                 temp_tabledata.set_name_table_part( "part 1");
                 temp_tabledata1.set_name_table_part("part 2");
 
+                QList<QStringList> temp_list_one;
+                QList<QStringList> temp_list_two;
+                temp_list_one.clear();
+                temp_list_two.clear();
+                while((double)temp_tabledata.get_total_hours()/current_status_hours > boundary_amount){
+                    if (!temp_tabledata.is_empty_list_two()){
+                        temp_list_two << temp_tabledata.get_list_two_last();
+                        temp_tabledata.remove_list_two_last();
+                    } else if(!temp_tabledata.is_empty_list_one()){
+                        temp_list_one << temp_tabledata.get_list_one_last();
+                        temp_tabledata.remove_list_one_last();
+                    } else{
+                        ERROR_REPORT("0x0")
+                    }
+                    temp_tabledata.set_header_obiem((double)temp_tabledata.get_total_hours() / (double)current_status_hours);
+                }
 
+                // объем учебной нагрузки
+                temp_tabledata.set_header_obiem((double)temp_tabledata.get_total_hours() / (double)current_status_hours);
 
-
+                temp_tabledata1.set_list_one(temp_list_one);
+                temp_tabledata1.set_list_two(temp_list_two);
+                temp_tabledata1.set_header_obiem((double)temp_tabledata1.get_total_hours() / (double)current_status_hours);
 
                 temp_tabledata1.set_header_sheet(temp_tabledata.get_header_sheet());
                 temp_tabledata1.set_name_table_fam(temp_tabledata.get_name_table_fam());

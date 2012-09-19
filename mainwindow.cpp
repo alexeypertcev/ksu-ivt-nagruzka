@@ -268,6 +268,11 @@ void MainWindow::check_and_restore_DB()
         insert_main_data_to_coefficients();
     }
 
+    if (query.exec("SELECT value FROM other_data WHERE name = ''")){
+        if (!query.next()){
+            query.exec("insert into other_data values('boundary_amount', '1.02')");
+        }
+    }
 }
 
 void MainWindow::update_spec_checkbox()

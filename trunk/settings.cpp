@@ -213,6 +213,21 @@ void Settings::on_lineEdit_5_editingFinished()
     update_other_data();
 }
 
+void Settings::on_lineEdit_6_editingFinished()
+{
+    QString s = "update other_data set 'value' = '"+ ui->lineEdit_6->text() +"' where name = 'boundary_amount'";
+#ifdef DEBUG_ENABLE_MODIFY
+    DEBUG_MESSAGE( s )
+#endif
+
+    QSqlQuery query;
+    if (!query.exec(s)){
+        ERROR_REPORT("0x80A")
+    }
+    update_other_data();
+}
+
+
 void Settings::update_other_data()
 {
     QSqlQuery query;
@@ -238,6 +253,8 @@ void Settings::update_other_data()
             ui->lineEdit_4->setText(query.value(1).toString());
         } else if (query.value(0).toString() == "name_kafedry_smail"){
             ui->lineEdit_5->setText(query.value(1).toString());
+        } else if (query.value(0).toString() == "boundary_amount"){
+            ui->lineEdit_6->setText(query.value(1).toString());
         } else {
             ERROR_REPORT("0x80B");
         }
@@ -530,3 +547,4 @@ void Settings::on_pushButton_clicked()
 
 
 }
+

@@ -251,6 +251,7 @@ static bool insert_main_data()
         query.exec("insert into other_data values('name_kafedry_smail', 'ПОиАИС')");
         query.exec("insert into other_data values('business_base_of_training', 'бюджет')");
         query.exec("insert into other_data values('vice_rector_on_education_work', 'Захаров В.В.')");
+        query.exec("insert into other_data values('boundary_amount', '1.02')");
         return true;
      }
      return false;

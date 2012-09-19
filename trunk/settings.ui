@@ -23,7 +23,7 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>2</number>
+    <number>3</number>
    </property>
    <widget class="QWidget" name="tab">
     <attribute name="title">
@@ -279,6 +279,32 @@
      </property>
      <property name="text">
       <string>Название кафедры(сокращенно):</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_6">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>260</y>
+       <width>391</width>
+       <height>16</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Порог объема нагрузки, для разбиения карточки учебных поручений</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="lineEdit_6">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>280</y>
+       <width>511</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>1,02</string>
      </property>
     </widget>
    </widget>

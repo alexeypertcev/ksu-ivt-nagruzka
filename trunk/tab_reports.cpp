@@ -21,8 +21,26 @@ bool Reports::create_report_teacherscard(QStringList teachers_id_list, QString t
     int temp_of_int_vacansion_sum[16];
     bool flag = false;
     bool temp_tabledata1_flag = false;
-
+    QList<int> equal;
+    QList<int> equal1;
+    QList<int> additinal_list;
     double boundary_amount = 1.02;
+    QString s = "SELECT value FROM other_data WHERE name = 'boundary_amount'";
+
+#ifdef DEBUG_ENABLE_SELECT
+    DEBUG_MESSAGE( s )
+#endif
+
+    if (!query.exec(s)){
+        ERROR_REPORT("0x0")
+    } else {
+        if (query.next()){
+            boundary_amount = query.value(0).toDouble();
+        } else {
+            ERROR_REPORT("0x0")
+        }
+    }
+
 
     QString select_list_data = "SELECT curriculum.subject_name, "
             "speciality.faculty_name, "
@@ -160,6 +178,8 @@ bool Reports::create_report_teacherscard(QStringList teachers_id_list, QString t
     QString current_status_name;
     int current_status_hours;
     int current_all_hours;
+    additinal_list.clear();
+
     for (int i=0; i<teachers_id_list.length(); ++i){
         temp_tabledata.clear();
 
@@ -364,18 +384,13 @@ bool Reports::create_report_teacherscard(QStringList teachers_id_list, QString t
         temp_tabledata.set_name_table_fam(temp_tabledata.get_header_Family());
 
         // тут просмотреть все предыдущие названия
-        for (int i=0; i<list_tabledata.length(); ++i){
-            if (list_tabledata[i].get_name_table_fam() == temp_tabledata.get_header_Family()){
-
-            }
-
-        }
 
         if (split_kard) {
             if (temp_tabledata.get_header_obiem().toDouble() > boundary_amount){
                 // проверка итогового объема, разбиение карточки на сплиты
                 temp_tabledata.set_name_table_part( "part 1");
                 temp_tabledata1.set_name_table_part("part 2");
+
 
 
 
@@ -389,58 +404,72 @@ bool Reports::create_report_teacherscard(QStringList teachers_id_list, QString t
         list_tabledata << temp_tabledata;
         if (temp_tabledata1_flag){
             list_tabledata << temp_tabledata1;
+            additinal_list << (list_tabledata.length() - 1) ;
         }
     }
 
     //------------------------------------------------------------
     // поиск и замена одинаковых фамилий/названий листов
-    // встроить в алгоритм формирования листов
+    //
 
-    QList<int> equal;
-    QList<int> equal1;
+    equal.clear();
+    equal1.clear();
     int buf;
     for (int i = 0; i<list_tabledata.length(); ++i){
-        equal.clear();
-        for (int j = i+1; j<list_tabledata.length(); ++j){
-            temp_tabledata1 = list_tabledata.at(i);
-            temp_tabledata2 = list_tabledata.at(j);
-            if (temp_tabledata1.get_name_table_fam() == temp_tabledata2.get_name_table_fam()){
-                    equal << j;
-            }
-        }
-        if (!equal.isEmpty()){
-            equal << i;
-            for (int k = 0; k<equal.length(); ++k){
-                temp_tabledata  = list_tabledata.at(equal.at(k));
-                list_tabledata[equal.at(k)].set_name_table_fam(temp_tabledata.get_header_Family_I_O());
-            }
-            for (int i1=0; i1<equal.length(); ++i1){
-                equal1.clear();
-                for (int j1=i1+1; j1<equal.length(); ++j1){
-                    temp_tabledata1 = list_tabledata.at(equal.at(i1));
-                    temp_tabledata2 = list_tabledata.at(equal.at(j1));
-                    if (temp_tabledata1.get_name_table_all() == temp_tabledata2.get_name_table_all()){
-                        equal1 << equal.at(j1);
+        if (!additinal_list.contains(i)){  // в поиске не учавствуют дополнительные листы (part 2)
+            equal.clear();
+            for (int j = i+1; j<list_tabledata.length(); ++j){
+                if (!additinal_list.contains(j)){
+                    temp_tabledata1 = list_tabledata.at(i);
+                    temp_tabledata2 = list_tabledata.at(j);
+                    if (temp_tabledata1.get_name_table_fam() == temp_tabledata2.get_name_table_fam()){
+                            equal << j;
                     }
                 }
-                if (!equal1.isEmpty()){
-                    equal1 << equal.at(i1);
-                    for (int i3 = 0; i3< equal1.length(); ++i3){
-                        for (int j3 = i3+1; j3<equal1.length(); ++j3){
-                            if (equal1.at(i3) > equal1.at(j3)){
-                                buf = equal1.at(i3);
-                                equal1[i3] = equal1.at(j3);
-                                equal1[j3] = buf;
-                            }
+            }
+            if (!equal.isEmpty()){
+                equal << i;
+                for (int k = 0; k<equal.length(); ++k){
+                    temp_tabledata  = list_tabledata.at(equal.at(k));
+                    list_tabledata[equal.at(k)].set_name_table_fam(temp_tabledata.get_header_Family_I_O());
+                }
+                for (int i1=0; i1<equal.length(); ++i1){
+                    equal1.clear();
+                    for (int j1=i1+1; j1<equal.length(); ++j1){
+                        temp_tabledata1 = list_tabledata.at(equal.at(i1));
+                        temp_tabledata2 = list_tabledata.at(equal.at(j1));
+                        if (temp_tabledata1.get_name_table_fam() == temp_tabledata2.get_name_table_fam()){
+                            equal1 << equal.at(j1);
                         }
                     }
-                    for (int k1 = 0; k1 < equal1.length(); ++k1){
-                        list_tabledata[equal1.at(k1)].set_name_table_fam( list_tabledata[equal1.at(k1)].get_name_table_fam() + " 0" + QString::number(k1+1));
+                    if (!equal1.isEmpty()){
+                        equal1 << equal.at(i1);
+                        for (int i3 = 0; i3< equal1.length(); ++i3){
+                            for (int j3 = i3+1; j3<equal1.length(); ++j3){
+                                if (equal1.at(i3) > equal1.at(j3)){
+                                    buf = equal1.at(i3);
+                                    equal1[i3] = equal1.at(j3);
+                                    equal1[j3] = buf;
+                                }
+                            }
+                        }
+                        for (int k1 = 0; k1 < equal1.length(); ++k1){
+                            list_tabledata[equal1.at(k1)].set_name_table_fam( list_tabledata[equal1.at(k1)].get_name_table_fam() + " 0" + QString::number(k1+1));
+                        }
                     }
                 }
             }
         }
     }
+    // подгоняем имена дополнительных листов к основным
+    for (int i = 0; i < additinal_list.length(); ++i){
+        if (additinal_list.at(i) > 0){
+            list_tabledata[additinal_list.at(i)].set_name_table_fam(list_tabledata[additinal_list.at(i)-1].get_name_table_fam());
+        } else {
+            ERROR_REPORT("0x0")
+        }
+    }
+
     //------------------------------------------------------------
 
     if(type_report == "xlsx"){

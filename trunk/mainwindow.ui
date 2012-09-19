@@ -723,14 +723,14 @@
        <widget class="QCheckBox" name="checkBox">
         <property name="geometry">
          <rect>
-          <x>690</x>
+          <x>500</x>
           <y>100</y>
           <width>231</width>
           <height>21</height>
          </rect>
         </property>
         <property name="text">
-         <string>Разбивать карточки по 1.0 ставки</string>
+         <string>Разбивать карточки по объему нагрузки</string>
         </property>
        </widget>
       </widget>

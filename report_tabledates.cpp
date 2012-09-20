@@ -64,7 +64,6 @@ QStringList Tabledata::get_list_sum(int i)
         buf_int.clear();
 
         int size_string = list.at(0).length();
-
         for (int i=0; i<size_string; ++i){
             buf_int << 0;
         }
@@ -78,8 +77,11 @@ QStringList Tabledata::get_list_sum(int i)
         for (int i=0; i<size_string; ++i){
             buf << functions::toReportString(QString::number(buf_int.at(i)));
         }
+    } else {
+        for (int j = 0; j<26; ++j){
+            buf << "" ;
+        }
     }
-
     return buf;
 }
 
@@ -173,6 +175,7 @@ QStringList Tabledata::get_list_all_sum(){
     }
 
     if (buf_list_one_sum.length() != buf_list_two_sum.length()){
+        buf << "" << "" << "" << "" << "" << "" << "" << "" << "" << "" << "" << "" << "" << "" << "" << "" << "" << "" << "" << "" << "" << "" << "" << "" << "" << "" ;
         return buf;
     }
 
